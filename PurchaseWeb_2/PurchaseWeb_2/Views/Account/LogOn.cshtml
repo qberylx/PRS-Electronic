@@ -10,10 +10,10 @@
 </div>
 <div class="w3ls-login box box--big">
     <!-- form starts here -->
-    <!--<form action="#" method="post">-->
-    @using (Html.BeginForm("LogOn", null, FormMethod.Post))
-    {
-        if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count() > 0)
+    <form action="#" method="post">
+    <!--using (Html.BeginForm("LogOn", null, FormMethod.Post))-->
+    
+        @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count() > 0)
         {
             <div class="alert alert-danger">
                 @Html.ValidationSummary(true, "")
@@ -52,7 +52,7 @@
         </script>
         <!-- //end script -->
         <input type="submit" value="LOGIN">
-        <!--</form>-->
-    }
+        </form>
+    
 </div>
 <!-- //form ends here -->
