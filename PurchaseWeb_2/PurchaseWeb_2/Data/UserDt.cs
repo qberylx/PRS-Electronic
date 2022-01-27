@@ -29,7 +29,7 @@ namespace PurchaseWeb_2.Model
                 
                 if (rd.HasRows)
                 {
-                    if (rd.Read())
+                    while (rd.Read())
                     {
                         DropdownDepartment department = new DropdownDepartment();
                         department.Dpt_Id = rd.GetInt32(0);
@@ -42,9 +42,38 @@ namespace PurchaseWeb_2.Model
                 con.Close();
 
                 return departmentList;
+            
+        }
 
-            
-            
+        public List<DropdownPosition> FetchPosition()
+        {
+            List<DropdownPosition> postionList = new List<DropdownPosition>();
+
+            //access database
+            string sqlQuery = @"SELECT [Psn_id]
+                                  ,[Position_name]
+                              FROM [dbo].[Position_mst]";
+
+            SqlCommand cmd = new SqlCommand(sqlQuery, con);
+            con.Open();
+            SqlDataReader rd = cmd.ExecuteReader();
+
+            if (rd.HasRows)
+            {
+                while (rd.Read())
+                {
+                    DropdownPosition position = new DropdownPosition();
+                    position.Psn_id = rd.GetInt32(0);
+                    position.Position_name = rd.GetString(1);
+
+                    postionList.Add(position);
+                }
+
+            }
+            con.Close();
+
+            return postionList;
+
         }
 
         //create new data

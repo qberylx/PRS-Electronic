@@ -24,9 +24,11 @@ namespace PurchaseWeb_2.Models
         [Required]
         public int Psn_id { get; set; }
 
+        [Required]
         public List<DropdownDepartment> DepartmentList { get; set; }
 
-        
+        [Required (ErrorMessage ="Please choose from staf position")]
+        public List<DropdownPosition> PositionList { get; set; }
 
 
     }
@@ -35,6 +37,13 @@ namespace PurchaseWeb_2.Models
     {
         public int Dpt_Id { get; set; }
         public string Dpt_name { get; set; }
+
+    }
+
+    public class DropdownPosition
+    {
+        public int Psn_id { get; set; }
+        public string Position_name { get; set; }
 
     }
 

@@ -118,7 +118,8 @@ namespace PurchaseWeb_2.Controllers
             //model.DepartmentList = userDT.FetchDepartment();
 
             ViewBag.departmentList = new SelectList(userDT.FetchDepartment(), "Dpt_Id", "Dpt_name");
-                       
+            ViewBag.positionList = new SelectList(userDT.FetchPosition(), "Psn_id", "Position_name");
+
             return View();
         }
 
@@ -141,5 +142,7 @@ namespace PurchaseWeb_2.Controllers
 
             return View("Details");
         }
+
+
     }
 }
