@@ -90,7 +90,7 @@ namespace PurchaseWeb_2.Controllers
             if (dr.Read())
             {
                 con.Close();
-                return RedirectToAction("Index", "Main");
+                return RedirectToAction("Dashboard", "Main");
             } else
             {
                 con.Close();
@@ -177,6 +177,20 @@ namespace PurchaseWeb_2.Controllers
             //    });
             //}
             //return AdUsers;
+        }
+
+        //main-header navbar control
+        [ChildActionOnly]
+        public ActionResult RenderMainHeader()
+        {
+            return PartialView("_main-header");
+        }
+
+        //Slidebar control
+        [ChildActionOnly]
+        public ActionResult RenderSlidebar()
+        {
+            return PartialView("_SlidebarMenu");
         }
 
     }
