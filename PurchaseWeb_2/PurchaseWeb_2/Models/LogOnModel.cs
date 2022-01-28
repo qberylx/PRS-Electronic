@@ -20,4 +20,19 @@ namespace PurchaseWeb_2.Models
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
+
+    public class User
+    {
+        public int Id { get; set; }
+        [Display(Name = "Display Name")]
+        public string DisplayName { get; set; }
+        public string Samaccountname { get; set; }
+    }
+
+    public class Group
+    {
+        public int Id { get; set; }
+        [Display(Name = "Group Name")]
+        public string GroupName { get; set; }
+    }
 }

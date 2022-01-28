@@ -3,6 +3,7 @@ using PurchaseWeb_2.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -50,6 +51,9 @@ namespace PurchaseWeb_2.Controllers
 
                         //return RedirectToAction("CheckUser");
                         Session["Username"] = model.UserName;
+                        //string UserName = model.UserName;
+                        //Session["SmaAccount"] = GetSmaAccount(UserName);
+                        
                         return RedirectToAction("CheckUser");
                     }
                 }
@@ -140,9 +144,40 @@ namespace PurchaseWeb_2.Controllers
                  TempData["msg"] = ex.Message;
              }
 
-            return View("Details");
+            return View("LogOn");
         }
 
+        public static String GetSmaAccount(string userName)
+        {
+            //List<User> AdUsers = new List<User>();
+            var ctx = new PrincipalContext(ContextType.Domain, "domi10.dominant.com:389", "DC=DOMINANT,DC=com");
+            //find group 
+            //GroupPrincipal user = GroupPrincipal.FindByIdentity(ctx, userName);
+
+            // find user
+            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, userName);
+            String SmaAcc = "";
+            if (user != null)
+            {
+                SmaAcc = user.Name;
+            }
+            return SmaAcc;
+
+            //UserPrincipal userPrin = new UserPrincipal(ctx);
+            //userPrin.Name = userName;
+            //var searcher = new System.DirectoryServices.AccountManagement.PrincipalSearcher();
+            //searcher.QueryFilter = userPrin;
+            //var results = searcher.FindAll();
+            //foreach (Principal p in results)
+            //{
+            //    AdUsers.Add(new User
+            //    {
+            //        DisplayName = p.DisplayName,
+            //        Samaccountname = p.SamAccountName
+            //    });
+            //}
+            //return AdUsers;
+        }
 
     }
 }
