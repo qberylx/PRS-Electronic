@@ -85,10 +85,13 @@ namespace PurchaseWeb_2.Controllers
             connectionstring();
             con.Open();
             cmd.Connection = con;
+            string username = Session["Username"].ToString();
             cmd.CommandText = @"Select * from Usr_mst where Username = '" + Session["Username"] + "' ";
             dr = cmd.ExecuteReader();
             if (dr.Read())
             {
+                Session["UserID"] = dr.GetInt32(0).ToString();
+                String userID = Session["UserID"].ToString();
                 con.Close();
                 return RedirectToAction("Dashboard", "Main");
             } else
@@ -190,7 +193,21 @@ namespace PurchaseWeb_2.Controllers
         [ChildActionOnly]
         public ActionResult RenderSlidebar()
         {
-            return PartialView("_SlidebarMenu");
+            IEnumerable<MenuModel> Menu = null;
+
+            if (Session["_Menu"] != null)
+            {
+                Menu = (IEnumerable<MenuModel>)Session["_Menu"];
+            }
+            else
+            {
+                MenuDT menuDT= new MenuDT();
+                String UserID = Session["UserID"].ToString();
+                Menu = menuDT.GetMenus(UserID);// pass employee id here
+                Session["_Menu"] = Menu;
+            }
+            
+            return PartialView("_SlidebarMenu", Menu);
         }
 
     }
