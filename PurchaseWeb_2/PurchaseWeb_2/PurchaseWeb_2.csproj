@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -45,11 +46,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
     </Reference>
@@ -130,13 +139,60 @@
     <Compile Include="Data\MenuDT.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Data\UserDt.cs" />
+    <Compile Include="Extensions\NotificationExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\Audlgn_Log.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\Department_mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\DomiPR.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DomiPR.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\DomiPR.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\DomiPR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DomiPR.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\Lgn_mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\Menu_mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\Position_mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\RoleMenuMapping_mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\SubMenu_mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\sysdiagram.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\usp_GetMenuData_Result.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\Usr_mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DepartmentModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -149,6 +205,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\dataTables.bootstrap.min.css" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\font-awesome.css" />
     <Content Include="css\Formstyle.css" />
@@ -210,6 +267,16 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="images\bg.jpg" />
+    <Content Include="ModelData\DomiPR.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DomiPR.Context.cs</LastGenOutput>
+      <DependentUpon>DomiPR.edmx</DependentUpon>
+    </Content>
+    <Content Include="ModelData\DomiPR.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DomiPR.edmx</DependentUpon>
+      <LastGenOutput>DomiPR.cs</LastGenOutput>
+    </Content>
     <Content Include="plugins\bootstrap-colorpicker\css\bootstrap-colorpicker.css" />
     <Content Include="plugins\bootstrap-colorpicker\css\bootstrap-colorpicker.min.css" />
     <Content Include="plugins\bootstrap-colorpicker\js\bootstrap-colorpicker.js" />
@@ -2128,7 +2195,15 @@
     <Content Include="dist\js\.eslintrc.json" />
     <Content Include="dist\js\adminlte.js.map" />
     <Content Include="dist\js\adminlte.min.js.map" />
+    <EntityDeploy Include="ModelData\DomiPR.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DomiPR.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="ModelData\DomiPR.edmx.diagram">
+      <DependentUpon>DomiPR.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\dataTables.bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -2163,6 +2238,15 @@
     <Content Include="Views\Shared\_main-header.cshtml" />
     <Content Include="Views\Shared\_SlidebarMenu.cshtml" />
     <Content Include="Views\Main\Dashboard.cshtml" />
+    <Content Include="Views\Main\_userList.cshtml" />
+    <Content Include="Views\Shared\_Notifications.cshtml" />
+    <Content Include="Views\Main\Reference.cshtml" />
+    <Content Include="Views\Main\Department.cshtml" />
+    <Content Include="Views\Main\departmentList.cshtml" />
+    <Content Include="Views\Main\DepartmentEdit.cshtml" />
+    <Content Include="Views\Main\Role.cshtml" />
+    <Content Include="Views\Main\roleList.cshtml" />
+    <Content Include="Views\Main\roleEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2187,6 +2271,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -2221,7 +2308,10 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
   </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

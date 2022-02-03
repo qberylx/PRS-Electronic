@@ -1,9 +1,23 @@
-﻿@model IEnumerable<PurchaseWeb_2.Models.MenuModel>
-
+﻿
 @{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 
-<h2>Dashboard</h2>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Dashboard</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<section class="row">
+    <div class="col-lg-12">
 
+        @Html.Partial("_Notifications")
+
+        @{Html.RenderAction("UserList", "Main"); }
+    </div>
+</section>

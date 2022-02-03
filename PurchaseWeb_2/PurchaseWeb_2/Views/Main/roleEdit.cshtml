@@ -1,0 +1,55 @@
+﻿@model PurchaseWeb_2.ModelData.Position_mst
+
+@{
+    ViewBag.Title = "roleEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Role Master (Edit)</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+
+@using (Html.BeginForm("roleEdit", "Main", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Position_mst</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Psn_id, new { @Value = ViewBag.role.Psn_id })
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Psn_id, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Psn_id, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.role.Psn_id, @disabled = "disabled" } })
+            @Html.ValidationMessageFor(model => model.Psn_id, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Position_name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Position_name, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.role.Position_name } })
+            @Html.ValidationMessageFor(model => model.Position_name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

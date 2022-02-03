@@ -41,96 +41,97 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
-    with font-awesome or any other icon font library -->
+            with font-awesome or any other icon font library -->
 
                 @foreach (var m in Model)
                 {
                     if (m.Menu_ParentId == 0)
                     {
                         var submenu = Model.Where(n => n.Menu_ParentId == m.MenuId).ToList();
-                        
-                        <li class="nav-item ">                           
+
+                        <li class="nav-item ">
 
                             @if (submenu != null && submenu.Count > 0)
                             {
 
-                            <a href="#" class="nav-link ">
-                                @if (m.MenuName == "Admin")
-                                {
-                                    <i class="far fa-tachometer-alt nav-icon"></i>
-                                }
-                                @if (m.MenuName == "Purchase Request")
-                                {
-                                    <i class="far fa-list-alt nav-icon"></i>
-                                }
-                                @if (m.MenuName == "Purchase Order")
-                                {
-                                    <i class="far fa-th nav-icon"></i>
-                                }
-                                <p>
-                                    @m.MenuName
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                @foreach (var e in submenu)
-                                {
-                                    <li class="nav-item">
-                                        <a href="@e.MenuUrl" class="nav-link ">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>@e.MenuName</p>
-                                        </a>
-                                    </li>
+                                <a href="#" class="nav-link ">
+                                    @if (m.MenuName == "Admin")
+                                    {
+                                        <i class="far fa-tachometer-alt nav-icon"></i>
+                                    }
+                                    @if (m.MenuName == "Purchase Request")
+                                    {
+                                        <i class="far fa-list-alt nav-icon"></i>
+                                    }
+                                    @if (m.MenuName == "Purchase Order")
+                                    {
+                                        <i class="far fa-th nav-icon"></i>
+                                    }
+                                    <p>
+                                        @m.MenuName
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    @foreach (var e in submenu)
+                                    {
+                                        <li class="nav-item">
+                                            <a href="@e.MenuUrl" class="nav-link ">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>@e.MenuName</p>
+                                            </a>
+                                        </li>
 
-                                }
+                                    }
 
-                            </ul>
+                                </ul>
 
                             }
                             else
                             {
-                            //if parent menu does not have child menu
+                                //if parent menu does not have child menu
 
-                        <li class="nav-item">
-                            <a href="#" class="nav-link ">
-                                @if (m.MenuName == "Admin")
-                                {
-                                    <i class="far fa-tachometer-alt nav-icon"></i>
-                                }
-                                @if (m.MenuName == "Purchase Request")
-                                {
-                                    <i class="far fa-list-alt nav-icon"></i>
-                                }
-                                @if (m.MenuName == "Purchase Order")
-                                {
-                                    <i class="far fa-th nav-icon"></i>
-                                }
+                            <li class="nav-item">
+                                <a href="#" class="nav-link ">
+                                    @if (m.MenuName == "Admin")
+                                    {
+                                        <i class="far fa-tachometer-alt nav-icon"></i>
+                                    }
+                                    @if (m.MenuName == "Purchase Request")
+                                    {
+                                        <i class="far fa-list-alt nav-icon"></i>
+                                    }
+                                    @if (m.MenuName == "Purchase Order")
+                                    {
+                                        <i class="far fa-th nav-icon"></i>
+                                    }
 
-                                <p>@m.MenuName</p>
-                                <i class="right fas fa-angle-left"></i>
-                            </a>
-                        </li>
+                                    <p>@m.MenuName</p>
+                                    <i class="right fas fa-angle-left"></i>
+                                </a>
+                            </li>
                         }
-                        </li>
+                            </li>
+                        }
                     }
-                }
 
 
                 <!--
-    <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-th"></i>
-                <p>
-                    Simple Link
-                    <span class="right badge badge-danger">New</span>
-                </p>
-            </a>
-        </li>
-        -->
+            <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Simple Link
+                            <span class="right badge badge-danger">New</span>
+                        </p>
+                    </a>
+                </li>
+                -->
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
+                <!-- /.sidebar -->
+            
 </aside>
 <!--/. Main sidebar-->

@@ -1,0 +1,32 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.Position_mst>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Position_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Create_date)
+        </th>
+        
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Where(x => x.Active == true) ) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Position_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Create_date)
+        </td>
+        
+        <td>
+            @Html.ActionLink("Edit", "roleEdit", new { id=item.Psn_id }) |
+            @Html.ActionLink("Delete", "roleDelete", new { id=item.Psn_id })
+        </td>
+    </tr>
+}
+
+</table>

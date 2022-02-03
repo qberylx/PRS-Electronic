@@ -1,0 +1,448 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Domi_PurModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Domi_Pur.dbo.Audlgn_Log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Audlgn_Log">
+          <Key>
+            <PropertyRef Name="audlgn_id" />
+          </Key>
+          <Property Name="audlgn_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" />
+          <Property Name="Date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Department_mst">
+          <Key>
+            <PropertyRef Name="Dpt_id" />
+          </Key>
+          <Property Name="Dpt_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Department_name" Type="varchar" MaxLength="50" />
+          <Property Name="Create_date" Type="datetime" />
+          <Property Name="Modified_date" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Lgn_mst">
+          <Key>
+            <PropertyRef Name="Lgn_id" />
+          </Key>
+          <Property Name="Lgn_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Menu_mst">
+          <Key>
+            <PropertyRef Name="Menu_id" />
+          </Key>
+          <Property Name="Menu_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Menu_name" Type="varchar" MaxLength="50" />
+          <Property Name="Menu_url" Type="varchar" MaxLength="100" />
+          <Property Name="Menu_ParentId" Type="int" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="Ordering" Type="int" />
+        </EntityType>
+        <EntityType Name="Position_mst">
+          <Key>
+            <PropertyRef Name="Psn_id" />
+          </Key>
+          <Property Name="Psn_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Position_name" Type="varchar" MaxLength="50" />
+          <Property Name="Create_date" Type="datetime" />
+          <Property Name="Modified_date" Type="datetime" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <EntityType Name="RoleMenuMapping_mst">
+          <Key>
+            <PropertyRef Name="RoleMap_Id" />
+          </Key>
+          <Property Name="RoleMap_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleId" Type="int" />
+          <Property Name="MenuId" Type="int" />
+          <Property Name="Active" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="SubMenu_mst">
+          <Key>
+            <PropertyRef Name="SubMenu_id" />
+          </Key>
+          <Property Name="SubMenu_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubMenu_Name" Type="varchar" MaxLength="50" />
+          <Property Name="Flag" Type="bit" />
+          <Property Name="Menu_id" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Usr_mst">
+          <Key>
+            <PropertyRef Name="usr_id" />
+          </Key>
+          <Property Name="usr_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Dpt_id" Type="int" />
+          <Property Name="Psn_id" Type="int" />
+          <Property Name="Date_Create" Type="datetime" />
+          <Property Name="Date_modified" Type="datetime" />
+          <Property Name="Flag_Aproval" Type="bit" />
+        </EntityType>
+        <Association Name="FK_Usr_mst_Department_mst">
+          <End Role="Department_mst" Type="Self.Department_mst" Multiplicity="0..1" />
+          <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department_mst">
+              <PropertyRef Name="Dpt_id" />
+            </Principal>
+            <Dependent Role="Usr_mst">
+              <PropertyRef Name="Dpt_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usr_mst_Position_mst">
+          <End Role="Position_mst" Type="Self.Position_mst" Multiplicity="0..1" />
+          <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position_mst">
+              <PropertyRef Name="Psn_id" />
+            </Principal>
+            <Dependent Role="Usr_mst">
+              <PropertyRef Name="Psn_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="usp_GetMenuData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserId" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="Domi_PurModelStoreContainer">
+          <EntitySet Name="Department_mst" EntityType="Self.Department_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Position_mst" EntityType="Self.Position_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RoleMenuMapping_mst" EntityType="Self.RoleMenuMapping_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usr_mst" EntityType="Self.Usr_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Audlgn_Log" EntityType="Self.Audlgn_Log" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Audlgn_Log].[audlgn_id] AS [audlgn_id], 
+    [Audlgn_Log].[Username] AS [Username], 
+    [Audlgn_Log].[Date] AS [Date]
+    FROM [dbo].[Audlgn_Log] AS [Audlgn_Log]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Lgn_mst" EntityType="Self.Lgn_mst" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Lgn_mst].[Lgn_id] AS [Lgn_id], 
+    [Lgn_mst].[Username] AS [Username], 
+    [Lgn_mst].[Password] AS [Password]
+    FROM [dbo].[Lgn_mst] AS [Lgn_mst]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="SubMenu_mst" EntityType="Self.SubMenu_mst" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [SubMenu_mst].[SubMenu_id] AS [SubMenu_id], 
+    [SubMenu_mst].[SubMenu_Name] AS [SubMenu_Name], 
+    [SubMenu_mst].[Flag] AS [Flag], 
+    [SubMenu_mst].[Menu_id] AS [Menu_id]
+    FROM [dbo].[SubMenu_mst] AS [SubMenu_mst]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Usr_mst_Department_mst" Association="Self.FK_Usr_mst_Department_mst">
+            <End Role="Department_mst" EntitySet="Department_mst" />
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usr_mst_Position_mst" Association="Self.FK_Usr_mst_Position_mst">
+            <End Role="Position_mst" EntitySet="Position_mst" />
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Domi_PurModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="RoleMenuMapping_mst">
+          <Key>
+            <PropertyRef Name="RoleMap_Id" />
+          </Key>
+          <Property Name="RoleMap_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleId" Type="Int32" />
+          <Property Name="MenuId" Type="Int32" />
+          <Property Name="Active" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Audlgn_Log">
+          <Key>
+            <PropertyRef Name="audlgn_id" />
+          </Key>
+          <Property Name="audlgn_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Department_mst">
+          <Key>
+            <PropertyRef Name="Dpt_id" />
+          </Key>
+          <Property Name="Dpt_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Department_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Create_date" Type="DateTime" Precision="3" />
+          <Property Name="Modified_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_Usr_mst_Department_mst" FromRole="Department_mst" ToRole="Usr_mst" />
+        </EntityType>
+        <EntityType Name="Lgn_mst">
+          <Key>
+            <PropertyRef Name="Lgn_id" />
+          </Key>
+          <Property Name="Lgn_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Menu_mst">
+          <Key>
+            <PropertyRef Name="Menu_id" />
+          </Key>
+          <Property Name="Menu_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Menu_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Menu_url" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Menu_ParentId" Type="Int32" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="Ordering" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Position_mst">
+          <Key>
+            <PropertyRef Name="Psn_id" />
+          </Key>
+          <Property Name="Psn_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Position_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Create_date" Type="DateTime" Precision="3" />
+          <Property Name="Modified_date" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_Usr_mst_Position_mst" FromRole="Position_mst" ToRole="Usr_mst" />
+        </EntityType>
+        <EntityType Name="SubMenu_mst">
+          <Key>
+            <PropertyRef Name="SubMenu_id" />
+          </Key>
+          <Property Name="SubMenu_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubMenu_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Flag" Type="Boolean" />
+          <Property Name="Menu_id" Type="Int32" />
+        </EntityType>
+        <EntityContainer Name="Domi_PurEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="RoleMenuMapping_mst" EntityType="Self.RoleMenuMapping_mst" />
+          <EntitySet Name="Audlgn_Log" EntityType="Self.Audlgn_Log" />
+          <EntitySet Name="Department_mst" EntityType="Self.Department_mst" />
+          <EntitySet Name="Lgn_mst" EntityType="Self.Lgn_mst" />
+          <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" />
+          <EntitySet Name="Position_mst" EntityType="Self.Position_mst" />
+          <EntitySet Name="SubMenu_mst" EntityType="Self.SubMenu_mst" />
+          <FunctionImport Name="usp_GetMenuData" ReturnType="Collection(Domi_PurModel.usp_GetMenuData_Result)">
+          <Parameter Name="UserId" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Usr_mst" EntityType="Domi_PurModel.Usr_mst" />
+          <EntitySet Name="sysdiagrams" EntityType="Domi_PurModel.sysdiagram" />
+          <AssociationSet Name="FK_Usr_mst_Department_mst" Association="Domi_PurModel.FK_Usr_mst_Department_mst">
+            <End Role="Department_mst" EntitySet="Department_mst" />
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usr_mst_Position_mst" Association="Domi_PurModel.FK_Usr_mst_Position_mst">
+            <End Role="Position_mst" EntitySet="Position_mst" />
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+          </AssociationSet>
+        </EntityContainer>
+        <ComplexType Name="usp_GetMenuData_Result">
+          <Property Type="Int32" Name="MID" Nullable="false" />
+          <Property Type="String" Name="Menu_name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Menu_url" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="Menu_ParentId" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Usr_mst">
+          <Key>
+            <PropertyRef Name="usr_id" />
+          </Key>
+          <Property Name="usr_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Dpt_id" Type="Int32" />
+          <Property Name="Psn_id" Type="Int32" />
+          <Property Name="Date_Create" Type="DateTime" Precision="3" />
+          <Property Name="Date_modified" Type="DateTime" Precision="3" />
+          <Property Name="Flag_Aproval" Type="Boolean" />
+          <NavigationProperty Name="Department_mst" Relationship="Domi_PurModel.FK_Usr_mst_Department_mst" FromRole="Usr_mst" ToRole="Department_mst" />
+          <NavigationProperty Name="Position_mst" Relationship="Domi_PurModel.FK_Usr_mst_Position_mst" FromRole="Usr_mst" ToRole="Position_mst" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Usr_mst_Department_mst">
+          <End Type="Domi_PurModel.Department_mst" Role="Department_mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.Usr_mst" Role="Usr_mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department_mst">
+              <PropertyRef Name="Dpt_id" />
+            </Principal>
+            <Dependent Role="Usr_mst">
+              <PropertyRef Name="Dpt_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usr_mst_Position_mst">
+          <End Type="Domi_PurModel.Position_mst" Role="Position_mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.Usr_mst" Role="Usr_mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position_mst">
+              <PropertyRef Name="Psn_id" />
+            </Principal>
+            <Dependent Role="Usr_mst">
+              <PropertyRef Name="Psn_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Domi_PurModelStoreContainer" CdmEntityContainer="Domi_PurEntities">
+          <EntitySetMapping Name="RoleMenuMapping_mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.RoleMenuMapping_mst">
+              <MappingFragment StoreEntitySet="RoleMenuMapping_mst">
+                <ScalarProperty Name="RoleMap_Id" ColumnName="RoleMap_Id" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Audlgn_Log">
+            <EntityTypeMapping TypeName="Domi_PurModel.Audlgn_Log">
+              <MappingFragment StoreEntitySet="Audlgn_Log">
+                <ScalarProperty Name="audlgn_id" ColumnName="audlgn_id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Department_mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Department_mst">
+              <MappingFragment StoreEntitySet="Department_mst">
+                <ScalarProperty Name="Dpt_id" ColumnName="Dpt_id" />
+                <ScalarProperty Name="Department_name" ColumnName="Department_name" />
+                <ScalarProperty Name="Create_date" ColumnName="Create_date" />
+                <ScalarProperty Name="Modified_date" ColumnName="Modified_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lgn_mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Lgn_mst">
+              <MappingFragment StoreEntitySet="Lgn_mst">
+                <ScalarProperty Name="Lgn_id" ColumnName="Lgn_id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Menu_mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Menu_mst">
+              <MappingFragment StoreEntitySet="Menu_mst">
+                <ScalarProperty Name="Menu_id" ColumnName="Menu_id" />
+                <ScalarProperty Name="Menu_name" ColumnName="Menu_name" />
+                <ScalarProperty Name="Menu_url" ColumnName="Menu_url" />
+                <ScalarProperty Name="Menu_ParentId" ColumnName="Menu_ParentId" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Ordering" ColumnName="Ordering" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Position_mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Position_mst">
+              <MappingFragment StoreEntitySet="Position_mst">
+                <ScalarProperty Name="Psn_id" ColumnName="Psn_id" />
+                <ScalarProperty Name="Position_name" ColumnName="Position_name" />
+                <ScalarProperty Name="Create_date" ColumnName="Create_date" />
+                <ScalarProperty Name="Modified_date" ColumnName="Modified_date" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubMenu_mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.SubMenu_mst">
+              <MappingFragment StoreEntitySet="SubMenu_mst">
+                <ScalarProperty Name="SubMenu_id" ColumnName="SubMenu_id" />
+                <ScalarProperty Name="SubMenu_Name" ColumnName="SubMenu_Name" />
+                <ScalarProperty Name="Flag" ColumnName="Flag" />
+                <ScalarProperty Name="Menu_id" ColumnName="Menu_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetMenuData" FunctionName="Domi_PurModel.Store.usp_GetMenuData">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Domi_PurModel.usp_GetMenuData_Result">
+                <ScalarProperty Name="MID" ColumnName="MID" />
+                <ScalarProperty Name="Menu_name" ColumnName="Menu_name" />
+                <ScalarProperty Name="Menu_url" ColumnName="Menu_url" />
+                <ScalarProperty Name="Menu_ParentId" ColumnName="Menu_ParentId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Usr_mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Usr_mst">
+              <MappingFragment StoreEntitySet="Usr_mst">
+                <ScalarProperty Name="Flag_Aproval" ColumnName="Flag_Aproval" />
+                <ScalarProperty Name="Date_modified" ColumnName="Date_modified" />
+                <ScalarProperty Name="Date_Create" ColumnName="Date_Create" />
+                <ScalarProperty Name="Psn_id" ColumnName="Psn_id" />
+                <ScalarProperty Name="Dpt_id" ColumnName="Dpt_id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="usr_id" ColumnName="usr_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Domi_PurModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
