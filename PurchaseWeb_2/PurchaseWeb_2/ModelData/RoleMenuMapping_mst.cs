@@ -17,6 +17,9 @@ namespace PurchaseWeb_2.ModelData
         public int RoleMap_Id { get; set; }
         public Nullable<int> RoleId { get; set; }
         public Nullable<int> MenuId { get; set; }
-        public Nullable<int> Active { get; set; }
+        public Nullable<bool> Active { get; set; }
+    
+        public virtual Menu_mst Menu_mst { get; set; }
+        public virtual Position_mst Position_mst { get; set; }
     }
 }

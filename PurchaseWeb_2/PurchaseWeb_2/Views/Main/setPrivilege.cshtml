@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "setPrivilege";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Privilege Setup</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">List of Role</h3>
+            </div>
+        </div>
+        <div class="card-body">
+            @Html.DropDownList("RoleID",
+                    new SelectList(ViewBag.roles, "Psn_id", "Position_name"),
+                    "Please Select the Role",
+                    new { @class = "custom-select form-control-border", onChange = "getMenulist(this.value);" })
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div id="menuList">
+
+        </div>
+    </div>
+</div>
+
+<script>
+    //function getMenulist(id) {
+    //    jQuery.ajax({
+    //        url: '/Main/getMenulist?roleid='+id,
+    //        type: 'POST',
+    //      success: function (result) {
+    //          $('#menuList').html(result);
+    //      }
+    //    });
+    //}
+
+    function getMenulist(val) {
+        $.ajax({
+            url: "/Main/getMenulist",
+            type: "POST",
+            dataType: "html",
+            data: { roleid: $("#RoleID").val() },
+            success: function (data) {
+                $('#menuList').html(data);
+            },
+        });
+    }
+</script>
+
+

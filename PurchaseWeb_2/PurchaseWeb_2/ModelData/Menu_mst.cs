@@ -14,11 +14,20 @@ namespace PurchaseWeb_2.ModelData
     
     public partial class Menu_mst
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Menu_mst()
+        {
+            this.RoleMenuMapping_mst = new HashSet<RoleMenuMapping_mst>();
+        }
+    
         public int Menu_id { get; set; }
         public string Menu_name { get; set; }
         public string Menu_url { get; set; }
         public Nullable<int> Menu_ParentId { get; set; }
         public Nullable<bool> Active { get; set; }
         public Nullable<int> Ordering { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RoleMenuMapping_mst> RoleMenuMapping_mst { get; set; }
     }
 }

@@ -1,0 +1,44 @@
+﻿@model List<PurchaseWeb_2.Models.MenuCheckboxViewModel>
+
+
+
+@using (Html.BeginForm("RoleMapSave", "Main", FormMethod.Post))
+{
+    //int i = 0;
+    <table class="table">
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+
+            </th>
+            <th>
+                Menu Name
+            </th>
+        </tr>
+
+
+
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <tr>
+                <td>
+                    @i
+                    @Html.HiddenFor(modelItem => Model[i].RoleID)
+                    @Html.HiddenFor(modelItem => Model[i].MenuID)
+                </td>
+                <td>
+                    @Html.CheckBoxFor(modelItem => Model[i].IsChecked )
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].MenuName)
+                </td>
+            </tr>
+        }
+
+    </table>
+    <button type="submit" class="btn btn-primary" value="Save">Submit</button>
+}
+
+

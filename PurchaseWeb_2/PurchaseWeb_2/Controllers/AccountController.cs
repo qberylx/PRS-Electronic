@@ -201,10 +201,18 @@ namespace PurchaseWeb_2.Controllers
             }
             else
             {
-                MenuDT menuDT= new MenuDT();
-                String UserID = Session["UserID"].ToString();
-                Menu = menuDT.GetMenus(UserID);// pass employee id here
-                Session["_Menu"] = Menu;
+                if (Session["UserID"] != null)
+                {
+                    MenuDT menuDT = new MenuDT();
+                    String UserID = Session["UserID"].ToString();
+                    Menu = menuDT.GetMenus(UserID);// pass employee id here
+                    Session["_Menu"] = Menu;
+                }
+                else
+                {
+                    return View("LogOn", "Account");
+                }
+                
             }
             
             return PartialView("_SlidebarMenu", Menu);

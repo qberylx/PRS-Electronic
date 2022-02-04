@@ -3,7 +3,9 @@ using PurchaseWeb_2.ModelData;
 using PurchaseWeb_2.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -64,6 +66,72 @@ namespace PurchaseWeb_2.Controllers
 
             return View();
         }
+
+        public ActionResult setPrivilege()
+        {
+            var roles = db.Position_mst.ToList();
+            ViewBag.roles = roles;
+
+            
+
+            return View("setPrivilege");
+        }
+
+        public ActionResult getMenulist(int roleid)
+        {
+            List<RoleMenuMapping_mst> menuList = db.RoleMenuMapping_mst
+                .Where(x => x.RoleId == roleid)                                    
+                .ToList();
+            MenuCheckboxViewModel mcVM = new MenuCheckboxViewModel();
+
+            List<MenuCheckboxViewModel> mcVMList = menuList.Select(x => new MenuCheckboxViewModel
+            {
+                RoleID = roleid,
+                MenuID = x.Menu_mst.Menu_id,
+                MenuName = x.Menu_mst.Menu_name,
+                IsChecked = (bool)x.Active
+            }).ToList();
+
+            //var menuList = db.Menu_mst.ToList();
+            //ViewBag.menuList = menuList;
+            //ViewBag.roleID = roleid;
+
+            return PartialView("getMenuList",mcVMList);
+        }
+
+        [HttpPost]
+        public ActionResult RoleMapSave(List<MenuCheckboxViewModel> menucheckboxs)
+        {
+            int roleid = 1 ;
+            var AddRoleMenuMap = db.Set<RoleMenuMapping_mst>();
+            foreach (MenuCheckboxViewModel menuCheckbox in menucheckboxs)
+            {
+                var AddChkRoleMenuMap = db.RoleMenuMapping_mst.SingleOrDefault(rm => rm.RoleId == menuCheckbox.RoleID && rm.MenuId == menuCheckbox.MenuID  );
+                if (AddChkRoleMenuMap != null)
+                {
+                    AddChkRoleMenuMap.Active = menuCheckbox.IsChecked;
+                    db.SaveChanges();
+
+                }
+                else
+                {
+                    AddRoleMenuMap.Add(new RoleMenuMapping_mst
+                    {
+                        RoleId = menuCheckbox.RoleID,
+                        MenuId = menuCheckbox.MenuID,
+                        Active = menuCheckbox.IsChecked
+                    });
+                }
+                roleid = menuCheckbox.RoleID;
+                
+            }
+            db.SaveChanges();
+
+
+            return RedirectToAction("setPrivilege");
+        }
+
+
 
         public ActionResult roleList()
         {

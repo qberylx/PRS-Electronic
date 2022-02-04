@@ -190,6 +190,7 @@
     </Compile>
     <Compile Include="Models\DepartmentModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />
+    <Compile Include="Models\MenuCheckboxViewModel.cs" />
     <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
@@ -2247,6 +2248,8 @@
     <Content Include="Views\Main\Role.cshtml" />
     <Content Include="Views\Main\roleList.cshtml" />
     <Content Include="Views\Main\roleEdit.cshtml" />
+    <Content Include="Views\Main\setPrivilege.cshtml" />
+    <Content Include="Views\Main\getMenulist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
