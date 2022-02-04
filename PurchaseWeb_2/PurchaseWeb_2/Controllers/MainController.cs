@@ -8,6 +8,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -125,6 +126,7 @@ namespace PurchaseWeb_2.Controllers
                 roleid = menuCheckbox.RoleID;
                 
             }
+            this.AddNotification("Privilege Updated!!", NotificationType.SUCCESS);
             db.SaveChanges();
 
 
@@ -296,11 +298,41 @@ namespace PurchaseWeb_2.Controllers
             
             try
             {
-                var user = new Usr_mst { usr_id = id, Flag_Aproval = true, Date_modified = DateTime.Now };
-                db.Usr_mst.Attach(user);
-                db.Entry(user).Property(x => x.Flag_Aproval).IsModified = true;
-                db.Entry(user).Property(x => x.Date_modified).IsModified = true;
+                var user = db.Usr_mst.Where(x => x.usr_id == id).FirstOrDefault();
+                if (user != null)
+                {
+                    user.Flag_Aproval = true;
+                    user.Date_modified = DateTime.Now;
+                }
+
+
+                //var user = new Usr_mst { usr_id = id, Flag_Aproval = true, Date_modified = DateTime.Now  };
+                //db.Usr_mst.Attach(user);
+                //db.Entry(user).Property(x => x.Flag_Aproval).IsModified = true;
+                //db.Entry(user).Property(x => x.Date_modified).IsModified = true;
                 db.SaveChanges();
+
+                //var UserList = db.Usr_mst.ToList();
+                //var UserEmail = UserList.Where(x => x.usr_id == id).First();
+
+                String email = user.Email;
+                MailMessage mail = new MailMessage();
+                mail.To.Add(email);
+                mail.From = new MailAddress("mqatadahabdaziz@gmail.com");
+                mail.Subject = @"Web Approval";
+                string Body = @"Hey , your User Id has been approve. 
+                                You may login to lalala";
+                mail.Body = Body;
+                mail.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.gmail.com";
+                smtp.Port = 587;
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new System.Net.NetworkCredential("mqatadahabdaziz@gmail.com", "qu3@Gmail"); // Enter seders User name and password       
+                smtp.EnableSsl = true;
+                smtp.Send(mail);
+
+
                 this.AddNotification("Approved!!", NotificationType.SUCCESS);
                 return PartialView("Dashboard");
             }
@@ -312,6 +344,29 @@ namespace PurchaseWeb_2.Controllers
 
             return PartialView("Dashboard");
 
+        }
+
+        public void SendEmail(int id)
+        {
+            //send email to user 
+            var UserList = db.Usr_mst.ToList();
+            var UserEmail = UserList.Where(x => x.usr_id == id).First();
+
+            String email = UserEmail.Email;
+            MailMessage mail = new MailMessage();
+            mail.To.Add(email);
+            mail.From = new MailAddress("mqatadahabdaziz@gmail.com");
+            mail.Subject = @"My Web , Approval";
+            string Body = @"Hey , your email has been approve";
+            mail.Body = Body;
+            mail.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new System.Net.NetworkCredential("mqatadahabdaziz@gmail.com", "qu3@Gmail"); // Enter seders User name and password       
+            smtp.EnableSsl = true;
+            smtp.Send(mail);
         }
 
 
