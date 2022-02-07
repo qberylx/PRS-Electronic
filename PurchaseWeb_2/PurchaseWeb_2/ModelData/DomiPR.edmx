@@ -44,6 +44,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="Menu_ParentId" Type="int" />
           <Property Name="Active" Type="bit" />
           <Property Name="Ordering" Type="int" />
+          <Property Name="MenuLayer" Type="int" />
         </EntityType>
         <EntityType Name="Position_mst">
           <Key>
@@ -146,6 +147,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="AssignRoleMenuMap" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="usp_GetMenuData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserId" Type="varchar" Mode="In" />
         </Function>
@@ -236,6 +238,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="Active" Type="Boolean" />
           <Property Name="Ordering" Type="Int32" />
           <NavigationProperty Name="RoleMenuMapping_mst" Relationship="Domi_PurModel.FK_RoleMenuMapping_mst_Menu_mst" FromRole="Menu_mst" ToRole="RoleMenuMapping_mst" />
+          <Property Name="MenuLayer" Type="Int32" />
         </EntityType>
         <EntityType Name="Position_mst">
           <Key>
@@ -287,6 +290,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             <End Role="Position_mst" EntitySet="Position_mst" />
             <End Role="RoleMenuMapping_mst" EntitySet="RoleMenuMapping_mst" />
           </AssociationSet>
+          <FunctionImport Name="AssignRoleMenuMap" />
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -415,6 +419,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySetMapping Name="Menu_mst">
             <EntityTypeMapping TypeName="Domi_PurModel.Menu_mst">
               <MappingFragment StoreEntitySet="Menu_mst">
+                <ScalarProperty Name="MenuLayer" ColumnName="MenuLayer" />
                 <ScalarProperty Name="Menu_id" ColumnName="Menu_id" />
                 <ScalarProperty Name="Menu_name" ColumnName="Menu_name" />
                 <ScalarProperty Name="Menu_url" ColumnName="Menu_url" />
@@ -490,6 +495,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AssignRoleMenuMap" FunctionName="Domi_PurModel.Store.AssignRoleMenuMap" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

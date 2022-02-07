@@ -2250,6 +2250,9 @@
     <Content Include="Views\Main\roleEdit.cshtml" />
     <Content Include="Views\Main\setPrivilege.cshtml" />
     <Content Include="Views\Main\getMenulist.cshtml" />
+    <Content Include="Views\Main\Menu.cshtml" />
+    <Content Include="Views\Main\menuList.cshtml" />
+    <Content Include="Views\Main\MenuEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

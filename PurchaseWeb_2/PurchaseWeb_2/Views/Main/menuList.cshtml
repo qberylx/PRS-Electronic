@@ -1,0 +1,102 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.Menu_mst>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Menu_name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Menu_url)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Active)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Ordering)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var m in Model.OrderBy(x => x.Ordering))
+            {
+                if (m.Menu_ParentId == 0 && m.Active == true)
+                {
+                    var submenu = Model.Where(n => n.Menu_ParentId == m.Menu_id && n.Active == true).OrderBy(n=>n.Ordering).ToList();
+
+                    if (submenu != null && submenu.Count > 0)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => m.Menu_name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => m.Menu_url)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => m.Active)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => m.Ordering)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "MenuEdit", new { id = m.Menu_id }) |
+                                @Html.ActionLink("Delete", "MenuDelete", new { id = m.Menu_id })
+                            </td>
+                        </tr>
+                        foreach (var n in submenu)
+                        {
+                            <tr>
+                                <td>
+                                    &nbsp;&nbsp; @Html.DisplayFor(modelItem => n.Menu_name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => n.Menu_url)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => n.Active)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => n.Ordering)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "MenuEdit", new { id = n.Menu_id }) |
+                                    @Html.ActionLink("Delete", "MenuDelete", new { id = n.Menu_id })
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                    else
+                    {
+                        <tr >
+                            <td>
+                                @Html.DisplayFor(modelItem => m.Menu_name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => m.Menu_url)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => m.Active)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => m.Ordering)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "MenuEdit", new { id = m.Menu_id }) |
+                                @Html.ActionLink("Delete", "MenuDelete", new { id = m.Menu_id })
+                            </td>
+                        </tr>
+                    }
+
+
+                }
+            }
+
+
+
+        </table>
+    </div>
+</div>
+

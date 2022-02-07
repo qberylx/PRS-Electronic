@@ -5,39 +5,77 @@
 @using (Html.BeginForm("RoleMapSave", "Main", FormMethod.Post))
 {
     //int i = 0;
-    <table class="table">
-        <tr>
-            <th>
-                No.
-            </th>
-            <th>
+<table class="table">
+    <tr>
+        <th>
+            No.
+        </th>
+        <th>
 
-            </th>
-            <th>
-                Menu Name
-            </th>
-        </tr>
+        </th>
+        <th>
+            Menu Name
+        </th>
+    </tr>
 
 
 
-        @for (int i = 0; i < Model.Count(); i++)
+    @for (int i = 0; i < Model.Where(x=>x.menuActive == true).Count(); i++)
+    {
+        if (Model[i].ParentId == 0)
         {
-            <tr>
-                <td>
-                    @i
-                    @Html.HiddenFor(modelItem => Model[i].RoleID)
-                    @Html.HiddenFor(modelItem => Model[i].MenuID)
-                </td>
-                <td>
-                    @Html.CheckBoxFor(modelItem => Model[i].IsChecked )
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model[i].MenuName)
-                </td>
-            </tr>
+            var submenu = Model.Where(n => n.ParentId == Model[i].MenuID).ToList();
+            if (submenu.Count() > 0)
+            {
+                <tr>
+                    <td>
+                        @i
+                        @Html.HiddenFor(modelItem => Model[i].RoleID)
+                        @Html.HiddenFor(modelItem => Model[i].MenuID)
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(modelItem => Model[i].IsChecked)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model[i].MenuName)
+                    </td>
+                </tr>
+                for (int j = 0; j < submenu.Count(); j++)
+                {
+                    <tr>
+                        <td>
+                            @j
+                            @Html.HiddenFor(modelItem => submenu[j].RoleID)
+                            @Html.HiddenFor(modelItem => submenu[j].MenuID)
+                        </td>
+                        <td>
+                            @Html.CheckBoxFor(modelItem => submenu[j].IsChecked)
+                        </td>
+                        <td>
+                            <i class="fa fa-angle-right" aria-hidden="true"></i> &nbsp;&nbsp;  @Html.DisplayFor(modelItem => submenu[j].MenuName)
+                        </td>
+                    </tr>
+                }
+            }
         }
+        <!--
+        <tr>
+            <td>
+                @i
+                @Html.HiddenFor(modelItem => Model[i].RoleID)
+                @Html.HiddenFor(modelItem => Model[i].MenuID)
+            </td>
+            <td>
+                @Html.CheckBoxFor(modelItem => Model[i].IsChecked)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model[i].MenuName)
+            </td>
+        </tr>
+        -->
+    }
 
-    </table>
+</table>
     <button type="submit" class="btn btn-primary" value="Save">Submit</button>
 }
 

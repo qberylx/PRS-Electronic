@@ -11,11 +11,9 @@ namespace PurchaseWeb_2.ModelData
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Usr_mst
     {
-        [Key]
         public int usr_id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }

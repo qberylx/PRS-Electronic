@@ -1,0 +1,117 @@
+﻿@model PurchaseWeb_2.ModelData.Menu_mst
+
+@{
+    ViewBag.Title = "Menu";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="content-header">
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0">Menu Master</h1>
+        </div><!-- /.col -->
+        <!--
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard v1</li>
+            </ol>
+        </div>
+        -->
+        <!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                <div id="notification">
+                    @Html.Partial("_Notifications")
+                </div>                
+                
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Menu_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Menu_name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Menu_name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Menu_url, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Menu_url, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Menu_url, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Menu_ParentId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select class="custom-select form-control-border" data-val="true" data-val-number="The field Menu_ParentId must be a number." id="Menu_ParentId" name="Menu_ParentId">
+                            <option value="0" >Please Select the Parent Menu</option>
+                            @foreach (var menu in ViewBag.menuParent)
+                                {
+                                    <option value="@menu.Menu_id">@menu.Menu_name</option>
+                                }
+                        </select>
+
+                        @Html.ValidationMessageFor(model => model.Menu_ParentId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MenuLayer, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            <select class="custom-select form-control-border" data-val="true" data-val-number="The field MenuLayer must be a number." id="MenuLayer" name="MenuLayer">
+                                <option value="0">Main Menu</option>
+                                <option value="1">Sub Menu</option>
+                            </select>
+
+                            @Html.ValidationMessageFor(model => model.MenuLayer, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Ordering, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Ordering, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Ordering, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+<section class="row">
+    <div class="col-lg-12">
+
+        @{Html.RenderAction("menuList", "Main"); }
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    });
+</script>

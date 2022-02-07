@@ -1,0 +1,93 @@
+﻿@model PurchaseWeb_2.ModelData.Menu_mst
+
+@{
+    ViewBag.Title = "MenuEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>Menu Edit</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm("MenuEdit", "Main", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Menu_mst</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Menu_id)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Menu_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Menu_name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Menu_name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Menu_url, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Menu_url, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Menu_url, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Menu_ParentId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select class="custom-select form-control-border" data-val="true" data-val-number="The field Menu_ParentId must be a number." id="Menu_ParentId" name="Menu_ParentId">
+                            <option value="0">This is Parent Menu</option>
+                            @foreach (var menu in ViewBag.menuParent)
+                            {
+                                if (menu.Menu_id == Model.Menu_ParentId)
+                                {
+                                    <option value="@menu.Menu_id" selected>@menu.Menu_name</option>
+                                }
+                                else
+                                {
+                                    <option value="@menu.Menu_id">@menu.Menu_name</option>
+                                }
+                            }
+                        </select>
+
+                        @Html.ValidationMessageFor(model => model.Menu_ParentId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Ordering, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Ordering, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Ordering, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Save" class="btn btn-success" />
+                            </div>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div>
+    <button onclick="document.location= '@Url.Action("Menu", "Main")'" class="btn btn-primary">
+        Return to Menu Master
+    </button>
+</div>
+
+
+

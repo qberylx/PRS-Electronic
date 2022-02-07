@@ -13,6 +13,9 @@ namespace PurchaseWeb_2.Models
         public int MenuID { get; set; }
         public string MenuName { get; set; }
         public int Active { get; set; }
+        public int ParentId { get; set; }
+        public bool menuActive { get; set; }
+
 
         public bool IsChecked { get; set; }
 

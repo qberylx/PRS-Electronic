@@ -68,6 +68,131 @@ namespace PurchaseWeb_2.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult Menu()
+        {
+            var menuParent = db.Menu_mst
+                                .Where(x => x.Menu_ParentId == 0)
+                                .OrderBy(x => x.Ordering)
+                                .ToList();
+            ViewBag.menuParent = menuParent;
+
+            return View("Menu");
+        }
+
+        [HttpPost]
+        public ActionResult Menu(Menu_mst menu_)
+        {
+            var menus = db.Set<Menu_mst>();
+            menus.Add(new Menu_mst
+            {
+                Menu_name     = menu_.Menu_name,
+                Menu_url      = menu_.Menu_url,
+                Menu_ParentId = menu_.Menu_ParentId,
+                Active        = true,
+                Ordering      = menu_.Ordering,
+                MenuLayer     = menu_.MenuLayer
+            });
+            db.SaveChanges();
+
+            var addMenuMap = db.AssignRoleMenuMap();
+
+            var menuParent = db.Menu_mst
+                                .Where(x => x.Menu_ParentId == 0)
+                                .OrderBy(x => x.Ordering)
+                                .ToList();
+            ViewBag.menuParent = menuParent;
+
+            return View("Menu");
+        }
+
+        [HttpGet]
+        public ActionResult MenuEdit(int id)
+        {
+            var menuEdit = db.Menu_mst.Where(x=>x.Menu_id==id).FirstOrDefault();
+
+            var menuParent = db.Menu_mst
+                                .Where(x => x.Menu_ParentId == 0)
+                                .OrderBy(x => x.Ordering)
+                                .ToList();
+            ViewBag.menuParent = menuParent;
+
+            return View("MenuEdit",menuEdit);
+        }
+
+        [HttpPost]
+        public ActionResult MenuEdit(Menu_mst menu_)
+        {
+            try
+            {
+                var menu = db.Menu_mst.SingleOrDefault(mm => mm.Menu_id == menu_.Menu_id);
+                if(menu != null)
+                {
+                    menu.Menu_name = menu_.Menu_name;
+                    menu.Menu_url = menu_.Menu_url;
+                    menu.Menu_ParentId = menu_.Menu_ParentId;
+                    menu.Ordering = menu_.Ordering;
+                }
+                db.SaveChanges();
+
+                var menuParent = db.Menu_mst
+                                .Where(x => x.Menu_ParentId == 0)
+                                .OrderBy(x => x.Ordering)
+                                .ToList();
+                ViewBag.menuParent = menuParent;
+
+                this.AddNotification("Menu Added!!", NotificationType.SUCCESS);
+                return View("Menu");
+            }
+            catch (RetryLimitExceededException)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+            this.AddNotification("Menu is not save!!", NotificationType.ERROR);
+            
+            return View("Menu");
+        }
+
+        public ActionResult MenuDelete(int id)
+        {
+            try
+            {
+                var menuDelete = db.Menu_mst.SingleOrDefault(mm => mm.Menu_id == id);
+                if (menuDelete != null)
+                {
+                    menuDelete.Active = false;
+                    db.SaveChanges();
+
+                }
+                
+                //viewbag untuk menu
+                var menuParent = db.Menu_mst
+                                .Where(x => x.Menu_ParentId == 0)
+                                .OrderBy(x => x.Ordering)
+                                .ToList();
+                ViewBag.menuParent = menuParent;
+
+                this.AddNotification("Menu Deleted successfully!!", NotificationType.SUCCESS);
+                return View("Menu");
+            }
+            catch (RetryLimitExceededException)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+            this.AddNotification("Menu Failed to be deleted!!", NotificationType.ERROR);
+            return View("Menu");
+
+        }
+
+        public ActionResult menuList()
+        {
+            var menuList = db.Menu_mst.ToList();
+
+            return PartialView("menuList", menuList);
+        }
+
         public ActionResult setPrivilege()
         {
             var roles = db.Position_mst.ToList();
@@ -90,7 +215,9 @@ namespace PurchaseWeb_2.Controllers
                 RoleID = roleid,
                 MenuID = x.Menu_mst.Menu_id,
                 MenuName = x.Menu_mst.Menu_name,
-                IsChecked = (bool)x.Active
+                IsChecked = (bool)x.Active,
+                ParentId = (int)x.Menu_mst.Menu_ParentId,
+                menuActive = (bool)x.Menu_mst.Active
             }).ToList();
 
             //var menuList = db.Menu_mst.ToList();
@@ -304,16 +431,12 @@ namespace PurchaseWeb_2.Controllers
                     user.Flag_Aproval = true;
                     user.Date_modified = DateTime.Now;
                 }
-
+                db.SaveChanges();
 
                 //var user = new Usr_mst { usr_id = id, Flag_Aproval = true, Date_modified = DateTime.Now  };
                 //db.Usr_mst.Attach(user);
                 //db.Entry(user).Property(x => x.Flag_Aproval).IsModified = true;
                 //db.Entry(user).Property(x => x.Date_modified).IsModified = true;
-                db.SaveChanges();
-
-                //var UserList = db.Usr_mst.ToList();
-                //var UserEmail = UserList.Where(x => x.usr_id == id).First();
 
                 String email = user.Email;
                 MailMessage mail = new MailMessage();
@@ -346,28 +469,7 @@ namespace PurchaseWeb_2.Controllers
 
         }
 
-        public void SendEmail(int id)
-        {
-            //send email to user 
-            var UserList = db.Usr_mst.ToList();
-            var UserEmail = UserList.Where(x => x.usr_id == id).First();
-
-            String email = UserEmail.Email;
-            MailMessage mail = new MailMessage();
-            mail.To.Add(email);
-            mail.From = new MailAddress("mqatadahabdaziz@gmail.com");
-            mail.Subject = @"My Web , Approval";
-            string Body = @"Hey , your email has been approve";
-            mail.Body = Body;
-            mail.IsBodyHtml = true;
-            SmtpClient smtp = new SmtpClient();
-            smtp.Host = "smtp.gmail.com";
-            smtp.Port = 587;
-            smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new System.Net.NetworkCredential("mqatadahabdaziz@gmail.com", "qu3@Gmail"); // Enter seders User name and password       
-            smtp.EnableSsl = true;
-            smtp.Send(mail);
-        }
+        
 
 
 

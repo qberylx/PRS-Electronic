@@ -45,5 +45,10 @@ namespace PurchaseWeb_2.ModelData
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_GetMenuData_Result>("usp_GetMenuData", userIdParameter);
         }
+    
+        public virtual int AssignRoleMenuMap()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AssignRoleMenuMap");
+        }
     }
 }
