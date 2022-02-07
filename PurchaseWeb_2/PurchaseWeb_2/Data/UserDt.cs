@@ -52,7 +52,8 @@ namespace PurchaseWeb_2.Model
             //access database
             string sqlQuery = @"SELECT [Psn_id]
                                   ,[Position_name]
-                              FROM [dbo].[Position_mst]";
+                              FROM [dbo].[Position_mst] 
+                              where [Position_name] not in ('Admin') ";
 
             SqlCommand cmd = new SqlCommand(sqlQuery, con);
             con.Open();

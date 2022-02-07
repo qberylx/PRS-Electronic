@@ -47,12 +47,8 @@ namespace PurchaseWeb_2.Controllers
                     }
                     else
                     {
-                        //return RedirectToAction("Create", "RegUser");
-
-                        //return RedirectToAction("CheckUser");
+                        // set session username
                         Session["Username"] = model.UserName;
-                        //string UserName = model.UserName;
-                        //Session["SmaAccount"] = GetSmaAccount(UserName);
                         
                         return RedirectToAction("CheckUser");
                     }
@@ -119,15 +115,12 @@ namespace PurchaseWeb_2.Controllers
         [HttpGet]
         public ActionResult ProcessCreate()
         {
-            //UserModel model = new UserModel();
-            //List<DropdownDepartment> departments = new List<DropdownDepartment>();
             UserDT userDT = new UserDT();
-            //model.DepartmentList = userDT.FetchDepartment();
-
+            
             ViewBag.departmentList = new SelectList(userDT.FetchDepartment(), "Dpt_Id", "Dpt_name");
             ViewBag.positionList = new SelectList(userDT.FetchPosition(), "Psn_id", "Position_name");
 
-            return View();
+            return View("ProcessCreate");
         }
 
 

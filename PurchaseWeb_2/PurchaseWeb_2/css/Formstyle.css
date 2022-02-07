@@ -177,7 +177,7 @@ textarea {
     height: 58px;
 }
 select.form-control {
-    width: 106%;
+    width: 100%;
     padding: 9px 10px;
 }
 /*.login-form input[type="text"]:hover,.login-form input[type="email"]:hover,textarea:hover {

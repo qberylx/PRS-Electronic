@@ -15,13 +15,13 @@ namespace PurchaseWeb_2.Models
         [Required]
         public string Username { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Please enter your office Email ")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please choose your department")]
         public int Dpt_id { get; set; }
 
-        [Required]
+        [Required (ErrorMessage ="Please choose your role")]
         public int Psn_id { get; set; }
 
         [Required]
@@ -42,6 +42,7 @@ namespace PurchaseWeb_2.Models
 
     public class DropdownPosition
     {
+        
         public int Psn_id { get; set; }
         public string Position_name { get; set; }
 
