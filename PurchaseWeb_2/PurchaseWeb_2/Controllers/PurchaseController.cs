@@ -38,7 +38,6 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult AddPurRequest(int Doctype)
         {
-            //int Doctype = 1;
             string PRnewNo = getNewPrNO(Doctype);
             string username = Convert.ToString(Session["Username"]);
             //get User id and department id
@@ -55,7 +54,9 @@ namespace PurchaseWeb_2.Controllers
                     DepartmentId = userdtls.Dpt_id,
                     RequestDate = DateTime.Now,
                     CreateDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now
+                    ModifiedDate = DateTime.Now,
+                    StatId = 1,
+                    PRTypeId = Doctype
 
                 });
                 db.SaveChanges();
@@ -82,6 +83,28 @@ namespace PurchaseWeb_2.Controllers
             NewPrNO = Convert.ToString(lstDocNo.Value);
 
             return NewPrNO;
+        }
+
+        [ChildActionOnly]
+        public ActionResult PrMstList()
+        {
+            string username = Convert.ToString(Session["Username"]);
+            //get User id and department id
+            var userdtls = db.Usr_mst
+                            .Where(x => x.Username == username)
+                            .FirstOrDefault();
+
+            var PrMstList = db.PR_Mst
+                .Where(x => x.DepartmentId == userdtls.Dpt_id)
+                .ToList();
+
+            if (userdtls.Psn_id == 7)
+            {
+                PrMstList = db.PR_Mst
+                .ToList();
+            }
+            
+            return PartialView("PrMstList", PrMstList);
         }
 
         [HttpGet]

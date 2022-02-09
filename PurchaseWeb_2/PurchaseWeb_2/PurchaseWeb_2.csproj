@@ -186,6 +186,9 @@
     <Compile Include="ModelData\RoleMenuMapping_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\Status_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\SubMenu_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -2268,6 +2271,7 @@
     <Content Include="Views\Main\MenuEdit.cshtml" />
     <Content Include="Views\Purchase\PurRequest.cshtml" />
     <Content Include="Views\Purchase\AddUOM.cshtml" />
+    <Content Include="Views\Purchase\PrMstList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

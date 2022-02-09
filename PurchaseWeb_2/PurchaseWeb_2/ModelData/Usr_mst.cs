@@ -18,6 +18,7 @@ namespace PurchaseWeb_2.ModelData
         public Usr_mst()
         {
             this.PR_Details = new HashSet<PR_Details>();
+            this.PR_Mst = new HashSet<PR_Mst>();
         }
     
         public int usr_id { get; set; }
@@ -33,5 +34,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual Position_mst Position_mst { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PR_Mst> PR_Mst { get; set; }
     }
 }

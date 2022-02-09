@@ -106,9 +106,11 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           </Key>
           <Property Name="PRId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PRNo" Type="varchar" MaxLength="20" />
+          <Property Name="PRTypeId" Type="int" />
           <Property Name="UserId" Type="int" />
           <Property Name="DepartmentId" Type="int" />
           <Property Name="RequestDate" Type="datetime" />
+          <Property Name="StatId" Type="int" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
@@ -120,6 +122,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="RoleId" Type="int" />
           <Property Name="MenuId" Type="int" />
           <Property Name="Active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Status_Mst">
+          <Key>
+            <PropertyRef Name="StatId" />
+          </Key>
+          <Property Name="StatId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -211,6 +220,42 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PR_Mst_Department_mst">
+          <End Role="Department_mst" Type="Self.Department_mst" Multiplicity="0..1" />
+          <End Role="PR_Mst" Type="Self.PR_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department_mst">
+              <PropertyRef Name="Dpt_id" />
+            </Principal>
+            <Dependent Role="PR_Mst">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Mst_Status_Mst">
+          <End Role="Status_Mst" Type="Self.Status_Mst" Multiplicity="0..1" />
+          <End Role="PR_Mst" Type="Self.PR_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status_Mst">
+              <PropertyRef Name="StatId" />
+            </Principal>
+            <Dependent Role="PR_Mst">
+              <PropertyRef Name="StatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Mst_Usr_mst">
+          <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="0..1" />
+          <End Role="PR_Mst" Type="Self.PR_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usr_mst">
+              <PropertyRef Name="usr_id" />
+            </Principal>
+            <Dependent Role="PR_Mst">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RoleMenuMapping_mst_Menu_mst">
           <End Role="Menu_mst" Type="Self.Menu_mst" Multiplicity="0..1" />
           <End Role="RoleMenuMapping_mst" Type="Self.RoleMenuMapping_mst" Multiplicity="*" />
@@ -277,6 +322,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySet Name="PR_Details" EntityType="Self.PR_Details" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Mst" EntityType="Self.PR_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenuMapping_mst" EntityType="Self.RoleMenuMapping_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Status_Mst" EntityType="Self.Status_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UOM_mst" EntityType="Self.UOM_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usr_mst" EntityType="Self.Usr_mst" Schema="dbo" store:Type="Tables" />
@@ -318,6 +364,18 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             <End Role="Usr_mst" EntitySet="Usr_mst" />
             <End Role="PR_Details" EntitySet="PR_Details" />
           </AssociationSet>
+          <AssociationSet Name="FK_PR_Mst_Department_mst" Association="Self.FK_PR_Mst_Department_mst">
+            <End Role="Department_mst" EntitySet="Department_mst" />
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Mst_Status_Mst" Association="Self.FK_PR_Mst_Status_Mst">
+            <End Role="Status_Mst" EntitySet="Status_Mst" />
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Mst_Usr_mst" Association="Self.FK_PR_Mst_Usr_mst">
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+          </AssociationSet>
           <AssociationSet Name="FK_RoleMenuMapping_mst_Menu_mst" Association="Self.FK_RoleMenuMapping_mst_Menu_mst">
             <End Role="Menu_mst" EntitySet="Menu_mst" />
             <End Role="RoleMenuMapping_mst" EntitySet="RoleMenuMapping_mst" />
@@ -356,6 +414,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="Create_date" Type="DateTime" Precision="3" />
           <Property Name="Modified_date" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_Usr_mst_Department_mst" FromRole="Department_mst" ToRole="Usr_mst" />
+          <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Mst_Department_mst" FromRole="Department_mst" ToRole="PR_Mst" />
         </EntityType>
         <EntityType Name="Lgn_mst">
           <Key>
@@ -455,6 +514,19 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             <Parameter Name="docyear" Mode="In" Type="Int32" />
             <Parameter Name="LastDocNo" Mode="InOut" Type="String" />
           </FunctionImport>
+          <AssociationSet Name="FK_PR_Mst_Department_mst" Association="Domi_PurModel.FK_PR_Mst_Department_mst">
+            <End Role="Department_mst" EntitySet="Department_mst" />
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Mst_Usr_mst" Association="Domi_PurModel.FK_PR_Mst_Usr_mst">
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+          </AssociationSet>
+          <EntitySet Name="Status_Mst" EntityType="Domi_PurModel.Status_Mst" />
+          <AssociationSet Name="FK_PR_Mst_Status_Mst" Association="Domi_PurModel.FK_PR_Mst_Status_Mst">
+            <End Role="Status_Mst" EntitySet="Status_Mst" />
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -477,6 +549,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <NavigationProperty Name="Department_mst" Relationship="Domi_PurModel.FK_Usr_mst_Department_mst" FromRole="Usr_mst" ToRole="Department_mst" />
           <NavigationProperty Name="Position_mst" Relationship="Domi_PurModel.FK_Usr_mst_Position_mst" FromRole="Usr_mst" ToRole="Position_mst" />
           <NavigationProperty Name="PR_Details" Relationship="Domi_PurModel.FK_PR_Details_Usr_mst" FromRole="Usr_mst" ToRole="PR_Details" />
+          <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Mst_Usr_mst" FromRole="Usr_mst" ToRole="PR_Mst" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -608,6 +681,11 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="PR_Details" Relationship="Domi_PurModel.FK_PR_Details_PR_Mst" FromRole="PR_Mst" ToRole="PR_Details" />
+          <NavigationProperty Name="Department_mst" Relationship="Domi_PurModel.FK_PR_Mst_Department_mst" FromRole="PR_Mst" ToRole="Department_mst" />
+          <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_PR_Mst_Usr_mst" FromRole="PR_Mst" ToRole="Usr_mst" />
+          <Property Name="StatId" Type="Int32" />
+          <NavigationProperty Name="Status_Mst" Relationship="Domi_PurModel.FK_PR_Mst_Status_Mst" FromRole="PR_Mst" ToRole="Status_Mst" />
+          <Property Name="PRTypeId" Type="Int32" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -663,6 +741,50 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             </Principal>
             <Dependent Role="PR_Details">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Mst_Department_mst">
+          <End Type="Domi_PurModel.Department_mst" Role="Department_mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PR_Mst" Role="PR_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department_mst">
+              <PropertyRef Name="Dpt_id" />
+            </Principal>
+            <Dependent Role="PR_Mst">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Mst_Usr_mst">
+          <End Type="Domi_PurModel.Usr_mst" Role="Usr_mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PR_Mst" Role="PR_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usr_mst">
+              <PropertyRef Name="usr_id" />
+            </Principal>
+            <Dependent Role="PR_Mst">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Status_Mst">
+          <Key>
+            <PropertyRef Name="StatId" />
+          </Key>
+          <Property Name="StatId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Mst_Status_Mst" FromRole="Status_Mst" ToRole="PR_Mst" />
+        </EntityType>
+        <Association Name="FK_PR_Mst_Status_Mst">
+          <End Type="Domi_PurModel.Status_Mst" Role="Status_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PR_Mst" Role="PR_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status_Mst">
+              <PropertyRef Name="StatId" />
+            </Principal>
+            <Dependent Role="PR_Mst">
+              <PropertyRef Name="StatId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -829,6 +951,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="PRTypeId" ColumnName="PRTypeId" />
+                <ScalarProperty Name="StatId" ColumnName="StatId" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
@@ -850,6 +974,14 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetDocNo" FunctionName="Domi_PurModel.Store.GetDocNo" >
           </FunctionImportMapping>
+          <EntitySetMapping Name="Status_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Status_Mst">
+              <MappingFragment StoreEntitySet="Status_Mst">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="StatId" ColumnName="StatId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

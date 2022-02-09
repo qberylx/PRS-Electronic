@@ -26,6 +26,10 @@
         <AssociationConnector Association="Domi_PurModel.FK_PR_Details_PR_Mst" />
         <AssociationConnector Association="Domi_PurModel.FK_PR_Details_UOM_mst" />
         <AssociationConnector Association="Domi_PurModel.FK_PR_Details_Usr_mst" />
+        <AssociationConnector Association="Domi_PurModel.FK_PR_Mst_Department_mst" />
+        <AssociationConnector Association="Domi_PurModel.FK_PR_Mst_Usr_mst" />
+        <EntityTypeShape EntityType="Domi_PurModel.Status_Mst" Width="1.5" PointX="8.375" PointY="6.875" />
+        <AssociationConnector Association="Domi_PurModel.FK_PR_Mst_Status_Mst" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

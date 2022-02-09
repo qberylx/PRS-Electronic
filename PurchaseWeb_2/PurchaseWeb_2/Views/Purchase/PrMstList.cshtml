@@ -1,0 +1,50 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Mst>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PRNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DepartmentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RequestDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StatId)
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.PRNo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Usr_mst.Username)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Department_mst.Department_name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RequestDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Status_Mst.Name)
+    </td>
+
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.PRId }) |
+        @Html.ActionLink("Details", "Details", new { id = item.PRId }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.PRId })
+    </td>
+</tr>
+}
+
+</table>
