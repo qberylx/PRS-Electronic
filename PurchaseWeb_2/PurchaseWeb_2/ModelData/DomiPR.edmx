@@ -15,6 +15,14 @@ warning 6002: The table/view 'Domi_Pur.dbo.Audlgn_Log' does not have a primary k
           <Property Name="Username" Type="varchar" MaxLength="50" />
           <Property Name="Date" Type="datetime" />
         </EntityType>
+        <EntityType Name="Curr_Mst">
+          <Key>
+            <PropertyRef Name="CurrId" />
+          </Key>
+          <Property Name="CurrId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CurrName" Type="varchar" MaxLength="50" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
         <EntityType Name="Department_mst">
           <Key>
             <PropertyRef Name="Dpt_id" />
@@ -56,6 +64,54 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="Modified_date" Type="datetime" />
           <Property Name="Active" Type="bit" />
         </EntityType>
+        <EntityType Name="PR_Details">
+          <Key>
+            <PropertyRef Name="PRDtId" />
+          </Key>
+          <Property Name="PRDtId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PRid" Type="int" />
+          <Property Name="PRNo" Type="varchar" MaxLength="10" />
+          <Property Name="TypePRId" Type="int" />
+          <Property Name="RequestDate" Type="date" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" />
+          <Property Name="DepartmentName" Type="varchar" MaxLength="50" />
+          <Property Name="Description" Type="varchar" MaxLength="300" />
+          <Property Name="DomiPartNo" Type="varchar" MaxLength="50" />
+          <Property Name="VendorPartNo" Type="varchar" MaxLength="50" />
+          <Property Name="Qty" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="UOMId" Type="int" />
+          <Property Name="ReqDevDate" Type="date" />
+          <Property Name="Remarks" Type="varchar" MaxLength="300" />
+          <Property Name="VendorName" Type="varchar" MaxLength="50" />
+          <Property Name="CurrId" Type="int" />
+          <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotCostnoTax" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Tax" Type="int" />
+          <Property Name="TotCostWitTax" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TaxCode" Type="varchar" MaxLength="10" />
+          <Property Name="TaxClass" Type="int" />
+          <Property Name="NoPo" Type="varchar" MaxLength="50" />
+          <Property Name="ApprovalHOD" Type="varchar" MaxLength="50" />
+          <Property Name="ApprovalHODStatus" Type="varchar" MaxLength="2" />
+          <Property Name="ApprovalMD" Type="varchar" MaxLength="50" />
+          <Property Name="ApprovalMDStatus" Type="varchar" MaxLength="2" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedUser" Type="int" />
+        </EntityType>
+        <EntityType Name="PR_Mst">
+          <Key>
+            <PropertyRef Name="PRId" />
+          </Key>
+          <Property Name="PRId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PRNo" Type="varchar" MaxLength="20" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="DepartmentId" Type="int" />
+          <Property Name="RequestDate" Type="datetime" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="RoleMenuMapping_mst">
           <Key>
             <PropertyRef Name="RoleMap_Id" />
@@ -86,6 +142,14 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="UOM_mst">
+          <Key>
+            <PropertyRef Name="UOMId" />
+          </Key>
+          <Property Name="UOMId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UOMName" Type="varchar" MaxLength="50" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
         <EntityType Name="Usr_mst">
           <Key>
             <PropertyRef Name="usr_id" />
@@ -99,6 +163,54 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="Date_modified" Type="datetime" />
           <Property Name="Flag_Aproval" Type="bit" />
         </EntityType>
+        <Association Name="FK_PR_Details_Curr_Mst">
+          <End Role="Curr_Mst" Type="Self.Curr_Mst" Multiplicity="0..1" />
+          <End Role="PR_Details" Type="Self.PR_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Curr_Mst">
+              <PropertyRef Name="CurrId" />
+            </Principal>
+            <Dependent Role="PR_Details">
+              <PropertyRef Name="CurrId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Details_PR_Mst">
+          <End Role="PR_Mst" Type="Self.PR_Mst" Multiplicity="0..1" />
+          <End Role="PR_Details" Type="Self.PR_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PR_Mst">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_Details">
+              <PropertyRef Name="PRid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Details_UOM_mst">
+          <End Role="UOM_mst" Type="Self.UOM_mst" Multiplicity="0..1" />
+          <End Role="PR_Details" Type="Self.PR_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UOM_mst">
+              <PropertyRef Name="UOMId" />
+            </Principal>
+            <Dependent Role="PR_Details">
+              <PropertyRef Name="UOMId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Details_Usr_mst">
+          <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="0..1" />
+          <End Role="PR_Details" Type="Self.PR_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usr_mst">
+              <PropertyRef Name="usr_id" />
+            </Principal>
+            <Dependent Role="PR_Details">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RoleMenuMapping_mst_Menu_mst">
           <End Role="Menu_mst" Type="Self.Menu_mst" Multiplicity="0..1" />
           <End Role="RoleMenuMapping_mst" Type="Self.RoleMenuMapping_mst" Multiplicity="*" />
@@ -148,15 +260,25 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           </ReferentialConstraint>
         </Association>
         <Function Name="AssignRoleMenuMap" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetDocNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="initial" Type="varchar" Mode="In" />
+          <Parameter Name="doctype" Type="int" Mode="In" />
+          <Parameter Name="docyear" Type="int" Mode="In" />
+          <Parameter Name="LastDocNo" Type="varchar" Mode="InOut" />
+        </Function>
         <Function Name="usp_GetMenuData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserId" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="Domi_PurModelStoreContainer">
+          <EntitySet Name="Curr_Mst" EntityType="Self.Curr_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department_mst" EntityType="Self.Department_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Position_mst" EntityType="Self.Position_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PR_Details" EntityType="Self.PR_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PR_Mst" EntityType="Self.PR_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenuMapping_mst" EntityType="Self.RoleMenuMapping_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UOM_mst" EntityType="Self.UOM_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usr_mst" EntityType="Self.Usr_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Audlgn_Log" EntityType="Self.Audlgn_Log" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -180,6 +302,22 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
     [SubMenu_mst].[Menu_id] AS [Menu_id]
     FROM [dbo].[SubMenu_mst] AS [SubMenu_mst]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_PR_Details_Curr_Mst" Association="Self.FK_PR_Details_Curr_Mst">
+            <End Role="Curr_Mst" EntitySet="Curr_Mst" />
+            <End Role="PR_Details" EntitySet="PR_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Details_PR_Mst" Association="Self.FK_PR_Details_PR_Mst">
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+            <End Role="PR_Details" EntitySet="PR_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Details_UOM_mst" Association="Self.FK_PR_Details_UOM_mst">
+            <End Role="UOM_mst" EntitySet="UOM_mst" />
+            <End Role="PR_Details" EntitySet="PR_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Details_Usr_mst" Association="Self.FK_PR_Details_Usr_mst">
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+            <End Role="PR_Details" EntitySet="PR_Details" />
+          </AssociationSet>
           <AssociationSet Name="FK_RoleMenuMapping_mst_Menu_mst" Association="Self.FK_RoleMenuMapping_mst_Menu_mst">
             <End Role="Menu_mst" EntitySet="Menu_mst" />
             <End Role="RoleMenuMapping_mst" EntitySet="RoleMenuMapping_mst" />
@@ -291,6 +429,32 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             <End Role="RoleMenuMapping_mst" EntitySet="RoleMenuMapping_mst" />
           </AssociationSet>
           <FunctionImport Name="AssignRoleMenuMap" />
+          <EntitySet Name="Curr_Mst" EntityType="Domi_PurModel.Curr_Mst" />
+          <EntitySet Name="PR_Details" EntityType="Domi_PurModel.PR_Details" />
+          <EntitySet Name="PR_Mst" EntityType="Domi_PurModel.PR_Mst" />
+          <EntitySet Name="UOM_mst" EntityType="Domi_PurModel.UOM_mst" />
+          <AssociationSet Name="FK_PR_Details_Curr_Mst" Association="Domi_PurModel.FK_PR_Details_Curr_Mst">
+            <End Role="Curr_Mst" EntitySet="Curr_Mst" />
+            <End Role="PR_Details" EntitySet="PR_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Details_PR_Mst" Association="Domi_PurModel.FK_PR_Details_PR_Mst">
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+            <End Role="PR_Details" EntitySet="PR_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Details_UOM_mst" Association="Domi_PurModel.FK_PR_Details_UOM_mst">
+            <End Role="UOM_mst" EntitySet="UOM_mst" />
+            <End Role="PR_Details" EntitySet="PR_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Details_Usr_mst" Association="Domi_PurModel.FK_PR_Details_Usr_mst">
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+            <End Role="PR_Details" EntitySet="PR_Details" />
+          </AssociationSet>
+          <FunctionImport Name="GetDocNo">
+            <Parameter Name="initial" Mode="In" Type="String" />
+            <Parameter Name="doctype" Mode="In" Type="Int32" />
+            <Parameter Name="docyear" Mode="In" Type="Int32" />
+            <Parameter Name="LastDocNo" Mode="InOut" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -312,6 +476,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="Flag_Aproval" Type="Boolean" />
           <NavigationProperty Name="Department_mst" Relationship="Domi_PurModel.FK_Usr_mst_Department_mst" FromRole="Usr_mst" ToRole="Department_mst" />
           <NavigationProperty Name="Position_mst" Relationship="Domi_PurModel.FK_Usr_mst_Position_mst" FromRole="Usr_mst" ToRole="Position_mst" />
+          <NavigationProperty Name="PR_Details" Relationship="Domi_PurModel.FK_PR_Details_Usr_mst" FromRole="Usr_mst" ToRole="PR_Details" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -379,6 +544,125 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             </Principal>
             <Dependent Role="RoleMenuMapping_mst">
               <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Curr_Mst">
+          <Key>
+            <PropertyRef Name="CurrId" />
+          </Key>
+          <Property Name="CurrId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CurrName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="PR_Details" Relationship="Domi_PurModel.FK_PR_Details_Curr_Mst" FromRole="Curr_Mst" ToRole="PR_Details" />
+        </EntityType>
+        <EntityType Name="PR_Details">
+          <Key>
+            <PropertyRef Name="PRDtId" />
+          </Key>
+          <Property Name="PRDtId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PRid" Type="Int32" />
+          <Property Name="PRNo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TypePRId" Type="Int32" />
+          <Property Name="RequestDate" Type="DateTime" Precision="0" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DepartmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="DomiPartNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VendorPartNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Qty" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UOMId" Type="Int32" />
+          <Property Name="ReqDevDate" Type="DateTime" Precision="0" />
+          <Property Name="Remarks" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="VendorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CurrId" Type="Int32" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotCostnoTax" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Tax" Type="Int32" />
+          <Property Name="TotCostWitTax" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TaxCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TaxClass" Type="Int32" />
+          <Property Name="NoPo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalHOD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalHODStatus" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalMD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalMDStatus" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedUser" Type="Int32" />
+          <NavigationProperty Name="Curr_Mst" Relationship="Domi_PurModel.FK_PR_Details_Curr_Mst" FromRole="PR_Details" ToRole="Curr_Mst" />
+          <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Details_PR_Mst" FromRole="PR_Details" ToRole="PR_Mst" />
+          <NavigationProperty Name="UOM_mst" Relationship="Domi_PurModel.FK_PR_Details_UOM_mst" FromRole="PR_Details" ToRole="UOM_mst" />
+          <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_PR_Details_Usr_mst" FromRole="PR_Details" ToRole="Usr_mst" />
+        </EntityType>
+        <EntityType Name="PR_Mst">
+          <Key>
+            <PropertyRef Name="PRId" />
+          </Key>
+          <Property Name="PRId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PRNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="DepartmentId" Type="Int32" />
+          <Property Name="RequestDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PR_Details" Relationship="Domi_PurModel.FK_PR_Details_PR_Mst" FromRole="PR_Mst" ToRole="PR_Details" />
+        </EntityType>
+        <EntityType Name="UOM_mst">
+          <Key>
+            <PropertyRef Name="UOMId" />
+          </Key>
+          <Property Name="UOMId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UOMName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="PR_Details" Relationship="Domi_PurModel.FK_PR_Details_UOM_mst" FromRole="UOM_mst" ToRole="PR_Details" />
+        </EntityType>
+        <Association Name="FK_PR_Details_Curr_Mst">
+          <End Type="Domi_PurModel.Curr_Mst" Role="Curr_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Curr_Mst">
+              <PropertyRef Name="CurrId" />
+            </Principal>
+            <Dependent Role="PR_Details">
+              <PropertyRef Name="CurrId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Details_PR_Mst">
+          <End Type="Domi_PurModel.PR_Mst" Role="PR_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PR_Mst">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PR_Details">
+              <PropertyRef Name="PRid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Details_UOM_mst">
+          <End Type="Domi_PurModel.UOM_mst" Role="UOM_mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UOM_mst">
+              <PropertyRef Name="UOMId" />
+            </Principal>
+            <Dependent Role="PR_Details">
+              <PropertyRef Name="UOMId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Details_Usr_mst">
+          <End Type="Domi_PurModel.Usr_mst" Role="Usr_mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usr_mst">
+              <PropertyRef Name="usr_id" />
+            </Principal>
+            <Dependent Role="PR_Details">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -496,6 +780,76 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AssignRoleMenuMap" FunctionName="Domi_PurModel.Store.AssignRoleMenuMap" />
+          <EntitySetMapping Name="Curr_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Curr_Mst">
+              <MappingFragment StoreEntitySet="Curr_Mst">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="CurrName" ColumnName="CurrName" />
+                <ScalarProperty Name="CurrId" ColumnName="CurrId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PR_Details">
+            <EntityTypeMapping TypeName="Domi_PurModel.PR_Details">
+              <MappingFragment StoreEntitySet="PR_Details">
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ApprovalMDStatus" ColumnName="ApprovalMDStatus" />
+                <ScalarProperty Name="ApprovalMD" ColumnName="ApprovalMD" />
+                <ScalarProperty Name="ApprovalHODStatus" ColumnName="ApprovalHODStatus" />
+                <ScalarProperty Name="ApprovalHOD" ColumnName="ApprovalHOD" />
+                <ScalarProperty Name="NoPo" ColumnName="NoPo" />
+                <ScalarProperty Name="TaxClass" ColumnName="TaxClass" />
+                <ScalarProperty Name="TaxCode" ColumnName="TaxCode" />
+                <ScalarProperty Name="TotCostWitTax" ColumnName="TotCostWitTax" />
+                <ScalarProperty Name="Tax" ColumnName="Tax" />
+                <ScalarProperty Name="TotCostnoTax" ColumnName="TotCostnoTax" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="CurrId" ColumnName="CurrId" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="ReqDevDate" ColumnName="ReqDevDate" />
+                <ScalarProperty Name="UOMId" ColumnName="UOMId" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="VendorPartNo" ColumnName="VendorPartNo" />
+                <ScalarProperty Name="DomiPartNo" ColumnName="DomiPartNo" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+                <ScalarProperty Name="TypePRId" ColumnName="TypePRId" />
+                <ScalarProperty Name="PRNo" ColumnName="PRNo" />
+                <ScalarProperty Name="PRid" ColumnName="PRid" />
+                <ScalarProperty Name="PRDtId" ColumnName="PRDtId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PR_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
+              <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="PRNo" ColumnName="PRNo" />
+                <ScalarProperty Name="PRId" ColumnName="PRId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UOM_mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.UOM_mst">
+              <MappingFragment StoreEntitySet="UOM_mst">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="UOMName" ColumnName="UOMName" />
+                <ScalarProperty Name="UOMId" ColumnName="UOMId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetDocNo" FunctionName="Domi_PurModel.Store.GetDocNo" >
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

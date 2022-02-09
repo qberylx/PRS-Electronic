@@ -36,6 +36,10 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<Usr_mst> Usr_mst { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<RoleMenuMapping_mst> RoleMenuMapping_mst { get; set; }
+        public virtual DbSet<Curr_Mst> Curr_Mst { get; set; }
+        public virtual DbSet<PR_Details> PR_Details { get; set; }
+        public virtual DbSet<PR_Mst> PR_Mst { get; set; }
+        public virtual DbSet<UOM_mst> UOM_mst { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {
@@ -49,6 +53,23 @@ namespace PurchaseWeb_2.ModelData
         public virtual int AssignRoleMenuMap()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AssignRoleMenuMap");
+        }
+    
+        public virtual int GetDocNo(string initial, Nullable<int> doctype, Nullable<int> docyear, ObjectParameter lastDocNo)
+        {
+            var initialParameter = initial != null ?
+                new ObjectParameter("initial", initial) :
+                new ObjectParameter("initial", typeof(string));
+    
+            var doctypeParameter = doctype.HasValue ?
+                new ObjectParameter("doctype", doctype) :
+                new ObjectParameter("doctype", typeof(int));
+    
+            var docyearParameter = docyear.HasValue ?
+                new ObjectParameter("docyear", docyear) :
+                new ObjectParameter("docyear", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetDocNo", initialParameter, doctypeParameter, docyearParameter, lastDocNo);
         }
     }
 }

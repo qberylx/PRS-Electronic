@@ -12,25 +12,18 @@ namespace PurchaseWeb_2.ModelData
     using System;
     using System.Collections.Generic;
     
-    public partial class Usr_mst
+    public partial class Curr_Mst
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Usr_mst()
+        public Curr_Mst()
         {
             this.PR_Details = new HashSet<PR_Details>();
         }
     
-        public int usr_id { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public Nullable<int> Dpt_id { get; set; }
-        public Nullable<int> Psn_id { get; set; }
-        public Nullable<System.DateTime> Date_Create { get; set; }
-        public Nullable<System.DateTime> Date_modified { get; set; }
-        public Nullable<bool> Flag_Aproval { get; set; }
+        public int CurrId { get; set; }
+        public string CurrName { get; set; }
+        public Nullable<bool> Active { get; set; }
     
-        public virtual Department_mst Department_mst { get; set; }
-        public virtual Position_mst Position_mst { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }
     }

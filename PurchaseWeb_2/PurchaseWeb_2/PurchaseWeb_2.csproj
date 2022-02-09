@@ -136,6 +136,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\PurchaseController.cs" />
     <Compile Include="Data\MenuDT.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Data\UserDt.cs" />
@@ -144,6 +145,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ModelData\Audlgn_Log.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\Curr_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\Department_mst.cs">
@@ -173,6 +177,12 @@
     <Compile Include="ModelData\Position_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\PR_Details.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\PR_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\RoleMenuMapping_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -180,6 +190,9 @@
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\sysdiagram.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\UOM_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\usp_GetMenuData_Result.cs">
@@ -2253,6 +2266,8 @@
     <Content Include="Views\Main\Menu.cshtml" />
     <Content Include="Views\Main\menuList.cshtml" />
     <Content Include="Views\Main\MenuEdit.cshtml" />
+    <Content Include="Views\Purchase\PurRequest.cshtml" />
+    <Content Include="Views\Purchase\AddUOM.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

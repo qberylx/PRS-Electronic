@@ -71,6 +71,8 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult LogOff()
         {
+            Session.Clear();
+            Session.Abandon();
             FormsAuthentication.SignOut();
 
             return RedirectToAction("Login", "Account");
