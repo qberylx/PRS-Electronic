@@ -211,16 +211,21 @@ namespace PurchaseWeb_2.Controllers
                         db.SaveChanges();
 
                     }
+                    ViewBag.Filename = _FileName;
+                    ViewBag.Filepath = _FileName;
+                    ViewBag.PurMasterID = PurMasterID;
                 }
                 ViewBag.Message = "File Uploaded Successfully!!";
-                return View();
+                return PartialView("UploadQuo", PurMasterID);
             }
             catch
             {
                 ViewBag.Message = "File upload failed!!";
-                return View();
+                return PartialView("UploadQuo", PurMasterID);
             }
         }
+
+
     }
 
 }
