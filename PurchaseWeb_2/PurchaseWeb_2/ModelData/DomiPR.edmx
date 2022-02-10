@@ -70,7 +70,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           </Key>
           <Property Name="PRDtId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PRid" Type="int" />
-          <Property Name="PRNo" Type="varchar" MaxLength="10" />
+          <Property Name="PRNo" Type="varchar" MaxLength="15" />
           <Property Name="TypePRId" Type="int" />
           <Property Name="RequestDate" Type="date" />
           <Property Name="UserId" Type="int" />
@@ -670,7 +670,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           </Key>
           <Property Name="PRDtId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PRid" Type="Int32" />
-          <Property Name="PRNo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PRNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="TypePRId" Type="Int32" />
           <Property Name="RequestDate" Type="DateTime" Precision="0" />
           <Property Name="UserId" Type="Int32" />

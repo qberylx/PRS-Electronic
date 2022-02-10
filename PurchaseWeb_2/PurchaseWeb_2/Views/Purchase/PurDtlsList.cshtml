@@ -1,0 +1,91 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Details>
+
+
+<div class="card card-success">
+    <div class="card-header">
+        <h3 class="card-title">Purchase Request Details List</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body table-responsive p-0" style="height: 300px;">
+        
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Partial("_Notifications")
+                <table class="table table-head-fixed text-nowrap table-striped">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DomiPartNo)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.VendorPartNo)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Qty)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ReqDevDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Remarks)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Device)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SalesOrder)
+                        </th>
+
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DomiPartNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.VendorPartNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Qty)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReqDevDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Remarks)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Device)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SalesOrder)
+                            </td>
+                            <td>
+                                @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                                {
+                                    <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                    <button class="btn btn-danger"><i class="fa fa-trash fa-xs"></i></button>
+                                }
+
+                                @Html.ActionLink("Edit", "Edit", new { id = item.PRDtId }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.PRDtId }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.PRDtId })
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+</div>
+
+

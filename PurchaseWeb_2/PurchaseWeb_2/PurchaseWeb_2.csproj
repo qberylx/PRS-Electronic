@@ -2281,6 +2281,7 @@
     <Content Include="Views\Purchase\AddPurDtls.cshtml" />
     <Content Include="Views\Purchase\PurMstSelected.cshtml" />
     <Content Include="Views\Purchase\UploadQuo.cshtml" />
+    <Content Include="Views\Purchase\PurDtlsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

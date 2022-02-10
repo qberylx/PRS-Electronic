@@ -9,8 +9,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using static PurchaseWeb_2.CustomAttribute.CustomAttribute;
 using System.IO;
+using PurchaseWeb_2.Extensions;
 
 namespace PurchaseWeb_2.Controllers
 {
@@ -118,22 +118,86 @@ namespace PurchaseWeb_2.Controllers
         {
             ViewBag.PrMstId = PrMstId;
 
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.PrNo = purMstr.PRNo;
+            ViewBag.PrTypeID = purMstr.PRTypeId;
+
             var UomList = db.UOM_mst.ToList();
             ViewBag.UOMList = UomList;
 
-            return View();
+            return View("AddPurDtls");
         }
 
         [HttpPost]
         public ActionResult AddPurDtls(PR_Details pR_)
         {
-            var UomList = db.UOM_mst.ToList();
-            ViewBag.UOMList = UomList;
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == pR_.PRid)
+                .FirstOrDefault();
+            try
+            {
+                var AddPRDtls = db.Set<PR_Details>();
+                AddPRDtls.Add(new PR_Details
+                {
+                    PRid = pR_.PRid,
+                    PRNo = pR_.PRNo,
+                    TypePRId = pR_.TypePRId,
+                    UserId = purMstr.UserId,
+                    UserName = purMstr.Usr_mst.Username,
+                    DepartmentName = purMstr.Department_mst.Department_name,
+                    DomiPartNo = pR_.DomiPartNo,
+                    VendorPartNo = pR_.VendorPartNo,
+                    Qty = pR_.Qty,
+                    UOMId = pR_.UOMId,
+                    ReqDevDate = pR_.ReqDevDate,
+                    Device = pR_.Device,
+                    SalesOrder = pR_.SalesOrder,
+                    Remarks = pR_.Remarks
+                });
+                db.SaveChanges();
+            }
+            catch (RetryLimitExceededException)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+            
 
-            return View();
+            return RedirectToAction("PurDtlsList","Purchase");
         }
 
-        
+        public ActionResult PurDtlsList()
+        {
+            var PrDtlsList = db.PR_Details.ToList();
+            
+            return PartialView("PurDtlsList",PrDtlsList);
+        }
+
+        public ActionResult DelPurList(int PrDtlsId)
+        {
+            //delete DelPurList
+            try
+            {
+                PR_Details pR_ = new PR_Details() { PRDtId = PrDtlsId };
+                db.PR_Details.Attach(pR_);
+                db.PR_Details.Remove(pR_);
+                db.SaveChanges();
+                this.AddNotification("The details Deleted successfully!!", NotificationType.SUCCESS);
+                return RedirectToAction("PurDtlsList", "Purchase");
+            }
+            catch (RetryLimitExceededException)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                return RedirectToAction("PurDtlsList", "Purchase");
+            }
+            
+        }
+
+
         [ChildActionOnly]
         [HttpGet]
         public ActionResult AddUOM()
