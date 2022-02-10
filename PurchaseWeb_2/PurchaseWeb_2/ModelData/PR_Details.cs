@@ -45,6 +45,8 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ModifiedUser { get; set; }
+        public string Device { get; set; }
+        public string SalesOrder { get; set; }
     
         public virtual Curr_Mst Curr_Mst { get; set; }
         public virtual PR_Mst PR_Mst { get; set; }

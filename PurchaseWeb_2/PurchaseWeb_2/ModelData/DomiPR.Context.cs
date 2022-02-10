@@ -41,6 +41,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<PR_Mst> PR_Mst { get; set; }
         public virtual DbSet<UOM_mst> UOM_mst { get; set; }
         public virtual DbSet<Status_Mst> Status_Mst { get; set; }
+        public virtual DbSet<PRType_mst> PRType_mst { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {

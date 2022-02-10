@@ -1,4 +1,5 @@
 ﻿using PurchaseWeb_2.ModelData;
+using PurchaseWeb_2.CustomAttribute;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
@@ -8,6 +9,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static PurchaseWeb_2.CustomAttribute.CustomAttribute;
+using System.IO;
 
 namespace PurchaseWeb_2.Controllers
 {
@@ -30,6 +33,7 @@ namespace PurchaseWeb_2.Controllers
         [HttpPost]
         public ActionResult PurRequest(PR_Details _Details)
         {
+            
             var UOMList = db.UOM_mst.ToList();
             ViewBag.UOMList = UOMList;
 
@@ -107,13 +111,119 @@ namespace PurchaseWeb_2.Controllers
             return PartialView("PrMstList", PrMstList);
         }
 
+        //Start Purchase request Details
+
+        [HttpGet]
+        public ActionResult AddPurDtls(int PrMstId)
+        {
+            ViewBag.PrMstId = PrMstId;
+
+            var UomList = db.UOM_mst.ToList();
+            ViewBag.UOMList = UomList;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddPurDtls(PR_Details pR_)
+        {
+            var UomList = db.UOM_mst.ToList();
+            ViewBag.UOMList = UomList;
+
+            return View();
+        }
+
+        
+        [ChildActionOnly]
         [HttpGet]
         public ActionResult AddUOM()
         {
             
-            return View("AddUOM");
+            return PartialView("AddUOM");
         }
 
-        
+        [HttpPost]
+        public ActionResult AddUOM(PR_Details pR_, string PrMstId)
+        {
+            int Id = Convert.ToInt32(PrMstId);
+            try
+            {
+                var UOM = db.Set<UOM_mst>();
+                UOM.Add(new UOM_mst
+                {
+                    UOMName = pR_.UOM_mst.UOMName,
+                    Active = true
+                });
+                db.SaveChanges();
+            }
+            catch (RetryLimitExceededException)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+
+
+            return RedirectToAction("AddPurDtls","Purchase", new { PrMstId  = Id });
+        }
+
+        //Show purchase master selected for reference
+        public ActionResult PurMstSelected(int PrMstId)
+        {
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            return PartialView("PurMstSelected",purMstr);
+        }
+
+        // upload quo document to pur mst if any
+        [HttpGet]
+        public ActionResult UploadQuo(int PrMstId)
+        {
+            var PrMstDtls = db.PR_Mst
+                    .Where(pr => pr.PRId == PrMstId)
+                    .FirstOrDefault();
+
+            ViewBag.Filename = PrMstDtls.FIleName;
+            ViewBag.Filepath = PrMstDtls.FilePath + PrMstDtls.FIleName ;            
+            ViewBag.PurMasterID = PrMstId;
+
+            return PartialView("UploadQuo");
+        }
+
+        [HttpPost]
+        public ActionResult UploadQuo(HttpPostedFileBase file,int PurMasterID)
+        {
+            try
+            {
+                if (file.ContentLength > 0)
+                {
+                    string _FileName = Path.GetFileName(file.FileName);
+                    string _path = Path.Combine(Server.MapPath("~/UploadedFile/Quotation"), _FileName);
+                    file.SaveAs(_path);
+
+                    //int PrMstID = PurMasterID;
+                    var PurMst = db.PR_Mst.SingleOrDefault(pr => pr.PRId == PurMasterID);
+                    if (PurMst != null)
+                    {
+                        PurMst.FIleName = _FileName;
+                        PurMst.FilePath = "~/UploadedFile/Quotation";
+                        db.SaveChanges();
+
+                    }
+                }
+                ViewBag.Message = "File Uploaded Successfully!!";
+                return View();
+            }
+            catch
+            {
+                ViewBag.Message = "File upload failed!!";
+                return View();
+            }
+        }
     }
+
 }
+
+
+

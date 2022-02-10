@@ -18,7 +18,7 @@
         <EntityTypeShape EntityType="Domi_PurModel.RoleMenuMapping_mst" Width="1.5" PointX="7" PointY="3.375" />
         <AssociationConnector Association="Domi_PurModel.FK_RoleMenuMapping_mst_Menu_mst" />
         <AssociationConnector Association="Domi_PurModel.FK_RoleMenuMapping_mst_Position_mst" />
-        <EntityTypeShape EntityType="Domi_PurModel.Curr_Mst" Width="1.5" PointX="3.75" PointY="15.375" />
+        <EntityTypeShape EntityType="Domi_PurModel.Curr_Mst" Width="1.5" PointX="7.375" PointY="16.375" />
         <EntityTypeShape EntityType="Domi_PurModel.PR_Details" Width="1.5" PointX="6" PointY="7.5" />
         <EntityTypeShape EntityType="Domi_PurModel.PR_Mst" Width="1.5" PointX="3.75" PointY="12" />
         <EntityTypeShape EntityType="Domi_PurModel.UOM_mst" Width="1.5" PointX="3.75" PointY="9.5" />
@@ -30,6 +30,8 @@
         <AssociationConnector Association="Domi_PurModel.FK_PR_Mst_Usr_mst" />
         <EntityTypeShape EntityType="Domi_PurModel.Status_Mst" Width="1.5" PointX="8.375" PointY="6.875" />
         <AssociationConnector Association="Domi_PurModel.FK_PR_Mst_Status_Mst" />
+        <EntityTypeShape EntityType="Domi_PurModel.PRType_mst" Width="1.5" PointX="9.375" PointY="0.75" />
+        <AssociationConnector Association="Domi_PurModel.FK_PR_Mst_PRType_mst" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,0 +1,183 @@
+﻿@model PurchaseWeb_2.ModelData.PR_Details
+
+@{
+    ViewBag.Title = "AddPurDtls";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<style>
+    .zoomedElement {
+        /*background-color: #50CBFF;*/
+        zoom: 90%;
+    }
+
+    .vertical-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-8">
+        @{ Html.RenderAction("PurMstSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+    </div>
+    <div class="col-md-4">
+        @{ Html.RenderAction("UploadQuo", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+    </div>
+</div>
+
+
+<div class="row zoomedElement">
+    <div class="col-md-12">
+        <!--card header-->
+        <div class="card card-primary">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-2 ">
+                        <h3 class="card-title vertical-center">Purchase Request Details</h3>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-success" data-toggle="modal" data-target="#addUOM" ><i class="fa fa-plus-circle"> Add UOM</i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--card body-->
+        @using (Html.BeginForm("AddPurDtls", "Purchase",FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="card-body">
+                <div class="row">
+                    <!--first column-->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DomiPartNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.DomiPartNo, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.DomiPartNo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.VendorPartNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.VendorPartNo, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.VendorPartNo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.UOMId, "UOMId", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @Html.DropDownList("UOMId",
+                                           new SelectList(ViewBag.UOMList, "UOMId", "UOMName"),
+                                           "Please Select the UOM",
+                                           new { @class = "custom-select form-control-border" })
+                                    </div>
+                                    
+                                </div>
+
+                                @Html.ValidationMessageFor(model => model.UOMId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ReqDevDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.ReqDevDate, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ReqDevDate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Device, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Device, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Device, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.SalesOrder, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.SalesOrder, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.SalesOrder, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" id="btnSubmit" name="Submit" value="Add PR Details" class="btn btn-primary" />
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+
+</div>
+
+<!-- Modal Add UOM -->
+<div class="modal fade" id="addUOM" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            @*{Html.RenderAction("AddUOM", "Purchase");}*@
+            <div class="modal-header">
+                <h5 class="modal-title">Add UOM</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("AddUOM", "Purchase", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UOM_mst.UOMName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.UOM_mst.UOMName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.UOM_mst.UOMName, "", new { @class = "text-danger" })
+
+                            <input type="hidden" id="PrMstId" name="PrMstId" value="@ViewBag.PrMstId" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="form-group">
+                        <input type="submit" name="AddUOM" value="Add" class="btn btn-primary" />
+                    </div>
+                </div>
+            }
+    </div>
+    </div>
+</div>
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

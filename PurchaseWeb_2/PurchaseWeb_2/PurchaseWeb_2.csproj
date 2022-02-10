@@ -137,6 +137,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\PurchaseController.cs" />
+    <Compile Include="CustomAttribute\CustomAttribute.cs" />
     <Compile Include="Data\MenuDT.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Data\UserDt.cs" />
@@ -175,6 +176,9 @@
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\Position_mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\PRType_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\PR_Details.cs">
@@ -2272,9 +2276,13 @@
     <Content Include="Views\Purchase\PurRequest.cshtml" />
     <Content Include="Views\Purchase\AddUOM.cshtml" />
     <Content Include="Views\Purchase\PrMstList.cshtml" />
+    <Content Include="Views\Purchase\AddPurDtls.cshtml" />
+    <Content Include="Views\Purchase\PurMstSelected.cshtml" />
+    <Content Include="Views\Purchase\UploadQuo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="UploadedFile\Quotation\" />
     <Folder Include="Views\Admin\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>

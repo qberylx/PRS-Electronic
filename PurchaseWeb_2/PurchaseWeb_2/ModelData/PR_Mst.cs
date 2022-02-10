@@ -29,11 +29,14 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> StatId { get; set; }
         public Nullable<int> PRTypeId { get; set; }
+        public string FIleName { get; set; }
+        public string FilePath { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }
         public virtual Department_mst Department_mst { get; set; }
         public virtual Usr_mst Usr_mst { get; set; }
         public virtual Status_Mst Status_Mst { get; set; }
+        public virtual PRType_mst PRType_mst { get; set; }
     }
 }

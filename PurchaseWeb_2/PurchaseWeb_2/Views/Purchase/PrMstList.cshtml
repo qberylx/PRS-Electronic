@@ -40,6 +40,7 @@
     </td>
 
     <td>
+        <button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>
         @Html.ActionLink("Edit", "Edit", new { id = item.PRId }) |
         @Html.ActionLink("Details", "Details", new { id = item.PRId }) |
         @Html.ActionLink("Delete", "Delete", new { id = item.PRId })
