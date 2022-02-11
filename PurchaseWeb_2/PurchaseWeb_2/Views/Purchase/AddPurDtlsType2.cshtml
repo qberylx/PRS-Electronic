@@ -1,7 +1,7 @@
 ﻿@model PurchaseWeb_2.ModelData.PR_Details
 
 @{
-    ViewBag.Title = "AddPurDtls";
+    ViewBag.Title = "AddPurDtlsType2";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 <style>
@@ -23,7 +23,7 @@
     <div class="col-md-8">
         @{ Html.RenderAction("PurMstSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });}
     </div>
-    <div class="col-md-4"  >
+    <div class="col-md-4">
         @{ Html.RenderAction("UploadQuo", "Purchase", new { PrMstId = ViewBag.PrMstId });}
     </div>
 </div>
@@ -39,17 +39,13 @@
                     <div class="col-md-2 ">
                         <h3 class="card-title vertical-center">Purchase Request Details</h3>
                     </div>
-                    <!--
-                    <div class="col-md-2">
-                        <button class="btn btn-success" data-toggle="modal" data-target="#addUOM"><i class="fa fa-plus-circle"> Add UOM</i></button>
-                    </div>
-                    -->
+                    
                 </div>
             </div>
         </div>
         <!--card body-->
         @*using (Html.BeginForm("AddPurDtls", "Purchase",FormMethod.Post))*@
-        @using (Ajax.BeginForm("AddPurDtls", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+        @using (Ajax.BeginForm("AddPurDtlsType2", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -126,7 +122,7 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Device, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.Device, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.Device, new { htmlAttributes = new { @class = "form-control" , @Value="Consignment Wafer" } })
                                 @Html.ValidationMessageFor(model => model.Device, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -134,7 +130,7 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.SalesOrder, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.SalesOrder, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.SalesOrder, new { htmlAttributes = new { @class = "form-control", @Value="-" } })
                                 @Html.ValidationMessageFor(model => model.SalesOrder, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -197,7 +193,7 @@
                     </div>
                 </div>
             }
-    </div>
+        </div>
     </div>
 </div>
 

@@ -1,4 +1,6 @@
-﻿<div id="divUploadQuote">
+﻿
+<div id="divUploadQuote">
+    
     <div class="card card-warning">
         <div class="card-header">
             <h3 class="card-title">Quotation</h3>
@@ -10,7 +12,22 @@
             </div>
         </div>
         <div class="card-body">
-            @ViewBag.Message
+            @if (ViewBag.Message != null)
+            {
+                if ((ViewBag.Message).Contains("Success"))
+                {
+                    <div class="alert alert-success alert-dismissible" id="divAlert">
+                        @ViewBag.Message
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger alert-dismissible" id="divAlert">
+                        @ViewBag.Message
+                    </div>
+                }
+
+            }
 
             @*using (Html.BeginForm("UploadQuo", "Purchase", FormMethod.Post, new { enctype = "multipart/form-data", id = "uploadQuot" }))*@
             @using (Ajax.BeginForm("UploadQuo", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divUploadQuote" }, new { enctype = "multipart/form-data" }))
@@ -56,6 +73,10 @@
         var cleanFileName = fileName.replace('C:\\fakepath\\', " ");
         $(this).next('.custom-file-label').html(cleanFileName);
     })
+
+    $(document).ready(function () {
+        $("#divAlert").delay(3000).fadeOut("slow");
+    });
 </script>
 
 

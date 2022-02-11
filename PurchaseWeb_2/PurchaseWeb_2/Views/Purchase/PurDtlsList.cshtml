@@ -15,71 +15,157 @@
         
         <div class="row">
             <div class="col-md-12">
-                @Html.Partial("_Notifications")
                 <table class="table table-head-fixed text-nowrap table-striped">
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DomiPartNo)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.VendorPartNo)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Qty)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ReqDevDate)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Remarks)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Device)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.SalesOrder)
-                        </th>
-
-                        <th></th>
-                    </tr>
-
-                    @foreach (var item in Model)
+                    @if (ViewBag.PrTypeId == 3)
                     {
                         <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DomiPartNo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.VendorPartNo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Qty)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ReqDevDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Remarks)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Device)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.SalesOrder)
-                            </td>
-                            <td>
-                                @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
-                                {
-                                    <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
-                                    <button class="btn btn-danger"><i class="fa fa-trash fa-xs"></i></button>
-                                }
+                            <th>
+                                No.
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DomiPartNo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.VendorName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Qty)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UOM_mst.UOMName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ReqDevDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Remarks)
+                            </th>
 
-                                @Html.ActionLink("Edit", "Edit", new { id = item.PRDtId }) |
-                                @Html.ActionLink("Details", "Details", new { id = item.PRDtId }) |
-                                @Html.ActionLink("Delete", "Delete", new { id = item.PRDtId })
-                            </td>
+                            <th></th>
                         </tr>
                     }
+                    else
+                    {
+                        <tr>
+                            <th>
+                                No.
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DomiPartNo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.VendorPartNo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Qty)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ReqDevDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Remarks)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SalesOrder)
+                            </th>
+
+                            <th></th>
+                        </tr>
+                    }
+
+
+                    @{ int i = 0;}
+                    @if (ViewBag.PrTypeId == 3)
+                    {
+                        foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DomiPartNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VendorName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Qty)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UOM_mst.UOMName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReqDevDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Remarks)
+                                </td>
+                                <td>
+                                    @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                                    {
+                                        <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                        <input type="hidden" id="DelPrMstId" name="DelPrMstId" value="@item.PRid" />
+                                        <button class="btn btn-danger"><i class="fa fa-trash fa-xs"></i></button>
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DomiPartNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VendorPartNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Qty)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReqDevDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Remarks)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SalesOrder)
+                                </td>
+                                <td>
+                                    @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                                    {
+                                        <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                        <input type="hidden" id="DelPrMstId" name="DelPrMstId" value="@item.PRid" />
+                                        <button class="btn btn-danger"><i class="fa fa-trash fa-xs"></i></button>
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+                    }
+
 
                 </table>
             </div>

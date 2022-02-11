@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.IO;
 using PurchaseWeb_2.Extensions;
+using PurchaseWeb_2.Models;
 
 namespace PurchaseWeb_2.Controllers
 {
@@ -111,6 +112,17 @@ namespace PurchaseWeb_2.Controllers
             return PartialView("PrMstList", PrMstList);
         }
 
+        public ActionResult DelPRMst(int PrMstId)
+        {
+            PR_Mst prMst = new PR_Mst() { PRId = PrMstId };
+            db.PR_Mst.Attach(prMst);
+            db.PR_Mst.Remove(prMst);
+            db.SaveChanges();
+            this.AddNotification("Row Deleted successfully!!", NotificationType.SUCCESS);
+            
+            return View("PurRequest");
+        }
+
         //Start Purchase request Details
 
         [HttpGet]
@@ -155,28 +167,54 @@ namespace PurchaseWeb_2.Controllers
                     ReqDevDate = pR_.ReqDevDate,
                     Device = pR_.Device,
                     SalesOrder = pR_.SalesOrder,
-                    Remarks = pR_.Remarks
+                    Remarks = pR_.Remarks,
+                    Description = "-",
+                    VendorName = "-"
                 });
                 db.SaveChanges();
             }
-            catch (RetryLimitExceededException)
+            catch (DbEntityValidationException e)
             {
-                //Log the error (uncomment dex variable name and add a line here to write a log.
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                throw;
+
             }
+            //catch (RetryLimitExceededException)
+            //{
+            //    //Log the error (uncomment dex variable name and add a line here to write a log.
+            //    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            //}
             
 
-            return RedirectToAction("PurDtlsList","Purchase");
+            return RedirectToAction("PurDtlsList","Purchase", new { PrMstId = pR_.PRid });
         }
 
-        public ActionResult PurDtlsList()
+        public ActionResult PurDtlsList(int PrMstId)
         {
-            var PrDtlsList = db.PR_Details.ToList();
+            var PrDtlsList = db.PR_Details
+                .Where(x => x.PRid == PrMstId)
+                .ToList();
+
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.PrTypeId = PrMst.PRTypeId;
             
             return PartialView("PurDtlsList",PrDtlsList);
         }
 
-        public ActionResult DelPurList(int PrDtlsId)
+        public ActionResult DelPurList(int PrDtlsId, int DelPrMstId )
         {
             //delete DelPurList
             try
@@ -186,13 +224,13 @@ namespace PurchaseWeb_2.Controllers
                 db.PR_Details.Remove(pR_);
                 db.SaveChanges();
                 this.AddNotification("The details Deleted successfully!!", NotificationType.SUCCESS);
-                return RedirectToAction("PurDtlsList", "Purchase");
+                return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = DelPrMstId });
             }
             catch (RetryLimitExceededException)
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                return RedirectToAction("PurDtlsList", "Purchase");
+                return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = DelPrMstId });
             }
             
         }
@@ -257,36 +295,245 @@ namespace PurchaseWeb_2.Controllers
 
         [HttpPost]
         public ActionResult UploadQuo(HttpPostedFileBase file,int PurMasterID)
+        {        
+           try
+           {
+               var PrMstDtls = db.PR_Mst
+                  .Where(pr => pr.PRId == PurMasterID)
+                  .FirstOrDefault();
+
+               if (file.ContentLength > 0)
+               {
+                   string _FileName = PrMstDtls.PRNo + Path.GetFileName(file.FileName);
+                   string _path = Path.Combine(Server.MapPath("~/UploadedFile/Quotation"), _FileName);
+                   file.SaveAs(_path);
+
+                   //int PrMstID = PurMasterID;
+                   var PurMst = db.PR_Mst.SingleOrDefault(pr => pr.PRId == PurMasterID);
+                   if (PurMst != null)
+                   {
+                       PurMst.FIleName = _FileName;
+                       PurMst.FilePath = "~/UploadedFile/Quotation";
+                       db.SaveChanges();
+
+                   }
+                   ViewBag.Filename = _FileName;
+                   ViewBag.Filepath = _FileName;
+                   ViewBag.PurMasterID = PurMasterID;
+               }
+               ViewBag.Message = "File Uploaded Successfully!!";
+               return PartialView("UploadQuo", PurMasterID);
+           }
+           catch
+           {
+               ViewBag.PurMasterID = PurMasterID;
+               ViewBag.Message = "File fail to Upload!!";
+               return PartialView("UploadQuo", PurMasterID);
+           }
+        }
+
+        //Start Purchase request Details Type 2
+
+        [HttpGet]
+        public ActionResult AddPurDtlsType2(int PrMstId)
         {
+            ViewBag.PrMstId = PrMstId;
+
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.PrNo = purMstr.PRNo;
+            ViewBag.PrTypeID = purMstr.PRTypeId;
+
+            var UomList = db.UOM_mst.ToList();
+            ViewBag.UOMList = UomList;
+
+            return View("AddPurDtlsType2");
+        }
+
+        [HttpPost]
+        public ActionResult AddPurDtlsType2(PR_Details pR_)
+        {
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == pR_.PRid)
+                .FirstOrDefault();
             try
             {
-                if (file.ContentLength > 0)
+                var AddPRDtls = db.Set<PR_Details>();
+                AddPRDtls.Add(new PR_Details
                 {
-                    string _FileName = Path.GetFileName(file.FileName);
-                    string _path = Path.Combine(Server.MapPath("~/UploadedFile/Quotation"), _FileName);
-                    file.SaveAs(_path);
-
-                    //int PrMstID = PurMasterID;
-                    var PurMst = db.PR_Mst.SingleOrDefault(pr => pr.PRId == PurMasterID);
-                    if (PurMst != null)
-                    {
-                        PurMst.FIleName = _FileName;
-                        PurMst.FilePath = "~/UploadedFile/Quotation";
-                        db.SaveChanges();
-
-                    }
-                    ViewBag.Filename = _FileName;
-                    ViewBag.Filepath = _FileName;
-                    ViewBag.PurMasterID = PurMasterID;
-                }
-                ViewBag.Message = "File Uploaded Successfully!!";
-                return PartialView("UploadQuo", PurMasterID);
+                    PRid = pR_.PRid,
+                    PRNo = pR_.PRNo,
+                    TypePRId = pR_.TypePRId,
+                    UserId = purMstr.UserId,
+                    UserName = purMstr.Usr_mst.Username,
+                    DepartmentName = purMstr.Department_mst.Department_name,
+                    DomiPartNo = pR_.DomiPartNo,
+                    VendorPartNo = pR_.VendorPartNo,
+                    Qty = pR_.Qty,
+                    UOMId = pR_.UOMId,
+                    ReqDevDate = pR_.ReqDevDate,
+                    Device = pR_.Device,
+                    SalesOrder = pR_.SalesOrder,
+                    Remarks = pR_.Remarks,
+                    Description = "-",
+                    VendorName = "-"
+                });
+                db.SaveChanges();
             }
-            catch
+            catch (DbEntityValidationException e)
             {
-                ViewBag.Message = "File upload failed!!";
-                return PartialView("UploadQuo", PurMasterID);
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                throw;
+
             }
+
+
+            return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+        }
+
+        //Start Purchase request Details Type 3
+
+        [HttpGet]
+        public ActionResult AddPurDtlsType3(int PrMstId)
+        {
+            ViewBag.PrMstId = PrMstId;
+
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.PrNo = purMstr.PRNo;
+            ViewBag.PrTypeID = purMstr.PRTypeId;
+
+            var UomList = db.UOM_mst.ToList();
+            ViewBag.UOMList = UomList;
+
+            return View("AddPurDtlsType3");
+        }
+
+        [HttpPost]
+        public ActionResult AddPurDtlsType3(PR_Details pR_)
+        {
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == pR_.PRid)
+                .FirstOrDefault();
+            try
+            {
+                var AddPRDtls = db.Set<PR_Details>();
+                decimal dqty = (decimal)pR_.Qty;
+
+                AddPRDtls.Add(new PR_Details
+                {
+                    PRid = pR_.PRid,
+                    PRNo = pR_.PRNo,
+                    TypePRId = pR_.TypePRId,
+                    UserId = purMstr.UserId,
+                    UserName = purMstr.Usr_mst.Username,
+                    DepartmentName = purMstr.Department_mst.Department_name,
+                    DomiPartNo = pR_.DomiPartNo,
+                    Description = pR_.Description,
+                    Qty = pR_.Qty,
+                    UOMId = pR_.UOMId,
+                    ReqDevDate = pR_.ReqDevDate,
+                    Remarks = pR_.Remarks,
+                    VendorName = pR_.VendorName,
+                    VendorPartNo = "-",
+                    Device = "-",
+                    SalesOrder = "-"
+                });
+                db.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                throw;
+
+            }
+
+
+            return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+        }
+
+        //Start Purchase request Details Type 4
+
+        [HttpGet]
+        public ActionResult AddPurDtlsType4(int PrMstId)
+        {
+            ViewBag.PrMstId = PrMstId;
+
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.PrNo = purMstr.PRNo;
+            ViewBag.PrTypeID = purMstr.PRTypeId;
+
+            var UomList = db.UOM_mst.ToList();
+            ViewBag.UOMList = UomList;
+
+            return View("AddPurDtlsType4");
+        }
+
+        [HttpPost]
+        public ActionResult AddPurDtlsType4(PR_Details pR_)
+        {
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == pR_.PRid)
+                .FirstOrDefault();
+            try
+            {
+                var AddPRDtls = db.Set<PR_Details>();
+                AddPRDtls.Add(new PR_Details
+                {
+                    PRid = pR_.PRid,
+                    PRNo = pR_.PRNo,
+                    TypePRId = pR_.TypePRId,
+                    UserId = purMstr.UserId,
+                    UserName = purMstr.Usr_mst.Username,
+                    DepartmentName = purMstr.Department_mst.Department_name,
+                    DomiPartNo = pR_.DomiPartNo,
+                    Description = pR_.Description,
+                    Qty = pR_.Qty,
+                    UOMId = pR_.UOMId,
+                    ReqDevDate = pR_.ReqDevDate,
+                    Remarks = pR_.Remarks,
+                    VendorName = pR_.VendorName,
+                    VendorPartNo = "-",
+                    Device = "-",
+                    SalesOrder = "-"
+                });
+                db.SaveChanges();
+            }
+            catch (RetryLimitExceededException)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+
+
+            return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
         }
 
 

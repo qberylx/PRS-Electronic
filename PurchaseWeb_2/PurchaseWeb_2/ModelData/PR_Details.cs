@@ -12,6 +12,7 @@ namespace PurchaseWeb_2.ModelData
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class PR_Details
     {
@@ -25,11 +26,13 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<int> UserId { get; set; }
         public string UserName { get; set; }
         public string DepartmentName { get; set; }
+        [Required(ErrorMessage = "Please enter Description")]
         public string Description { get; set; }
-        [Required(ErrorMessage ="Please enter Dominant Part No.")]
+        [Required(ErrorMessage = "Please enter Dominant Part No.")]
         public string DomiPartNo { get; set; }
         [Required(ErrorMessage = "Please enter Vendor Part No.")]
         public string VendorPartNo { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         [Required(ErrorMessage = "Please enter Quantity")]
         [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Valid Decimal number with maximum 2 decimal places.")]
         public Nullable<decimal> Qty { get; set; }
@@ -40,6 +43,7 @@ namespace PurchaseWeb_2.ModelData
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public Nullable<System.DateTime> ReqDevDate { get; set; }
         public string Remarks { get; set; }
+        [Required(ErrorMessage = "Please enter Vendor Name")]
         public string VendorName { get; set; }
         public Nullable<int> CurrId { get; set; }
         public Nullable<decimal> UnitPrice { get; set; }
@@ -60,7 +64,7 @@ namespace PurchaseWeb_2.ModelData
         public string Device { get; set; }
         [Required(ErrorMessage = "Please enter the sales order ")]
         public string SalesOrder { get; set; }
-    
+
         public virtual Curr_Mst Curr_Mst { get; set; }
         public virtual PR_Mst PR_Mst { get; set; }
         public virtual UOM_mst UOM_mst { get; set; }

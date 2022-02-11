@@ -209,6 +209,7 @@
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DepartmentModel.cs" />
+    <Compile Include="Models\FileUpload.cs" />
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\MenuCheckboxViewModel.cs" />
     <Compile Include="Models\MenuModel.cs" />
@@ -2282,6 +2283,8 @@
     <Content Include="Views\Purchase\PurMstSelected.cshtml" />
     <Content Include="Views\Purchase\UploadQuo.cshtml" />
     <Content Include="Views\Purchase\PurDtlsList.cshtml" />
+    <Content Include="Views\Purchase\AddPurDtlsType2.cshtml" />
+    <Content Include="Views\Purchase\AddPurDtlsType3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
