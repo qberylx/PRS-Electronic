@@ -78,7 +78,6 @@ namespace PurchaseWeb_2.Controllers
         public string getNewPrNO(int Doctype)
         {
             string NewPrNO = "";
-            Doctype = 1;
             int currYear = DateTime.Now.Year;
             string initial = "PR";
             //var getDocNo = db.GetDocNo(initial, Doctype, currYear);
@@ -144,7 +143,7 @@ namespace PurchaseWeb_2.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddPurDtls(PR_Details pR_)
+        public ActionResult AddPurDtls(PRdtlsViewModel pR_)
         {
             var purMstr = db.PR_Mst
                 .Where(x => x.PRId == pR_.PRid)
@@ -169,7 +168,8 @@ namespace PurchaseWeb_2.Controllers
                     SalesOrder = pR_.SalesOrder,
                     Remarks = pR_.Remarks,
                     Description = "-",
-                    VendorName = "-"
+                    VendorName = "-",
+                    EstimateUnitPrice = 0.00M
                 });
                 db.SaveChanges();
             }
@@ -353,7 +353,7 @@ namespace PurchaseWeb_2.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddPurDtlsType2(PR_Details pR_)
+        public ActionResult AddPurDtlsType2(PRdtlsViewModel pR_)
         {
             var purMstr = db.PR_Mst
                 .Where(x => x.PRId == pR_.PRid)
@@ -378,7 +378,8 @@ namespace PurchaseWeb_2.Controllers
                     SalesOrder = pR_.SalesOrder,
                     Remarks = pR_.Remarks,
                     Description = "-",
-                    VendorName = "-"
+                    VendorName = "-",
+                    EstimateUnitPrice = 0.00M
                 });
                 db.SaveChanges();
             }
@@ -424,7 +425,7 @@ namespace PurchaseWeb_2.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddPurDtlsType3(PR_Details pR_)
+        public ActionResult AddPurDtlsType3(PRdtlsViewModel pR_)
         {
             var purMstr = db.PR_Mst
                 .Where(x => x.PRId == pR_.PRid)
@@ -451,7 +452,8 @@ namespace PurchaseWeb_2.Controllers
                     VendorName = pR_.VendorName,
                     VendorPartNo = "-",
                     Device = "-",
-                    SalesOrder = "-"
+                    SalesOrder = "-",
+                    EstimateUnitPrice = 0.00M
                 });
                 db.SaveChanges();
             }
@@ -493,11 +495,14 @@ namespace PurchaseWeb_2.Controllers
             var UomList = db.UOM_mst.ToList();
             ViewBag.UOMList = UomList;
 
+            var CurrList = db.Currency_Mst.ToList();
+            ViewBag.CurrList = CurrList;
+
             return View("AddPurDtlsType4");
         }
 
         [HttpPost]
-        public ActionResult AddPurDtlsType4(PR_Details pR_)
+        public ActionResult AddPurDtlsType4(PRdtlsViewModel pR_)
         {
             var purMstr = db.PR_Mst
                 .Where(x => x.PRId == pR_.PRid)
@@ -513,16 +518,18 @@ namespace PurchaseWeb_2.Controllers
                     UserId = purMstr.UserId,
                     UserName = purMstr.Usr_mst.Username,
                     DepartmentName = purMstr.Department_mst.Department_name,
-                    DomiPartNo = pR_.DomiPartNo,
+                    DomiPartNo = "-",
                     Description = pR_.Description,
                     Qty = pR_.Qty,
                     UOMId = pR_.UOMId,
                     ReqDevDate = pR_.ReqDevDate,
-                    Remarks = pR_.Remarks,
-                    VendorName = pR_.VendorName,
-                    VendorPartNo = "-",
+                    Remarks = "-",
+                    VendorName = "-",
+                    VendorPartNo = pR_.VendorPartNo,
                     Device = "-",
-                    SalesOrder = "-"
+                    SalesOrder = "-",
+                    EstCurrId = pR_.EstCurrId,
+                    EstimateUnitPrice = pR_.EstimateUnitPrice
                 });
                 db.SaveChanges();
             }

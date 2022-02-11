@@ -36,12 +36,12 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<Usr_mst> Usr_mst { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<RoleMenuMapping_mst> RoleMenuMapping_mst { get; set; }
-        public virtual DbSet<Curr_Mst> Curr_Mst { get; set; }
         public virtual DbSet<PR_Details> PR_Details { get; set; }
         public virtual DbSet<PR_Mst> PR_Mst { get; set; }
         public virtual DbSet<UOM_mst> UOM_mst { get; set; }
         public virtual DbSet<Status_Mst> Status_Mst { get; set; }
         public virtual DbSet<PRType_mst> PRType_mst { get; set; }
+        public virtual DbSet<Currency_Mst> Currency_Mst { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {

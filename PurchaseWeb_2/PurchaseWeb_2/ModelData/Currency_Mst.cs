@@ -12,19 +12,23 @@ namespace PurchaseWeb_2.ModelData
     using System;
     using System.Collections.Generic;
     
-    public partial class Curr_Mst
+    public partial class Currency_Mst
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Curr_Mst()
+        public Currency_Mst()
         {
             this.PR_Details = new HashSet<PR_Details>();
+            this.PR_Details1 = new HashSet<PR_Details>();
         }
     
         public int CurrId { get; set; }
-        public string CurrName { get; set; }
+        public string Kod { get; set; }
+        public string Name { get; set; }
         public Nullable<bool> Active { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PR_Details> PR_Details1 { get; set; }
     }
 }

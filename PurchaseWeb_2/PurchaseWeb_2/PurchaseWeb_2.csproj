@@ -148,7 +148,7 @@
     <Compile Include="ModelData\Audlgn_Log.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
-    <Compile Include="ModelData\Curr_Mst.cs">
+    <Compile Include="ModelData\Currency_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\Department_mst.cs">
@@ -213,6 +213,7 @@
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\MenuCheckboxViewModel.cs" />
     <Compile Include="Models\MenuModel.cs" />
+    <Compile Include="Models\PRdtlsViewModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -2285,6 +2286,7 @@
     <Content Include="Views\Purchase\PurDtlsList.cshtml" />
     <Content Include="Views\Purchase\AddPurDtlsType2.cshtml" />
     <Content Include="Views\Purchase\AddPurDtlsType3.cshtml" />
+    <Content Include="Views\Purchase\AddPurDtlsType4.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

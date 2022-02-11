@@ -15,12 +15,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Audlgn_Log' does not have a primary k
           <Property Name="Username" Type="varchar" MaxLength="50" />
           <Property Name="Date" Type="datetime" />
         </EntityType>
-        <EntityType Name="Curr_Mst">
+        <EntityType Name="Currency_Mst">
           <Key>
             <PropertyRef Name="CurrId" />
           </Key>
           <Property Name="CurrId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CurrName" Type="varchar" MaxLength="50" />
+          <Property Name="Kod" Type="varchar" MaxLength="5" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
           <Property Name="Active" Type="bit" />
         </EntityType>
         <EntityType Name="Department_mst">
@@ -86,6 +87,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="Device" Type="varchar" MaxLength="100" />
           <Property Name="SalesOrder" Type="varchar" MaxLength="50" />
           <Property Name="VendorName" Type="varchar" MaxLength="50" />
+          <Property Name="EstCurrId" Type="int" />
+          <Property Name="EstimateUnitPrice" Type="decimal" Precision="18" Scale="2" />
           <Property Name="CurrId" Type="int" />
           <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
           <Property Name="TotCostnoTax" Type="decimal" Precision="18" Scale="2" />
@@ -184,11 +187,23 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="Flag_Aproval" Type="bit" />
           <Property Name="TelExt" Type="varchar" MaxLength="10" />
         </EntityType>
-        <Association Name="FK_PR_Details_Curr_Mst">
-          <End Role="Curr_Mst" Type="Self.Curr_Mst" Multiplicity="0..1" />
+        <Association Name="FK_PR_Details_Currency_Mst">
+          <End Role="Currency_Mst" Type="Self.Currency_Mst" Multiplicity="0..1" />
           <End Role="PR_Details" Type="Self.PR_Details" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Curr_Mst">
+            <Principal Role="Currency_Mst">
+              <PropertyRef Name="CurrId" />
+            </Principal>
+            <Dependent Role="PR_Details">
+              <PropertyRef Name="EstCurrId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Details_Currency_Mst1">
+          <End Role="Currency_Mst" Type="Self.Currency_Mst" Multiplicity="0..1" />
+          <End Role="PR_Details" Type="Self.PR_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency_Mst">
               <PropertyRef Name="CurrId" />
             </Principal>
             <Dependent Role="PR_Details">
@@ -339,7 +354,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Parameter Name="UserId" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="Domi_PurModelStoreContainer">
-          <EntitySet Name="Curr_Mst" EntityType="Self.Curr_Mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Currency_Mst" EntityType="Self.Currency_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department_mst" EntityType="Self.Department_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Position_mst" EntityType="Self.Position_mst" Schema="dbo" store:Type="Tables" />
@@ -373,8 +388,12 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
     [SubMenu_mst].[Menu_id] AS [Menu_id]
     FROM [dbo].[SubMenu_mst] AS [SubMenu_mst]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK_PR_Details_Curr_Mst" Association="Self.FK_PR_Details_Curr_Mst">
-            <End Role="Curr_Mst" EntitySet="Curr_Mst" />
+          <AssociationSet Name="FK_PR_Details_Currency_Mst" Association="Self.FK_PR_Details_Currency_Mst">
+            <End Role="Currency_Mst" EntitySet="Currency_Mst" />
+            <End Role="PR_Details" EntitySet="PR_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Details_Currency_Mst1" Association="Self.FK_PR_Details_Currency_Mst1">
+            <End Role="Currency_Mst" EntitySet="Currency_Mst" />
             <End Role="PR_Details" EntitySet="PR_Details" />
           </AssociationSet>
           <AssociationSet Name="FK_PR_Details_PR_Mst" Association="Self.FK_PR_Details_PR_Mst">
@@ -517,14 +536,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             <End Role="RoleMenuMapping_mst" EntitySet="RoleMenuMapping_mst" />
           </AssociationSet>
           <FunctionImport Name="AssignRoleMenuMap" />
-          <EntitySet Name="Curr_Mst" EntityType="Domi_PurModel.Curr_Mst" />
           <EntitySet Name="PR_Details" EntityType="Domi_PurModel.PR_Details" />
           <EntitySet Name="PR_Mst" EntityType="Domi_PurModel.PR_Mst" />
           <EntitySet Name="UOM_mst" EntityType="Domi_PurModel.UOM_mst" />
-          <AssociationSet Name="FK_PR_Details_Curr_Mst" Association="Domi_PurModel.FK_PR_Details_Curr_Mst">
-            <End Role="Curr_Mst" EntitySet="Curr_Mst" />
-            <End Role="PR_Details" EntitySet="PR_Details" />
-          </AssociationSet>
           <AssociationSet Name="FK_PR_Details_PR_Mst" Association="Domi_PurModel.FK_PR_Details_PR_Mst">
             <End Role="PR_Mst" EntitySet="PR_Mst" />
             <End Role="PR_Details" EntitySet="PR_Details" />
@@ -560,6 +574,15 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <AssociationSet Name="FK_PR_Mst_PRType_mst" Association="Domi_PurModel.FK_PR_Mst_PRType_mst">
             <End Role="PRType_mst" EntitySet="PRType_mst" />
             <End Role="PR_Mst" EntitySet="PR_Mst" />
+          </AssociationSet>
+          <EntitySet Name="Currency_Mst" EntityType="Domi_PurModel.Currency_Mst" />
+          <AssociationSet Name="FK_PR_Details_Currency_Mst" Association="Domi_PurModel.FK_PR_Details_Currency_Mst">
+            <End Role="Currency_Mst" EntitySet="Currency_Mst" />
+            <End Role="PR_Details" EntitySet="PR_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Details_Currency_Mst1" Association="Domi_PurModel.FK_PR_Details_Currency_Mst1">
+            <End Role="Currency_Mst" EntitySet="Currency_Mst" />
+            <End Role="PR_Details" EntitySet="PR_Details" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
@@ -655,15 +678,6 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Curr_Mst">
-          <Key>
-            <PropertyRef Name="CurrId" />
-          </Key>
-          <Property Name="CurrId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CurrName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Active" Type="Boolean" />
-          <NavigationProperty Name="PR_Details" Relationship="Domi_PurModel.FK_PR_Details_Curr_Mst" FromRole="Curr_Mst" ToRole="PR_Details" />
-        </EntityType>
         <EntityType Name="PR_Details">
           <Key>
             <PropertyRef Name="PRDtId" />
@@ -699,12 +713,15 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedUser" Type="Int32" />
-          <NavigationProperty Name="Curr_Mst" Relationship="Domi_PurModel.FK_PR_Details_Curr_Mst" FromRole="PR_Details" ToRole="Curr_Mst" />
           <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Details_PR_Mst" FromRole="PR_Details" ToRole="PR_Mst" />
           <NavigationProperty Name="UOM_mst" Relationship="Domi_PurModel.FK_PR_Details_UOM_mst" FromRole="PR_Details" ToRole="UOM_mst" />
           <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_PR_Details_Usr_mst" FromRole="PR_Details" ToRole="Usr_mst" />
           <Property Name="Device" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="SalesOrder" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EstCurrId" Type="Int32" />
+          <Property Name="EstimateUnitPrice" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="Currency_Mst" Relationship="Domi_PurModel.FK_PR_Details_Currency_Mst" FromRole="PR_Details" ToRole="Currency_Mst" />
+          <NavigationProperty Name="Currency_Mst1" Relationship="Domi_PurModel.FK_PR_Details_Currency_Mst1" FromRole="PR_Details" ToRole="Currency_Mst" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -736,18 +753,6 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="Active" Type="Boolean" />
           <NavigationProperty Name="PR_Details" Relationship="Domi_PurModel.FK_PR_Details_UOM_mst" FromRole="UOM_mst" ToRole="PR_Details" />
         </EntityType>
-        <Association Name="FK_PR_Details_Curr_Mst">
-          <End Type="Domi_PurModel.Curr_Mst" Role="Curr_Mst" Multiplicity="0..1" />
-          <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Curr_Mst">
-              <PropertyRef Name="CurrId" />
-            </Principal>
-            <Dependent Role="PR_Details">
-              <PropertyRef Name="CurrId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PR_Details_PR_Mst">
           <End Type="Domi_PurModel.PR_Mst" Role="PR_Mst" Multiplicity="0..1" />
           <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="*" />
@@ -845,6 +850,41 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             </Principal>
             <Dependent Role="PR_Mst">
               <PropertyRef Name="PRTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Currency_Mst">
+          <Key>
+            <PropertyRef Name="CurrId" />
+          </Key>
+          <Property Name="CurrId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Kod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="PR_Details" Relationship="Domi_PurModel.FK_PR_Details_Currency_Mst" FromRole="Currency_Mst" ToRole="PR_Details" />
+          <NavigationProperty Name="PR_Details1" Relationship="Domi_PurModel.FK_PR_Details_Currency_Mst1" FromRole="Currency_Mst" ToRole="PR_Details" />
+        </EntityType>
+        <Association Name="FK_PR_Details_Currency_Mst">
+          <End Type="Domi_PurModel.Currency_Mst" Role="Currency_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency_Mst">
+              <PropertyRef Name="CurrId" />
+            </Principal>
+            <Dependent Role="PR_Details">
+              <PropertyRef Name="EstCurrId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Details_Currency_Mst1">
+          <End Type="Domi_PurModel.Currency_Mst" Role="Currency_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency_Mst">
+              <PropertyRef Name="CurrId" />
+            </Principal>
+            <Dependent Role="PR_Details">
+              <PropertyRef Name="CurrId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -963,18 +1003,11 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AssignRoleMenuMap" FunctionName="Domi_PurModel.Store.AssignRoleMenuMap" />
-          <EntitySetMapping Name="Curr_Mst">
-            <EntityTypeMapping TypeName="Domi_PurModel.Curr_Mst">
-              <MappingFragment StoreEntitySet="Curr_Mst">
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="CurrName" ColumnName="CurrName" />
-                <ScalarProperty Name="CurrId" ColumnName="CurrId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PR_Details">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Details">
               <MappingFragment StoreEntitySet="PR_Details">
+                <ScalarProperty Name="EstimateUnitPrice" ColumnName="EstimateUnitPrice" />
+                <ScalarProperty Name="EstCurrId" ColumnName="EstCurrId" />
                 <ScalarProperty Name="SalesOrder" ColumnName="SalesOrder" />
                 <ScalarProperty Name="Device" ColumnName="Device" />
                 <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
@@ -1052,6 +1085,16 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
               <MappingFragment StoreEntitySet="PRType_mst">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="PRTypeId" ColumnName="PRTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Currency_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Currency_Mst">
+              <MappingFragment StoreEntitySet="Currency_Mst">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Kod" ColumnName="Kod" />
+                <ScalarProperty Name="CurrId" ColumnName="CurrId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

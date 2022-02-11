@@ -47,6 +47,37 @@
                             <th></th>
                         </tr>
                     }
+                    else if (ViewBag.PrTypeId == 4)
+                    {
+                        <tr>
+                            <th>
+                                No.
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.VendorPartNo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Qty)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UOM_mst.UOMName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ReqDevDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Currency_Mst.Kod)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.EstimateUnitPrice)
+                            </th>
+
+                            <th></th>
+                        </tr>
+                    }
                     else
                     {
                         <tr>
@@ -110,6 +141,48 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Remarks)
+                                </td>
+                                <td>
+                                    @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                                    {
+                                        <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                        <input type="hidden" id="DelPrMstId" name="DelPrMstId" value="@item.PRid" />
+                                        <button class="btn btn-danger"><i class="fa fa-trash fa-xs"></i></button>
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else if (ViewBag.PrTypeId == 4)
+                    {
+                        foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VendorPartNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Qty)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UOM_mst.UOMName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReqDevDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Currency_Mst.Kod)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EstimateUnitPrice)
                                 </td>
                                 <td>
                                     @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
