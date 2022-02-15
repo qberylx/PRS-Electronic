@@ -2287,6 +2287,9 @@
     <Content Include="Views\Purchase\AddPurDtlsType2.cshtml" />
     <Content Include="Views\Purchase\AddPurDtlsType3.cshtml" />
     <Content Include="Views\Purchase\AddPurDtlsType4.cshtml" />
+    <Content Include="Views\Purchase\PrView.cshtml" />
+    <Content Include="Views\Purchase\PurMstViewSelected.cshtml" />
+    <Content Include="Views\Purchase\PurDetailsViewSelected.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

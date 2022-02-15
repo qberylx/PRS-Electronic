@@ -1,0 +1,82 @@
+﻿@model PurchaseWeb_2.ModelData.PR_Mst
+
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">PURCHASE REQUISITION</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <!--PR no-->
+                        <strong>PR No :</strong> @Html.DisplayFor(model => model.PRNo)
+                    </div>
+                    <div class="col-md-6">
+                        <!--PR type-->
+                        <strong>PR Type :</strong> @Html.DisplayFor(model => model.PRType_mst.Name)
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Requisition Date</strong> <br />
+                        @Html.DisplayFor(model => model.RequestDate)
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Requestor</strong> <br />
+                        @Html.DisplayFor(model => model.Usr_mst.Username)
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Department</strong> <br />
+                        @Html.DisplayFor(model => model.Department_mst.Department_name)
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Tel Ext.</strong> <br />
+                        @Html.DisplayFor(model => model.Status_Mst.Name)
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <table class="table">
+                    <tr>
+                        <th>
+                            FileName
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+                    
+                    <tbody>
+                        @if (ViewBag.Filename != null)
+                        {
+                            <tr>
+                                <td>@ViewBag.Filename</td>
+                                <td class="text-right py-0 align-middle">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="/UploadedFile/Quotation/@ViewBag.Filename" class="btn btn-info" target="_blank"><i class="fas fa-eye"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }else
+                        {
+                            <tr>
+                                <td>There are no quotation uploaded</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+</div>

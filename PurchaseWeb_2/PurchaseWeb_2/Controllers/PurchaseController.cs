@@ -72,7 +72,7 @@ namespace PurchaseWeb_2.Controllers
                 //Log the error (uncomment dex variable name and add a line here to write a log.
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
-            return RedirectToAction("PurRequest");
+            return RedirectToAction("PrMstList","Purchase");
         }
 
         public string getNewPrNO(int Doctype)
@@ -89,7 +89,54 @@ namespace PurchaseWeb_2.Controllers
             return NewPrNO;
         }
 
-        [ChildActionOnly]
+        public ActionResult PRhod(int PrMstId)
+        {
+            //update statid = 3 (Pending Approval HOD)
+            var PrMst = db.PR_Mst.SingleOrDefault(pr => pr.PRId == PrMstId);
+            if (PrMst != null)
+            {
+                PrMst.StatId = 3;
+                db.SaveChanges();
+            }
+            return View("PurRequest");
+        }
+
+        public ActionResult PrView(int PrMstId)
+        {
+            ViewBag.PrMstId = PrMstId;
+
+            return View("PrView");
+        }
+
+        public ActionResult PurMstViewSelected(int PrMstId)
+        {
+            var prMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+
+            ViewBag.Filename = prMst.FIleName;
+            ViewBag.Filepath = prMst.FilePath + prMst.FIleName;
+
+            return PartialView("PurMstViewSelected", prMst);
+        }
+
+        public ActionResult PurDetailsViewSelected(int PrMstId)
+        {
+            var PrDtlsView = db.PR_Details
+                .Where(x => x.PRid == PrMstId)
+                .ToList();
+
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.PrTypeId = PrMst.PRTypeId;
+
+
+            return PartialView("PurDetailsViewSelected", PrDtlsView);
+        }
+
         public ActionResult PrMstList()
         {
             string username = Convert.ToString(Session["Username"]);
@@ -542,6 +589,8 @@ namespace PurchaseWeb_2.Controllers
 
             return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
         }
+
+        
 
 
     }
