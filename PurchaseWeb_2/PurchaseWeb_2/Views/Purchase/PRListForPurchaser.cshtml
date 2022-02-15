@@ -1,0 +1,66 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Mst>
+
+<div class="card card-primary">
+    <div class="card-header">
+        <div class="card-title">
+            <h5>Purchase Request List</h5>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-responsive table-head-fixed">
+            <tr>
+                <th>
+                    PRNo
+                </th>
+                <th>
+                    Requisition Date
+                </th>
+                <th>
+                    Department
+                </th>
+                <th>
+                    Requestor
+                </th>
+                <th>
+                    PR Type
+                </th>
+                <th>
+                    PR Status
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PRNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Department_mst.Department_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Usr_mst.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PRType_mst.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status_Mst.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "PRDtlsForPurchaser", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                @Html.ActionLink("Details", "Details", new { id = item.PRId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.PRId })
+            </td>
+        </tr>
+            }
+
+        </table>
+    </div>
+</div>
+
+

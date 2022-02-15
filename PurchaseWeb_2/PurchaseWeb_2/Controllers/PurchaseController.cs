@@ -655,6 +655,35 @@ namespace PurchaseWeb_2.Controllers
             return View("PRProsesList");
         }
 
+        public ActionResult PRListForPurchaser()
+        {
+            var PrMstList = db.PR_Mst
+                .Where(x => x.StatId == 7 || x.StatId == 8)
+                .ToList();
+            return PartialView("PRListForPurchaser", PrMstList);
+        }
+
+        public ActionResult PRDtlsForPurchaser(int PrMstId)
+        {
+            var PrDtlsList = db.PR_Details
+                .Where(x => x.PRid == PrMstId)
+                .ToList();
+            return View("PRDtlsForPurchaser", PrDtlsList);
+        }
+
+        [HttpGet]
+        public ActionResult UpdatePrDtlsPurchaser(int PrDtlsId)
+        {
+            var PrDtls = db.PR_Details
+                .Where(x => x.PRDtId == PrDtlsId)
+                .SingleOrDefault();
+
+            var CurList = db.Currency_Mst.ToList();
+            ViewBag.CurList = CurList;
+
+            return PartialView("UpdatePrDtlsPurchaser", PrDtls);
+        }
+
     }
 
 }
