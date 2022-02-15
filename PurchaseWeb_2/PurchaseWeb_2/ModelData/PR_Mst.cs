@@ -31,6 +31,9 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<int> PRTypeId { get; set; }
         public string FIleName { get; set; }
         public string FilePath { get; set; }
+        public string HODApprovalBy { get; set; }
+        public Nullable<System.DateTime> HODApprovalDate { get; set; }
+        public string ModifiedBy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }

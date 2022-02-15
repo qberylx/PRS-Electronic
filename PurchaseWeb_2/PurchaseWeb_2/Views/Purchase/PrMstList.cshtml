@@ -33,56 +33,66 @@
 
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PRNo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Usr_mst.Username)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Department_mst.Department_name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.RequestDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PRType_mst.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Status_Mst.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelitem => item.PR_Details.Count)
-                            </td>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PRNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Usr_mst.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Department_mst.Department_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PRType_mst.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status_Mst.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.PR_Details.Count)
+                    </td>
 
-                            <td>
-                                @switch (item.PRTypeId)
-                                {
-                                    case 1:<button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>
-                                        break;
+                    @if (item.StatId != 1 && item.StatId != 2)
+                    {
+                        <td>
+                            @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @switch (item.PRTypeId)
+                            {
+                                case 1:<button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>
+                                    break;
 
-                                    case 2: <button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtlsType2?PrMstId=@item.PRId' ;">Add Details</button>
-                                        break;
+                                case 2: <button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtlsType2?PrMstId=@item.PRId' ;">Add Details</button>
+                                    break;
 
-                                    case 3: <button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtlsType3?PrMstId=@item.PRId' ;">Add Details</button>
-                                        break;
+                                case 3: <button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtlsType3?PrMstId=@item.PRId' ;">Add Details</button>
+                                    break;
 
-                                    case 4: <button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtlsType4?PrMstId=@item.PRId' ;">Add Details</button>
-                                        break;
-
-
-                                }
-
-                                @Html.ActionLink("Send", "PRhod", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
-
-                                @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
-
-                                @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                                case 4: <button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtlsType4?PrMstId=@item.PRId' ;">Add Details</button>
+                                    break;
 
 
-                            </td>
-                        </tr>
+                            }
+
+                            @Html.ActionLink("Send", "PRhod", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+
+                            @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
+
+                            @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+
+
+                        </td>
+                    }
+
+                </tr>
                     }
 
                 </table>

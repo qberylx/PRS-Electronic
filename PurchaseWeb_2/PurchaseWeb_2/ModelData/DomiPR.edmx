@@ -120,6 +120,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="StatId" Type="int" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="varchar" MaxLength="50" />
+          <Property Name="HODApprovalBy" Type="varchar" MaxLength="50" />
+          <Property Name="HODApprovalDate" Type="datetime" />
         </EntityType>
         <EntityType Name="PRType_mst">
           <Key>
@@ -743,6 +746,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <NavigationProperty Name="PRType_mst" Relationship="Domi_PurModel.FK_PR_Mst_PRType_mst" FromRole="PR_Mst" ToRole="PRType_mst" />
           <Property Name="FIleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FilePath" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HODApprovalBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HODApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1047,6 +1053,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="HODApprovalDate" ColumnName="HODApprovalDate" />
+                <ScalarProperty Name="HODApprovalBy" ColumnName="HODApprovalBy" />
                 <ScalarProperty Name="FilePath" ColumnName="FilePath" />
                 <ScalarProperty Name="FIleName" ColumnName="FIleName" />
                 <ScalarProperty Name="PRTypeId" ColumnName="PRTypeId" />

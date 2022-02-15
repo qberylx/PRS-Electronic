@@ -1,0 +1,100 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Mst>
+
+@{
+    ViewBag.Title = "ApprovalHOD";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div  class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">List of PR for HOD Approval</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="body">
+        @ViewBag.Message
+
+        @if (ViewBag.Message != null)
+        {
+            if ((ViewBag.Message).Contains("Approved"))
+            {
+                <div class="alert alert-success alert-dismissible" id="divAlert">
+                    @ViewBag.Message
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger alert-dismissible" id="divAlert">
+                    @ViewBag.Message
+                </div>
+            }
+
+        }
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.PRNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RequestDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Department_mst.Department_name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Usr_mst.Username)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PRType_mst.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status_Mst.Name)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PRNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Department_mst.Department_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Usr_mst.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PRType_mst.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status_Mst.Name)
+                    </td>
+                    <td>
+                        @Html.ActionLink("View", "PrView", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                        @Html.ActionLink("Approve", "ApproveHOD", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                        @Html.ActionLink("Reject", "RejectHOD", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
+
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#divAlert").delay(3000).fadeOut("slow");
+    });
+</script>
+
+

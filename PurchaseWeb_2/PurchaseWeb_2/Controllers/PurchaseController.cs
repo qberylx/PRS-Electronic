@@ -101,6 +101,65 @@ namespace PurchaseWeb_2.Controllers
             return View("PurRequest");
         }
 
+        public ActionResult ApprovalHOD()
+        {
+            string username = Convert.ToString(Session["Username"]);
+            //get User id and department id
+            var userdtls = db.Usr_mst
+                            .Where(x => x.Username == username)
+                            .FirstOrDefault();
+
+            var PrMst = db.PR_Mst
+                .Where(x => x.DepartmentId == userdtls.Dpt_id && x.StatId == 3 )
+                .ToList();
+                            
+            return View("ApprovalHOD", PrMst);
+        }
+
+        public ActionResult ApproveHOD(int PrMstId)
+        {
+            string Username = (string)Session["Username"];
+
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            if(PrMst != null)
+            {
+                PrMst.StatId = 7;
+                PrMst.ModifiedDate = DateTime.Now;
+                PrMst.ModifiedBy = Username;
+                PrMst.HODApprovalBy = Username;
+                PrMst.HODApprovalDate = DateTime.Now;
+                db.SaveChanges();
+            }
+
+            ViewBag.Message =  PrMst.PRNo + " is Approved !";
+
+            return RedirectToAction("ApprovalHOD");
+        }
+
+        public ActionResult RejectHOD(int PrMstId)
+        {
+            string Username = (string)Session["Username"];
+
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            if (PrMst != null)
+            {
+                PrMst.StatId = 2;
+                PrMst.ModifiedDate = DateTime.Now;
+                PrMst.ModifiedBy = Username;
+                db.SaveChanges();
+            }
+
+            ViewBag.Message = PrMst.PRNo + " is send back to User !";
+
+            return RedirectToAction("ApprovalHOD");
+        }
+
         public ActionResult PrView(int PrMstId)
         {
             ViewBag.PrMstId = PrMstId;
@@ -591,7 +650,10 @@ namespace PurchaseWeb_2.Controllers
         }
 
         
-
+        public ActionResult PRProsesList()
+        {
+            return View("PRProsesList");
+        }
 
     }
 

@@ -2290,6 +2290,8 @@
     <Content Include="Views\Purchase\PrView.cshtml" />
     <Content Include="Views\Purchase\PurMstViewSelected.cshtml" />
     <Content Include="Views\Purchase\PurDetailsViewSelected.cshtml" />
+    <Content Include="Views\Purchase\ApprovalHOD.cshtml" />
+    <Content Include="Views\Purchase\PRProsesList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,17 +11,13 @@ namespace PurchaseWeb_2.ModelData
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+    
     public partial class PR_Details
     {
         public int PRDtId { get; set; }
         public Nullable<int> PRid { get; set; }
         public string PRNo { get; set; }
         public Nullable<int> TypePRId { get; set; }
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public Nullable<System.DateTime> RequestDate { get; set; }
         public Nullable<int> UserId { get; set; }
         public string UserName { get; set; }
@@ -29,12 +25,8 @@ namespace PurchaseWeb_2.ModelData
         public string Description { get; set; }
         public string DomiPartNo { get; set; }
         public string VendorPartNo { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Valid Decimal number with maximum 2 decimal places.")]
         public Nullable<decimal> Qty { get; set; }
         public Nullable<int> UOMId { get; set; }
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public Nullable<System.DateTime> ReqDevDate { get; set; }
         public string Remarks { get; set; }
         public string VendorName { get; set; }
@@ -56,8 +48,6 @@ namespace PurchaseWeb_2.ModelData
         public string Device { get; set; }
         public string SalesOrder { get; set; }
         public Nullable<int> EstCurrId { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Valid Decimal number with maximum 2 decimal places.")]
         public Nullable<decimal> EstimateUnitPrice { get; set; }
     
         public virtual PR_Mst PR_Mst { get; set; }
