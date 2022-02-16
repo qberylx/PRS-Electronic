@@ -665,10 +665,42 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult PRDtlsForPurchaser(int PrMstId)
         {
-            var PrDtlsList = db.PR_Details
+            ViewBag.PrMstId = PrMstId;
+            return View("PRDtlsForPurchaser");
+        }
+
+        public ActionResult PRDtlsListForPurchaser(int PrMstId)
+        {
+            List<PR_Details> PrDtlsList = db.PR_Details
                 .Where(x => x.PRid == PrMstId)
                 .ToList();
-            return View("PRDtlsForPurchaser", PrDtlsList);
+            PRDtlsPurchaser PRDtlsP = new PRDtlsPurchaser();
+
+            List<PRDtlsPurchaser> PRDtlsPList = PrDtlsList.Select(x => new PRDtlsPurchaser
+            {
+                PRDtId = x.PRDtId,
+                PRid = x.PRid,
+                DomiPartNo = x.DomiPartNo,
+                VendorPartNo = x.VendorPartNo,
+                Qty = x.Qty,
+                UOMId = x.UOMId,
+                UOM_mst = x.UOM_mst,
+                ReqDevDate = x.ReqDevDate,
+                Remarks = x.Remarks,
+                Device = x.Device,
+                SalesOrder = x.SalesOrder,
+                Currency_Mst = x.Currency_Mst,
+                Currency_Mst1 = x.Currency_Mst1,
+                CurrId = x.CurrId,
+                UnitPrice = x.UnitPrice,
+                Tax = x.Tax,
+                TotCostWitTax = x.TotCostWitTax,
+                TaxCode = x.TaxCode,
+                TaxClass = x.TaxClass,
+                NoPo = x.NoPo
+            }).ToList();
+
+            return PartialView("PRDtlsListForPurchaser", PRDtlsPList);
         }
 
         [HttpGet]
@@ -681,7 +713,28 @@ namespace PurchaseWeb_2.Controllers
             var CurList = db.Currency_Mst.ToList();
             ViewBag.CurList = CurList;
 
+            ViewBag.PrMstId = PrDtls.PRid;
+            ViewBag.PrDtlsId = PrDtls.PRDtId;
+
             return PartialView("UpdatePrDtlsPurchaser", PrDtls);
+        }
+
+        [HttpPost]
+        public ActionResult UpdatePrDtlsPurchaser(PR_Details pR_Details, int PrDtlsId, int PrMstId)
+        {
+            var prDtls = db.PR_Details.SingleOrDefault(x => x.PRDtId == PrDtlsId);
+            if(prDtls != null)
+            {
+                prDtls.CurrId = pR_Details.CurrId;
+                prDtls.UnitPrice = pR_Details.UnitPrice;
+                prDtls.Tax = pR_Details.Tax;
+                prDtls.TotCostWitTax = pR_Details.TotCostWitTax;
+                prDtls.TaxCode = pR_Details.TaxCode;
+                prDtls.TaxClass = pR_Details.TaxClass;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("PRDtlsListForPurchaser", "Purchase", new { PrMstId = PrMstId });
         }
 
     }
