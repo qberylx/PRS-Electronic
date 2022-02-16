@@ -18,9 +18,6 @@
 
                         </th>
                         <th>
-
-                        </th>
-                        <th>
                             DomiPartNo
                         </th>
                         <th>
@@ -62,10 +59,7 @@
                         <th>
                             Tax <br /> Class
                         </th>
-                        <th>
-                            PO#
-                        </th>
-
+                        
                         <th></th>
                     </tr>
                     @{ int i = 0; }
@@ -77,11 +71,11 @@
                                 @i
                             </td>
                             
+                            <!--
                             <td>
                                 <input type="checkbox" id="PoFlagIsChecked" name="PoFlagIsChecked" onchange="UpdatePOFlag(@item.PRDtId)" />
-
-                                @Html.CheckBoxFor(modelItem => item.PoFlagIsChecked, new { @disabled = "disabled" })
                             </td>
+                            -->
                             <td>
                                 @Html.DisplayFor(modelItem => item.DomiPartNo)
                             </td>
@@ -133,9 +127,6 @@
                                 @Html.DisplayFor(modelItem => item.TaxClass)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.NoPo)
-                            </td>
-                            <td>
                                 <button type="button" class="btn btn-default" id="UpdatePrDtls" data-toggle="modal" data-target="#modalUpdatePrDtls" data-assigned-id="@item.PRDtId" value="@item.PRDtId" onclick="UpdatePrDtls(@item.PRDtId)">
                                     <i class="fa fa-pen"></i>
                                 </button>
@@ -150,7 +141,12 @@
 
     </div>
     <div class="card card-footer">
-
+        <div class="row">
+            <div class="col-md-3">
+                @Html.ActionLink("Return To Main List", "PRProsesList", "Purchase", new { @class = "btn btn-primary" })
+            </div>
+        </div>
+        
     </div>
     
 

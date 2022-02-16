@@ -658,9 +658,23 @@ namespace PurchaseWeb_2.Controllers
         public ActionResult PRListForPurchaser()
         {
             var PrMstList = db.PR_Mst
-                .Where(x => x.StatId == 7 || x.StatId == 8)
+                .Where(x => x.StatId == 7 )
                 .ToList();
             return PartialView("PRListForPurchaser", PrMstList);
+        }
+
+        public ActionResult PurHODApproval(int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+            if (PrMst != null)
+            {
+                PrMst.StatId = 8;
+                db.SaveChanges();
+            }
+
+            return View("PRProsesList");
         }
 
         public ActionResult PRDtlsForPurchaser(int PrMstId)
@@ -701,6 +715,8 @@ namespace PurchaseWeb_2.Controllers
                 NoPo = x.NoPo,
                 PoFlagIsChecked = x.PoFlag == null ? false : (bool)x.PoFlag
             }).ToList();
+
+            ViewBag.PrMstId = PrMstId;
 
             return PartialView("PRDtlsListForPurchaser", PRDtlsPList);
         }
@@ -768,6 +784,14 @@ namespace PurchaseWeb_2.Controllers
             }
 
             return RedirectToAction("PRDtlsListForPurchaser", "Purchase", new { PrMstId = PrMstId });
+        }
+
+        public ActionResult HODPurApprovalList()
+        {
+            var PRMstList = db.PR_Mst
+                .Where(x => x.StatId == 8)
+                .ToList();
+            return View("HODPurApprovalList", PRMstList);
         }
 
     }

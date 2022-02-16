@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="card-body">
-        <table class="table table-responsive table-head-fixed">
+        <table class="table table-responsive table-head-fixed " style="width:100%">
             <tr>
                 <th>
                     PRNo
@@ -52,9 +52,8 @@
                 @Html.DisplayFor(modelItem => item.Status_Mst.Name)
             </td>
             <td>
-                @Html.ActionLink("Details", "PRDtlsForPurchaser", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
-                @Html.ActionLink("Details", "Details", new { id = item.PRId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.PRId })
+                @Html.ActionLink("Details", "PRDtlsForPurchaser", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                @Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
             </td>
         </tr>
             }

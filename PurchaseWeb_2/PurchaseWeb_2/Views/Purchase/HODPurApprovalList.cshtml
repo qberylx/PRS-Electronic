@@ -1,0 +1,106 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Mst>
+
+@{
+    ViewBag.Title = "HODPurApprovalList";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>HODPurApprovalList</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PRNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RequestDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModifiedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FIleName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FilePath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HODApprovalBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HODApprovalDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModifiedBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Department_mst.Department_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Usr_mst.Username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status_Mst.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PRType_mst.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PRNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RequestDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreateDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ModifiedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FIleName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FilePath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HODApprovalBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HODApprovalDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ModifiedBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Department_mst.Department_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Usr_mst.Username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status_Mst.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PRType_mst.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.PRId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.PRId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.PRId })
+        </td>
+    </tr>
+}
+
+</table>

@@ -2297,6 +2297,7 @@
     <Content Include="Views\Purchase\PRDtlsForPurchaser.cshtml" />
     <Content Include="Views\Purchase\UpdatePrDtlsPurchaser.cshtml" />
     <Content Include="Views\Purchase\PRDtlsListForPurchaser.cshtml" />
+    <Content Include="Views\Purchase\HODPurApprovalList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
