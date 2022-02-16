@@ -669,6 +669,7 @@ namespace PurchaseWeb_2.Controllers
             return View("PRDtlsForPurchaser");
         }
 
+        [HttpGet]
         public ActionResult PRDtlsListForPurchaser(int PrMstId)
         {
             List<PR_Details> PrDtlsList = db.PR_Details
@@ -697,10 +698,42 @@ namespace PurchaseWeb_2.Controllers
                 TotCostWitTax = x.TotCostWitTax,
                 TaxCode = x.TaxCode,
                 TaxClass = x.TaxClass,
-                NoPo = x.NoPo
+                NoPo = x.NoPo,
+                PoFlagIsChecked = x.PoFlag == null ? false : (bool)x.PoFlag
             }).ToList();
 
             return PartialView("PRDtlsListForPurchaser", PRDtlsPList);
+        }
+
+        public ActionResult UpdatePoFlag(int PrDtlsId,int isChecked)
+        {
+            bool convertcheck;
+            if (isChecked == 1)
+            {
+                convertcheck = true;
+            }
+            else
+            {
+                convertcheck = false;
+            }
+
+            var PrDtls = db.PR_Details
+                .Where(x => x.PRDtId == PrDtlsId)
+                .SingleOrDefault();
+            if( PrDtls != null)
+            {
+                if (PrDtls.NoPo == null)
+                {
+                    PrDtls.PoFlag = convertcheck;
+                    db.SaveChanges();
+                }else
+                {
+                    ViewBag.Message = "This PR details already have PO Number ";
+                }
+                
+            }
+            
+            return RedirectToAction("PRDtlsListForPurchaser", PrDtls.PRid);
         }
 
         [HttpGet]

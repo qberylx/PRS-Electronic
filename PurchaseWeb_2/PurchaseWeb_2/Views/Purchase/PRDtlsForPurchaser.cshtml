@@ -38,12 +38,27 @@
     //        $('#partial').load(route);
     //    });
     //});
+
     function UpdatePrDtls(PRDtId) {
         console.log(PRDtId);
         var route = '@Url.Action("UpdatePrDtlsPurchaser", "Purchase")?PrDtlsId=' + PRDtId;
         $('#partial').load(route);
         //$("#modalUpdatePrDtls").modal('hide');
-        $("#clsUpdate").click();
+        //$("#clsUpdate").click();
+        $("#clsUpdate").prev().click();
+    }
+
+    function UpdatePOFlag(PRDtId) {
+        console.log(PRDtId);
+        if ($('#PoFlagIsChecked').is(":checked")) {
+            var isChecked = 1;
+        } else {
+            var isChecked = 0;
+        }
+        console.log(isChecked);
+        var route = '@Url.Action("UpdatePoFlag", "Purchase")?PrDtlsId=' + PRDtId + '&isChecked=' + isChecked;
+        //var route = '@Url.Action("UpdatePoFlag", "Purchase",new { PrDtlsId = "'+PRDtId+'" , isChecked = "'+isChecked+'" })'
+        $('#DivPRDtlsListForPurchaser').load(route);
     }
 </script>
 

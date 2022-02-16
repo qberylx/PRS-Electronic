@@ -96,6 +96,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="TotCostWitTax" Type="decimal" Precision="18" Scale="2" />
           <Property Name="TaxCode" Type="varchar" MaxLength="10" />
           <Property Name="TaxClass" Type="int" />
+          <Property Name="PoFlag" Type="bit" />
           <Property Name="NoPo" Type="varchar" MaxLength="50" />
           <Property Name="ApprovalHOD" Type="varchar" MaxLength="50" />
           <Property Name="ApprovalHODStatus" Type="varchar" MaxLength="2" />
@@ -725,6 +726,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="EstimateUnitPrice" Type="Decimal" Precision="18" Scale="2" />
           <NavigationProperty Name="Currency_Mst" Relationship="Domi_PurModel.FK_PR_Details_Currency_Mst" FromRole="PR_Details" ToRole="Currency_Mst" />
           <NavigationProperty Name="Currency_Mst1" Relationship="Domi_PurModel.FK_PR_Details_Currency_Mst1" FromRole="PR_Details" ToRole="Currency_Mst" />
+          <Property Name="PoFlag" Type="Boolean" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -1012,6 +1014,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySetMapping Name="PR_Details">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Details">
               <MappingFragment StoreEntitySet="PR_Details">
+                <ScalarProperty Name="PoFlag" ColumnName="PoFlag" />
                 <ScalarProperty Name="EstimateUnitPrice" ColumnName="EstimateUnitPrice" />
                 <ScalarProperty Name="EstCurrId" ColumnName="EstCurrId" />
                 <ScalarProperty Name="SalesOrder" ColumnName="SalesOrder" />
