@@ -14,7 +14,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-head-fixed text-nowrap table-striped">
+                <table class="table table-head-fixed text-nowrap table-striped table-responsive">
                     @if (ViewBag.PrTypeId == 3)
                     {
                         <tr>
@@ -42,8 +42,29 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Remarks)
                             </th>
+                            <th>
+                                Currency
+                            </th>
+                            <th>
+                                Unit Price
+                            </th>
+                            <th>
+                                Total Amount <br /> (Exc Tax)
+                            </th>
+                            <th>
+                                Tax %
+                            </th>
+                            <th>
+                                Total Amount <br /> (Inc Tax)
+                            </th>
+                            <th>
+                                Tax Group
+                            </th>
+                            <th>
+                                Tax Class
+                            </th>
 
-                            <th></th>
+                            <th style="display:none"></th>
                         </tr>
                     }
                     else if (ViewBag.PrTypeId == 4)
@@ -160,6 +181,27 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Remarks)
                                 </td>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.Currency_Mst1.Kod)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.TotCostnoTax)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.Tax)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.TotCostWitTax)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.TaxCode)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.TaxClass)
+                                </th>
                                 <td style="display:none">
                                     @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
                                     {
@@ -219,73 +261,97 @@
                         foreach (var item in Model)
                         {
                             i++;
-                <tr>
-                    <td>
-                        @i
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DomiPartNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.VendorPartNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Qty)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ReqDevDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Remarks)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Device)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SalesOrder)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Currency_Mst1.Kod)
-                        @{ViewBag.Currency = item.Currency_Mst1.Kod;}
-                    </td>
-                    <th>
-                        @Html.DisplayFor(modelItem => item.UnitPrice)
-                    </th>
-                    <th>
-                        @Html.DisplayFor(modelItem => item.Tax)
-                    </th>
-                    <th>
-                        <!--col 12-->
-                        @Html.DisplayFor(modelItem => item.TotCostWitTax)
-                    </th>
-                    <th>
-                        @Html.DisplayFor(modelItem => item.TaxCode)
-                    </th>
-                    <th>
-                        @Html.DisplayFor(modelItem => item.TaxClass)
-                    </th>
+                            <tr>
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DomiPartNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VendorPartNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Qty)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReqDevDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Remarks)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SalesOrder)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Currency_Mst1.Kod)
+                                    @{ViewBag.Currency = item.Currency_Mst1.Kod;}
+                                </td>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.Tax)
+                                </th>
+                                <th>
+                                    <!--col 12-->
+                                    @Html.DisplayFor(modelItem => item.TotCostWitTax)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.TaxCode)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.TaxClass)
+                                </th>
 
-                    <td style="display:none">
-                        @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
-                        {
-                            <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
-                            <input type="hidden" id="DelPrMstId" name="DelPrMstId" value="@item.PRid" />
-                            <button class="btn btn-danger"><i class="fa fa-trash fa-xs"></i></button>
-                        }
 
-                    </td>
-                </tr>
+                                <td style="display:none">
+                                    @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                                    {
+                                        <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                        <input type="hidden" id="DelPrMstId" name="DelPrMstId" value="@item.PRid" />
+                                        <button class="btn btn-danger"><i class="fa fa-trash fa-xs"></i></button>
+                                    }
+
+                                </td>
+                            </tr>
                         }
                     }
 
                 <tr>
-                    <tfooter>
+                    @if (ViewBag.PrTypeId == 3)
+                    {
+                        <td colspan="10"></td>
+                    }
+                    else 
+                    { 
                         <td colspan="9"></td>
-                        <th>Grand Total</th>
-                        <td></td>
-                        <th>@ViewBag.Currency @ViewBag.GrandTotal </th>
-                        <td colspan="2"></td>
-                    </tfooter>
+                    }                    
+                    <th>Grand Total</th>
+                    <td></td>
+                    <th>
+                        <div class="row">
+                            <div class="col-md-4">
+                                @foreach (var item in Model.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
+                                {
+                                    @item.Max(s => s.Currency_Mst1.Kod) <br />
+                                }
+                            </div>
+                            <div class="col-md-8">
+                                @foreach (var item in Model.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
+                                {
+                                    @item.Sum(s => s.TotCostWitTax) <br />
+                                }
+                            </div>
+                        </div>
+                        
+                        
+                        @*ViewBag.Currency @ViewBag.GrandTotal*@
+                    </th>
+                    <td colspan="2"></td>
                 </tr>
 
                 </table>
