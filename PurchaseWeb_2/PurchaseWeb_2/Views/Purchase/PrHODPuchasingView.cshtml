@@ -1,9 +1,8 @@
 ﻿
 @{
-    ViewBag.Title = "PrView";
+    ViewBag.Title = "PrHODPuchasingView";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
-
 
 <div class="invoice p-3 mb-3">
     <div class="row">
@@ -13,7 +12,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            @{ Html.RenderAction("PurDetailsViewSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+            @{ Html.RenderAction("PurDetailsPurchasingViewSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });}
         </div>
     </div>
     <div>
@@ -24,6 +23,10 @@
         else if (ViewBag.StatusId == 3)
         {
             @Html.ActionLink("Return To Main PR", "ApprovalHOD", "Purchase", null, new { @class = "btn btn-primary" })
+        }
+        else if (ViewBag.StatusId == 5)
+        {
+            @Html.ActionLink("Return To Main PR", "MDApprovalList", "Purchase", null, new { @class = "btn btn-primary" })
         }
         else
         {

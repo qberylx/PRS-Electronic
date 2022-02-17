@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Mst>
 
 @{
-    ViewBag.Title = "HODPurApprovalList";
+    ViewBag.Title = "MDApprovalList";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 
 <div class="card card-primary">
     <div class="card-header">
-        <h3 class="card-title">List of PR for HOD Puchasing Department Approval</h3>
+        <h3 class="card-title">List of PR for MD Puchasing Department Approval</h3>
 
         <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -52,7 +52,7 @@
                     @Html.DisplayNameFor(model => model.PRType_mst.Name)
                 </th>
                 <th>
-                    Grand Amount
+                    Grand Total
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Status_Mst.Name)
@@ -79,29 +79,15 @@
                         @Html.DisplayFor(modelItem => item.PRType_mst.Name)
                     </td>
                     <td>
-                        @*Html.DisplayFor(modelItem => item.GrandAmt)*@
-                        <div class="row">
-                            <div class="col-md-4">
-                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
-                                {
-                                    @currency.Max(s => s.Currency_Mst1.Kod) <br />
-                                }
-                            </div>
-                            <div class="col-md-8">
-                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
-                                {
-                                    @currency.Sum(s => s.TotCostWitTax) <br />
-                                }
-                            </div>
-                        </div>
+                        @Html.DisplayFor(modelItem => item.GrandAmt)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Status_Mst.Name)
                     </td>
                     <td>
                         @Html.ActionLink("View", "PrHODPuchasingView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
-                        @Html.ActionLink("Approve", "ApproveHODPurchasingDept", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
-                        @Html.ActionLink("Reject", "RejectHODPurchasingDept", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
+                        @Html.ActionLink("Approve", "ApproveMD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                        @Html.ActionLink("Reject", "RejectMD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
 
                     </td>
                 </tr>

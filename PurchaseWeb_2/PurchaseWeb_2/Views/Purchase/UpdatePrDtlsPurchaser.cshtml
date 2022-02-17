@@ -34,6 +34,18 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-2">
+                        Tot Amount (Exc. Tax) :
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.TotCostnoTax, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TotCostnoTax, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2">
                         TAX % :
                     </div>
                     <div class="col-md-10">

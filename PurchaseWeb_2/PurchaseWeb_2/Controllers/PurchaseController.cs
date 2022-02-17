@@ -162,6 +162,11 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult PrView(int PrMstId)
         {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+
+            ViewBag.StatusId = PrMst.StatId;
             ViewBag.PrMstId = PrMstId;
 
             return View("PrView");
@@ -695,6 +700,7 @@ namespace PurchaseWeb_2.Controllers
             {
                 PRDtId = x.PRDtId,
                 PRid = x.PRid,
+                TypePRId = x.TypePRId,
                 DomiPartNo = x.DomiPartNo,
                 VendorPartNo = x.VendorPartNo,
                 Qty = x.Qty,
@@ -708,6 +714,7 @@ namespace PurchaseWeb_2.Controllers
                 Currency_Mst1 = x.Currency_Mst1,
                 CurrId = x.CurrId,
                 UnitPrice = x.UnitPrice,
+                TotCostnoTax = x.TotCostnoTax,
                 Tax = x.Tax,
                 TotCostWitTax = x.TotCostWitTax,
                 TaxCode = x.TaxCode,
@@ -717,6 +724,10 @@ namespace PurchaseWeb_2.Controllers
             }).ToList();
 
             ViewBag.PrMstId = PrMstId;
+
+            var PrMst = db.PR_Mst.SingleOrDefault(x => x.PRId == PrMstId);
+            ViewBag.PrTypeId = PrMst.PRTypeId;
+
 
             return PartialView("PRDtlsListForPurchaser", PRDtlsPList);
         }
@@ -776,12 +787,28 @@ namespace PurchaseWeb_2.Controllers
             {
                 prDtls.CurrId = pR_Details.CurrId;
                 prDtls.UnitPrice = pR_Details.UnitPrice;
+                prDtls.TotCostnoTax = pR_Details.TotCostnoTax ?? 0.00M;
                 prDtls.Tax = pR_Details.Tax;
                 prDtls.TotCostWitTax = pR_Details.TotCostWitTax;
                 prDtls.TaxCode = pR_Details.TaxCode;
                 prDtls.TaxClass = pR_Details.TaxClass;
                 db.SaveChanges();
             }
+
+            // have to update grand amount for PR in Pr Mst as well
+            var GrandTotal = db.PR_Details
+                .Where(x => x.PRid == PrMstId)
+                .Sum(i => i.TotCostWitTax);
+
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+            if (PrMst != null)
+            {
+                PrMst.GrandAmt = GrandTotal;
+                db.SaveChanges();
+            }
+
 
             return RedirectToAction("PRDtlsListForPurchaser", "Purchase", new { PrMstId = PrMstId });
         }
@@ -791,7 +818,122 @@ namespace PurchaseWeb_2.Controllers
             var PRMstList = db.PR_Mst
                 .Where(x => x.StatId == 8)
                 .ToList();
+
+            var GrandTotalList = db.PR_Details
+                .GroupBy(g => new { g.PRid, g.Currency_Mst1 })
+                .Select(x => new
+                {
+                    PrID = x.Select(y => y.PRid).FirstOrDefault(),
+                    CurrKod = x.Select(y => y.Currency_Mst1.Kod).FirstOrDefault(),
+                    sumTotAmtnoTax = x.Sum(y => y.TotCostnoTax),
+                    sumTotAmtWtTax = x.Sum(y => y.TotCostWitTax)
+                })
+                .ToList();
+
+            ViewBag.GrandTotalList = GrandTotalList;
+
             return View("HODPurApprovalList", PRMstList);
+        }
+
+        public ActionResult ApproveHODPurchasingDept(int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+            if (PrMst != null)
+            {
+                if (PrMst.GrandAmt >= 40.00M)
+                {
+                    PrMst.StatId = 5;
+                }
+                else
+                {
+                    PrMst.StatId = 9;
+                }
+                
+                db.SaveChanges();
+            }
+            return RedirectToAction("HODPurApprovalList");
+        }
+
+        public ActionResult RejectHODPurchasingDept(int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+            if (PrMst != null)
+            {
+                PrMst.StatId = 7;
+                db.SaveChanges();
+            }
+            return RedirectToAction("HODPurApprovalList");
+        }
+
+        public ActionResult PrHODPuchasingView(int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+
+            ViewBag.StatusId = PrMst.StatId;
+            ViewBag.PrMstId = PrMstId;
+
+            return View("PrHODPuchasingView");
+        }
+
+        public ActionResult PurDetailsPurchasingViewSelected(int PrMstId)
+        {
+            var PrDtlsView = db.PR_Details
+                .Where(x => x.PRid == PrMstId)
+                .ToList();
+
+            var GrandTotal = db.PR_Details
+                .Where(x => x.PRid == PrMstId)
+                .Sum(i => i.TotCostWitTax);
+
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.PrTypeId = PrMst.PRTypeId;
+            ViewBag.GrandTotal = GrandTotal;
+
+            return PartialView("PurDetailsPurchasingViewSelected", PrDtlsView);
+        }
+
+        public ActionResult MDApprovalList()
+        {
+            var PRMstList = db.PR_Mst
+                .Where(x => x.StatId == 5)
+                .ToList();
+
+            return View("MDApprovalList", PRMstList);
+        }
+
+        public ActionResult ApproveMD(int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+            if (PrMst != null)
+            {
+                PrMst.StatId = 9;
+                db.SaveChanges();
+            }
+            return RedirectToAction("MDApprovalList");
+        }
+
+        public ActionResult RejectMD(int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+            if (PrMst != null)
+            {
+                PrMst.StatId = 7;
+                db.SaveChanges();
+            }
+            return RedirectToAction("MDApprovalList");
         }
 
     }

@@ -27,9 +27,10 @@ namespace PurchaseWeb_2.Models
         public string Remarks { get; set; }
         public string VendorName { get; set; }
         public Nullable<int> CurrId { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
+        [Column(TypeName = "decimal(18,5)")]
         [Required(ErrorMessage = "Please enter the Unit Price")]
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Valid Decimal number with maximum 2 decimal places.")]
+        [RegularExpression(@"^\d+(\.\d{1,2,3,4,5})?$", ErrorMessage = "Valid Decimal number with maximum 5 decimal places.")]
+        [DisplayFormat(DataFormatString = "{0:n5}", ApplyFormatInEditMode = true)]
         public Nullable<decimal> UnitPrice { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         [Required(ErrorMessage = "Please enter Total Amaunt")]
@@ -53,6 +54,10 @@ namespace PurchaseWeb_2.Models
         public string Device { get; set; }
         public string SalesOrder { get; set; }
         public Nullable<int> EstCurrId { get; set; }
+        [Column(TypeName = "decimal(18,5)")]
+        [Required(ErrorMessage = "Please enter the Unit Price")]
+        [RegularExpression(@"^\d+(\.\d{1,2,3,4,5})?$", ErrorMessage = "Valid Decimal number with maximum 2 decimal places.")]
+        [DisplayFormat(DataFormatString = "{0:n5}", ApplyFormatInEditMode = true)]
         public Nullable<decimal> EstimateUnitPrice { get; set; }
         public Nullable<bool> PoFlag { get; set; }
         public bool PoFlagIsChecked { get; set; }

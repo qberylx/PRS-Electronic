@@ -200,6 +200,7 @@
 <script>
     $(function () {
         $('input#Qty').blur(function () {
+            var textAmt = (this.value).replace(/,/g, "");
             var amt = parseFloat(this.value);
             $(this).val( amt.toFixed(2));
         });

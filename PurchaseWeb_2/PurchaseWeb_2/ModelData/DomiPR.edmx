@@ -88,9 +88,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="SalesOrder" Type="varchar" MaxLength="50" />
           <Property Name="VendorName" Type="varchar" MaxLength="50" />
           <Property Name="EstCurrId" Type="int" />
-          <Property Name="EstimateUnitPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="EstimateUnitPrice" Type="decimal" Precision="18" Scale="5" />
           <Property Name="CurrId" Type="int" />
-          <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="5" />
           <Property Name="TotCostnoTax" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Tax" Type="int" />
           <Property Name="TotCostWitTax" Type="decimal" Precision="18" Scale="2" />
@@ -124,6 +124,11 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="ModifiedBy" Type="varchar" MaxLength="50" />
           <Property Name="HODApprovalBy" Type="varchar" MaxLength="50" />
           <Property Name="HODApprovalDate" Type="datetime" />
+          <Property Name="HODPurDeptApprovalBy" Type="varchar" MaxLength="50" />
+          <Property Name="HODPurDeptApprovalDate" Type="datetime" />
+          <Property Name="MDApprovalBy" Type="varchar" MaxLength="50" />
+          <Property Name="MDApprovalDate" Type="datetime" />
+          <Property Name="GrandAmt" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="PRType_mst">
           <Key>
@@ -703,7 +708,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="Remarks" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="VendorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CurrId" Type="Int32" />
-          <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="TotCostnoTax" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Tax" Type="Int32" />
           <Property Name="TotCostWitTax" Type="Decimal" Precision="18" Scale="2" />
@@ -723,7 +728,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="Device" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="SalesOrder" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="EstCurrId" Type="Int32" />
-          <Property Name="EstimateUnitPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="EstimateUnitPrice" Type="Decimal" Precision="18" Scale="5" />
           <NavigationProperty Name="Currency_Mst" Relationship="Domi_PurModel.FK_PR_Details_Currency_Mst" FromRole="PR_Details" ToRole="Currency_Mst" />
           <NavigationProperty Name="Currency_Mst1" Relationship="Domi_PurModel.FK_PR_Details_Currency_Mst1" FromRole="PR_Details" ToRole="Currency_Mst" />
           <Property Name="PoFlag" Type="Boolean" />
@@ -751,6 +756,11 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="HODApprovalBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="HODApprovalDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HODPurDeptApprovalBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HODPurDeptApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="MDApprovalBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MDApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="GrandAmt" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1056,6 +1066,11 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="GrandAmt" ColumnName="GrandAmt" />
+                <ScalarProperty Name="MDApprovalDate" ColumnName="MDApprovalDate" />
+                <ScalarProperty Name="MDApprovalBy" ColumnName="MDApprovalBy" />
+                <ScalarProperty Name="HODPurDeptApprovalDate" ColumnName="HODPurDeptApprovalDate" />
+                <ScalarProperty Name="HODPurDeptApprovalBy" ColumnName="HODPurDeptApprovalBy" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="HODApprovalDate" ColumnName="HODApprovalDate" />
                 <ScalarProperty Name="HODApprovalBy" ColumnName="HODApprovalBy" />

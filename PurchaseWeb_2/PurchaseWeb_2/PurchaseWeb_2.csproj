@@ -210,11 +210,13 @@
     </Compile>
     <Compile Include="Models\DepartmentModel.cs" />
     <Compile Include="Models\FileUpload.cs" />
+    <Compile Include="Models\GrandTotalView.cs" />
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\MenuCheckboxViewModel.cs" />
     <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\PRDtlsPurchaser.cs" />
     <Compile Include="Models\PRdtlsViewModel.cs" />
+    <Compile Include="Models\PRMstView.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -2298,6 +2300,9 @@
     <Content Include="Views\Purchase\UpdatePrDtlsPurchaser.cshtml" />
     <Content Include="Views\Purchase\PRDtlsListForPurchaser.cshtml" />
     <Content Include="Views\Purchase\HODPurApprovalList.cshtml" />
+    <Content Include="Views\Purchase\PrHODPuchasingView.cshtml" />
+    <Content Include="Views\Purchase\PurDetailsPurchasingViewSelected.cshtml" />
+    <Content Include="Views\Purchase\MDApprovalList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

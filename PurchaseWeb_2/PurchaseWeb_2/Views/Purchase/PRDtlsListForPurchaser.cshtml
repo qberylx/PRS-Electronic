@@ -47,6 +47,12 @@
                         <th>
                             Unit Price
                         </th>
+                        @if (ViewBag.PrTypeId == 3)
+                        {
+                            <th>
+                                Total Amount <br /> (Exc Tax)
+                            </th>
+                        }
                         <th>
                             Tax %
                         </th>
@@ -59,7 +65,7 @@
                         <th>
                             Tax <br /> Class
                         </th>
-                        
+
                         <th></th>
                     </tr>
                     @{ int i = 0; }
@@ -114,6 +120,12 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.UnitPrice)
                             </td>
+                            @if (item.TypePRId == 3)
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotCostnoTax)
+                                </td>
+                            }
                             <td>
                                 @Html.DisplayFor(modelItem => item.Tax)
                             </td>
