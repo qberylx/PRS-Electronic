@@ -33,6 +33,11 @@
         <EntityTypeShape EntityType="Domi_PurModel.Currency_Mst" Width="1.5" PointX="8.375" PointY="9.875" />
         <AssociationConnector Association="Domi_PurModel.FK_PR_Details_Currency_Mst" />
         <AssociationConnector Association="Domi_PurModel.FK_PR_Details_Currency_Mst1" />
+        <EntityTypeShape EntityType="Domi_PurModel.AccCCLvl1" Width="1.5" PointX="9.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.AccCCLvl2" Width="1.5" PointX="10.75" PointY="6.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.AccTypeDept" Width="1.5" PointX="10.75" PointY="9.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.AccTypeDivision" Width="1.5" PointX="11.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.AccTypeExpens" Width="1.5" PointX="0.75" PointY="11.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

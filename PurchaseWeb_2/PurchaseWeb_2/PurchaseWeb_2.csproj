@@ -145,6 +145,21 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\AccCCLvl1.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\AccCCLvl2.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\AccTypeDept.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\AccTypeDivision.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\AccTypeExpens.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\Audlgn_Log.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>

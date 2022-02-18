@@ -42,6 +42,11 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<Status_Mst> Status_Mst { get; set; }
         public virtual DbSet<PRType_mst> PRType_mst { get; set; }
         public virtual DbSet<Currency_Mst> Currency_Mst { get; set; }
+        public virtual DbSet<AccCCLvl1> AccCCLvl1 { get; set; }
+        public virtual DbSet<AccCCLvl2> AccCCLvl2 { get; set; }
+        public virtual DbSet<AccTypeDept> AccTypeDepts { get; set; }
+        public virtual DbSet<AccTypeDivision> AccTypeDivisions { get; set; }
+        public virtual DbSet<AccTypeExpens> AccTypeExpenses { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {

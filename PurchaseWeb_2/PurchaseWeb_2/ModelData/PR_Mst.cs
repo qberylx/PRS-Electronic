@@ -39,6 +39,7 @@ namespace PurchaseWeb_2.ModelData
         public string MDApprovalBy { get; set; }
         public Nullable<System.DateTime> MDApprovalDate { get; set; }
         public Nullable<decimal> GrandAmt { get; set; }
+        public string AccountCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }

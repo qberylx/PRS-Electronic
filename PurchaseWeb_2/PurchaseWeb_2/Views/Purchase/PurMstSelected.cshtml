@@ -1,49 +1,126 @@
-﻿@model PurchaseWeb_2.ModelData.PR_Mst
+﻿<div id="divPurChaseMasterSelected">
 
-<div class="card card-info">
-    <div class="card-header">
-        <h3 class="card-title">PURCHASE REQUISITION</h3>
+    @model PurchaseWeb_2.ModelData.PR_Mst
 
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                <i class="fas fa-minus"></i>
-            </button>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-6">
-                        <!--PR no-->
-                        <strong>PR No :</strong> @Html.DisplayFor(model => model.PRNo)
-                    </div>
-                    <div class="col-md-6">
-                        <!--PR type-->
-                        @Html.DisplayFor(model => model.PRType_mst.Name)
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <strong>Requisition Date</strong> <br />
-                        @Html.DisplayFor(model => model.RequestDate)
-                    </div>
-                    <div class="col-md-3">
-                        <strong>Requestor</strong> <br />
-                        @Html.DisplayFor(model => model.Usr_mst.Username)
-                    </div>
-                    <div class="col-md-3">
-                        <strong>Department</strong> <br />
-                        @Html.DisplayFor(model => model.Department_mst.Department_name)
-                    </div>
-                    <div class="col-md-3">
-                        <strong>Tel Ext.</strong> <br />
-                        @Html.DisplayFor(model => model.Status_Mst.Name)
-                    </div>
-                </div>
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">PURCHASE REQUISITION</h3>
 
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
             </div>
         </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        @if (Model.PRTypeId != 4)
+                        {
+                            <div class="col-md-6">
+                                <!--PR no-->
+                                <strong>PR No :</strong> @Html.DisplayFor(model => model.PRNo)
+                            </div>
+                            <div class="col-md-6">
+                                <!--PR type-->
+                                <strong>PR Type :</strong>@Html.DisplayFor(model => model.PRType_mst.Name)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-4">
+                                <!--PR no-->
+                                <strong>PR No :</strong> @Html.DisplayFor(model => model.PRNo)
+                            </div>
+                            <div class="col-md-4">
+                                <!--PR type-->
+                                <strong>PR Type :</strong>@Html.DisplayFor(model => model.PRType_mst.Name)
+                            </div>
+                            <div class="col-md-4">
+                                <!--PR Account-->
+                                <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode)
+                            </div>
+                        }
+
+                        @{ ViewBag.PrMStId = (int)Model.PRId;}
+
+                    </div>
+                    <hr />
+                    @if (Model.PRTypeId == 4)
+                    {
+                        @using (Ajax.BeginForm("GetAccountNo", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurChaseMasterSelected" }))
+                        {
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <strong>Expenses Type :</strong> <br />
+                                    @Html.DropDownList("AccTypeExpensesID",
+                                 new SelectList(ViewBag.ExpList, "ExpCode", "ExpName"),
+                                 "Please Select Expenses Type",
+                                 new { @class = "custom-select form-control-border" })
+                                </div>
+                                <div class="col-md-2">
+                                    <strong>Division :</strong> <br />
+                                    @Html.DropDownList("AccTypeDivId",
+                                 new SelectList(ViewBag.DivList, "DivCode", "DivName"),
+                                 "Please Select Division",
+                                 new { @class = "custom-select form-control-border" })
+                                </div>
+                                <div class="col-md-2">
+                                    <strong>Department :</strong> <br />
+                                    @Html.DropDownList("AccTypeDepID",
+                                 new SelectList(ViewBag.DptList, "DeptCode", "DeptName"),
+                                 "Please Select Department",
+                                 new { @class = "custom-select form-control-border" })
+                                </div>
+                                <div class="col-md-2">
+                                    <strong>CC LVl 1 :</strong> <br />
+                                    @Html.DropDownList("AccCCLvl1ID",
+                                 new SelectList(ViewBag.CCLvl1, "CCLvl1Code", "CCLvl1Name"),
+                                 "Please Select CC Lvl 1",
+                                 new { @class = "custom-select form-control-border" })
+                                </div>
+                                <div class="col-md-3">
+                                    <strong>CC Lvl 2 :</strong> <br />
+                                    @Html.DropDownList("AccCCLvl2ID",
+                                 new SelectList(ViewBag.CCLvl2, "CCLvl2Code", "CCLvl2Name"),
+                                 "Please Select CC Lvl 2",
+                                 new { @class = "custom-select form-control-border" })
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-12 text-md-right">
+                                    <input type="hidden" value="@ViewBag.PrMStId" id="PrMStId" name="PrMStId" />
+                                    <input type="submit" value="Update Account No" id="btnSaveAcc" name="btnSaveAcc" class="btn btn-primary">
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>Requisition Date</strong> <br />
+                            @Html.DisplayFor(model => model.RequestDate)
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Requestor</strong> <br />
+                            @Html.DisplayFor(model => model.Usr_mst.Username)
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Department</strong> <br />
+                            @Html.DisplayFor(model => model.Department_mst.Department_name)
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Tel Ext.</strong> <br />
+                            @Html.DisplayFor(model => model.Status_Mst.Name)
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
     </div>
-    <!-- /.card-body -->
+
 </div>

@@ -5,6 +5,46 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Domi_PurModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AccCCLvl1">
+          <Key>
+            <PropertyRef Name="AccCCLvl1ID" />
+          </Key>
+          <Property Name="AccCCLvl1ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CCLvl1Name" Type="varchar" MaxLength="50" />
+          <Property Name="CCLvl1Code" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="AccCCLvl2">
+          <Key>
+            <PropertyRef Name="AccCCLvl2ID" />
+          </Key>
+          <Property Name="AccCCLvl2ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CCLvl2Name" Type="varchar" MaxLength="50" />
+          <Property Name="CCLvl2Code" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="AccTypeDept">
+          <Key>
+            <PropertyRef Name="AccTypeDepID" />
+          </Key>
+          <Property Name="AccTypeDepID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DeptName" Type="varchar" MaxLength="50" />
+          <Property Name="DeptCode" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="AccTypeDivision">
+          <Key>
+            <PropertyRef Name="AccTypeDivId" />
+          </Key>
+          <Property Name="AccTypeDivId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DivName" Type="varchar" MaxLength="50" />
+          <Property Name="DivCode" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="AccTypeExpenses">
+          <Key>
+            <PropertyRef Name="AccTypeExpensesID" />
+          </Key>
+          <Property Name="AccTypeExpensesID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExpName" Type="varchar" MaxLength="100" />
+          <Property Name="ExpCode" Type="varchar" MaxLength="10" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Domi_Pur.dbo.Audlgn_Log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Audlgn_Log">
@@ -129,6 +169,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="MDApprovalBy" Type="varchar" MaxLength="50" />
           <Property Name="MDApprovalDate" Type="datetime" />
           <Property Name="GrandAmt" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AccountCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PRType_mst">
           <Key>
@@ -363,6 +404,11 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Parameter Name="UserId" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="Domi_PurModelStoreContainer">
+          <EntitySet Name="AccCCLvl1" EntityType="Self.AccCCLvl1" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccCCLvl2" EntityType="Self.AccCCLvl2" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccTypeDept" EntityType="Self.AccTypeDept" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccTypeDivision" EntityType="Self.AccTypeDivision" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccTypeExpenses" EntityType="Self.AccTypeExpenses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency_Mst" EntityType="Self.Currency_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department_mst" EntityType="Self.Department_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" Schema="dbo" store:Type="Tables" />
@@ -593,6 +639,11 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             <End Role="Currency_Mst" EntitySet="Currency_Mst" />
             <End Role="PR_Details" EntitySet="PR_Details" />
           </AssociationSet>
+          <EntitySet Name="AccCCLvl1" EntityType="Domi_PurModel.AccCCLvl1" />
+          <EntitySet Name="AccCCLvl2" EntityType="Domi_PurModel.AccCCLvl2" />
+          <EntitySet Name="AccTypeDepts" EntityType="Domi_PurModel.AccTypeDept" />
+          <EntitySet Name="AccTypeDivisions" EntityType="Domi_PurModel.AccTypeDivision" />
+          <EntitySet Name="AccTypeExpenses" EntityType="Domi_PurModel.AccTypeExpens" />
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -761,6 +812,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="MDApprovalBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="MDApprovalDate" Type="DateTime" Precision="3" />
           <Property Name="GrandAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AccountCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -906,6 +958,46 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AccCCLvl1">
+          <Key>
+            <PropertyRef Name="AccCCLvl1ID" />
+          </Key>
+          <Property Name="AccCCLvl1ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CCLvl1Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CCLvl1Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AccCCLvl2">
+          <Key>
+            <PropertyRef Name="AccCCLvl2ID" />
+          </Key>
+          <Property Name="AccCCLvl2ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CCLvl2Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CCLvl2Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AccTypeDept">
+          <Key>
+            <PropertyRef Name="AccTypeDepID" />
+          </Key>
+          <Property Name="AccTypeDepID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DeptName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DeptCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AccTypeDivision">
+          <Key>
+            <PropertyRef Name="AccTypeDivId" />
+          </Key>
+          <Property Name="AccTypeDivId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DivName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DivCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AccTypeExpens">
+          <Key>
+            <PropertyRef Name="AccTypeExpensesID" />
+          </Key>
+          <Property Name="AccTypeExpensesID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExpName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ExpCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1066,6 +1158,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
                 <ScalarProperty Name="GrandAmt" ColumnName="GrandAmt" />
                 <ScalarProperty Name="MDApprovalDate" ColumnName="MDApprovalDate" />
                 <ScalarProperty Name="MDApprovalBy" ColumnName="MDApprovalBy" />
@@ -1122,6 +1215,51 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Kod" ColumnName="Kod" />
                 <ScalarProperty Name="CurrId" ColumnName="CurrId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccCCLvl1">
+            <EntityTypeMapping TypeName="Domi_PurModel.AccCCLvl1">
+              <MappingFragment StoreEntitySet="AccCCLvl1">
+                <ScalarProperty Name="CCLvl1Code" ColumnName="CCLvl1Code" />
+                <ScalarProperty Name="CCLvl1Name" ColumnName="CCLvl1Name" />
+                <ScalarProperty Name="AccCCLvl1ID" ColumnName="AccCCLvl1ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccCCLvl2">
+            <EntityTypeMapping TypeName="Domi_PurModel.AccCCLvl2">
+              <MappingFragment StoreEntitySet="AccCCLvl2">
+                <ScalarProperty Name="CCLvl2Code" ColumnName="CCLvl2Code" />
+                <ScalarProperty Name="CCLvl2Name" ColumnName="CCLvl2Name" />
+                <ScalarProperty Name="AccCCLvl2ID" ColumnName="AccCCLvl2ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccTypeDepts">
+            <EntityTypeMapping TypeName="Domi_PurModel.AccTypeDept">
+              <MappingFragment StoreEntitySet="AccTypeDept">
+                <ScalarProperty Name="DeptCode" ColumnName="DeptCode" />
+                <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+                <ScalarProperty Name="AccTypeDepID" ColumnName="AccTypeDepID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccTypeDivisions">
+            <EntityTypeMapping TypeName="Domi_PurModel.AccTypeDivision">
+              <MappingFragment StoreEntitySet="AccTypeDivision">
+                <ScalarProperty Name="DivCode" ColumnName="DivCode" />
+                <ScalarProperty Name="DivName" ColumnName="DivName" />
+                <ScalarProperty Name="AccTypeDivId" ColumnName="AccTypeDivId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccTypeExpenses">
+            <EntityTypeMapping TypeName="Domi_PurModel.AccTypeExpens">
+              <MappingFragment StoreEntitySet="AccTypeExpenses">
+                <ScalarProperty Name="ExpCode" ColumnName="ExpCode" />
+                <ScalarProperty Name="ExpName" ColumnName="ExpName" />
+                <ScalarProperty Name="AccTypeExpensesID" ColumnName="AccTypeExpensesID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

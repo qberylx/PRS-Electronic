@@ -386,6 +386,18 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.PRId == PrMstId)
                 .FirstOrDefault();
 
+            var AccExpList = db.AccTypeExpenses.ToList();
+            var DivList = db.AccTypeDivisions.ToList();
+            var DptList = db.AccTypeDepts.ToList();
+            var CCLvl1 = db.AccCCLvl1.ToList();
+            var CCLvl2 = db.AccCCLvl2.ToList();
+
+            ViewBag.ExpList = AccExpList;
+            ViewBag.DivList = DivList;
+            ViewBag.DptList = DptList;
+            ViewBag.CCLvl1 = CCLvl1;
+            ViewBag.CCLvl2 = CCLvl2;
+
             return PartialView("PurMstSelected",purMstr);
         }
 
@@ -658,6 +670,20 @@ namespace PurchaseWeb_2.Controllers
         public ActionResult PRProsesList()
         {
             return View("PRProsesList");
+        }
+
+        public ActionResult GetAccountNo(int PrMStId, string AccTypeExpensesID, string AccTypeDivId, string AccTypeDepID, string AccCCLvl1ID , string AccCCLvl2ID)
+        {
+            var AccCode = AccTypeExpensesID + "-" + AccTypeDivId + "-" + AccTypeDepID + "-" + AccCCLvl1ID + "-" + AccCCLvl2ID;
+
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrMStId).SingleOrDefault();
+            if (PrMst != null)
+            {
+                PrMst.AccountCode = AccCode;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("PurMstSelected", "Purchase", new { PrMstId = PrMStId } );
         }
 
         public ActionResult PRListForPurchaser()
