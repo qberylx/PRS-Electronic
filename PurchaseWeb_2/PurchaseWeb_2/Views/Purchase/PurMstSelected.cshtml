@@ -49,7 +49,7 @@
                     <hr />
                     @if (Model.PRTypeId == 4)
                     {
-                        @using (Ajax.BeginForm("GetAccountNo", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurChaseMasterSelected" }))
+                        using (Ajax.BeginForm("GetAccountNo", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurChaseMasterSelected" }))
                         {
                             <div class="row">
                                 <div class="col-md-3">
