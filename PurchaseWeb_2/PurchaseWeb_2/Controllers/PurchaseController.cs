@@ -1030,14 +1030,20 @@ namespace PurchaseWeb_2.Controllers
                 .SingleOrDefault();
             if (PrMst != null)
             {
-                if (PrMst.GrandAmt >= 40.00M)
+                if (PrMst.PRTypeId == 4)
                 {
-                    PrMst.StatId = 5;
-                }
-                else
+                    if (PrMst.GrandAmt >= 50000.00M)
+                    {
+                        PrMst.StatId = 5;
+                    }
+                    else
+                    {
+                        PrMst.StatId = 9;
+                    }
+                } else
                 {
                     PrMst.StatId = 9;
-                }
+                }               
                 
                 db.SaveChanges();
             }
