@@ -14,14 +14,33 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="row">
-                    <div class="col-md-6">
-                        <!--PR no-->
-                        <strong>PR No :</strong> @Html.DisplayFor(model => model.PRNo)
-                    </div>
-                    <div class="col-md-6">
-                        <!--PR type-->
-                        <strong>PR Type :</strong> @Html.DisplayFor(model => model.PRType_mst.Name)
-                    </div>
+                    @if (Model.PRTypeId != 4)
+                    {
+                        <div class="col-md-6">
+                            <!--PR no-->
+                            <strong>PR No :</strong> @Html.DisplayFor(model => model.PRNo)
+                        </div>
+                        <div class="col-md-6">
+                            <!--PR type-->
+                            <strong>PR Type :</strong>@Html.DisplayFor(model => model.PRType_mst.Name)
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-4">
+                            <!--PR no-->
+                            <strong>PR No :</strong> @Html.DisplayFor(model => model.PRNo)
+                        </div>
+                        <div class="col-md-4">
+                            <!--PR type-->
+                            <strong>PR Type :</strong>@Html.DisplayFor(model => model.PRType_mst.Name)
+                        </div>
+                        <div class="col-md-4">
+                            <!--PR Account-->
+                            <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode)
+                        </div>
+                    }
+                    
                 </div>
                 <br />
                 <div class="row">

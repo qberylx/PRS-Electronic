@@ -14,6 +14,12 @@ namespace PurchaseWeb_2.ModelData
     
     public partial class PR_Details
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PR_Details()
+        {
+            this.PR_VendorComparison = new HashSet<PR_VendorComparison>();
+        }
+    
         public int PRDtId { get; set; }
         public Nullable<int> PRid { get; set; }
         public string PRNo { get; set; }
@@ -56,5 +62,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual Usr_mst Usr_mst { get; set; }
         public virtual Currency_Mst Currency_Mst { get; set; }
         public virtual Currency_Mst Currency_Mst1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PR_VendorComparison> PR_VendorComparison { get; set; }
     }
 }

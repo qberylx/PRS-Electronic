@@ -1,0 +1,123 @@
+﻿<div id="DivVendorCompareList@{@ViewBag.PrDtlstId}">
+
+    @model IEnumerable<PurchaseWeb_2.ModelData.PR_VendorComparison>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.VCName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuoteDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastQuoteDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PODate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CostDown)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlagWin)
+            </th>
+
+            <th></th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VCName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CurPrice)
+                </td>
+                <td>
+                    @{
+                        DateTime QuoteDate = (DateTime)item.QuoteDate;
+                        String strQuoteDate = QuoteDate.ToString("dd/MM/yyyy");
+                    }
+                    @strQuoteDate
+
+                </td>
+                <td>
+                    @if (item.LastPrice == null || item.LastPrice == 0.00M)
+                    {
+                        <a>New</a>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.LastPrice)
+                    }
+                </td>
+                <td>
+                    @{
+                        String strLastQuoteDate = "";
+
+                        if (item.LastQuoteDate != null)
+                        {
+                            DateTime LastQuoteDate = (DateTime)item.LastQuoteDate;
+                            strLastQuoteDate = LastQuoteDate.ToString("dd/MM/yyyy");
+                        }
+                    }
+
+                    @strLastQuoteDate
+
+                </td>
+                <td>
+                    @{
+                        String strPODate = "";
+
+                        if (item.PODate != null)
+                        {
+                            DateTime PODate = (DateTime)item.PODate;
+                            strPODate = PODate.ToString("dd/MM/yyyy");
+                        }
+                    }
+                    
+                    @strPODate
+                    
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CostDown)
+                </td>
+                <td>
+                    @{ if (item.FlagWin == true)
+                        {
+                            <a ><strong>Winner</strong></a>
+                        }
+                    }
+                    
+                </td>
+
+                <td>
+                    @using (Ajax.BeginForm("VendorComparisonWinner", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPRDtlsListForPurchaserType4" }))
+                    {
+                        <button class="btn btn-success"><i class="fa fa-check-circle"></i></button>
+                        <input type="hidden" value="@item.VCId" id="VCIdw" name="VCIdw" />
+                    }
+                </td>
+                <td>
+                    @using (Ajax.BeginForm("VendorComparisonDelete", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPRDtlsListForPurchaserType4" }))
+                    {
+                        <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                        <input type="hidden" value="@item.VCId" id="VCIdDel" name="VCIdDel" />
+                    }
+                </td>
+            </tr>
+            <tr>
+            </tr>
+        }
+
+    </table>
+</div>

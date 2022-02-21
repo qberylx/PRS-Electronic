@@ -202,6 +202,9 @@
     <Compile Include="ModelData\PR_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\PR_VendorComparison.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\RoleMenuMapping_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -234,6 +237,7 @@
     <Compile Include="Models\PRMstView.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
+    <Compile Include="Models\VendorComparisonModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2318,6 +2322,9 @@
     <Content Include="Views\Purchase\PrHODPuchasingView.cshtml" />
     <Content Include="Views\Purchase\PurDetailsPurchasingViewSelected.cshtml" />
     <Content Include="Views\Purchase\MDApprovalList.cshtml" />
+    <Content Include="Views\Purchase\PRDtlsListForPurchaserType4.cshtml" />
+    <Content Include="Views\Purchase\VendorComparison.cshtml" />
+    <Content Include="Views\Purchase\VendorComparisonList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

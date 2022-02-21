@@ -1,0 +1,114 @@
+﻿@model PurchaseWeb_2.Models.VendorComparisonModel
+
+@*using (Html.BeginForm("VendorComparison", "Purchase", FormMethod.Post)) *@
+@using (Ajax.BeginForm("VendorComparison", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivVendorCompareList" + @ViewBag.PrDtlstId }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="col-md-1">
+            Vendor name <br />
+            @Html.EditorFor(model => model.VCName, new { htmlAttributes = new { @class = "form-control" } }) <br />
+            @Html.ValidationMessageFor(model => model.VCName, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-1">
+            Current Price <br />
+            @Html.EditorFor(model => model.CurPrice, new { htmlAttributes = new { @class = "form-control" , onchange= "UpdatePrice(this, "+@ViewBag.PrDtlstId+", "+@ViewBag.Qty+")" } }) <br />
+            @Html.ValidationMessageFor(model => model.CurPrice, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            Quote. Date <br />
+            @Html.EditorFor(model => model.QuoteDate, new { htmlAttributes = new { @class = "form-control" } }) <br />
+            @Html.ValidationMessageFor(model => model.QuoteDate, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-1">
+            Last Price <br />
+            @Html.EditorFor(model => model.LastPrice, new { htmlAttributes = new { @class = "form-control" } }) <br />
+            @Html.ValidationMessageFor(model => model.LastPrice, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            Quote. Date <br />
+            @Html.EditorFor(model => model.LastQuoteDate, new { htmlAttributes = new { @class = "form-control" } }) <br />
+            @Html.ValidationMessageFor(model => model.LastQuoteDate, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            PO. Date <br />
+            @Html.EditorFor(model => model.PODate, new { htmlAttributes = new { @class = "form-control" } }) <br />
+            @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-1">
+            Cost Down % <br />
+            @Html.EditorFor(model => model.CostDown, new { htmlAttributes = new { @class = "form-control" } }) <br />
+            @Html.ValidationMessageFor(model => model.CostDown, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-1">
+            <br />
+            <input type="hidden" value="@ViewBag.PrDtlstId" id="PrDtlstId" name="PrDtlstId" />
+            <input type="hidden" value="@ViewBag.Qty" id="PrdtlsQty" name="PrdtlsQty" />
+            <button class="btn btn-success"><i class="fa fa-plus-circle"></i></button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col=md-1">
+            Total Amount (Exc) <br />
+            @Html.EditorFor(model => model.TotCostWitTax, new { htmlAttributes = new { @class = "form-control" , @kiraTAE = ViewBag.PrDtlstId } }) <br />
+            @Html.ValidationMessageFor(model => model.TotCostWitTax, "", new { @class = "text-danger" })
+        </div>
+        &nbsp;
+        <div class="col=md-1">
+            Tax %<br />
+            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", @Value = "0", @kiraTax = ViewBag.PrDtlstId } }) <br />
+            @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+        </div>
+        &nbsp;
+        <div class="col=md-1">
+            Total Amount (Icl)<br />
+            @Html.EditorFor(model => model.TotCostnoTax, new { htmlAttributes = new { @class = "form-control", @Value = "0", @kiraTAI = ViewBag.PrDtlstId } }) <br />
+            @Html.ValidationMessageFor(model => model.TotCostnoTax, "", new { @class = "text-danger" })
+        </div>
+        &nbsp;
+        <div class="col=md-1">
+            Total Group<br />
+            @Html.EditorFor(model => model.TaxCode, new { htmlAttributes = new { @class = "form-control", @Value = "SSTG" } }) <br />
+            @Html.ValidationMessageFor(model => model.TaxCode, "", new { @class = "text-danger" })
+        </div>
+        &nbsp;
+        <div class="col=md-1">
+            Total Class<br />
+            @Html.EditorFor(model => model.TaxClass, new { htmlAttributes = new { @class = "form-control", @Value = "1" } }) <br />
+            @Html.ValidationMessageFor(model => model.TaxClass, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+
+        //$("#CurPrice").change(function () {
+        //    var qty = $("#PrdtlsQty").val();
+        //    //totamount = unit cost * qty
+        //    var TotAmt1 = qty * $("#CurPrice").val();
+        //    $("#TotCostWitTax").val(TotAmt1);
+        //    var TaxAmt = $("#Tax").val() * TotAmt1;
+        //    $("#TotCostnoTax").val(TotAmt1 + TaxAmt);
+        //});
+
+
+    });
+
+    function UpdatePrice(Price, PrDtlstId, Qty) {
+        //alert(Price.value + " " + PrDtlstId + " " + Qty);
+        var totamt = Qty * Price.value;
+        //alert(totamt);
+        $("[kiraTAE=" + PrDtlstId + "]").val(totamt);
+        var taxamt = $("[kiraTax=" + PrDtlstId + "]").val() * totamt;
+        //alert(taxamt);
+        $("[kiraTAI=" + PrDtlstId + "]").val(taxamt + totamt);
+    }
+</script>
+
+

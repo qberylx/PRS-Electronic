@@ -10,6 +10,7 @@ namespace PurchaseWeb_2.Models
 {
     public class PRDtlsPurchaser
     {
+        [Key]
         public int PRDtId { get; set; }
         public Nullable<int> PRid { get; set; }
         public string PRNo { get; set; }

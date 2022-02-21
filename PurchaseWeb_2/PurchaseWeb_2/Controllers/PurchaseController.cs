@@ -710,8 +710,170 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult PRDtlsForPurchaser(int PrMstId)
         {
+            var Prmst = db.PR_Mst.Where(x => x.PRId == PrMstId).SingleOrDefault();
+
+            ViewBag.PrTypeID = Prmst.PRTypeId;
             ViewBag.PrMstId = PrMstId;
+
             return View("PRDtlsForPurchaser");
+        }
+
+        public ActionResult PRDtlsListForPurchaserType4(int PrMstId)
+        {
+            List<PR_Details> PrDtlsList = db.PR_Details
+                .Where(x => x.PRid == PrMstId)
+                .ToList();
+            PRDtlsPurchaser PRDtlsP = new PRDtlsPurchaser();
+
+            List<PRDtlsPurchaser> PRDtlsPList = PrDtlsList.Select(x => new PRDtlsPurchaser
+            {
+                PRDtId = x.PRDtId,
+                PRid = x.PRid,
+                TypePRId = x.TypePRId,
+                DomiPartNo = x.DomiPartNo,
+                VendorPartNo = x.VendorPartNo,
+                Qty = x.Qty,
+                UOMId = x.UOMId,
+                UOM_mst = x.UOM_mst,
+                ReqDevDate = x.ReqDevDate,
+                Remarks = x.Remarks,
+                Device = x.Device,
+                SalesOrder = x.SalesOrder,
+                Currency_Mst = x.Currency_Mst,
+                Currency_Mst1 = x.Currency_Mst1,
+                CurrId = x.CurrId,
+                UnitPrice = x.UnitPrice,
+                TotCostnoTax = x.TotCostnoTax,
+                Tax = x.Tax,
+                TotCostWitTax = x.TotCostWitTax,
+                TaxCode = x.TaxCode,
+                TaxClass = x.TaxClass,
+                NoPo = x.NoPo,
+                PoFlagIsChecked = x.PoFlag == null ? false : (bool)x.PoFlag,
+                Description = x.Description,
+                EstimateUnitPrice = x.EstimateUnitPrice
+            }).ToList();
+
+            ViewBag.PrMstId = PrMstId;
+
+            var PrMst = db.PR_Mst.SingleOrDefault(x => x.PRId == PrMstId);
+            ViewBag.PrTypeId = PrMst.PRTypeId;
+
+            return PartialView("PRDtlsListForPurchaserType4", PRDtlsPList);
+        }
+
+        [HttpGet]
+        public ActionResult VendorComparison(int PrDtlstId)
+        {
+            ViewBag.PrDtlstId = PrDtlstId;
+
+            //get kuantiti
+            var prdtls = db.PR_Details
+                .Where(x => x.PRDtId == PrDtlstId)
+                .SingleOrDefault();
+
+            ViewBag.Qty = prdtls.Qty;
+            
+            return PartialView("VendorComparison");
+            
+        }
+
+        [HttpPost]
+        public ActionResult VendorComparison(VendorComparisonModel pR_Vendor, int PrDtlstId)
+        {
+            var VC = db.Set<PR_VendorComparison>();
+            VC.Add(new PR_VendorComparison
+            {
+                PRDtId = PrDtlstId,
+                VCName = pR_Vendor.VCName,
+                CurPrice = pR_Vendor.CurPrice,
+                QuoteDate = pR_Vendor.QuoteDate,
+                LastPrice = pR_Vendor.LastPrice,
+                LastQuoteDate = pR_Vendor.LastQuoteDate,
+                PODate = pR_Vendor.PODate,
+                CostDown = pR_Vendor.CostDown,
+                FlagWin = pR_Vendor.FlagWin,
+                CreatedBy = (String)Session["Username"],
+                CreatedDate = DateTime.Now,
+                TotCostnoTax = pR_Vendor.TotCostnoTax,
+                Tax = pR_Vendor.Tax,
+                TotCostWitTax = pR_Vendor.TotCostWitTax,
+                TaxCode = pR_Vendor.TaxCode,
+                TaxClass = pR_Vendor.TaxClass
+            });
+            db.SaveChanges();
+
+            //return PartialView("VendorComparison");
+            return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = PrDtlstId });
+        }
+
+        public ActionResult VendorComparisonList(int PrDtlstId)
+        {
+            var VCList = db.PR_VendorComparison
+                .Where(x => x.PRDtId == PrDtlstId)
+                .ToList();
+
+            ViewBag.PrDtlstId = PrDtlstId;
+
+            return PartialView("VendorComparisonList",VCList);
+        }
+
+        public ActionResult VendorComparisonDelete(int VCIdDel)
+        {
+            var vcDel = db.PR_VendorComparison.Where(x => x.VCId == VCIdDel).SingleOrDefault();
+
+            var PrDtls = db.PR_Details
+                .Where(x => x.PRDtId == vcDel.PRDtId)
+                .SingleOrDefault();
+
+
+            PR_VendorComparison VC = new PR_VendorComparison() { VCId = VCIdDel };
+            db.PR_VendorComparison.Attach(vcDel);
+            db.PR_VendorComparison.Remove(vcDel);
+            db.SaveChanges();
+
+            return RedirectToAction("PRDtlsListForPurchaserType4", "Purchase", new { PrMstId = PrDtls.PRid });
+        }
+
+        public ActionResult VendorComparisonWinner (int VCIdw)
+        {
+            var vc = db.PR_VendorComparison.Where(x => x.VCId == VCIdw).SingleOrDefault();
+
+            // vc by prdt
+            var vcByPrdt = db.PR_VendorComparison.Where(x => x.PRDtId == vc.PRDtId).ToList();
+            if (vcByPrdt != null)
+            {
+                vcByPrdt.ForEach(v => v.FlagWin = false);
+                db.SaveChanges();
+            }
+
+            // update winner vc
+            if (vc != null)
+            {
+                vc.FlagWin = true;
+                vc.ModifiedBy = (String)Session["Username"];
+                vc.ModifiedDate = DateTime.Now;
+                db.SaveChanges();
+            }
+
+            // update pr details
+            var PrDtls = db.PR_Details
+                .Where(x => x.PRDtId == vc.PRDtId)
+                .SingleOrDefault();
+            if (PrDtls != null)
+            {
+                PrDtls.VendorName = vc.VCName;
+                PrDtls.UnitPrice = vc.CurPrice;
+                PrDtls.CurrId = PrDtls.EstCurrId;
+                PrDtls.TotCostnoTax = vc.TotCostnoTax;
+                PrDtls.Tax = vc.Tax;
+                PrDtls.TotCostWitTax = vc.TotCostWitTax;
+                PrDtls.TaxCode = vc.TaxCode;
+                PrDtls.TaxClass = vc.TaxClass;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("PRDtlsListForPurchaserType4", "Purchase", new { PrMstId = PrDtls.PRid });
         }
 
         [HttpGet]
