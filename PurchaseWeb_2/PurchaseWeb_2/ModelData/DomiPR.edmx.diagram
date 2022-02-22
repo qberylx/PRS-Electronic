@@ -40,6 +40,7 @@
         <EntityTypeShape EntityType="Domi_PurModel.AccTypeExpens" Width="1.5" PointX="0.75" PointY="11.75" />
         <EntityTypeShape EntityType="Domi_PurModel.PR_VendorComparison" Width="1.5" PointX="8.25" PointY="13.125" />
         <AssociationConnector Association="Domi_PurModel.FK_PR_VendorComparison_PR_Details" />
+        <EntityTypeShape EntityType="Domi_PurModel.PO_Mst" Width="1.5" PointX="12.375" PointY="3.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

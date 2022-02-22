@@ -48,6 +48,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<AccTypeDivision> AccTypeDivisions { get; set; }
         public virtual DbSet<AccTypeExpens> AccTypeExpenses { get; set; }
         public virtual DbSet<PR_VendorComparison> PR_VendorComparison { get; set; }
+        public virtual DbSet<PO_Mst> PO_Mst { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {

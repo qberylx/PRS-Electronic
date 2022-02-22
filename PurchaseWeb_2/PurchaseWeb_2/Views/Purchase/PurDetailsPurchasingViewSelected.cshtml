@@ -94,8 +94,26 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.EstimateUnitPrice)
                             </th>
+                            <th>
+                                Actual <br />Unit Price
+                            </th>
+                            <th>
+                                Total Cost (Exc.)
+                            </th>
+                            <th>
+                                Tax %
+                            </th>
+                            <th>
+                                Total Cost (Icl.)
+                            </th>
+                            <th>
+                                Tax Group
+                            </th>
+                            <th>
+                                Tax Class
+                            </th>
 
-                            <th></th>
+                            <th style="display:none"></th>
                         </tr>
                     }
                     else
@@ -244,6 +262,24 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.EstimateUnitPrice)
                                 </td>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.TotCostnoTax)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.Tax)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.TotCostWitTax)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.TaxCode)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.TaxClass)
+                                </th>
                                 <td style="display:none">
                                     @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
                                     {

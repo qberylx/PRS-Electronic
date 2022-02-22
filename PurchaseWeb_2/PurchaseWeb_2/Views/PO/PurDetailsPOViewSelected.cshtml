@@ -1,0 +1,445 @@
+﻿@model List<PurchaseWeb_2.Models.PRdtlsViewModel>
+
+@{
+    ViewBag.Title = "PurDetailsPOViewSelected";
+    Layout = "";
+}
+
+<div class="card card-success">
+    <div class="card-header">
+        <h3 class="card-title">Purchase Request Details List</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+
+    @using (Ajax.BeginForm("CreatePoNo", "PO", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPurDetailsPOViewSelected" }))
+    {
+        <div class="card-body  p-0">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-head-fixed text-nowrap table-striped table-responsive">
+                        @if (ViewBag.PrTypeId == 3)
+                        {
+                            <tr>
+                                <th>
+                                    No.
+                                </th>
+                                <th></th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    DomiPartNo
+                                </th>
+                                <th>
+                                    VendorName
+                                </th>
+                                <th>
+                                    Qty
+                                </th>
+                                <th>
+                                    UOM
+                                </th>
+                                <th>
+                                    Req. Delivery Date
+                                </th>
+                                <th>
+                                    Remarks
+                                </th>
+                                <th>
+                                    Currency
+                                </th>
+                                <th>
+                                    Unit Price
+                                </th>
+                                <th>
+                                    Total Amount <br /> (Exc Tax)
+                                </th>
+                                <th>
+                                    Tax %
+                                </th>
+                                <th>
+                                    Total Amount <br /> (Inc Tax)
+                                </th>
+                                <th>
+                                    Tax Group
+                                </th>
+                                <th>
+                                    Tax Class
+                                </th>
+                                <th>
+                                    PO No
+                                </th>
+
+                            </tr>
+                        }
+                        else if (ViewBag.PrTypeId == 4)
+                        {
+                            <tr>
+
+                                <th>
+                                    No.
+                                </th>
+                                <th></th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    VendorPartNo
+                                </th>
+                                <th>
+                                    Qty
+                                </th>
+                                <th>
+                                    UOM
+                                </th>
+                                <th>
+                                    Req. Delivery Date
+                                </th>
+                                <th>
+                                    Currency
+                                </th>
+                                <th>
+                                    Estimate <br /> Unit Price
+                                </th>
+                                <th>
+                                    Actual <br />Unit Price
+                                </th>
+                                <th>
+                                    Total Cost (Exc.)
+                                </th>
+                                <th>
+                                    Tax %
+                                </th>
+                                <th>
+                                    Total Cost (Icl.)
+                                </th>
+                                <th>
+                                    Tax Group
+                                </th>
+                                <th>
+                                    Tax Class
+                                </th>
+                                <th>
+                                    PO No
+                                </th>
+
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <th>
+                                    No.
+                                </th>
+                                <th></th>
+                                <th>
+                                    DomiPartNo
+                                </th>
+                                <th>
+                                    VendorPartNo
+                                </th>
+                                <th>
+                                    Qty
+                                </th>
+                                <th>
+                                    Req. Delivery Date
+                                </th>
+                                <th>
+                                    Remarks
+                                </th>
+                                <th>
+                                    Device
+                                </th>
+                                <th>
+                                    SalesOrder
+                                </th>
+                                <th>
+                                    Currency
+                                </th>
+                                <th>
+                                    Unit Price
+                                </th>
+                                <th>
+                                    Tax %
+                                </th>
+                                <th>
+                                    Total Amount <br /> (Inc Tax)
+                                </th>
+                                <th>
+                                    Tax Group
+                                </th>
+                                <th>
+                                    Tax Class
+                                </th>
+                                <th>
+                                    No. PO
+                                </th>
+                            </tr>
+                        }
+
+
+                        @{ int i = 0;}
+                        @if (ViewBag.PrTypeId == 3)
+                        {
+                            for (i = 0; i < Model.Count(); i++)
+                            {
+                                int j = i + 1;
+                                <tr>
+                                    <td>
+                                        @j
+                                        @Html.HiddenFor(modeItem => Model[i].PRid)
+                                        @Html.HiddenFor(modeItem => Model[i].PRDtId)
+                                    </td>
+                                    <td>
+                                        @if (Model[i].PoFlag)
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag, new { @disabled = "disabled" })
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag)
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].DomiPartNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].VendorName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].Qty)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].UOM_mst.UOMName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].ReqDevDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].Remarks)
+                                    </td>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].Currency_Mst1.Kod)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].UnitPrice)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].TotCostnoTax)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].Tax)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].TotCostWitTax)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].TaxCode)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].TaxClass)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].NoPo)
+                                    </th>
+                                </tr>
+                            }
+                        }
+                        else if (ViewBag.PrTypeId == 4)
+                        {
+                            for (i = 0; i < Model.Count(); i++)
+                            {
+                                int j = i + 1;
+                                <tr>
+                                    <td>
+                                        @j
+                                        @Html.HiddenFor(modeItem => Model[i].PRid)
+                                        @Html.HiddenFor(modeItem => Model[i].PRDtId)
+                                    </td>
+                                    <td>
+                                        @if (Model[i].PoFlag)
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag, new { @disabled = "disabled" })
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag)
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].VendorPartNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].Qty)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].UOM_mst.UOMName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].ReqDevDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].Currency_Mst.Kod)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].EstimateUnitPrice)
+                                    </td>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].UnitPrice)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].TotCostnoTax)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].Tax)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].TotCostWitTax)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].TaxCode)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].TaxClass)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].NoPo)
+                                    </th>
+                                    
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            @*foreach (var item in Model) *@
+                            for (i = 0; i < Model.Count(); i++)
+                            {
+                                int j = i + 1;
+                                //i++;
+                                <tr>
+                                    <td>
+                                        @j
+                                        @Html.HiddenFor(modeItem => Model[i].PRid)
+                                        @Html.HiddenFor(modeItem => Model[i].PRDtId)
+                                    </td>
+                                    <td>
+                                        @if (Model[i].PoFlag)
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag, new { @disabled = "disabled" })
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag)
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].DomiPartNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].VendorPartNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].Qty)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].ReqDevDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].Remarks)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].Device)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].SalesOrder)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].Currency_Mst1.Kod)
+                                        @{ViewBag.Currency = Model[i].Currency_Mst1.Kod;}
+                                    </td>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].UnitPrice)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].Tax)
+                                    </th>
+                                    <th>
+                                        <!--col 12-->
+                                        @Html.DisplayFor(modelItem => Model[i].TotCostWitTax)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].TaxCode)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].TaxClass)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayFor(modelItem => Model[i].NoPo)
+                                    </th>
+
+                                </tr>
+                            }
+                        }
+
+                        <tr>
+                            @if (ViewBag.PrTypeId == 3)
+                            {
+                                <td colspan="11"></td>
+                            }
+                            else
+                            {
+                                <td colspan="10"></td>
+                            }
+                            <th>Grand Total</th>
+                            <td></td>
+                            <th>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        @foreach (var item in Model.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
+                                        {
+                                            @item.Max(s => s.Currency_Mst1.Kod) <br />
+                                        }
+                                    </div>
+                                    <div class="col-md-8">
+                                        @foreach (var item in Model.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
+                                        {
+                                            @item.Sum(s => s.TotCostWitTax) <br />
+                                        }
+                                    </div>
+                                </div>
+
+
+                                @*ViewBag.Currency @ViewBag.GrandTotal*@
+                            </th>
+                            <td colspan="2"></td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            <input type="submit" class="btn btn-primary" value="Send to PO List" />
+            <input type="hidden" value="@ViewBag.PrMstId" id="PrMstId" name="PrMstId" />
+            <input type="hidden" value="@ViewBag.PrTypeId" id="Doctype" name="Doctype" />
+        </div>
+    }
+
+</div>
+
+

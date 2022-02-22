@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Mst>
 
 @{
-    ViewBag.Title = "HODPurApprovalList";
+    ViewBag.Title = "PoProsesList";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 
@@ -40,22 +40,25 @@
                     @Html.DisplayNameFor(model => model.PRNo)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.RequestDate)
+                    PR Date
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Department_mst.Department_name)
+                    Department
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Usr_mst.Username)
+                    Requestor
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PRType_mst.Name)
+                    PR Type
                 </th>
                 <th>
                     Grand Amount
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Status_Mst.Name)
+                    Status
+                </th>
+                <th>
+                    PR Details Left
                 </th>
                 <th></th>
             </tr>
@@ -98,10 +101,11 @@
                         @Html.DisplayFor(modelItem => item.Status_Mst.Name)
                     </td>
                     <td>
-                        @Html.ActionLink("View", "PrHODPuchasingView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
-                        @Html.ActionLink("Approve", "ApproveHODPurchasingDept", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
-                        @Html.ActionLink("Reject", "RejectHODPurchasingDept", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
-
+                        @item.PR_Details.Where(x => x.PoFlag == null || x.PoFlag == false).Count()
+                    </td>
+                    <td>
+                        @Html.ActionLink("View", "POProsesView", "PO", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                        
                     </td>
                 </tr>
             }

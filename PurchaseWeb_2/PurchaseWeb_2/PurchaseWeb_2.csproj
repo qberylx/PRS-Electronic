@@ -136,6 +136,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\POController.cs" />
     <Compile Include="Controllers\PurchaseController.cs" />
     <Compile Include="CustomAttribute\CustomAttribute.cs" />
     <Compile Include="Data\MenuDT.cs" />
@@ -191,6 +192,9 @@
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\Position_mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\PO_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\PRType_mst.cs">
@@ -2325,6 +2329,10 @@
     <Content Include="Views\Purchase\PRDtlsListForPurchaserType4.cshtml" />
     <Content Include="Views\Purchase\VendorComparison.cshtml" />
     <Content Include="Views\Purchase\VendorComparisonList.cshtml" />
+    <Content Include="Views\PO\PoProsesList.cshtml" />
+    <Content Include="Views\PO\POProsesView.cshtml" />
+    <Content Include="Views\PO\PurDetailsPOViewSelected-old.cshtml" />
+    <Content Include="Views\PO\PurDetailsPOViewSelected.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

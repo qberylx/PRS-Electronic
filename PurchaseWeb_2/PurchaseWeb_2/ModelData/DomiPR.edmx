@@ -95,6 +95,15 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="Ordering" Type="int" />
           <Property Name="MenuLayer" Type="int" />
         </EntityType>
+        <EntityType Name="PO_Mst">
+          <Key>
+            <PropertyRef Name="POId" />
+          </Key>
+          <Property Name="POId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NoPo" Type="varchar" MaxLength="20" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="50" />
+          <Property Name="CreateDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="Position_mst">
           <Key>
             <PropertyRef Name="Psn_id" />
@@ -448,6 +457,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySet Name="Currency_Mst" EntityType="Self.Currency_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department_mst" EntityType="Self.Department_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PO_Mst" EntityType="Self.PO_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Position_mst" EntityType="Self.Position_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Details" EntityType="Self.PR_Details" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Mst" EntityType="Self.PR_Mst" Schema="dbo" store:Type="Tables" />
@@ -690,6 +700,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             <End Role="PR_Details" EntitySet="PR_Details" />
             <End Role="PR_VendorComparison" EntitySet="PR_VendorComparison" />
           </AssociationSet>
+          <EntitySet Name="PO_Mst" EntityType="Domi_PurModel.PO_Mst" />
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -1082,6 +1093,15 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="PO_Mst">
+          <Key>
+            <PropertyRef Name="POId" />
+          </Key>
+          <Property Name="POId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NoPo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1369,6 +1389,16 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
                 <ScalarProperty Name="VCName" ColumnName="VCName" />
                 <ScalarProperty Name="PRDtId" ColumnName="PRDtId" />
                 <ScalarProperty Name="VCId" ColumnName="VCId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PO_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.PO_Mst">
+              <MappingFragment StoreEntitySet="PO_Mst">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="NoPo" ColumnName="NoPo" />
+                <ScalarProperty Name="POId" ColumnName="POId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
