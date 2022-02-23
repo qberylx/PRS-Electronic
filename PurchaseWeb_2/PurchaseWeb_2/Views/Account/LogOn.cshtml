@@ -10,9 +10,8 @@
 </div>
 <div class="w3ls-login box box--big">
     <!-- form starts here -->
-    <form action="/Account/LogOn" method="post">
-    <!--using (Html.BeginForm("LogOn", null, FormMethod.Post))-->
-    
+    @*using (Html.BeginForm("LogOn", "Account", FormMethod.Post)) *@
+    <form action="~/Account/LogOn" method="post">
         @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count() > 0)
         {
             <div class="alert alert-danger">
@@ -33,26 +32,27 @@
             @Html.ValidationMessageFor(model => model.Password, "")
             <div class="agile_label">
                 <input id="check3" name="check3" type="checkbox" value="show password" onclick="myFunction()">
-                <label class="check" for="check3">Show password</label>
+                <!--<label class="check" for="check3">Show password</label>-->
             </div>
             <!--<div class="agile-right">
                 <a href="#">forgot password?</a>
             </div>-->
         </div>
-        <!-- script for show password -->
-        <script>
-                function myFunction() {
-                    var x = document.getElementById("myInput");
-                    if (x.type === "password") {
-                        x.type = "text";
-                    } else {
-                        x.type = "password";
-                    }
-                }
-        </script>
-        <!-- //end script -->
+
         <input type="submit" value="LOGIN">
-        </form>
-    
+    </form>
 </div>
+
+<!-- script for show password -->
+<script>
+    function myFunction() {
+        var x = document.getElementById("myInput");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+</script>
+<!-- //end script -->
 <!-- //form ends here -->

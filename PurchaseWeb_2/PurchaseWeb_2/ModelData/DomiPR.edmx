@@ -94,6 +94,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="Active" Type="bit" />
           <Property Name="Ordering" Type="int" />
           <Property Name="MenuLayer" Type="int" />
+          <Property Name="Controller" Type="varchar" MaxLength="50" />
+          <Property Name="Action" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PO_Mst">
           <Key>
@@ -590,6 +592,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="Ordering" Type="Int32" />
           <NavigationProperty Name="RoleMenuMapping_mst" Relationship="Domi_PurModel.FK_RoleMenuMapping_mst_Menu_mst" FromRole="Menu_mst" ToRole="RoleMenuMapping_mst" />
           <Property Name="MenuLayer" Type="Int32" />
+          <Property Name="Controller" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Position_mst">
           <Key>
@@ -1139,6 +1143,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySetMapping Name="Menu_mst">
             <EntityTypeMapping TypeName="Domi_PurModel.Menu_mst">
               <MappingFragment StoreEntitySet="Menu_mst">
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="Controller" ColumnName="Controller" />
                 <ScalarProperty Name="MenuLayer" ColumnName="MenuLayer" />
                 <ScalarProperty Name="Menu_id" ColumnName="Menu_id" />
                 <ScalarProperty Name="Menu_name" ColumnName="Menu_name" />

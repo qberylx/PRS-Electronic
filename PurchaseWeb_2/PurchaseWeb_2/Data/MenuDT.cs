@@ -27,6 +27,8 @@ namespace PurchaseWeb_2.Controllers
                 menu.MenuName = sdr["Menu_name"].ToString();
                 menu.MenuUrl = sdr["Menu_url"].ToString();
                 menu.Menu_ParentId = Convert.ToInt32(sdr["Menu_ParentId"].ToString());
+                menu.Controller = sdr["Controller"].ToString();
+                menu.Action = sdr["Action"].ToString();
                 menulist.Add(menu);
             }
             return menulist;

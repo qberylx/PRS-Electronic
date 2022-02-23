@@ -27,6 +27,8 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<bool> Active { get; set; }
         public Nullable<int> Ordering { get; set; }
         public Nullable<int> MenuLayer { get; set; }
+        public string Controller { get; set; }
+        public string Action { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RoleMenuMapping_mst> RoleMenuMapping_mst { get; set; }

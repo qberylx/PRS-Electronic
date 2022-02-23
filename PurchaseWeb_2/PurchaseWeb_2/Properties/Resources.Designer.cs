@@ -61,7 +61,7 @@ namespace PurchaseWeb_2.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to data source=&quot;ML0001868\SQLEXPRESS&quot;; database=&quot;Domi_Pur&quot; ; Integrated Security=SSPI.
+        ///   Looks up a localized string similar to data source=&quot;ML0001868\SQLEXPRESS&quot;; database=&quot;Domi_Pur&quot; ;user id=sa;password=password;.
         /// </summary>
         internal static string ConnectionString {
             get {

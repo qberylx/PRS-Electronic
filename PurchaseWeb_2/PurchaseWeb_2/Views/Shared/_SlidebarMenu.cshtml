@@ -49,7 +49,7 @@
                     {
                         var submenu = Model.Where(n => n.Menu_ParentId == m.MenuId).ToList();
 
-                        <li class="nav-item ">
+                        <li class="nav-item">
 
                             @if (submenu != null && submenu.Count > 0)
                             {
@@ -76,7 +76,7 @@
                                     @foreach (var e in submenu)
                                     {
                                         <li class="nav-item">
-                                            <a href="@e.MenuUrl" class="nav-link ">
+                                            <a href="@Url.Action(e.Action, e.Controller)" class="nav-link ">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>@e.MenuName</p>
                                             </a>
@@ -110,8 +110,8 @@
                                     <i class="right fas fa-angle-left"></i>
                                 </a>
                             </li>
-                        }
-                            </li>
+                            }
+                        </li>
                         }
                     }
 

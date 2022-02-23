@@ -4,6 +4,10 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
     <!-- Meta-Tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
@@ -31,5 +35,9 @@
     <div>
         @RenderBody()
     </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    
+    @RenderSection("scripts", required: false)
 </body>
 </html>

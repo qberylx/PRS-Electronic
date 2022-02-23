@@ -18,6 +18,8 @@ namespace PurchaseWeb_2.Models
         public int Menu_ParentId { get; set; }
         [Required]
         public bool Active { get; set; }
+        public string Controller { get; set; }
+        public string Action { get; set; }
 
     }
 
