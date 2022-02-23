@@ -159,5 +159,48 @@ namespace PurchaseWeb_2.Controllers
             return NewPoNO;
         }
 
+        public ActionResult PoList()
+        {
+
+            return View("PoList");
+        }
+
+        public ActionResult POSelectDate()
+        {
+
+            return PartialView("POSelectDate");
+        }
+
+        [HttpGet]
+        public ActionResult POListByDate()
+        {
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now;
+
+            var POlist = db.GetPOListbyDate(start, end).ToList();
+
+            return PartialView("POListByDate", POlist);
+        }
+
+        [HttpPost]
+        public ActionResult POListByDate(SearchPoListbyDate searchPo)
+        {
+            DateTime start;
+            DateTime end;
+            if (searchPo == null)
+            {
+                start = DateTime.Now;
+                end = DateTime.Now;
+            }
+            else
+            {
+                start = searchPo.FromDate;
+                end = searchPo.ToDate;
+            }
+            var POlist = db.GetPOListbyDate(start, end).ToList();
+
+            return PartialView("POListByDate", POlist);
+        }
+
     }
 }

@@ -447,6 +447,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Parameter Name="docyear" Type="int" Mode="In" />
           <Parameter Name="LastDocNo" Type="varchar" Mode="InOut" />
         </Function>
+        <Function Name="GetPOListbyDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FromDate" Type="date" Mode="In" />
+          <Parameter Name="ToDate" Type="date" Mode="In" />
+        </Function>
         <Function Name="usp_GetMenuData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserId" Type="varchar" Mode="In" />
         </Function>
@@ -705,6 +709,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             <End Role="PR_VendorComparison" EntitySet="PR_VendorComparison" />
           </AssociationSet>
           <EntitySet Name="PO_Mst" EntityType="Domi_PurModel.PO_Mst" />
+          <FunctionImport Name="GetPOListbyDate" ReturnType="Collection(Domi_PurModel.GetPOListbyDate_Result)">
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -1106,6 +1114,48 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
         </EntityType>
+        <ComplexType Name="GetPOListbyDate_Result">
+          <Property Type="Int64" Name="RN" Nullable="true" />
+          <Property Type="Int32" Name="POId" Nullable="false" />
+          <Property Type="String" Name="NoPo" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="CreateDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="PRDtId" Nullable="false" />
+          <Property Type="Int32" Name="PRid" Nullable="true" />
+          <Property Type="String" Name="PRNo" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="TypePRId" Nullable="true" />
+          <Property Type="DateTime" Name="RequestDate" Nullable="true" />
+          <Property Type="Int32" Name="UserId" Nullable="true" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="DomiPartNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="VendorPartNo" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Qty" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="UOMId" Nullable="true" />
+          <Property Type="DateTime" Name="ReqDevDate" Nullable="true" />
+          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="Device" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="SalesOrder" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="VendorName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="EstCurrId" Nullable="true" />
+          <Property Type="Decimal" Name="EstimateUnitPrice" Nullable="true" Precision="18" Scale="5" />
+          <Property Type="Int32" Name="CurrId" Nullable="true" />
+          <Property Type="Decimal" Name="UnitPrice" Nullable="true" Precision="18" Scale="5" />
+          <Property Type="Decimal" Name="TotCostnoTax" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="Tax" Nullable="true" />
+          <Property Type="Decimal" Name="TotCostWitTax" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="TaxCode" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="TaxClass" Nullable="true" />
+          <Property Type="Boolean" Name="PoFlag" Nullable="true" />
+          <Property Type="String" Name="ApprovalHOD" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ApprovalHODStatus" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="ApprovalMD" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ApprovalMDStatus" Nullable="true" MaxLength="2" />
+          <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="ModifiedUser" Nullable="true" />
+          <Property Type="String" Name="CreateByPO" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="CreateDatePO" Nullable="true" Precision="23" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1408,6 +1458,52 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetPOListbyDate" FunctionName="Domi_PurModel.Store.GetPOListbyDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Domi_PurModel.GetPOListbyDate_Result">
+                <ScalarProperty Name="RN" ColumnName="RN" />
+                <ScalarProperty Name="POId" ColumnName="POId" />
+                <ScalarProperty Name="NoPo" ColumnName="NoPo" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="PRDtId" ColumnName="PRDtId" />
+                <ScalarProperty Name="PRid" ColumnName="PRid" />
+                <ScalarProperty Name="PRNo" ColumnName="PRNo" />
+                <ScalarProperty Name="TypePRId" ColumnName="TypePRId" />
+                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DomiPartNo" ColumnName="DomiPartNo" />
+                <ScalarProperty Name="VendorPartNo" ColumnName="VendorPartNo" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="UOMId" ColumnName="UOMId" />
+                <ScalarProperty Name="ReqDevDate" ColumnName="ReqDevDate" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Device" ColumnName="Device" />
+                <ScalarProperty Name="SalesOrder" ColumnName="SalesOrder" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="EstCurrId" ColumnName="EstCurrId" />
+                <ScalarProperty Name="EstimateUnitPrice" ColumnName="EstimateUnitPrice" />
+                <ScalarProperty Name="CurrId" ColumnName="CurrId" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="TotCostnoTax" ColumnName="TotCostnoTax" />
+                <ScalarProperty Name="Tax" ColumnName="Tax" />
+                <ScalarProperty Name="TotCostWitTax" ColumnName="TotCostWitTax" />
+                <ScalarProperty Name="TaxCode" ColumnName="TaxCode" />
+                <ScalarProperty Name="TaxClass" ColumnName="TaxClass" />
+                <ScalarProperty Name="PoFlag" ColumnName="PoFlag" />
+                <ScalarProperty Name="ApprovalHOD" ColumnName="ApprovalHOD" />
+                <ScalarProperty Name="ApprovalHODStatus" ColumnName="ApprovalHODStatus" />
+                <ScalarProperty Name="ApprovalMD" ColumnName="ApprovalMD" />
+                <ScalarProperty Name="ApprovalMDStatus" ColumnName="ApprovalMDStatus" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreateByPO" ColumnName="CreateByPO" />
+                <ScalarProperty Name="CreateDatePO" ColumnName="CreateDatePO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

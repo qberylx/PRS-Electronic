@@ -80,5 +80,20 @@ namespace PurchaseWeb_2.ModelData
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetDocNo", initialParameter, doctypeParameter, docyearParameter, lastDocNo);
         }
+    
+        public virtual ObjectResult<GetPOListbyDate_Result> GetPOListbyDate(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPOListbyDate_Result>("GetPOListbyDate", fromDateParameter, toDateParameter);
+        }
+
+        public System.Data.Entity.DbSet<PurchaseWeb_2.ModelData.GetPOListbyDate_Result> GetPOListbyDate_Result { get; set; }
     }
 }

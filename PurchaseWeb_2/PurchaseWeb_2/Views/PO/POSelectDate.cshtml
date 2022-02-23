@@ -1,0 +1,33 @@
+﻿@model PurchaseWeb_2.Models.SearchPoListbyDate
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">PO List</h3>
+    </div>
+    @using (Ajax.BeginForm("POListByDate", "PO", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPOListByDate" }))
+    {
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-1">
+                    From Date :
+                </div>
+                <div class="col-md-2">
+                    <!--<input type="date" id="FromDate" name="FromDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" />-->
+                    @Html.EditorFor(model => model.FromDate, new { @Value = DateTime.Today.ToString("yyyy-MM-dd") })
+                </div>
+                <div class="col-md-1">
+                    To Date :
+                </div>
+                <div class="col-md-2">
+                    <!--<input type="date" id="ToDate" name="ToDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" />-->
+                    @Html.EditorFor(model => model.ToDate, new { @Value = DateTime.Today.ToString("yyyy-MM-dd") })
+                </div>
+
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary">Preview</button>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

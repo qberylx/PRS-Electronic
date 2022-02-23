@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "PoList";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @{ Html.RenderAction("POSelectDate", "PO");}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="DivPOListByDate">
+            @{ Html.RenderAction("POListByDate", "PO");}
+        </div>
+    </div>
+</div>
+
