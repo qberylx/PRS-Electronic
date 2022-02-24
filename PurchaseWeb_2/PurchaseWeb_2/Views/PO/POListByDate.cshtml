@@ -3,8 +3,8 @@
 <p>
     @using (Html.BeginForm("ExportToExcel", "PO", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        <input type="text" id="FromDates" name="FromDates" value="" />
-        <input type="text" id="ToDates" name="ToDates" value="" />
+        <input type="hidden" id="FromDates" name="FromDates" value="" />
+        <input type="hidden" id="ToDates" name="ToDates" value="" />
         <button class="btn btn-primary" id="btnExport" name="btnExport" onclick="">Export To Excel</button>
     }
 </p>

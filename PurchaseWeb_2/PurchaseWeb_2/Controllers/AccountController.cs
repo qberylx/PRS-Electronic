@@ -27,7 +27,7 @@ namespace PurchaseWeb_2.Controllers
         void connectionstring()
         {
             //con.ConnectionString = @"data source=ML0001868\SQLEXPRESS; database=Domi_Pur ; Integrated Security=SSPI ";
-            con.ConnectionString = PurchaseWeb_2.Properties.Resources.ConnectionString;
+            con.ConnectionString = PurchaseWeb_2.Properties.Resources.ConnectionString1;
         }
 
         [HttpPost]
@@ -43,8 +43,8 @@ namespace PurchaseWeb_2.Controllers
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
                         && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/"))
                     {
-                        //return Redirect(returnUrl);
-                        return View("Create");
+                        // if user have returnUrl
+                        return RedirectToAction("CheckUser");
                     }
                     else
                     {
@@ -90,9 +90,19 @@ namespace PurchaseWeb_2.Controllers
             if (dr.Read())
             {
                 Session["UserID"] = dr.GetInt32(0).ToString();
+                Session["UserRoleId"] = dr.GetInt32(4).ToString();
                 String userID = Session["UserID"].ToString();
+                String userRoleId = Session["UserRoleId"].ToString();
                 con.Close();
-                return RedirectToAction("Dashboard", "Main");
+                if (userRoleId == "7") // if admin go to admin dashboard
+                {
+                    return RedirectToAction("Dashboard", "Main");
+                }
+                else
+                {
+                    return RedirectToAction("PurRequest", "Purchase");
+                }
+                
             } else
             {
                 con.Close();

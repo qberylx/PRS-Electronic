@@ -68,5 +68,14 @@ namespace PurchaseWeb_2.Properties {
                 return ResourceManager.GetString("ConnectionString", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to data source=&quot;Testserver1&quot;; database=&quot;Domi_Pur&quot; ;user id=pruser;password=user2020;.
+        /// </summary>
+        internal static string ConnectionString1 {
+            get {
+                return ResourceManager.GetString("ConnectionString1", resourceCulture);
+            }
+        }
     }
 }

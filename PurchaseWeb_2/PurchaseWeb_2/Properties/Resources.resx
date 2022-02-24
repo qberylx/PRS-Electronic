@@ -121,4 +121,8 @@
     <value>data source="ML0001868\SQLEXPRESS"; database="Domi_Pur" ;user id=sa;password=password;</value>
     <comment>SQL Server Connection</comment>
   </data>
+  <data name="ConnectionString1" xml:space="preserve">
+    <value>data source="Testserver1"; database="Domi_Pur" ;user id=pruser;password=user2020;</value>
+    <comment>SQL Server Connection</comment>
+  </data>
 </root>
