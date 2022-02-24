@@ -1,8 +1,11 @@
-﻿using PurchaseWeb_2.ModelData;
+﻿using ClosedXML.Excel;
+using PurchaseWeb_2.ModelData;
 using PurchaseWeb_2.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity.Core.Objects;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -167,8 +170,13 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult POSelectDate()
         {
+            
+            var SearchPO = new SearchPoListbyDate { 
+                FromDate = DateTime.Now,
+                ToDate = DateTime.Now
+            };
 
-            return PartialView("POSelectDate");
+            return PartialView("POSelectDate", SearchPO);
         }
 
         [HttpGet]
@@ -200,6 +208,43 @@ namespace PurchaseWeb_2.Controllers
             var POlist = db.GetPOListbyDate(start, end).ToList();
 
             return PartialView("POListByDate", POlist);
+        }
+
+        [HttpPost]
+        public FileResult ExportToExcel(string FromDates, string ToDates)
+        {
+            DateTime start = Convert.ToDateTime(FromDates);
+            DateTime end = Convert.ToDateTime(ToDates);
+            DataTable dt = new DataTable("Sheet 1");
+            dt.Columns.AddRange(new DataColumn[6] { new DataColumn("No"),
+                                                     new DataColumn("POno"),
+                                                     new DataColumn("PRno"),
+                                                     new DataColumn("PrDate"),
+                                                     new DataColumn("Description"),
+                                                     new DataColumn("Requestor") });
+
+            var POlist = db.GetPOListbyDate(start, end).ToList();
+
+            foreach (var po in POlist)
+            {
+                dt.Rows.Add(po.RN,
+                    po.NoPo,
+                    po.PRNo,
+                    po.CreateDate,
+                    po.Description,
+                    po.UserName
+                    );
+            }
+
+            using (XLWorkbook wb = new XLWorkbook()) //Install ClosedXml from Nuget for XLWorkbook  
+            {
+                wb.Worksheets.Add(dt);
+                using (MemoryStream stream = new MemoryStream()) //using System.IO;  
+                {
+                    wb.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExcelFile.xlsx");
+                }
+            }
         }
 
     }

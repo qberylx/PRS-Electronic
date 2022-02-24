@@ -17,3 +17,46 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        //var FromDate = $("#FromDate").val();
+        //var ToDate = $("#ToDate").val();
+        //if (FromDate == "") { FromDate = Date.now; }
+        //if (ToDate == "") { ToDate = Date.now; }
+        //console.log(FromDate);
+        //console.log(ToDate);
+        //$("FromDates").val(FromDate);
+        //$("ToDates").val(ToDate);
+
+        //function chgDateFrom(date) {
+        //    alert(date);
+        //    $("FromDates").val(date);
+        //}
+
+        $('#FromDate').change(function(e){
+            alert('Changed!');
+            console.log(this.value);
+            $("#FromDates").val(this.value);
+        });
+
+        $('#ToDate').change(function (e) {
+            alert('Changed!');
+            console.log(this.value);
+            $("#ToDates").val(this.value);
+        });
+
+        //function chgDateTo(date) {
+        //    alert(date);
+        //    $("ToDates").val(date);
+        //}
+
+        //if (FromDate != "0") {
+        //    window.location.href = "/PO/ExportToExcel?FromDate=" + FromDate + "&ToDate=" + ToDate;
+        //}
+        //else {
+        //    $('#alertModal').modal('show');
+        //    return false;
+        //}
+    });
+</script>
+

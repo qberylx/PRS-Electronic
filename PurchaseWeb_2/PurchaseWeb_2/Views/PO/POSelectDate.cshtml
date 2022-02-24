@@ -13,14 +13,14 @@
                 </div>
                 <div class="col-md-2">
                     <!--<input type="date" id="FromDate" name="FromDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" />-->
-                    @Html.EditorFor(model => model.FromDate, new { @Value = DateTime.Today.ToString("yyyy-MM-dd") })
+                    @Html.EditorFor(model => model.FromDate, new { @onchange = "chgDateFrom(this.value)"})
                 </div>
                 <div class="col-md-1">
                     To Date :
                 </div>
                 <div class="col-md-2">
                     <!--<input type="date" id="ToDate" name="ToDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" />-->
-                    @Html.EditorFor(model => model.ToDate, new { @Value = DateTime.Today.ToString("yyyy-MM-dd") })
+                    @Html.EditorFor(model => model.ToDate, new { @onchange = "chgDateTo(this.value)" })
                 </div>
 
                 <div class="col-md-2">

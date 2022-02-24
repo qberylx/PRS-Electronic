@@ -1,7 +1,12 @@
 ﻿@model IEnumerable<PurchaseWeb_2.ModelData.GetPOListbyDate_Result>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @using (Html.BeginForm("ExportToExcel", "PO", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="text" id="FromDates" name="FromDates" value="" />
+        <input type="text" id="ToDates" name="ToDates" value="" />
+        <button class="btn btn-primary" id="btnExport" name="btnExport" onclick="">Export To Excel</button>
+    }
 </p>
 <table class="table">
     <tr>
@@ -122,7 +127,7 @@
         <th>
             @Html.DisplayNameFor(model => model.CreateDatePO)
         </th>
-        <th></th>
+        
     </tr>
 
 @foreach (var item in Model) {
@@ -244,12 +249,10 @@
         <td>
             @Html.DisplayFor(modelItem => item.CreateDatePO)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.PRDtId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.PRDtId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.PRDtId })
-        </td>
+        
     </tr>
 }
 
 </table>
+
+
