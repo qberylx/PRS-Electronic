@@ -4,10 +4,10 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Department_name)
+            Department Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Create_date)
+            Date Created
         </th>
         <th></th>
     </tr>
@@ -21,8 +21,10 @@
             @Html.DisplayFor(modelItem => item.Create_date)
         </td>
         <td>
-            @Html.ActionLink("Edit", "departmentEdit", new { id=item.Dpt_id }) |
-            @Html.ActionLink("Delete", "departmentDelete", new { id=item.Dpt_id })
+            <a href="@Url.Action("departmentEdit","Main", new { id=item.Dpt_id })"  class="btn btn-info"><i class="fa fa-pen"> </i></a> &nbsp;&nbsp;
+            <a href="@Url.Action("departmentDelete","Main", new { id=item.Dpt_id })"  class="btn btn-danger"><i class="fa fa-trash"></i></a>
+
+            
         </td>
     </tr>
 }

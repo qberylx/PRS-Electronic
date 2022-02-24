@@ -23,8 +23,9 @@
         </td>
         
         <td>
-            @Html.ActionLink("Edit", "roleEdit", new { id=item.Psn_id }) |
-            @Html.ActionLink("Delete", "roleDelete", new { id=item.Psn_id })
+            <a href="@Url.Action("roleEdit","Main", new { id=item.Psn_id })" class="btn btn-info"><i class="fa fa-pen"> </i></a> &nbsp;&nbsp;
+            <a href="@Url.Action("roleDelete","Main", new { id=item.Psn_id })" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+
         </td>
     </tr>
 }

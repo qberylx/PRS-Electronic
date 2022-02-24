@@ -2359,6 +2359,7 @@
     <Content Include="Views\PO\PoList.cshtml" />
     <Content Include="Views\PO\POSelectDate.cshtml" />
     <Content Include="Views\PO\POListByDate.cshtml" />
+    <Content Include="Views\Main\EditUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

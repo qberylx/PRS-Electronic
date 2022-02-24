@@ -414,10 +414,47 @@ namespace PurchaseWeb_2.Controllers
                 DepartmentName = x.Department_mst.Department_name,
                 Psn_id = x.Psn_id,
                 PositionName = x.Position_mst.Position_name,
-                Date_Create = x.Date_Create
+                Date_Create = x.Date_Create,
+                TelExt = x.TelExt
             }).ToList();
 
             return PartialView("_userList", userVMList);
+        }
+
+        [HttpGet]
+        public ActionResult EditUser(int UserId)
+        {
+            var Userupdate = db.Usr_mst
+                .Where(x => x.usr_id == UserId)
+                .FirstOrDefault();
+
+            var DptList = db.Department_mst.ToList();
+            var RoleList = db.Position_mst.ToList();
+
+            ViewBag.DptList = DptList;
+            ViewBag.RoleList = RoleList;
+
+            return View("EditUser", Userupdate);
+        }
+
+        [HttpPost]
+        public ActionResult EditUser(Usr_mst usr_Mst)
+        {
+            var userUpdate = db.Usr_mst
+                .SingleOrDefault(x => x.usr_id == usr_Mst.usr_id);
+            if (userUpdate != null)
+            {
+                userUpdate.Dpt_id = usr_Mst.Dpt_id;
+                userUpdate.Psn_id = usr_Mst.Psn_id;
+                userUpdate.TelExt = usr_Mst.TelExt;
+                userUpdate.Flag_Aproval = usr_Mst.Flag_Aproval;
+                userUpdate.Date_modified = DateTime.Now;
+                db.SaveChanges();
+            }
+
+            this.AddNotification("Updated!", NotificationType.SUCCESS);
+
+            return RedirectToAction("Dashboard", "Main");
         }
 
         public ActionResult Approve(int id)

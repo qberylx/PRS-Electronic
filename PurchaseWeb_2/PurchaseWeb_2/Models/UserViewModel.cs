@@ -19,11 +19,14 @@ namespace PurchaseWeb_2.Models
         public Nullable<System.DateTime> Date_Create { get; set; }
         public Nullable<System.DateTime> Date_modified { get; set; }
         public Nullable<bool> Flag_Aproval { get; set; }
+        public string TelExt { get; set; }
 
         [Display(Name = "Department")]
         public string DepartmentName { get; set; }
         [Display(Name = "Role")]
         public string PositionName { get; set; }
+
+
 
     }
 }

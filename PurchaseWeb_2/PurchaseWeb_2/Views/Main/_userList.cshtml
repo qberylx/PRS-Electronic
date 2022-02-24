@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="card">
+        <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title">User Pending for Approval</h3>
 
@@ -36,9 +36,13 @@
                                 @Html.DisplayNameFor(model => model.PositionName)
                             </th>
                             <th>
+                                TelExt
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.Date_Create)
                             </th>
                             
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -59,13 +63,17 @@
                                     @Html.DisplayFor(modelItem => item.PositionName)
                                 </td>
                                 <td>
+                                    @Html.DisplayFor(modelItem => item.TelExt)
+                                </td>
+                                <td>
                                     @Html.DisplayFor(modelItem => item.Date_Create)
                                 </td>
                                 
                                 <td>
-                                    <button class="btn btn-block btn-success" onclick="window.location.href='/Main/Approve/@item.usr_id'"> Approve </button>
-                                    
-                                    
+                                    <button class="btn btn-block btn-success" onclick="window.location.href='/Main/Approve/@item.usr_id'">Approve</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-block btn-primary" onclick="window.location.href='/Main/EditUser?UserId=@item.usr_id'">Update</button>
                                 </td>
                             </tr>
                         }
