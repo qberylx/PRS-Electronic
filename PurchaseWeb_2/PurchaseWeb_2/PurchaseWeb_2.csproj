@@ -2360,6 +2360,7 @@
     <Content Include="Views\PO\POSelectDate.cshtml" />
     <Content Include="Views\PO\POListByDate.cshtml" />
     <Content Include="Views\Main\EditUser.cshtml" />
+    <Content Include="Views\Purchase\UOMmaster.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

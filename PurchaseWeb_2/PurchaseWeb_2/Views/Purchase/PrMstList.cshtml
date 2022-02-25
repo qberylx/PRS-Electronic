@@ -7,22 +7,22 @@
                 <table class="table table-head-fixed text-nowrap table-striped">
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.PRNo)
+                            PR No
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.UserId)
+                            Requestor
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.DepartmentId)
+                            Department
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.RequestDate)
+                            Requisition Date
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.PRType_mst.Name)
+                            PR Type
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.StatId)
+                            PR Status
                         </th>
                         <th>
                             Items
@@ -67,16 +67,24 @@
                         <td>
                             @switch (item.PRTypeId)
                             {
-                                case 1:<button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>
+                                case 1:
+                                    <!--<button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>-->
+                                        <a class="btn btn-primary" href="@Url.Action("AddPurDtls","Purchase", new {PrMstId = item.PRId})">Add Details</a>
                                     break;
 
-                                case 2: <button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtlsType2?PrMstId=@item.PRId' ;">Add Details</button>
+                                case 2: 
+                                    <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType2","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                    
                                     break;
 
-                                case 3: <button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtlsType3?PrMstId=@item.PRId' ;">Add Details</button>
+                                case 3: 
+                                    <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                    
                                     break;
 
-                                case 4: <button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtlsType4?PrMstId=@item.PRId' ;">Add Details</button>
+                                case 4: 
+                                    <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType4","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                    
                                     break;
 
 

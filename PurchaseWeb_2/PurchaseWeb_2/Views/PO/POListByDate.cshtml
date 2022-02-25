@@ -1,12 +1,14 @@
 ﻿@model IEnumerable<PurchaseWeb_2.ModelData.GetPOListbyDate_Result>
 
 <p>
+    @*
     @using (Html.BeginForm("ExportToExcel", "PO", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <input type="hidden" id="FromDates" name="FromDates" value="" />
         <input type="hidden" id="ToDates" name="ToDates" value="" />
         <button class="btn btn-primary" id="btnExport" name="btnExport" onclick="">Export To Excel</button>
     }
+    *@
 </p>
 <table class="table">
     <tr>

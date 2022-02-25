@@ -213,8 +213,19 @@ namespace PurchaseWeb_2.Controllers
         [HttpPost]
         public FileResult ExportToExcel(string FromDates, string ToDates)
         {
-            DateTime start = Convert.ToDateTime(FromDates);
-            DateTime end = Convert.ToDateTime(ToDates);
+            DateTime start;
+            DateTime end;
+
+            if (FromDates == "" || ToDates == "" )
+            {
+                start = DateTime.Today;
+                end = DateTime.Today;
+            } else
+            {
+                start = Convert.ToDateTime(FromDates);
+                end = Convert.ToDateTime(ToDates);
+
+            }
             DataTable dt = new DataTable("Sheet 1");
             dt.Columns.AddRange(new DataColumn[6] { new DataColumn("No"),
                                                      new DataColumn("POno"),

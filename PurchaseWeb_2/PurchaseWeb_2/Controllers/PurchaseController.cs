@@ -1130,6 +1130,11 @@ namespace PurchaseWeb_2.Controllers
             return RedirectToAction("MDApprovalList");
         }
 
+        public ActionResult UOMmaster()
+        {
+            return View("UOMmaster");
+        }
+
     }
 
 }
