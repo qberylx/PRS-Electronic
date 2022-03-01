@@ -47,14 +47,6 @@
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Domi_Pur.dbo.Audlgn_Log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="Audlgn_Log">
-          <Key>
-            <PropertyRef Name="audlgn_id" />
-          </Key>
-          <Property Name="audlgn_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Username" Type="varchar" MaxLength="50" />
-          <Property Name="Date" Type="datetime" />
-        </EntityType>
         <EntityType Name="Currency_Mst">
           <Key>
             <PropertyRef Name="CurrId" />
@@ -181,6 +173,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="MDApprovalDate" Type="datetime" />
           <Property Name="GrandAmt" Type="decimal" Precision="18" Scale="2" />
           <Property Name="AccountCode" Type="varchar" MaxLength="50" />
+          <Property Name="HODComment" Type="varchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -231,15 +224,6 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="SubMenu_mst">
-          <Key>
-            <PropertyRef Name="SubMenu_id" />
-          </Key>
-          <Property Name="SubMenu_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SubMenu_Name" Type="varchar" MaxLength="50" />
-          <Property Name="Flag" Type="bit" />
-          <Property Name="Menu_id" Type="int" />
-        </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -474,27 +458,12 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UOM_mst" EntityType="Self.UOM_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usr_mst" EntityType="Self.Usr_mst" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Audlgn_Log" EntityType="Self.Audlgn_Log" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Audlgn_Log].[audlgn_id] AS [audlgn_id], 
-    [Audlgn_Log].[Username] AS [Username], 
-    [Audlgn_Log].[Date] AS [Date]
-    FROM [dbo].[Audlgn_Log] AS [Audlgn_Log]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="Lgn_mst" EntityType="Self.Lgn_mst" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Lgn_mst].[Lgn_id] AS [Lgn_id], 
     [Lgn_mst].[Username] AS [Username], 
     [Lgn_mst].[Password] AS [Password]
     FROM [dbo].[Lgn_mst] AS [Lgn_mst]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="SubMenu_mst" EntityType="Self.SubMenu_mst" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [SubMenu_mst].[SubMenu_id] AS [SubMenu_id], 
-    [SubMenu_mst].[SubMenu_Name] AS [SubMenu_Name], 
-    [SubMenu_mst].[Flag] AS [Flag], 
-    [SubMenu_mst].[Menu_id] AS [Menu_id]
-    FROM [dbo].[SubMenu_mst] AS [SubMenu_mst]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_PR_Details_Currency_Mst" Association="Self.FK_PR_Details_Currency_Mst">
             <End Role="Currency_Mst" EntitySet="Currency_Mst" />
@@ -557,14 +526,6 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Domi_PurModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Audlgn_Log">
-          <Key>
-            <PropertyRef Name="audlgn_id" />
-          </Key>
-          <Property Name="audlgn_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Date" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="Department_mst">
           <Key>
             <PropertyRef Name="Dpt_id" />
@@ -611,22 +572,11 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_Usr_mst_Position_mst" FromRole="Position_mst" ToRole="Usr_mst" />
           <NavigationProperty Name="RoleMenuMapping_mst" Relationship="Domi_PurModel.FK_RoleMenuMapping_mst_Position_mst" FromRole="Position_mst" ToRole="RoleMenuMapping_mst" />
         </EntityType>
-        <EntityType Name="SubMenu_mst">
-          <Key>
-            <PropertyRef Name="SubMenu_id" />
-          </Key>
-          <Property Name="SubMenu_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SubMenu_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Flag" Type="Boolean" />
-          <Property Name="Menu_id" Type="Int32" />
-        </EntityType>
         <EntityContainer Name="Domi_PurEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Audlgn_Log" EntityType="Self.Audlgn_Log" />
           <EntitySet Name="Department_mst" EntityType="Self.Department_mst" />
           <EntitySet Name="Lgn_mst" EntityType="Self.Lgn_mst" />
           <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" />
           <EntitySet Name="Position_mst" EntityType="Self.Position_mst" />
-          <EntitySet Name="SubMenu_mst" EntityType="Self.SubMenu_mst" />
           <FunctionImport Name="usp_GetMenuData" ReturnType="Collection(Domi_PurModel.usp_GetMenuData_Result)">
           <Parameter Name="UserId" Mode="In" Type="String" />
           </FunctionImport>
@@ -883,6 +833,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="MDApprovalDate" Type="DateTime" Precision="3" />
           <Property Name="GrandAmt" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="AccountCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HODComment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1162,15 +1113,6 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Domi_PurModelStoreContainer" CdmEntityContainer="Domi_PurEntities">
-          <EntitySetMapping Name="Audlgn_Log">
-            <EntityTypeMapping TypeName="Domi_PurModel.Audlgn_Log">
-              <MappingFragment StoreEntitySet="Audlgn_Log">
-                <ScalarProperty Name="audlgn_id" ColumnName="audlgn_id" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Department_mst">
             <EntityTypeMapping TypeName="Domi_PurModel.Department_mst">
               <MappingFragment StoreEntitySet="Department_mst">
@@ -1213,16 +1155,6 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
                 <ScalarProperty Name="Create_date" ColumnName="Create_date" />
                 <ScalarProperty Name="Modified_date" ColumnName="Modified_date" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SubMenu_mst">
-            <EntityTypeMapping TypeName="Domi_PurModel.SubMenu_mst">
-              <MappingFragment StoreEntitySet="SubMenu_mst">
-                <ScalarProperty Name="SubMenu_id" ColumnName="SubMenu_id" />
-                <ScalarProperty Name="SubMenu_Name" ColumnName="SubMenu_Name" />
-                <ScalarProperty Name="Flag" ColumnName="Flag" />
-                <ScalarProperty Name="Menu_id" ColumnName="Menu_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1318,6 +1250,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="HODComment" ColumnName="HODComment" />
                 <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
                 <ScalarProperty Name="GrandAmt" ColumnName="GrandAmt" />
                 <ScalarProperty Name="MDApprovalDate" ColumnName="MDApprovalDate" />

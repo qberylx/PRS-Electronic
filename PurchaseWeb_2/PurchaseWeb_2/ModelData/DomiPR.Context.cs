@@ -27,12 +27,10 @@ namespace PurchaseWeb_2.ModelData
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Audlgn_Log> Audlgn_Log { get; set; }
         public virtual DbSet<Department_mst> Department_mst { get; set; }
         public virtual DbSet<Lgn_mst> Lgn_mst { get; set; }
         public virtual DbSet<Menu_mst> Menu_mst { get; set; }
         public virtual DbSet<Position_mst> Position_mst { get; set; }
-        public virtual DbSet<SubMenu_mst> SubMenu_mst { get; set; }
         public virtual DbSet<Usr_mst> Usr_mst { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<RoleMenuMapping_mst> RoleMenuMapping_mst { get; set; }
@@ -93,7 +91,5 @@ namespace PurchaseWeb_2.ModelData
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPOListbyDate_Result>("GetPOListbyDate", fromDateParameter, toDateParameter);
         }
-
-        public System.Data.Entity.DbSet<PurchaseWeb_2.ModelData.GetPOListbyDate_Result> GetPOListbyDate_Result { get; set; }
     }
 }

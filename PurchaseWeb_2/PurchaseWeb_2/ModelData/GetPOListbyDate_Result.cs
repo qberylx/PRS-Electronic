@@ -10,15 +10,13 @@
 namespace PurchaseWeb_2.ModelData
 {
     using System;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class GetPOListbyDate_Result
     {
         public Nullable<long> RN { get; set; }
         public int POId { get; set; }
         public string NoPo { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
-        [Key]
         public int PRDtId { get; set; }
         public Nullable<int> PRid { get; set; }
         public string PRNo { get; set; }

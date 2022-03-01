@@ -4,7 +4,7 @@
     <div class="card-body  p-0" >
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-head-fixed text-nowrap table-striped">
+                <table class="table table-head-fixed text-nowrap table-striped table-responsive table-sm">
                     <tr>
                         <th>
                             PR No
@@ -30,78 +30,84 @@
 
                         <th></th>
                     </tr>
-
-                    @foreach (var item in Model)
-                    {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PRNo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Usr_mst.Username)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Department_mst.Department_name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RequestDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PRType_mst.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status_Mst.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelitem => item.PR_Details.Count)
-                    </td>
-
-                    @if (item.StatId != 1 && item.StatId != 2)
-                    {
+                @{ String status = "false" ;}
+                @foreach (var item in Model)
+                {
+                    if (item.StatId == 2) { status = "true"; } else { status = "false"; }
+                    <tr data-widget="expandable-table"   aria-expanded = "@status"  >
                         <td>
-                            @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                            @Html.DisplayFor(modelItem => item.PRNo)
                         </td>
-                    }
-                    else
-                    {
                         <td>
-                            @switch (item.PRTypeId)
-                            {
-                                case 1:
-                                    <!--<button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>-->
-                                        <a class="btn btn-primary" href="@Url.Action("AddPurDtls","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-                                    break;
-
-                                case 2: 
-                                    <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType2","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-                                    
-                                    break;
-
-                                case 3: 
-                                    <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-                                    
-                                    break;
-
-                                case 4: 
-                                    <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType4","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-                                    
-                                    break;
-
-
-                            }
-
-                            @Html.ActionLink("Send", "PRhod", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
-
-                            @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
-
-                            @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
-
-
+                            @Html.DisplayFor(modelItem => item.Usr_mst.Username)
                         </td>
-                    }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Department_mst.Department_name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RequestDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PRType_mst.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status_Mst.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelitem => item.PR_Details.Count)
+                        </td>
 
-                </tr>
-                    }
+                        @if (item.StatId != 1 && item.StatId != 2)
+                        {
+                            <td>
+                                @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @switch (item.PRTypeId)
+                                {
+                                    case 1:
+                                        <!--<button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>-->
+                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtls","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                        break;
+
+                                    case 2: 
+                                        <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType2","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                    
+                                        break;
+
+                                    case 3: 
+                                        <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                    
+                                        break;
+
+                                    case 4: 
+                                        <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType4","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                    
+                                        break;
+
+
+                                }
+
+                                @Html.ActionLink("Send", "PRhod", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+
+                                @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
+
+                                @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+
+
+                            </td>
+                        }
+
+                    </tr>
+                    <tr class="expandable-body" >
+                        <td colspan="7">
+                            <p style="color:indianred; padding-left:2em">@item.HODComment</p>
+                        </td>
+                    </tr>
+                }
 
                 </table>
             </div>

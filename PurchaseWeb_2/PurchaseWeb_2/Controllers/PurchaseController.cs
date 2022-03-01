@@ -139,7 +139,7 @@ namespace PurchaseWeb_2.Controllers
             return RedirectToAction("ApprovalHOD");
         }
 
-        public ActionResult RejectHOD(int PrMstId)
+        public ActionResult RejectHOD(int PrMstId, string comment)
         {
             string Username = (string)Session["Username"];
 
@@ -152,6 +152,7 @@ namespace PurchaseWeb_2.Controllers
                 PrMst.StatId = 2;
                 PrMst.ModifiedDate = DateTime.Now;
                 PrMst.ModifiedBy = Username;
+                PrMst.HODComment = comment;
                 db.SaveChanges();
             }
 

@@ -5,12 +5,10 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="8ee2d69fcd2b4f91854250b661d3c8d2" Name="Diagram1">
-        <EntityTypeShape EntityType="Domi_PurModel.Audlgn_Log" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Domi_PurModel.Department_mst" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Domi_PurModel.Lgn_mst" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Domi_PurModel.Menu_mst" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Domi_PurModel.Position_mst" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Domi_PurModel.SubMenu_mst" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Domi_PurModel.Usr_mst" Width="1.5" PointX="0.75" PointY="6.75" />
         <EntityTypeShape EntityType="Domi_PurModel.sysdiagram" Width="1.5" PointX="3.375" PointY="6.75" />
         <AssociationConnector Association="Domi_PurModel.FK_Usr_mst_Department_mst" />

@@ -26,7 +26,7 @@ namespace PurchaseWeb_2.Controllers
         [HttpGet]
         public ActionResult Dashboard() {
 
-            return View(); 
+            return View("Dashboard"); 
         }
 
         [HttpGet]
@@ -50,7 +50,7 @@ namespace PurchaseWeb_2.Controllers
         [HttpGet]
         public ActionResult Role()
         {
-            return View();
+            return View("Role");
         }
 
         [HttpPost]

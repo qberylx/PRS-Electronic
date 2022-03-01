@@ -8,7 +8,7 @@ namespace PurchaseWeb_2.Controllers
 {
     internal class MenuDT
     {
-        SqlConnection con = new SqlConnection(PurchaseWeb_2.Properties.Resources.ConnectionString1);
+        SqlConnection con = new SqlConnection(PurchaseWeb_2.Properties.Resources.ConnectionString);
 
         //Fetch data
         public IList<MenuModel> GetMenus(string UserId)
