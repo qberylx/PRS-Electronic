@@ -428,9 +428,20 @@ namespace PurchaseWeb_2.Controllers
 
                if (file.ContentLength > 0)
                {
-                   string _FileName = PrMstDtls.PRNo + Path.GetFileName(file.FileName);
+                   string _FileName = PrMstDtls.PRNo + "_" + Path.GetFileName(file.FileName);
                    string _path = Path.Combine(Server.MapPath("~/UploadedFile/Quotation"), _FileName);
                    file.SaveAs(_path);
+
+                    //insert into prfile
+                    var PrFile = db.Set<PRFile>();
+                    PrFile.Add(new PRFile
+                    {
+                        PrMstId = PurMasterID,
+                        FileName = _FileName,
+                        FilePath = _path
+                    });
+                    db.SaveChanges();
+
 
                    //int PrMstID = PurMasterID;
                    var PurMst = db.PR_Mst.SingleOrDefault(pr => pr.PRId == PurMasterID);
@@ -454,6 +465,36 @@ namespace PurchaseWeb_2.Controllers
                ViewBag.Message = "File fail to Upload!!";
                return PartialView("UploadQuo", PurMasterID);
            }
+        }
+
+        public ActionResult UploadQuoList(int PrMstId)
+        {
+            var quoList = db.PRFiles.Where(x => x.PrMstId == PrMstId).ToList();
+
+            return PartialView("UploadQuoList", quoList);
+        }
+
+        public ActionResult deleteFile(int PrMstId, int Fileid)
+        {
+            try
+            {
+                PRFile file = new PRFile() { FileId = Fileid };
+                db.PRFiles.Attach(file);
+                db.PRFiles.Remove(file);
+                db.SaveChanges();
+
+                ViewBag.PurMasterID = PrMstId;
+                ViewBag.Message = "File deleted Successfully!!";
+            }
+            catch
+            {
+                ViewBag.PurMasterID = PrMstId;
+                ViewBag.Message = "File fail to be deleted!!";
+            }
+            
+            return PartialView("UploadQuo", PrMstId);
+
+            //return RedirectToAction("UploadQuo", "Purchase", new { PrMstId = PrMstId });
         }
 
         //Start Purchase request Details Type 2

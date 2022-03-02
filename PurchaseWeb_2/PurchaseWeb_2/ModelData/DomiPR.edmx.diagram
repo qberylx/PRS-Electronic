@@ -39,6 +39,8 @@
         <EntityTypeShape EntityType="Domi_PurModel.PR_VendorComparison" Width="1.5" PointX="8.25" PointY="13.125" />
         <AssociationConnector Association="Domi_PurModel.FK_PR_VendorComparison_PR_Details" />
         <EntityTypeShape EntityType="Domi_PurModel.PO_Mst" Width="1.5" PointX="12.375" PointY="3.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.PRFile" Width="1.5" PointX="6" PointY="18.25" />
+        <AssociationConnector Association="Domi_PurModel.FK_PRFile_PR_Mst" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

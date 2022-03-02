@@ -45,8 +45,6 @@
           <Property Name="ExpName" Type="varchar" MaxLength="100" />
           <Property Name="ExpCode" Type="varchar" MaxLength="10" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Domi_Pur.dbo.Audlgn_Log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Currency_Mst">
           <Key>
             <PropertyRef Name="CurrId" />
@@ -174,6 +172,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="GrandAmt" Type="decimal" Precision="18" Scale="2" />
           <Property Name="AccountCode" Type="varchar" MaxLength="50" />
           <Property Name="HODComment" Type="varchar" MaxLength="300" />
+          <Property Name="FileId" Type="int" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -199,6 +198,15 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="TaxCode" Type="varchar" MaxLength="10" />
           <Property Name="TaxClass" Type="int" />
         </EntityType>
+        <EntityType Name="PRFile">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PrMstId" Type="int" />
+          <Property Name="FileName" Type="varchar" MaxLength="100" />
+          <Property Name="FilePath" Type="varchar" MaxLength="300" />
+        </EntityType>
         <EntityType Name="PRType_mst">
           <Key>
             <PropertyRef Name="PRTypeId" />
@@ -222,8 +230,6 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="StatId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -376,6 +382,18 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PRFile_PR_Mst">
+          <End Role="PR_Mst" Type="Self.PR_Mst" Multiplicity="0..1" />
+          <End Role="PRFile" Type="Self.PRFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PR_Mst">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PRFile">
+              <PropertyRef Name="PrMstId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RoleMenuMapping_mst_Menu_mst">
           <End Role="Menu_mst" Type="Self.Menu_mst" Multiplicity="0..1" />
           <End Role="RoleMenuMapping_mst" Type="Self.RoleMenuMapping_mst" Multiplicity="*" />
@@ -452,6 +470,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySet Name="PR_Details" EntityType="Self.PR_Details" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Mst" EntityType="Self.PR_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_VendorComparison" EntityType="Self.PR_VendorComparison" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRFile" EntityType="Self.PRFile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRType_mst" EntityType="Self.PRType_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenuMapping_mst" EntityType="Self.RoleMenuMapping_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status_Mst" EntityType="Self.Status_Mst" Schema="dbo" store:Type="Tables" />
@@ -504,6 +523,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <AssociationSet Name="FK_PR_VendorComparison_PR_Details" Association="Self.FK_PR_VendorComparison_PR_Details">
             <End Role="PR_Details" EntitySet="PR_Details" />
             <End Role="PR_VendorComparison" EntitySet="PR_VendorComparison" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRFile_PR_Mst" Association="Self.FK_PRFile_PR_Mst">
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+            <End Role="PRFile" EntitySet="PRFile" />
           </AssociationSet>
           <AssociationSet Name="FK_RoleMenuMapping_mst_Menu_mst" Association="Self.FK_RoleMenuMapping_mst_Menu_mst">
             <End Role="Menu_mst" EntitySet="Menu_mst" />
@@ -663,6 +686,11 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
             <Parameter Name="FromDate" Mode="In" Type="DateTime" />
             <Parameter Name="ToDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="PRFiles" EntityType="Domi_PurModel.PRFile" />
+          <AssociationSet Name="FK_PRFile_PR_Mst" Association="Domi_PurModel.FK_PRFile_PR_Mst">
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+            <End Role="PRFile" EntitySet="PRFiles" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -834,6 +862,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Name="GrandAmt" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="AccountCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="HODComment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="FileId" Type="Int32" />
+          <NavigationProperty Name="PRFiles" Relationship="Domi_PurModel.FK_PRFile_PR_Mst" FromRole="PR_Mst" ToRole="PRFile" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1107,6 +1137,28 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <Property Type="String" Name="CreateByPO" Nullable="true" MaxLength="50" />
           <Property Type="DateTime" Name="CreateDatePO" Nullable="true" Precision="23" />
         </ComplexType>
+        <EntityType Name="PRFile">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="Int32" Nullable="false" />
+          <Property Name="PrMstId" Type="Int32" />
+          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FilePath" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PRFile_PR_Mst" FromRole="PRFile" ToRole="PR_Mst" />
+        </EntityType>
+        <Association Name="FK_PRFile_PR_Mst">
+          <End Type="Domi_PurModel.PR_Mst" Role="PR_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PRFile" Role="PRFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PR_Mst">
+              <PropertyRef Name="PRId" />
+            </Principal>
+            <Dependent Role="PRFile">
+              <PropertyRef Name="PrMstId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1250,6 +1302,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
                 <ScalarProperty Name="HODComment" ColumnName="HODComment" />
                 <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
                 <ScalarProperty Name="GrandAmt" ColumnName="GrandAmt" />
@@ -1437,6 +1490,16 @@ warning 6002: The table/view 'Domi_Pur.dbo.SubMenu_mst' does not have a primary 
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="PRFiles">
+            <EntityTypeMapping TypeName="Domi_PurModel.PRFile">
+              <MappingFragment StoreEntitySet="PRFile">
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="PrMstId" ColumnName="PrMstId" />
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

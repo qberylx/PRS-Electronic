@@ -215,6 +215,9 @@
     <Compile Include="ModelData\PO_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\PRFile.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\PRType_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -2357,6 +2360,7 @@
     <Content Include="Views\Purchase\UOMmaster.cshtml" />
     <Content Include="Views\Main\Index.cshtml" />
     <Content Include="Views\Main\iFrame.cshtml" />
+    <Content Include="Views\Purchase\UploadQuoList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

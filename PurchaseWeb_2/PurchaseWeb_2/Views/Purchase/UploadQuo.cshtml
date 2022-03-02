@@ -47,6 +47,8 @@
 
 
             <br />
+            @{ Html.RenderAction("UploadQuoList", "Purchase", new { PrMstId = ViewBag.PurMasterID });}
+            <!--
             <table class="table">
                 <tbody>
                     <tr>
@@ -59,6 +61,7 @@
                     </tr>
                 </tbody>
             </table>
+            -->
         </div>
         <!-- /.card-body -->
     </div>

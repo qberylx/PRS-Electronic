@@ -18,6 +18,7 @@ namespace PurchaseWeb_2.ModelData
         public PR_Mst()
         {
             this.PR_Details = new HashSet<PR_Details>();
+            this.PRFiles = new HashSet<PRFile>();
         }
     
         public int PRId { get; set; }
@@ -41,6 +42,7 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<decimal> GrandAmt { get; set; }
         public string AccountCode { get; set; }
         public string HODComment { get; set; }
+        public Nullable<int> FileId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }
@@ -48,5 +50,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual Usr_mst Usr_mst { get; set; }
         public virtual Status_Mst Status_Mst { get; set; }
         public virtual PRType_mst PRType_mst { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PRFile> PRFiles { get; set; }
     }
 }
