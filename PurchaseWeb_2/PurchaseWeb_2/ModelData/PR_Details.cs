@@ -56,6 +56,10 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<int> EstCurrId { get; set; }
         public Nullable<decimal> EstimateUnitPrice { get; set; }
         public Nullable<bool> PoFlag { get; set; }
+        public string UOMName { get; set; }
+        public string VendorCode { get; set; }
+        public string AccGroup { get; set; }
+        public string CurCode { get; set; }
     
         public virtual PR_Mst PR_Mst { get; set; }
         public virtual UOM_mst UOM_mst { get; set; }

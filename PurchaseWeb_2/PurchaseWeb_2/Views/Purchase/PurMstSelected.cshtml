@@ -95,6 +95,8 @@
                                     <input type="submit" value="Update Account No" id="btnSaveAcc" name="btnSaveAcc" class="btn btn-primary">
                                 </div>
                             </div>
+
+                            <hr />
                         }
                     }
 
@@ -116,6 +118,88 @@
                             @Html.DisplayFor(model => model.Usr_mst.TelExt)
                         </div>
                     </div>
+                    <br />
+                    @if (Model.PRTypeId == 4)
+                    {
+                        <div class="row">
+                            <div class="col-md-4">
+                                <strong>Purpose</strong><br />
+                                @Html.DisplayFor(model => model.Purpose)
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Remarks</strong><br />
+                                @Html.DisplayFor(model => model.Remarks)
+                            </div>
+                            <div class="col-md-4">
+                                @if (Model.AssetFlag == 1)
+                                {
+                                    <p>New asset</p>
+                                    if (Model.CPRF == "")
+                                    {<span style="color:red ; font-size:small">PR has tag CPRF without CPRF NO. Please enter CPRF no.</span>}
+                                    else
+                                    { <strong>CPRF NO :</strong> @Html.DisplayFor(model => model.CPRF); }
+                                }
+                                else if (Model.AssetFlag == 2)
+                                {
+                                    <p>Improve or add on to the existing assets</p>
+                                    if (Model.CPRF == "")
+                                    {<p class="error">PR has tag without CPRF NO. Please enter CPRF no.</p>}
+                                    else
+                                    { Html.DisplayFor(model => model.CPRF); }
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.PRTypeId == 4)
+                    {
+                        using (Ajax.BeginForm("SavePrAsset", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurChaseMasterSelected" }))
+                        {
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <strong>Purpose</strong> <br />
+                                    <textarea id="Purpose" name="Purpose" placeholder="Purpose" class="form-control"></textarea> <br />
+                                </div>
+                                <div class="col-md-4">
+                                    <strong>Remarks </strong> <br />
+                                    <textarea id="Remarks" name="Remarks" placeholder="Remarks" class="form-control"></textarea>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="custom-control custom-switch">
+                                        <input type="hidden" id="CPRFflag" name="CPRFflag" value="0" />
+                                        <input type="checkbox" class="custom-control-input" id="cSCprf" name="cSCprf" onchange="cSCprfChange()" >
+                                        <label class="custom-control-label" for="cSCprf">Is this PR for CPRF?</label>
+                                    </div>
+                                    <hr />
+
+                                    <div id="divRdAsset" style="display:none">
+                                        <div class="custom-control custom-radio">
+                                            <input type="hidden" id="chkNewAsset" name="chkNewAsset" value="0" />
+                                            <input class="custom-control-input" type="radio" id="customRadio1" name="RdAsset" onclick="newAsset()" checked="checked">
+                                            <label for="customRadio1" class="custom-control-label">New asset</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="hidden" id="chkExtAsset" name="chkExtAsset" value="0" />
+                                            <input class="custom-control-input" type="radio" id="customRadio2" name="RdAsset" onclick="extAsset()">
+                                            <label for="customRadio2" class="custom-control-label">Improve or add on to the existing assets</label>
+                                        </div>
+
+                                        <strong>CPRF NO.:</strong>
+                                        <input type="text" id="CPRF" name="CPRF" value="" />
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <input type="hidden" value="@ViewBag.PrMStId" id="AssetPrMStId" name="AssetPrMStId" />
+                                <button class="btn btn-primary " type="submit">Save</button>
+                            </div>
+                        }
+
+                    }
 
                 </div>
             </div>
@@ -124,3 +208,43 @@
     </div>
 
 </div>
+
+<script>
+    function cSCprfChange() {
+        if ($("#cSCprf").is(":checked")) {
+            $("#divRdAsset").show();
+            $("#CPRFflag").val("1");
+            $("#chkNewAsset").val("1");
+        }
+        else {
+            $("#divRdAsset").hide();
+            $("#CPRFflag").val("0");
+            $("#chkNewAsset").val("0");
+            $("#chkExtAsset").val("0");
+        }
+    }
+
+    function extAsset() {
+        if ($("#customRadio1").is(":checked")) {
+            $("#customRadio1").val("1");
+            $("#customRadio2").val("0");
+        } 
+    }
+
+    function newAsset() {
+        if ($("#customRadio1").is(":checked")) {
+            $("#customRadio1").val("0");
+            $("#customRadio2").val("1");
+        }
+    }
+
+    $('form1').on('submit', function () {
+        // do validation here
+        alert("sini");
+        return false;
+        /*
+        if ( not valid )
+            return false;
+        */
+    });
+</script>

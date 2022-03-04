@@ -61,24 +61,34 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                <div id="divDesc">
+                                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>                                
                                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.DomiPartNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <label class="control-label col-md-10">Domi. Part No.</label>
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.DomiPartNo, new { htmlAttributes = new { @class = "form-control" } })
+                                <select class="fstdropdown-select form-control-border" id="DomiPartNo" name="DomiPartNo" onchange="domiChange(this.value)">
+                                    <option value="">Select option</option>
+                                    @foreach (var domi in ViewBag.domipartlist)
+                                    {
+                                        <option value="@domi.ITEMNO">@domi.ITEMNO</option>
+                                    }
+                                </select>
                                 @Html.ValidationMessageFor(model => model.DomiPartNo, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.VendorName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <label class="control-label col-md-10">Vendor Part No.</label>
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.VendorName, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.VendorName, "", new { @class = "text-danger" })
+                                <div id="divVendorPartNo">
+                                    @Html.EditorFor(model => model.VendorPartNo, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.VendorPartNo, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
@@ -89,21 +99,23 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
-                                <input type="text" id="Qty" name="Qty" class="form-control" placeholder="0.00" value=""/>
-                                 @*@Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control" } })*@
+                                <input type="text" id="Qty" name="Qty" class="form-control" placeholder="0.00" value="" />
+                                @*@Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control" } })*@
                                 @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.UOMId, "UOMId", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <label class="control-label col-md-10">UOM</label>
                             <div class="col-md-10">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        @Html.DropDownList("UOMId",
-                                           new SelectList(ViewBag.UOMList, "UOMId", "UOMName"),
+                                        <div id="divUOM">
+                                            @Html.DropDownList("UOMName",
+                                           new SelectList(ViewBag.UOMList, "UNIT", "UNIT"),
                                            "Please Select the UOM",
                                            new { @class = "custom-select form-control-border" })
+                                        </div>
                                     </div>
 
                                 </div>
@@ -112,12 +124,12 @@
                             </div>
                         </div>
 
-                        
+
 
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.ReqDevDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <label class="control-label col-md-10">Req. Delivery Date</label>
                             <div class="col-md-10">
                                 @Html.EditorFor(model => model.ReqDevDate, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.ReqDevDate, "", new { @class = "text-danger" })
@@ -198,6 +210,7 @@
 <script>
     $(function () {
         $('input#Qty').blur(function () {
+            var textAmt = (this.value).replace(/,/g, "");
             var amt = parseFloat(this.value);
             $(this).val(amt.toFixed(2));
         });
@@ -209,3 +222,59 @@
 <div>
     @Html.ActionLink("Return To Main PR", "PurRequest", "Purchase", null, new { @class = "btn btn-primary" })
 </div>
+
+<script>
+
+    function domiChange(itemno) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("callVendorpart","Purchase")",
+            data: '{itemno: "' + itemno + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divVendorPartNo').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("callUOM","Purchase")",
+            data: '{itemno: "' + itemno + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divUOM').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("callDesc","Purchase")",
+            data: '{itemno: "' + itemno + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divDesc').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    };
+</script>

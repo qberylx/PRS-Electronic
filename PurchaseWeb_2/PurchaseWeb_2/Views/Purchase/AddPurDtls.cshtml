@@ -36,7 +36,7 @@
         <div class="card card-primary">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-2 ">
+                    <div class="col-md-10 ">
                         <h3 class="card-title vertical-center">Purchase Request Details</h3>
                     </div>
                     <!--
@@ -58,14 +58,26 @@
             @Html.HiddenFor(model => model.TypePRId, new { @Value = ViewBag.PRTypeId })
 
 
-            <div class="card-body">
+            <div class="card-body" id="domiForm1">
                 <div class="row">
                     <!--first column-->
                     <div class="col-md-4">
-                        <div class="form-group">
+                        <div class="form-group" id="domiForm">
                             <label class="control-label col-md-10">Domi. Part No.</label>
-                            <div class="col-md-10">
+                            <div class="col-md-10" >
+                                
+
+                                <select class="fstdropdown-select form-control-border" id="DomiPartNo" name="DomiPartNo" onchange="domiChange(this.value)" >
+                                    <option value="">Select option</option>
+                                    @foreach (var domi in ViewBag.domipartlist)
+                                    {
+                                        <option value="@domi.ITEMNO">@domi.ITEMNO</option>
+                                    }
+                                </select>
+                                
+                                @*
                                 @Html.EditorFor(model => model.DomiPartNo, new { htmlAttributes = new { @class = "form-control" } })
+                                *@
                                 @Html.ValidationMessageFor(model => model.DomiPartNo, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -73,7 +85,9 @@
                         <div class="form-group">
                             <label class="control-label col-md-10">Vendor Part No.</label>
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.VendorPartNo, new { htmlAttributes = new { @class = "form-control" } })
+                                <div id="divVendorPartNo">
+                                    @Html.EditorFor(model => model.VendorPartNo, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>                                
                                 @Html.ValidationMessageFor(model => model.VendorPartNo, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -93,15 +107,17 @@
                             <div class="col-md-10">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        @Html.DropDownList("UOMId",
-                                           new SelectList(ViewBag.UOMList, "UOMId", "UOMName"),
+                                        <div id="divUOM">
+                                            @Html.DropDownList("UOMName",
+                                           new SelectList(ViewBag.UOMList, "UNIT", "UNIT"),
                                            "Please Select the UOM",
                                            new { @class = "custom-select form-control-border" })
+                                        </div>
                                     </div>
 
                                 </div>
 
-                                @Html.ValidationMessageFor(model => model.UOMId, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.UOMName, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
@@ -215,3 +231,44 @@
 <div>
     @Html.ActionLink("Return To Main PR", "PurRequest", "Purchase", null, new { @class = "btn btn-primary" })
 </div>
+
+
+
+<script>
+    
+    function domiChange(itemno) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("callVendorpart","Purchase")",
+            data: '{itemno: "' + itemno + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divVendorPartNo').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("callUOM","Purchase")",
+            data: '{itemno: "' + itemno + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divUOM').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    };
+</script>

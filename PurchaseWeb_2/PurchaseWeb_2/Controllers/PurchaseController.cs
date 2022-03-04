@@ -18,6 +18,7 @@ namespace PurchaseWeb_2.Controllers
     public class PurchaseController : Controller
     {
         Domi_PurEntities db = new Domi_PurEntities();
+        dom1Entities dbDom1 = new dom1Entities();
         // GET: Purchase
         public ActionResult Index()
         {
@@ -248,8 +249,13 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.PrNo = purMstr.PRNo;
             ViewBag.PrTypeID = purMstr.PRTypeId;
 
-            var UomList = db.UOM_mst.ToList();
+            var UomList = dbDom1.ICUCODs.ToList();
             ViewBag.UOMList = UomList;
+
+            // get from sage the domipartno
+            var domipartlist = dbDom1.POVUPRs.ToList();
+
+            ViewBag.domipartlist = domipartlist;
 
             return View("AddPurDtls");
         }
@@ -274,14 +280,24 @@ namespace PurchaseWeb_2.Controllers
                     DomiPartNo = pR_.DomiPartNo,
                     VendorPartNo = pR_.VendorPartNo,
                     Qty = pR_.Qty,
-                    UOMId = pR_.UOMId,
+                    //UOMId = pR_.UOMId,
                     ReqDevDate = pR_.ReqDevDate,
                     Device = pR_.Device,
                     SalesOrder = pR_.SalesOrder,
                     Remarks = pR_.Remarks,
                     Description = "-",
-                    VendorName = "-",
-                    EstimateUnitPrice = 0.00M
+                    VendorName = pR_.VendorName,
+                    EstimateUnitPrice = 0.00M,
+                    UnitPrice = pR_.UnitPrice,
+                    VendorCode = pR_.VendorCode,
+                    UOMName = pR_.UOMName,
+                    TotCostnoTax = (decimal)pR_.UnitPrice * (decimal)pR_.Qty,
+                    Tax = 0,
+                    TotCostWitTax = (decimal)pR_.UnitPrice * (decimal)pR_.Qty ,
+                    TaxCode = "SSTG",
+                    TaxClass = 1,
+                    CurCode = pR_.CurCode,
+                    AccGroup = pR_.AccGroup
                 });
                 db.SaveChanges();
             }
@@ -311,6 +327,48 @@ namespace PurchaseWeb_2.Controllers
             return RedirectToAction("PurDtlsList","Purchase", new { PrMstId = pR_.PRid });
         }
 
+        public ActionResult callVendorpart(String itemno)
+        {
+            var vendorpart = dbDom1.ICITMVs
+                .Where(x => x.ITEMNO == itemno)
+                .FirstOrDefault();
+            if (vendorpart != null)
+            {
+                ViewBag.Vendorpart = vendorpart.VENDITEM;
+            }
+
+            return PartialView("callVendorpart");
+        }
+
+        public ActionResult callUOM(String itemno)
+        {
+            var UOM = dbDom1.POVUPRs
+                .Where(x => x.ITEMNO == itemno)
+                .FirstOrDefault();
+            if (UOM != null)
+            {
+                ViewBag.UOM = UOM.DEFBUNIT;
+                ViewBag.UnitPrice = UOM.BAMOUNT;
+                ViewBag.vdCode = UOM.VDCODE;
+                ViewBag.CurCode = UOM.APVEN.CURNCODE;
+                ViewBag.AccGroup = UOM.APVEN.IDGRP;
+                ViewBag.VdName = UOM.APVEN.SHORTNAME;
+            }
+            return PartialView("callUOM");
+        }
+
+        public ActionResult callDesc(String itemno)
+        {
+            var Desc = dbDom1.POVUPRs
+                .Where(x => x.ITEMNO == itemno)
+                .FirstOrDefault();
+            if (Desc != null)
+            {
+                ViewBag.Desc = Desc.VCPDESC;
+            }
+
+            return PartialView("callDesc");
+        }
         public ActionResult PurDtlsList(int PrMstId)
         {
             var PrDtlsList = db.PR_Details
@@ -400,6 +458,38 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.CCLvl2 = CCLvl2;
 
             return PartialView("PurMstSelected",purMstr);
+        }
+
+        //Saving PR CPRF 
+        public ActionResult SavePrAsset(int AssetPrMStId, String CPRFflag, String chkNewAsset , String chkExtAsset, String CPRF, String Purpose , String Remarks)
+        {
+            var PRMst = db.PR_Mst
+                .Where(x => x.PRId == AssetPrMStId)
+                .SingleOrDefault();
+            if (PRMst != null)
+            {
+                PRMst.Purpose = Purpose;
+                PRMst.Remarks = Remarks;
+                if (CPRFflag == "1")
+                {
+                    if (chkNewAsset == "1")
+                    {
+                        PRMst.AssetFlag = 1;
+                    }
+                    else
+                    {
+                        PRMst.AssetFlag = 2;
+                    }
+                    PRMst.CPRF = CPRF;
+                }
+                else
+                {
+                    PRMst.AssetFlag = 0;
+                }
+                db.SaveChanges();
+            }            
+
+            return RedirectToAction("PurMstSelected", "Purchase", new { PrMstId = AssetPrMStId });
         }
 
         // upload quo document to pur mst if any
@@ -511,8 +601,13 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.PrNo = purMstr.PRNo;
             ViewBag.PrTypeID = purMstr.PRTypeId;
 
-            var UomList = db.UOM_mst.ToList();
+            var UomList = dbDom1.ICUCODs.ToList();
             ViewBag.UOMList = UomList;
+
+            // get from sage the domipartno
+            var domipartlist = dbDom1.POVUPRs.ToList();
+
+            ViewBag.domipartlist = domipartlist;
 
             return View("AddPurDtlsType2");
         }
@@ -537,14 +632,24 @@ namespace PurchaseWeb_2.Controllers
                     DomiPartNo = pR_.DomiPartNo,
                     VendorPartNo = pR_.VendorPartNo,
                     Qty = pR_.Qty,
-                    UOMId = pR_.UOMId,
+                    //UOMId = pR_.UOMId,
                     ReqDevDate = pR_.ReqDevDate,
                     Device = pR_.Device,
                     SalesOrder = pR_.SalesOrder,
                     Remarks = pR_.Remarks,
                     Description = "-",
-                    VendorName = "-",
-                    EstimateUnitPrice = 0.00M
+                    VendorName = pR_.VendorName,
+                    EstimateUnitPrice = 0.00M,
+                    UnitPrice = pR_.UnitPrice,
+                    VendorCode = pR_.VendorCode,
+                    UOMName = pR_.UOMName,
+                    TotCostnoTax = (decimal)pR_.UnitPrice * (decimal)pR_.Qty,
+                    Tax = 0,
+                    TotCostWitTax = (decimal)pR_.UnitPrice * (decimal)pR_.Qty,
+                    TaxCode = "SSTG",
+                    TaxClass = 1,
+                    CurCode = pR_.CurCode,
+                    AccGroup = pR_.AccGroup
                 });
                 db.SaveChanges();
             }
@@ -583,8 +688,13 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.PrNo = purMstr.PRNo;
             ViewBag.PrTypeID = purMstr.PRTypeId;
 
-            var UomList = db.UOM_mst.ToList();
+            var UomList = dbDom1.ICUCODs.ToList();
             ViewBag.UOMList = UomList;
+
+            // get from sage the domipartno
+            var domipartlist = dbDom1.POVUPRs.ToList();
+
+            ViewBag.domipartlist = domipartlist;
 
             return View("AddPurDtlsType3");
         }
@@ -611,14 +721,24 @@ namespace PurchaseWeb_2.Controllers
                     DomiPartNo = pR_.DomiPartNo,
                     Description = pR_.Description,
                     Qty = pR_.Qty,
-                    UOMId = pR_.UOMId,
+                    //UOMId = pR_.UOMId,
                     ReqDevDate = pR_.ReqDevDate,
                     Remarks = pR_.Remarks,
                     VendorName = pR_.VendorName,
                     VendorPartNo = "-",
                     Device = "-",
                     SalesOrder = "-",
-                    EstimateUnitPrice = 0.00M
+                    EstimateUnitPrice = 0.00M,
+                    UnitPrice = pR_.UnitPrice,
+                    VendorCode = pR_.VendorCode,
+                    UOMName = pR_.UOMName,
+                    TotCostnoTax = (decimal)pR_.UnitPrice * (decimal)pR_.Qty,
+                    Tax = 0,
+                    TotCostWitTax = (decimal)pR_.UnitPrice * (decimal)pR_.Qty,
+                    TaxCode = "SSTG",
+                    TaxClass = 1,
+                    CurCode = pR_.CurCode,
+                    AccGroup = pR_.AccGroup
                 });
                 db.SaveChanges();
             }

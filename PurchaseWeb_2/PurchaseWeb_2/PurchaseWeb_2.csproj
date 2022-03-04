@@ -179,6 +179,12 @@
     <Compile Include="ModelData\AccTypeExpens.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\APVEN.cs">
+      <DependentUpon>SageDom1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\CSCCD.cs">
+      <DependentUpon>SageDom1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\Currency_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -203,6 +209,12 @@
     <Compile Include="ModelData\GetPOListbyDate_Result.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\ICITMV.cs">
+      <DependentUpon>SageDom1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\ICUCOD.cs">
+      <DependentUpon>SageDom1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\Lgn_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -211,6 +223,12 @@
     </Compile>
     <Compile Include="ModelData\Position_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\POVIA.cs">
+      <DependentUpon>SageDom1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\POVUPR.cs">
+      <DependentUpon>SageDom1.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\PO_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
@@ -232,6 +250,21 @@
     </Compile>
     <Compile Include="ModelData\RoleMenuMapping_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\SageDom1.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SageDom1.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\SageDom1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SageDom1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\SageDom1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SageDom1.edmx</DependentUpon>
     </Compile>
     <Compile Include="ModelData\Status_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
@@ -345,6 +378,16 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DomiPR.edmx</DependentUpon>
       <LastGenOutput>DomiPR.cs</LastGenOutput>
+    </Content>
+    <Content Include="ModelData\SageDom1.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SageDom1.edmx</DependentUpon>
+      <LastGenOutput>SageDom1.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ModelData\SageDom1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SageDom1.edmx</DependentUpon>
+      <LastGenOutput>SageDom1.cs</LastGenOutput>
     </Content>
     <Content Include="plugins\bootstrap-colorpicker\css\bootstrap-colorpicker.css" />
     <Content Include="plugins\bootstrap-colorpicker\css\bootstrap-colorpicker.min.css" />
@@ -1312,6 +1355,11 @@
     <Content Include="plugins\fontawesome-free\webfonts\fa-brands-400.svg" />
     <Content Include="plugins\fontawesome-free\webfonts\fa-regular-400.svg" />
     <Content Include="plugins\fontawesome-free\webfonts\fa-solid-900.svg" />
+    <Content Include="plugins\fstdropdown\fstdropdown.css" />
+    <Content Include="plugins\fstdropdown\fstdropdown.js" />
+    <Content Include="plugins\fstdropdown\fstdropdown.min.css" />
+    <Content Include="plugins\fstdropdown\fstdropdown.min.js" />
+    <Content Include="plugins\fstdropdown\index.html" />
     <Content Include="plugins\fullcalendar\LICENSE.txt" />
     <Content Include="plugins\fullcalendar\locales-all.js" />
     <Content Include="plugins\fullcalendar\locales-all.min.js" />
@@ -2271,6 +2319,16 @@
     <Content Include="ModelData\DomiPR.edmx.diagram">
       <DependentUpon>DomiPR.edmx</DependentUpon>
     </Content>
+    <EntityDeploy Include="ModelData\SageDom1.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SageDom1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="ModelData\SageDom1.edmx.diagram">
+      <DependentUpon>SageDom1.edmx</DependentUpon>
+    </Content>
+    <Content Include="plugins\fstdropdown\.gitignore" />
+    <Content Include="plugins\fstdropdown\LICENSE" />
+    <Content Include="plugins\fstdropdown\README.md" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\dataTables.bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2361,6 +2419,9 @@
     <Content Include="Views\Main\Index.cshtml" />
     <Content Include="Views\Main\iFrame.cshtml" />
     <Content Include="Views\Purchase\UploadQuoList.cshtml" />
+    <Content Include="Views\Purchase\callVendorpart.cshtml" />
+    <Content Include="Views\Purchase\callUOM.cshtml" />
+    <Content Include="Views\Purchase\callDesc.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -65,6 +65,10 @@ namespace PurchaseWeb_2.Models
         [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Valid Decimal number with maximum 2 decimal places.")]
         public decimal EstimateUnitPrice { get; set; }
         public bool PoFlag { get; set; }
+        public string UOMName { get; set; }
+        public string VendorCode { get; set; }
+        public string AccGroup { get; set; }
+        public string CurCode { get; set; }
 
 
         public virtual PR_Mst PR_Mst { get; set; }

@@ -118,13 +118,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="UserId" Type="int" />
           <Property Name="UserName" Type="varchar" MaxLength="50" />
           <Property Name="DepartmentName" Type="varchar" MaxLength="50" />
-          <Property Name="Description" Type="varchar" MaxLength="300" />
+          <Property Name="Description" Type="varchar(max)" />
           <Property Name="DomiPartNo" Type="varchar" MaxLength="50" />
           <Property Name="VendorPartNo" Type="varchar" MaxLength="50" />
           <Property Name="Qty" Type="decimal" Precision="18" Scale="2" />
           <Property Name="UOMId" Type="int" />
           <Property Name="ReqDevDate" Type="date" />
-          <Property Name="Remarks" Type="varchar" MaxLength="300" />
+          <Property Name="Remarks" Type="varchar(max)" />
           <Property Name="Device" Type="varchar" MaxLength="100" />
           <Property Name="SalesOrder" Type="varchar" MaxLength="50" />
           <Property Name="VendorName" Type="varchar" MaxLength="50" />
@@ -146,6 +146,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="ModifiedUser" Type="int" />
+          <Property Name="UOMName" Type="varchar" MaxLength="50" />
+          <Property Name="VendorCode" Type="varchar" MaxLength="50" />
+          <Property Name="AccGroup" Type="varchar" MaxLength="10" />
+          <Property Name="CurCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -173,6 +177,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="AccountCode" Type="varchar" MaxLength="50" />
           <Property Name="HODComment" Type="varchar" MaxLength="300" />
           <Property Name="FileId" Type="int" />
+          <Property Name="Purpose" Type="varchar(max)" />
+          <Property Name="Remarks" Type="varchar(max)" />
+          <Property Name="CPRF" Type="varchar" MaxLength="50" />
+          <Property Name="AssetFlag" Type="int" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -797,13 +805,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="UserId" Type="Int32" />
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="DepartmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DomiPartNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="VendorPartNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Qty" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="UOMId" Type="Int32" />
           <Property Name="ReqDevDate" Type="DateTime" Precision="0" />
-          <Property Name="Remarks" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="VendorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CurrId" Type="Int32" />
           <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="5" />
@@ -831,6 +839,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <NavigationProperty Name="Currency_Mst1" Relationship="Domi_PurModel.FK_PR_Details_Currency_Mst1" FromRole="PR_Details" ToRole="Currency_Mst" />
           <Property Name="PoFlag" Type="Boolean" />
           <NavigationProperty Name="PR_VendorComparison" Relationship="Domi_PurModel.FK_PR_VendorComparison_PR_Details" FromRole="PR_Details" ToRole="PR_VendorComparison" />
+          <Property Name="UOMName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VendorCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AccGroup" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CurCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -864,6 +876,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="HODComment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="FileId" Type="Int32" />
           <NavigationProperty Name="PRFiles" Relationship="Domi_PurModel.FK_PRFile_PR_Mst" FromRole="PR_Mst" ToRole="PRFile" />
+          <Property Name="Purpose" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CPRF" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AssetFlag" Type="Int32" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1260,6 +1276,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySetMapping Name="PR_Details">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Details">
               <MappingFragment StoreEntitySet="PR_Details">
+                <ScalarProperty Name="CurCode" ColumnName="CurCode" />
+                <ScalarProperty Name="AccGroup" ColumnName="AccGroup" />
+                <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
+                <ScalarProperty Name="UOMName" ColumnName="UOMName" />
                 <ScalarProperty Name="PoFlag" ColumnName="PoFlag" />
                 <ScalarProperty Name="EstimateUnitPrice" ColumnName="EstimateUnitPrice" />
                 <ScalarProperty Name="EstCurrId" ColumnName="EstCurrId" />
@@ -1302,6 +1322,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="AssetFlag" ColumnName="AssetFlag" />
+                <ScalarProperty Name="CPRF" ColumnName="CPRF" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Purpose" ColumnName="Purpose" />
                 <ScalarProperty Name="FileId" ColumnName="FileId" />
                 <ScalarProperty Name="HODComment" ColumnName="HODComment" />
                 <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />

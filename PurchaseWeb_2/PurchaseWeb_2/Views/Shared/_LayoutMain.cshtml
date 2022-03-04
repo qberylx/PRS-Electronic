@@ -3,7 +3,7 @@
 <html>
 @{string sUsername = (string)Session["Username"];}
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>@ViewBag.Title</title>
 
     <!-- Google Font: Source Sans Pro -->
@@ -31,7 +31,8 @@
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
-    
+
+
     <!-- REQUIRED SCRIPTS -->
     <!-- jQuery -->
     <script src="~/plugins/jquery/jquery.min.js"></script>
@@ -68,10 +69,18 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="~/dist/js/pages/dashboard.js"></script>
 
-</head>
-<body class="hold-transition sidebar-mini layout-fixed">
+    <!--Select2.js-->
+    <link rel="stylesheet" href="~/plugins/select2/css/select2.css">
+    <script src="~/plugins/select2/js/select2.js"></script>
 
-    <div class="wrapper">
+    <!--fstdropdown-->
+    <script src="~/plugins/fstdropdown/fstdropdown.js"></script>
+    <link rel="stylesheet" href="~/plugins/fstdropdown/fstdropdown.css">
+
+</head>
+<body class="sidebar-mini sidebar-collapse" style="height: auto; min-height: 100%;">
+
+    <div class="wrapper" style="height: auto; min-height: 100%;">
 
         <!-- Preloader -->
         <!--
@@ -79,7 +88,6 @@
             <img class="animation__shake" src="~/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
         </div>
         -->
-
         <!--Navbar-->
         @{ Html.RenderAction("RenderMainHeader", "Account"); }
 
@@ -92,7 +100,7 @@
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
-                     @RenderBody()
+                    @RenderBody()
                 </div><!-- /.container-fluid -->
             </section>
             <!-- /.content -->
@@ -109,9 +117,11 @@
         </footer>
     </div>
     <!-- ./wrapper -->
- 
+
 
 </body>
 </html>
+
+
 
 
