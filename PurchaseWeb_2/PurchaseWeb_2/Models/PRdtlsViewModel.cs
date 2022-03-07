@@ -60,15 +60,17 @@ namespace PurchaseWeb_2.Models
         [Required(ErrorMessage = "Please enter the sales order ")]
         public string SalesOrder { get; set; }
         public int EstCurrId { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
+        [Column(TypeName = "decimal(18,5)")]
         [Required(ErrorMessage = "Please enter estimate Unit Price")]
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Valid Decimal number with maximum 2 decimal places.")]
+        //[RegularExpression(@"^\d+(\.\d{1,2,3,4,5})?$", ErrorMessage = "Valid Decimal number with maximum 5 decimal places.")]
         public decimal EstimateUnitPrice { get; set; }
         public bool PoFlag { get; set; }
         public string UOMName { get; set; }
         public string VendorCode { get; set; }
         public string AccGroup { get; set; }
         public string CurCode { get; set; }
+
+        public decimal EstTotalPrice { get; set; }
 
 
         public virtual PR_Mst PR_Mst { get; set; }

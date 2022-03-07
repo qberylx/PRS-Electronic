@@ -180,9 +180,14 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.PRId == PrMstId)
                 .FirstOrDefault();
 
+            var files = db.PRFiles
+                .Where(x => x.PrMstId == PrMstId)
+                .ToList();
 
-            ViewBag.Filename = prMst.FIleName;
-            ViewBag.Filepath = prMst.FilePath + prMst.FIleName;
+
+            ViewBag.Files = files;
+            //ViewBag.Filename = files.FileName;
+            //ViewBag.Filepath = files.FilePath + files.FileName;
 
             return PartialView("PurMstViewSelected", prMst);
         }
@@ -777,10 +782,10 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.PrNo = purMstr.PRNo;
             ViewBag.PrTypeID = purMstr.PRTypeId;
 
-            var UomList = db.UOM_mst.ToList();
+            var UomList = dbDom1.ICUCODs.ToList();
             ViewBag.UOMList = UomList;
 
-            var CurrList = db.Currency_Mst.ToList();
+            var CurrList = dbDom1.CSCCDs.ToList();
             ViewBag.CurrList = CurrList;
 
             return View("AddPurDtlsType4");
@@ -806,15 +811,21 @@ namespace PurchaseWeb_2.Controllers
                     DomiPartNo = "-",
                     Description = pR_.Description,
                     Qty = pR_.Qty,
-                    UOMId = pR_.UOMId,
+                    //UOMId = pR_.UOMId,
                     ReqDevDate = pR_.ReqDevDate,
                     Remarks = "-",
                     VendorName = "-",
                     VendorPartNo = pR_.VendorPartNo,
                     Device = "-",
                     SalesOrder = "-",
-                    EstCurrId = pR_.EstCurrId,
-                    EstimateUnitPrice = pR_.EstimateUnitPrice
+                    //EstCurrId = pR_.EstCurrId,
+                    EstimateUnitPrice = pR_.EstimateUnitPrice,
+                    EstTotalPrice = pR_.EstimateUnitPrice * pR_.Qty,
+                    UOMName = pR_.UOMName,
+                    CurCode = pR_.CurCode,
+                    Tax = 0,
+                    TaxCode = "SSTG",
+                    TaxClass = 1
                 });
                 db.SaveChanges();
             }

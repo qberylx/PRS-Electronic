@@ -77,8 +77,13 @@
     <script src="~/plugins/fstdropdown/fstdropdown.js"></script>
     <link rel="stylesheet" href="~/plugins/fstdropdown/fstdropdown.css">
 
+    <style>
+        .zoomedElement {
+            zoom: 90%;
+        }
+    </style>
 </head>
-<body class="sidebar-mini sidebar-collapse" style="height: auto; min-height: 100%;">
+<body class="sidebar-mini sidebar-collapse zoomedElement" style="height: auto; min-height: 100%;">
 
     <div class="wrapper" style="height: auto; min-height: 100%;">
 
@@ -94,7 +99,7 @@
         <!--Mainsidebar-->
         @{ Html.RenderAction("RenderSlidebar", "Account"); }
 
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="min-height: 914.816px !important;">
             <!-- Content Header (Page header) -->
             <!-- /.content-header -->
             <!-- Main content -->

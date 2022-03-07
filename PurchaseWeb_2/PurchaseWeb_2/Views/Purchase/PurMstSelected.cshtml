@@ -133,7 +133,7 @@
                             <div class="col-md-4">
                                 @if (Model.AssetFlag == 1)
                                 {
-                                    <p>New asset</p>
+                                    <p><i>New asset</i></p>
                                     if (Model.CPRF == "")
                                     {<span style="color:red ; font-size:small">PR has tag CPRF without CPRF NO. Please enter CPRF no.</span>}
                                     else
@@ -141,11 +141,11 @@
                                 }
                                 else if (Model.AssetFlag == 2)
                                 {
-                                    <p>Improve or add on to the existing assets</p>
+                                    <p><i>Improve or add on to the existing assets</i></p>
                                     if (Model.CPRF == "")
                                     {<p class="error">PR has tag without CPRF NO. Please enter CPRF no.</p>}
                                     else
-                                    { Html.DisplayFor(model => model.CPRF); }
+                                    { <strong>CPRF NO :</strong> @Html.DisplayFor(model => model.CPRF); }
                                 }
                             </div>
                         </div>
@@ -159,11 +159,11 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <strong>Purpose</strong> <br />
-                                    <textarea id="Purpose" name="Purpose" placeholder="Purpose" class="form-control"></textarea> <br />
+                                    <textarea id="Purpose" name="Purpose" placeholder="Purpose" class="form-control" value="@Model.Purpose"></textarea> <br />
                                 </div>
                                 <div class="col-md-4">
                                     <strong>Remarks </strong> <br />
-                                    <textarea id="Remarks" name="Remarks" placeholder="Remarks" class="form-control"></textarea>
+                                    <textarea id="Remarks" name="Remarks" placeholder="Remarks" class="form-control" value="@Model.Remarks"></textarea>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="custom-control custom-switch">
@@ -186,7 +186,7 @@
                                         </div>
 
                                         <strong>CPRF NO.:</strong>
-                                        <input type="text" id="CPRF" name="CPRF" value="" />
+                                        <input type="text" id="CPRF" name="CPRF" value="@Model.CPRF" />
                                     </div>
 
 

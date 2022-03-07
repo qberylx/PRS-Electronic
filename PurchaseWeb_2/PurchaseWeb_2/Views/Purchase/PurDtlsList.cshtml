@@ -13,7 +13,7 @@
         -->
     </div>
     <div class="card-body table-responsive p-0" style="height: 300px;">
-        
+
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-head-fixed text-nowrap table-striped table-responsive table-md">
@@ -64,13 +64,13 @@
                                 @Html.DisplayNameFor(model => model.Qty)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.UOM_mst.UOMName)
+                                UOM
                             </th>
                             <th>
                                 Req. Delivery Date
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Currency_Mst.Kod)
+                                Currency
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.EstimateUnitPrice)
@@ -166,7 +166,10 @@
                                     @i
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Description)
+                                    @*
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    *@
+                                    @Html.Raw(item.Description.Replace(Environment.NewLine, "<br/>"))
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.VendorPartNo)
@@ -175,14 +178,14 @@
                                     @Html.DisplayFor(modelItem => item.Qty)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.UOM_mst.UOMName)
+                                    @Html.DisplayFor(modelItem => item.UOMName)
                                 </td>
                                 <td>
                                     @{ DateTime reqDevDate = (DateTime)item.ReqDevDate; }
                                     @reqDevDate.ToString("dd/MM/yyyy")
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Currency_Mst.Kod)
+                                    @Html.DisplayFor(modelItem => item.CurCode)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.EstimateUnitPrice)
@@ -249,6 +252,33 @@
         </div>
     </div>
     <!-- /.card-body -->
+    @if (ViewBag.PrTypeId == 4)
+    {
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-md-12">
+                    <table style="margin-right:0px;margin-left:auto;padding:4px">
+                        <tr>
+                            <td> <strong>Estimated Total Price :</strong></td>
+                            @foreach (var currency in Model.OrderBy(x => x.CurCode).GroupBy(x => x.CurCode))
+                            {
+                                <td style="padding-left:2em;padding-right:1em">
+                                    @currency.Max(x => x.CurCode)
+                                </td>
+                            }
+                            @foreach (var currency in Model.OrderBy(x => x.CurCode).GroupBy(x => x.CurCode))
+                            {
+                                <td>
+                                    @currency.Sum(x => x.EstTotalPrice)
+                                </td>
+                            }
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
 </div>
 
 

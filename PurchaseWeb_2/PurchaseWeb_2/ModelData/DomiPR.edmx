@@ -130,6 +130,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="VendorName" Type="varchar" MaxLength="50" />
           <Property Name="EstCurrId" Type="int" />
           <Property Name="EstimateUnitPrice" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="EstTotalPrice" Type="decimal" Precision="18" Scale="2" />
           <Property Name="CurrId" Type="int" />
           <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="5" />
           <Property Name="TotCostnoTax" Type="decimal" Precision="18" Scale="2" />
@@ -843,6 +844,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="VendorCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="AccGroup" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="CurCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EstTotalPrice" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -1276,6 +1278,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySetMapping Name="PR_Details">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Details">
               <MappingFragment StoreEntitySet="PR_Details">
+                <ScalarProperty Name="EstTotalPrice" ColumnName="EstTotalPrice" />
                 <ScalarProperty Name="CurCode" ColumnName="CurCode" />
                 <ScalarProperty Name="AccGroup" ColumnName="AccGroup" />
                 <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
