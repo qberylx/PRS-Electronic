@@ -1,0 +1,7 @@
+﻿<select class="fstdropdown-select form-control-border" id="VDCode" name="VDCode">
+    <option value="">Select option</option>
+    @foreach (var vd in ViewBag.vdLst)
+    {
+        <option value="@vd.VENDORID">@vd.VENDORID - @vd.SHORTNAME</option>
+    }
+</select>

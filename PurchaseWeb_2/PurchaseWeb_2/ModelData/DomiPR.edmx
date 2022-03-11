@@ -87,6 +87,26 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="Controller" Type="varchar" MaxLength="50" />
           <Property Name="Action" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="MonthlyBudget">
+          <Key>
+            <PropertyRef Name="BudgetId" />
+          </Key>
+          <Property Name="BudgetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepId" Type="int" />
+          <Property Name="Budget" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Balance" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="50" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="Month" Type="int" />
+          <Property Name="Year" Type="int" />
+        </EntityType>
+        <EntityType Name="Months">
+          <Key>
+            <PropertyRef Name="Month" />
+          </Key>
+          <Property Name="Month" Type="int" Nullable="false" />
+          <Property Name="MonthName" Type="varchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="PO_Mst">
           <Key>
             <PropertyRef Name="POId" />
@@ -182,6 +202,12 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="Remarks" Type="varchar(max)" />
           <Property Name="CPRF" Type="varchar" MaxLength="50" />
           <Property Name="AssetFlag" Type="int" />
+          <Property Name="AssetBudget" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AssetBal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="FlagUpdatedCPRF" Type="bit" />
+          <Property Name="FlagUpdateMonthlyBudget" Type="bit" />
+          <Property Name="PRGroupType" Type="int" />
+          <Property Name="HODPurComment" Type="varchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -189,6 +215,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           </Key>
           <Property Name="VCId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PRDtId" Type="int" />
+          <Property Name="VDCode" Type="varchar" MaxLength="50" />
           <Property Name="VCName" Type="varchar" MaxLength="50" />
           <Property Name="CurPrice" Type="decimal" Precision="18" Scale="2" />
           <Property Name="QuoteDate" Type="date" />
@@ -206,6 +233,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="TotCostWitTax" Type="decimal" Precision="18" Scale="2" />
           <Property Name="TaxCode" Type="varchar" MaxLength="10" />
           <Property Name="TaxClass" Type="int" />
+          <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DiscType" Type="int" />
+          <Property Name="CurRate" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="PRFile">
           <Key>
@@ -271,6 +301,30 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="Flag_Aproval" Type="bit" />
           <Property Name="TelExt" Type="varchar" MaxLength="10" />
         </EntityType>
+        <Association Name="FK_MonthlyBudget_AccTypeDept">
+          <End Role="AccTypeDept" Type="Self.AccTypeDept" Multiplicity="0..1" />
+          <End Role="MonthlyBudget" Type="Self.MonthlyBudget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDept">
+              <PropertyRef Name="AccTypeDepID" />
+            </Principal>
+            <Dependent Role="MonthlyBudget">
+              <PropertyRef Name="DepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Months">
+          <End Role="Months" Type="Self.Months" Multiplicity="0..1" />
+          <End Role="MonthlyBudget" Type="Self.MonthlyBudget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Months">
+              <PropertyRef Name="Month" />
+            </Principal>
+            <Dependent Role="MonthlyBudget">
+              <PropertyRef Name="Month" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PR_Details_Currency_Mst">
           <End Role="Currency_Mst" Type="Self.Currency_Mst" Multiplicity="0..1" />
           <End Role="PR_Details" Type="Self.PR_Details" Multiplicity="*" />
@@ -328,6 +382,18 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
             </Principal>
             <Dependent Role="PR_Details">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Mst_AccTypeDept">
+          <End Role="AccTypeDept" Type="Self.AccTypeDept" Multiplicity="0..1" />
+          <End Role="PR_Mst" Type="Self.PR_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDept">
+              <PropertyRef Name="AccTypeDepID" />
+            </Principal>
+            <Dependent Role="PR_Mst">
+              <PropertyRef Name="DepartmentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -427,6 +493,18 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Usr_mst_AccTypeDept">
+          <End Role="AccTypeDept" Type="Self.AccTypeDept" Multiplicity="0..1" />
+          <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDept">
+              <PropertyRef Name="AccTypeDepID" />
+            </Principal>
+            <Dependent Role="Usr_mst">
+              <PropertyRef Name="Dpt_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Usr_mst_Department_mst">
           <End Role="Department_mst" Type="Self.Department_mst" Multiplicity="0..1" />
           <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="*" />
@@ -474,6 +552,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySet Name="Currency_Mst" EntityType="Self.Currency_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department_mst" EntityType="Self.Department_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MonthlyBudget" EntityType="Self.MonthlyBudget" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Months" EntityType="Self.Months" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PO_Mst" EntityType="Self.PO_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Position_mst" EntityType="Self.Position_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Details" EntityType="Self.PR_Details" Schema="dbo" store:Type="Tables" />
@@ -493,6 +573,14 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
     [Lgn_mst].[Password] AS [Password]
     FROM [dbo].[Lgn_mst] AS [Lgn_mst]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_MonthlyBudget_AccTypeDept" Association="Self.FK_MonthlyBudget_AccTypeDept">
+            <End Role="AccTypeDept" EntitySet="AccTypeDept" />
+            <End Role="MonthlyBudget" EntitySet="MonthlyBudget" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Months" Association="Self.FK_MonthlyBudget_Months">
+            <End Role="Months" EntitySet="Months" />
+            <End Role="MonthlyBudget" EntitySet="MonthlyBudget" />
+          </AssociationSet>
           <AssociationSet Name="FK_PR_Details_Currency_Mst" Association="Self.FK_PR_Details_Currency_Mst">
             <End Role="Currency_Mst" EntitySet="Currency_Mst" />
             <End Role="PR_Details" EntitySet="PR_Details" />
@@ -512,6 +600,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <AssociationSet Name="FK_PR_Details_Usr_mst" Association="Self.FK_PR_Details_Usr_mst">
             <End Role="Usr_mst" EntitySet="Usr_mst" />
             <End Role="PR_Details" EntitySet="PR_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Mst_AccTypeDept" Association="Self.FK_PR_Mst_AccTypeDept">
+            <End Role="AccTypeDept" EntitySet="AccTypeDept" />
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
           </AssociationSet>
           <AssociationSet Name="FK_PR_Mst_Department_mst" Association="Self.FK_PR_Mst_Department_mst">
             <End Role="Department_mst" EntitySet="Department_mst" />
@@ -544,6 +636,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <AssociationSet Name="FK_RoleMenuMapping_mst_Position_mst" Association="Self.FK_RoleMenuMapping_mst_Position_mst">
             <End Role="Position_mst" EntitySet="Position_mst" />
             <End Role="RoleMenuMapping_mst" EntitySet="RoleMenuMapping_mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usr_mst_AccTypeDept" Association="Self.FK_Usr_mst_AccTypeDept">
+            <End Role="AccTypeDept" EntitySet="AccTypeDept" />
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
           </AssociationSet>
           <AssociationSet Name="FK_Usr_mst_Department_mst" Association="Self.FK_Usr_mst_Department_mst">
             <End Role="Department_mst" EntitySet="Department_mst" />
@@ -700,6 +796,24 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
             <End Role="PR_Mst" EntitySet="PR_Mst" />
             <End Role="PRFile" EntitySet="PRFiles" />
           </AssociationSet>
+          <AssociationSet Name="FK_Usr_mst_AccTypeDept" Association="Domi_PurModel.FK_Usr_mst_AccTypeDept">
+            <End Role="AccTypeDept" EntitySet="AccTypeDepts" />
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Mst_AccTypeDept" Association="Domi_PurModel.FK_PR_Mst_AccTypeDept">
+            <End Role="AccTypeDept" EntitySet="AccTypeDepts" />
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+          </AssociationSet>
+          <EntitySet Name="MonthlyBudgets" EntityType="Domi_PurModel.MonthlyBudget" />
+          <EntitySet Name="Months" EntityType="Domi_PurModel.Month" />
+          <AssociationSet Name="FK_MonthlyBudget_AccTypeDept" Association="Domi_PurModel.FK_MonthlyBudget_AccTypeDept">
+            <End Role="AccTypeDept" EntitySet="AccTypeDepts" />
+            <End Role="MonthlyBudget" EntitySet="MonthlyBudgets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Months" Association="Domi_PurModel.FK_MonthlyBudget_Months">
+            <End Role="Month" EntitySet="Months" />
+            <End Role="MonthlyBudget" EntitySet="MonthlyBudgets" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -724,6 +838,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <NavigationProperty Name="PR_Details" Relationship="Domi_PurModel.FK_PR_Details_Usr_mst" FromRole="Usr_mst" ToRole="PR_Details" />
           <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Mst_Usr_mst" FromRole="Usr_mst" ToRole="PR_Mst" />
           <Property Name="TelExt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccTypeDept" Relationship="Domi_PurModel.FK_Usr_mst_AccTypeDept" FromRole="Usr_mst" ToRole="AccTypeDept" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -882,6 +997,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CPRF" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="AssetFlag" Type="Int32" />
+          <NavigationProperty Name="AccTypeDept" Relationship="Domi_PurModel.FK_PR_Mst_AccTypeDept" FromRole="PR_Mst" ToRole="AccTypeDept" />
+          <Property Name="AssetBudget" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AssetBal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="FlagUpdatedCPRF" Type="Boolean" />
+          <Property Name="FlagUpdateMonthlyBudget" Type="Boolean" />
+          <Property Name="PRGroupType" Type="Int32" />
+          <Property Name="HODPurComment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1050,6 +1172,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="AccTypeDepID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DeptName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="DeptCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_Usr_mst_AccTypeDept" FromRole="AccTypeDept" ToRole="Usr_mst" />
+          <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Mst_AccTypeDept" FromRole="AccTypeDept" ToRole="PR_Mst" />
+          <NavigationProperty Name="MonthlyBudgets" Relationship="Domi_PurModel.FK_MonthlyBudget_AccTypeDept" FromRole="AccTypeDept" ToRole="MonthlyBudget" />
         </EntityType>
         <EntityType Name="AccTypeDivision">
           <Key>
@@ -1091,6 +1216,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="TotCostWitTax" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="TaxCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="TaxClass" Type="Int32" />
+          <Property Name="VDCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DiscType" Type="Int32" />
+          <Property Name="CurRate" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <Association Name="FK_PR_VendorComparison_PR_Details">
           <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="0..1" />
@@ -1174,6 +1303,77 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
             </Principal>
             <Dependent Role="PRFile">
               <PropertyRef Name="PrMstId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usr_mst_AccTypeDept">
+          <End Type="Domi_PurModel.AccTypeDept" Role="AccTypeDept" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.Usr_mst" Role="Usr_mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDept">
+              <PropertyRef Name="AccTypeDepID" />
+            </Principal>
+            <Dependent Role="Usr_mst">
+              <PropertyRef Name="Dpt_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PR_Mst_AccTypeDept">
+          <End Type="Domi_PurModel.AccTypeDept" Role="AccTypeDept" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PR_Mst" Role="PR_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDept">
+              <PropertyRef Name="AccTypeDepID" />
+            </Principal>
+            <Dependent Role="PR_Mst">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MonthlyBudget">
+          <Key>
+            <PropertyRef Name="BudgetId" />
+          </Key>
+          <Property Name="BudgetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepId" Type="Int32" />
+          <Property Name="Budget" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Balance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="Month" Type="Int32" />
+          <Property Name="Year" Type="Int32" />
+          <NavigationProperty Name="AccTypeDept" Relationship="Domi_PurModel.FK_MonthlyBudget_AccTypeDept" FromRole="MonthlyBudget" ToRole="AccTypeDept" />
+          <NavigationProperty Name="Month1" Relationship="Domi_PurModel.FK_MonthlyBudget_Months" FromRole="MonthlyBudget" ToRole="Month" />
+        </EntityType>
+        <EntityType Name="Month">
+          <Key>
+            <PropertyRef Name="Month1" />
+          </Key>
+          <Property Name="Month1" Type="Int32" Nullable="false" />
+          <Property Name="MonthName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="MonthlyBudgets" Relationship="Domi_PurModel.FK_MonthlyBudget_Months" FromRole="Month" ToRole="MonthlyBudget" />
+        </EntityType>
+        <Association Name="FK_MonthlyBudget_AccTypeDept">
+          <End Type="Domi_PurModel.AccTypeDept" Role="AccTypeDept" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.MonthlyBudget" Role="MonthlyBudget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDept">
+              <PropertyRef Name="AccTypeDepID" />
+            </Principal>
+            <Dependent Role="MonthlyBudget">
+              <PropertyRef Name="DepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Months">
+          <End Type="Domi_PurModel.Month" Role="Month" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.MonthlyBudget" Role="MonthlyBudget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Month">
+              <PropertyRef Name="Month1" />
+            </Principal>
+            <Dependent Role="MonthlyBudget">
+              <PropertyRef Name="Month" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1325,6 +1525,12 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="HODPurComment" ColumnName="HODPurComment" />
+                <ScalarProperty Name="PRGroupType" ColumnName="PRGroupType" />
+                <ScalarProperty Name="FlagUpdateMonthlyBudget" ColumnName="FlagUpdateMonthlyBudget" />
+                <ScalarProperty Name="FlagUpdatedCPRF" ColumnName="FlagUpdatedCPRF" />
+                <ScalarProperty Name="AssetBal" ColumnName="AssetBal" />
+                <ScalarProperty Name="AssetBudget" ColumnName="AssetBudget" />
                 <ScalarProperty Name="AssetFlag" ColumnName="AssetFlag" />
                 <ScalarProperty Name="CPRF" ColumnName="CPRF" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
@@ -1439,6 +1645,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySetMapping Name="PR_VendorComparison">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_VendorComparison">
               <MappingFragment StoreEntitySet="PR_VendorComparison">
+                <ScalarProperty Name="CurRate" ColumnName="CurRate" />
+                <ScalarProperty Name="DiscType" ColumnName="DiscType" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="VDCode" ColumnName="VDCode" />
                 <ScalarProperty Name="TaxClass" ColumnName="TaxClass" />
                 <ScalarProperty Name="TaxCode" ColumnName="TaxCode" />
                 <ScalarProperty Name="TotCostWitTax" ColumnName="TotCostWitTax" />
@@ -1524,6 +1734,28 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
                 <ScalarProperty Name="FileName" ColumnName="FileName" />
                 <ScalarProperty Name="PrMstId" ColumnName="PrMstId" />
                 <ScalarProperty Name="FileId" ColumnName="FileId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MonthlyBudgets">
+            <EntityTypeMapping TypeName="Domi_PurModel.MonthlyBudget">
+              <MappingFragment StoreEntitySet="MonthlyBudget">
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Budget" ColumnName="Budget" />
+                <ScalarProperty Name="DepId" ColumnName="DepId" />
+                <ScalarProperty Name="BudgetId" ColumnName="BudgetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Months">
+            <EntityTypeMapping TypeName="Domi_PurModel.Month">
+              <MappingFragment StoreEntitySet="Months">
+                <ScalarProperty Name="MonthName" ColumnName="MonthName" />
+                <ScalarProperty Name="Month1" ColumnName="Month" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -2,31 +2,31 @@
 
     @model IEnumerable<PurchaseWeb_2.ModelData.PR_VendorComparison>
 
-    <table class="table">
+    <table class="table table-sm table-responsive">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.VCName)
+                Vendor
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CurPrice)
+                Current Price
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.QuoteDate)
+                Quotation Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastPrice)
+                Last Price
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastQuoteDate)
+                Last Quotation Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PODate)
+                PO Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CostDown)
+                Cost Down
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FlagWin)
+                Winner
             </th>
 
             <th></th>
@@ -101,14 +101,16 @@
                 </td>
 
                 <td>
-                    @using (Ajax.BeginForm("VendorComparisonWinner", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPRDtlsListForPurchaserType4" }))
+                    @*@using (Ajax.BeginForm("VendorComparisonWinner", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPRDtlsForPurchaser" }))*@
+                    @using (Html.BeginForm("VendorComparisonWinner", "Purchase", FormMethod.Post, new { @class = "winform" }))
                     {
-                        <button class="btn btn-success"><i class="fa fa-check-circle"></i></button>
+                        <button class="btn btn-success" ><i class="fa fa-check-circle"></i></button>
                         <input type="hidden" value="@item.VCId" id="VCIdw" name="VCIdw" />
                     }
+
                 </td>
                 <td>
-                    @using (Ajax.BeginForm("VendorComparisonDelete", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPRDtlsListForPurchaserType4" }))
+                    @using (Ajax.BeginForm("VendorComparisonDelete", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divVDCompareLst_"+item.PRDtId+"" }))
                     {
                         <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
                         <input type="hidden" value="@item.VCId" id="VCIdDel" name="VCIdDel" />

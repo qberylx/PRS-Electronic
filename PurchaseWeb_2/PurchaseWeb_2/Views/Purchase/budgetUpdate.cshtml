@@ -1,0 +1,124 @@
+﻿@model PurchaseWeb_2.ModelData.PR_Mst
+
+@{
+    ViewBag.Title = "BudgetUpdate";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">PURCHASE REQUISITION</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <!--PR no-->
+                                <strong>PR No :</strong> @Html.DisplayFor(model => model.PRNo)
+                            </div>
+                            <div class="col-md-4">
+                                <!--PR type-->
+                                <strong>PR Type :</strong>@Html.DisplayFor(model => model.PRType_mst.Name)
+                            </div>
+                            <div class="col-md-4">
+                                <!--PR Account-->
+                                <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode)
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Requisition Date</strong> <br />
+                                @Html.DisplayFor(model => model.RequestDate)
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Requestor</strong> <br />
+                                @Html.DisplayFor(model => model.Usr_mst.Username)
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Department</strong> <br />
+                                @Html.DisplayFor(model => model.AccTypeDept.DeptName)
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Tel Ext.</strong> <br />
+                                @Html.DisplayFor(model => model.Usr_mst.TelExt)
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <strong>Purpose</strong><br />
+                                @Html.DisplayFor(model => model.Purpose)
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Remarks</strong><br />
+                                @Html.DisplayFor(model => model.Remarks)
+                            </div>
+                            <div class="col-md-4">
+                                @if (Model.AssetFlag == 1)
+                                {
+                                    <p><i><strong>New asset</strong></i></p>
+                                    if (Model.CPRF == "")
+                                    {<span style="color:red ; font-size:small">PR has tag CPRF without CPRF NO. Please enter CPRF no.</span>}
+                                    else
+                                    { <strong>CPRF NO :</strong> @Html.DisplayFor(model => model.CPRF);
+                                }
+                            }
+                            else if (Model.AssetFlag == 2)
+                            {
+                                <p><i><strong>Improve or add on to the existing assets</strong></i></p>
+                                if (Model.CPRF == "")
+                                {<p class="error">PR has tag without CPRF NO. Please enter CPRF no.</p>}
+                                else
+                                { <strong>CPRF NO :</strong> @Html.DisplayFor(model => model.CPRF);
+                            }
+                        }
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <table class="table">
+                            <tbody>
+                                @foreach (var item in Model.PRFiles)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FileName)
+                                        </td>
+                                        <td class="text-right py-0 align-middle">
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="~/UploadedFile/Quotation/@item.FileName" class="btn btn-info" target="_blank"><i class="fas fa-eye"></i></a>
+                                                
+                                                <input type="hidden" id="filePrMstId" value="@item.PrMstId" />
+                                                <input type="hidden" id="fileId" value="@item.FileId" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                @Html.ActionLink("Back to List", "PRProsesList", "Purchase", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        @{Html.RenderAction("budgetCprf", "Purchase", new { PrMstId = Model.PRId });}
+    </div>
+    <div class="col-4">
+        @{Html.RenderAction("budgetMonthly", "Purchase", new { PrMstId = Model.PRId });}
+    </div>
+</div>
+

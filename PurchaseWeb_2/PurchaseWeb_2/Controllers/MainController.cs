@@ -36,12 +36,11 @@ namespace PurchaseWeb_2.Controllers
         }
 
         [HttpPost]
-        public ActionResult Department(Department_mst department_)
+        public ActionResult Department(AccTypeDept department_)
         {
-            var departments = db.Set<Department_mst>();
-            departments.Add(new Department_mst { 
-                Department_name = department_.Department_name,
-                Create_date = DateTime.Now });
+            var departments = db.Set<AccTypeDept>();
+            departments.Add(new AccTypeDept { 
+                DeptName = department_.DeptName });
             db.SaveChanges();
 
             return View();
@@ -332,7 +331,7 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult departmentList()
         {
-            List<Department_mst> departmentList = db.Department_mst.ToList();
+            List<AccTypeDept> departmentList = db.AccTypeDepts.ToList();
             
             return PartialView(departmentList);
         }
@@ -340,30 +339,31 @@ namespace PurchaseWeb_2.Controllers
         [HttpGet]
         public ActionResult departmentEdit(int id)
         {
-            var department = db.Department_mst
-                                .Where(d => d.Dpt_id == id)
+            var department = db.AccTypeDepts
+                                .Where(d => d.AccTypeDepID == id)
                                 .FirstOrDefault();
             ViewBag.department = department;
 
-            return View();
+            return View("departmentEdit", department);
         }
 
         [HttpPost]
-        public ActionResult departmentEdit(Department_mst department_)
+        public ActionResult departmentEdit(AccTypeDept department_)
         {
             try
             {
-                var department = new Department_mst
+                var department = new AccTypeDept
                 {
-                    Dpt_id = department_.Dpt_id,
-                    Department_name = department_.Department_name,
-                    Modified_date = DateTime.Now
+                    AccTypeDepID = department_.AccTypeDepID,
+                    DeptName = department_.DeptName,
+                    DeptCode = department_.DeptCode
                 };
-                db.Department_mst.Attach(department);
-                db.Entry(department).Property(x => x.Department_name).IsModified = true;
-                db.Entry(department).Property(x => x.Modified_date).IsModified = true;
+
+                db.AccTypeDepts.Attach(department);
+                db.Entry(department).Property(x => x.DeptName).IsModified = true;
+                db.Entry(department).Property(x => x.DeptCode).IsModified = true;
                 db.SaveChanges();
-                this.AddNotification("Department Added!!", NotificationType.SUCCESS);
+                this.AddNotification("Department Updated!!", NotificationType.SUCCESS);
                 return View("Department");
             }
             catch (RetryLimitExceededException)
@@ -379,9 +379,9 @@ namespace PurchaseWeb_2.Controllers
         {
             try
             {
-                Department_mst department = new Department_mst() { Dpt_id = id };
-                db.Department_mst.Attach(department);
-                db.Department_mst.Remove(department);
+                AccTypeDept department = new AccTypeDept() { AccTypeDepID = id };
+                db.AccTypeDepts.Attach(department);
+                db.AccTypeDepts.Remove(department);
                 db.SaveChanges();
                 this.AddNotification("Department Deleted successfully!!", NotificationType.SUCCESS);
                 return View("Department");
@@ -411,7 +411,7 @@ namespace PurchaseWeb_2.Controllers
                 Username = x.Username,
                 Email = x.Email,
                 Dpt_id = x.Dpt_id,
-                DepartmentName = x.Department_mst.Department_name,
+                DepartmentName = x.AccTypeDept.DeptName,
                 Psn_id = x.Psn_id,
                 PositionName = x.Position_mst.Position_name,
                 Date_Create = x.Date_Create,
@@ -428,7 +428,7 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.usr_id == UserId)
                 .FirstOrDefault();
 
-            var DptList = db.Department_mst.ToList();
+            var DptList = db.AccTypeDepts.ToList();
             var RoleList = db.Position_mst.ToList();
 
             ViewBag.DptList = DptList;

@@ -19,9 +19,7 @@ namespace PurchaseWeb_2.Model
             List<DropdownDepartment> departmentList = new List<DropdownDepartment>();
 
             //access database
-                string sqlQuery = @"SELECT [Dpt_id]
-                                  ,[Department_name]
-                              FROM [dbo].[Department_mst]";
+                string sqlQuery = @"select AccTypeDepID, DeptName,DeptCode from AccTypeDept";
 
                 SqlCommand cmd = new SqlCommand(sqlQuery, con);
                 con.Open();

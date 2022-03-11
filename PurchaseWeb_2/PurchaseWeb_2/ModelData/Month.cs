@@ -12,24 +12,17 @@ namespace PurchaseWeb_2.ModelData
     using System;
     using System.Collections.Generic;
     
-    public partial class AccTypeDept
+    public partial class Month
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public AccTypeDept()
+        public Month()
         {
-            this.Usr_mst = new HashSet<Usr_mst>();
-            this.PR_Mst = new HashSet<PR_Mst>();
             this.MonthlyBudgets = new HashSet<MonthlyBudget>();
         }
     
-        public int AccTypeDepID { get; set; }
-        public string DeptName { get; set; }
-        public string DeptCode { get; set; }
+        public int Month1 { get; set; }
+        public string MonthName { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Usr_mst> Usr_mst { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PR_Mst> PR_Mst { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MonthlyBudget> MonthlyBudgets { get; set; }
     }

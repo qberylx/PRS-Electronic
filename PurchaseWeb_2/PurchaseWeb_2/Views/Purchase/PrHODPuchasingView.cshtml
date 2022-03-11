@@ -15,6 +15,33 @@
             @{ Html.RenderAction("PurDetailsPurchasingViewSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });}
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            @if (ViewBag.StatusId == 8)
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Comments</label>
+                            <textarea class="form-control" rows="3" placeholder="Enter ..." id="comment" name="comment"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="error invalid-feedback" style="display:none" id="commentValid">
+                    <span>Please enter your comment for reject PR.</span>
+                </div>
+                <br />
+                <div class="row-cols-md-12">
+                    <button type="submit" class="btn btn-danger" id="HODReject" name="HODReject">Reject</button>
+                    <input type="hidden" id="PrmstIdHod" name="PrmstIdHod" value="@ViewBag.PrMstId" />
+                </div>
+
+
+            }
+
+        </div>
+    </div>
+    <hr />
     <div>
         @if (ViewBag.StatusId == 8)
         {
@@ -36,3 +63,22 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $("#HODReject").click(function (event) {
+            event.preventDefault();
+            var coms = $("#comment").val();
+            //alert(coms.length);
+            //return false;
+            if (coms.length < 1) {
+                $("#commentValid").toggle();
+                $("#commentValid").delay(2000).fadeOut("slow");
+                return false;
+            } else {
+                console.log($("#comment").val());
+                location.href = "@Url.Action("RejectHODPurchasingDept", "Purchase")?PrMstId=@ViewBag.PrMstId&comment="+coms+"" ;
+            }
+
+        });
+    });
+</script>

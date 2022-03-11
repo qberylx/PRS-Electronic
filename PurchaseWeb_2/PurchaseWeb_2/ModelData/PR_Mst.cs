@@ -47,6 +47,12 @@ namespace PurchaseWeb_2.ModelData
         public string Remarks { get; set; }
         public string CPRF { get; set; }
         public Nullable<int> AssetFlag { get; set; }
+        public Nullable<decimal> AssetBudget { get; set; }
+        public Nullable<decimal> AssetBal { get; set; }
+        public Nullable<bool> FlagUpdatedCPRF { get; set; }
+        public Nullable<bool> FlagUpdateMonthlyBudget { get; set; }
+        public Nullable<int> PRGroupType { get; set; }
+        public string HODPurComment { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }
@@ -56,5 +62,6 @@ namespace PurchaseWeb_2.ModelData
         public virtual PRType_mst PRType_mst { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRFile> PRFiles { get; set; }
+        public virtual AccTypeDept AccTypeDept { get; set; }
     }
 }

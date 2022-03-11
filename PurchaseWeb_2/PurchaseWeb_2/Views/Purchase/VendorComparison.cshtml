@@ -7,14 +7,28 @@
 
     <div class="row">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="col-md-2">
+            Vendor name
+            <select class="fstdropdown-select form-control-border" id="VDCode" name="VDCode" onchange="getCurCode(this.value, @ViewBag.PrDtlstId)">
+                <option value="">Select option</option>
+                @foreach (var vd in ViewBag.vdLst)
+                {
+                    <option value="@vd.VENDORID">@vd.VENDORID - @vd.SHORTNAME</option>
+                }
+            </select>
+            
+            <br />
+            @Html.ValidationMessageFor(model => model.VDCode, "", new { @class = "text-danger" })
+        </div>
         <div class="col-md-1">
-            Vendor name <br />
-            @Html.EditorFor(model => model.VCName, new { htmlAttributes = new { @class = "form-control" } }) <br />
-            @Html.ValidationMessageFor(model => model.VCName, "", new { @class = "text-danger" })
+            Currency Tax Rate<br />
+            <div id="divCurCode_@ViewBag.PrDtlstId">
+                @{ Html.RenderAction("getCurCode", "Purchase");}
+            </div>
         </div>
         <div class="col-md-1">
             Current Price <br />
-            @Html.EditorFor(model => model.CurPrice, new { htmlAttributes = new { @class = "form-control" , onchange= "UpdatePrice(this, "+@ViewBag.PrDtlstId+", "+@ViewBag.Qty+")" } }) <br />
+            @Html.EditorFor(model => model.CurPrice, new { htmlAttributes = new { @class = "form-control" , @onfocusout = "UpdatePrice(this, "+@ViewBag.PrDtlstId+", "+@ViewBag.Qty+ " )", @Value="0.00", @kiraCurP = ViewBag.PrDtlstId } }) <br />
             @Html.ValidationMessageFor(model => model.CurPrice, "", new { @class = "text-danger" })
         </div>
         <div class="col-md-2">
@@ -24,7 +38,7 @@
         </div>
         <div class="col-md-1">
             Last Price <br />
-            @Html.EditorFor(model => model.LastPrice, new { htmlAttributes = new { @class = "form-control" } }) <br />
+            @Html.EditorFor(model => model.LastPrice, new { htmlAttributes = new { @class = "form-control" , @Value="0.00" , @kiraLastP = ViewBag.PrDtlstId , @onfocusout = "UpdateCostDown(this.value , " + @ViewBag.PrDtlstId + " )" } }) <br />
             @Html.ValidationMessageFor(model => model.LastPrice, "", new { @class = "text-danger" })
         </div>
         <div class="col-md-2">
@@ -39,45 +53,66 @@
         </div>
         <div class="col-md-1">
             Cost Down % <br />
-            @Html.EditorFor(model => model.CostDown, new { htmlAttributes = new { @class = "form-control" } }) <br />
+            @Html.EditorFor(model => model.CostDown, new { htmlAttributes = new { @class = "form-control" , @Value="0.00" , @kiraCostD = ViewBag.PrDtlstId } }) <br />
             @Html.ValidationMessageFor(model => model.CostDown, "", new { @class = "text-danger" })
         </div>
-        <div class="col-md-1">
-            <br />
-            <input type="hidden" value="@ViewBag.PrDtlstId" id="PrDtlstId" name="PrDtlstId" />
-            <input type="hidden" value="@ViewBag.Qty" id="PrdtlsQty" name="PrdtlsQty" />
-            <button class="btn btn-success"><i class="fa fa-plus-circle"></i></button>
-        </div>
+        
     </div>
     <div class="row">
-        <div class="col=md-1">
+        <div class="col-md-1 pr-3">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="csDiscount_@ViewBag.PrDtlstId" onchange="chgDiscount(this , @ViewBag.PrDtlstId)">
+                <label class="custom-control-label" for="csDiscount_@ViewBag.PrDtlstId">Discount?</label>
+            </div>
+            <br />
+            <div id="divRdDisc_@ViewBag.PrDtlstId" style="display:none">
+                <input type="radio" id="percent_@ViewBag.PrDtlstId" name="rdDiscount" value="percent" onclick="cghRdDisc( this.value, @ViewBag.PrDtlstId)">
+                <label for="percent">%</label>
+                <input type="radio" id="amount_@ViewBag.PrDtlstId" name="rdDiscount" value="amount" onclick="cghRdDisc( this.value, @ViewBag.PrDtlstId)">
+                <label for="amount">Amount</label>
+                <input type="hidden" id="discType_@ViewBag.PrDtlstId" name="DiscType" value="0" />
+            </div>
+            
+        </div>
+
+        <div class="col-md-1 pr-3" id="divDiscount_@ViewBag.PrDtlstId" style="display:none">
+            Discount % <br /> <input type="text" id="percentDisc" name="percentDisc" value="0.00" onchange="cghPerDisc(this.value, @ViewBag.PrDtlstId)"/>
+        </div>
+
+        <div class="col-md-2 pr-3">
             Total Amount (Exc) <br />
-            @Html.EditorFor(model => model.TotCostWitTax, new { htmlAttributes = new { @class = "form-control" , @kiraTAE = ViewBag.PrDtlstId } }) <br />
+            @Html.EditorFor(model => model.TotCostWitTax, new { htmlAttributes = new { @class = "form-control", @kiraTAE = ViewBag.PrDtlstId , @Value="0.00" } }) <br />
             @Html.ValidationMessageFor(model => model.TotCostWitTax, "", new { @class = "text-danger" })
         </div>
         &nbsp;
-        <div class="col=md-1">
+        <div class="col-md-1 pr-3">
             Tax %<br />
-            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", @Value = "0", @kiraTax = ViewBag.PrDtlstId } }) <br />
+            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", @Value = "0", @kiraTax = ViewBag.PrDtlstId , @onfocusout = "UpdateTax(this.value , " + @ViewBag.PrDtlstId + " , " + @ViewBag.Qty + ")" } }) <br />
             @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
         </div>
         &nbsp;
-        <div class="col=md-1">
+        <div class="col-md-2 pr-3">
             Total Amount (Icl)<br />
-            @Html.EditorFor(model => model.TotCostnoTax, new { htmlAttributes = new { @class = "form-control", @Value = "0", @kiraTAI = ViewBag.PrDtlstId } }) <br />
+            @Html.EditorFor(model => model.TotCostnoTax, new { htmlAttributes = new { @class = "form-control", @Value = "0.00", @kiraTAI = ViewBag.PrDtlstId } }) <br />
             @Html.ValidationMessageFor(model => model.TotCostnoTax, "", new { @class = "text-danger" })
         </div>
         &nbsp;
-        <div class="col=md-1">
+        <div class="col-md-1 pr-3">
             Total Group<br />
             @Html.EditorFor(model => model.TaxCode, new { htmlAttributes = new { @class = "form-control", @Value = "SSTG" } }) <br />
             @Html.ValidationMessageFor(model => model.TaxCode, "", new { @class = "text-danger" })
         </div>
         &nbsp;
-        <div class="col=md-1">
-            Total Class<br />
+        <div class="col-md-1 pr-3">
+            Tax Class<br />
             @Html.EditorFor(model => model.TaxClass, new { htmlAttributes = new { @class = "form-control", @Value = "1" } }) <br />
             @Html.ValidationMessageFor(model => model.TaxClass, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-1">
+            <br />
+            <input type="hidden" value="@ViewBag.PrDtlstId" id="PrDtlstId" name="PrDtlstId" />
+            <input type="hidden" value="@ViewBag.Qty" id="PrdtlsQty" name="PrdtlsQty" />
+            <button class="btn btn-success"><i class="fa fa-plus-circle"> Add</i></button>
         </div>
     </div>
 
@@ -88,27 +123,220 @@
     $(document).ready(function () {
         $("#notification").delay(3000).fadeOut("slow");
 
-        //$("#CurPrice").change(function () {
-        //    var qty = $("#PrdtlsQty").val();
-        //    //totamount = unit cost * qty
-        //    var TotAmt1 = qty * $("#CurPrice").val();
-        //    $("#TotCostWitTax").val(TotAmt1);
-        //    var TaxAmt = $("#Tax").val() * TotAmt1;
-        //    $("#TotCostnoTax").val(TotAmt1 + TaxAmt);
-        //});
-
+        /*
+        $.ajax({
+            type: "GET",
+            url: "",
+            dataType: "html",
+            success: function (response) {
+                $('#vendorList').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            }
+        });
+        */
 
     });
 
     function UpdatePrice(Price, PrDtlstId, Qty) {
-        //alert(Price.value + " " + PrDtlstId + " " + Qty);
         var totamt = Qty * Price.value;
-        //alert(totamt);
-        $("[kiraTAE=" + PrDtlstId + "]").val(totamt);
-        var taxamt = $("[kiraTax=" + PrDtlstId + "]").val() * totamt;
-        //alert(taxamt);
-        $("[kiraTAI=" + PrDtlstId + "]").val(taxamt + totamt);
+        $("[kiraTAE=" + PrDtlstId + "]").val(totamt.toFixed(2));
+        $("[kiraTAE=" + PrDtlstId + "]").attr("value", totamt.toFixed(2));
+
+        var taxamt = $("[kiraTax=" + PrDtlstId + "]").val() / 100 * totamt;
+        $("[kiraTAI=" + PrDtlstId + "]").val((taxamt + totamt).toFixed(2));
+
+        // calc Costdown
+        var lastPrice = $("[kiraLastP=" + PrDtlstId + "]").val();
+        if (lastPrice <= 0) {
+            $("[kiraCostD=" + PrDtlstId + "]").val(0);
+        } else {
+            var curPrice = $("[kiraCurP=" + PrDtlstId + "]").val();
+            var costDown = (lastPrice - curPrice) / lastPrice * 100;
+            $("[kiraCostD=" + PrDtlstId + "]").val(costDown.toFixed(2));
+        }
     }
+
+    function UpdateCostDown(lastPrice, PrDtlstId) {
+        // calc Costdown
+        //var lastPrice = $("[kiraLastP=" + PrDtlstId + "]").val();
+        if (lastPrice <= 0) {
+            $("[kiraCostD=" + PrDtlstId + "]").val(0);
+        } else {
+            var curPrice = $("[kiraCurP=" + PrDtlstId + "]").val();
+            var costDown = (lastPrice - curPrice) / lastPrice * 100;
+            $("[kiraCostD=" + PrDtlstId + "]").val(costDown.toFixed(2));
+        }
+    }
+
+    function UpdateTax(tax, PrDtlstId, Qty) {
+        var curPrice = $("[kiraCurP=" + PrDtlstId + "]").val();
+        var totamt = Qty * curPrice;
+
+        //check discount
+        //chk if rdio percent is checked
+        if ($("#percent_" + PrDtlstId + "").prop("checked") == true) {
+            console.log("percent is checked.");
+            //percentDisc_ tax amount
+            var DiscAmt = $("#percentDisc_" + PrDtlstId + "").val() / 100 * totamt;
+            totamt = totamt - DiscAmt;
+
+        } else if ($("#amount_" + PrDtlstId + "").prop("checked") == true)
+        {
+            console.log("amount is checked.");
+            //amountDisc_ tax amount
+            var DiscAmt = $("#amountDisc_" + PrDtlstId + "").val();
+            totamt = totamt - DiscAmt;
+        }
+
+        $("[kiraTAE=" + PrDtlstId + "]").val(totamt.toFixed(2));
+        $("[kiraTAE=" + PrDtlstId + "]").attr("value", totamt.toFixed(2));
+
+        var taxamt = tax / 100 * totamt;
+        $("[kiraTAI=" + PrDtlstId + "]").val((taxamt + totamt).toFixed(2));
+    }
+
+    $(function () {
+        $('input#CurPrice').blur(function () {
+            var textAmt = (this.value).replace(/,/g, "");
+            var amt = parseFloat(this.value);
+            $(this).val(amt.toFixed(5));
+        });
+    });
+
+    $(function () {
+        $('input#LastPrice').blur(function () {
+            var textAmt = (this.value).replace(/,/g, "");
+            var amt = parseFloat(this.value);
+            $(this).val(amt.toFixed(5));
+        });
+    });
+
+    function getCurCode(vdCode, PrDtlstId) {
+        console.log(vdCode);
+        console.log(PrDtlstId);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("getCurCode","Purchase")",
+            data: JSON.stringify({ vdCode: vdCode, PrDtlstId: PrDtlstId }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCurCode_'+PrDtlstId+'').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function chgCurRate(curRate, PrDtlstId) {
+        console.log(curRate);
+        console.log(PrDtlstId);
+
+        var curPrice = $("[kiraCurP=" + PrDtlstId + "]").val();
+        var curPriceRate = curRate * curPrice;
+
+        $("[kiraCurP=" + PrDtlstId + "]").val(curPriceRate);
+
+        var totamt = Qty * curPriceRate;
+
+        $("[kiraTAE=" + PrDtlstId + "]").val(totamt.toFixed(2));
+        $("[kiraTAE=" + PrDtlstId + "]").attr("value",totamt.toFixed(2));
+
+        var taxamt = $("[kiraTax=" + PrDtlstId + "]").val() / 100 * totamt;
+
+        $("[kiraTAI=" + PrDtlstId + "]").val((taxamt + totamt).toFixed(2));
+
+        // calc Costdown
+        var lastPrice = $("[kiraLastP=" + PrDtlstId + "]").val();
+        if (lastPrice <= 0) {
+            $("[kiraCostD=" + PrDtlstId + "]").val(0);
+        } else {
+            var curPrice = $("[kiraCurP=" + PrDtlstId + "]").val();
+            var costDown = (lastPrice - curPrice) / lastPrice * 100;
+            $("[kiraCostD=" + PrDtlstId + "]").val(costDown.toFixed(2));
+        }
+
+    }
+
+    function chgDiscount(tggleDis, PrDtlstId) {
+        if ($(tggleDis).prop("checked") == true) {
+            $("#divRdDisc_" + PrDtlstId + "").show();
+            console.log("Checkbox is checked.");
+        }
+        else if ($(tggleDis).prop("checked") == false) {
+            $("#divDiscount_" + PrDtlstId + "").hide();
+            $("#divDiscount_" + PrDtlstId + "").html("");
+            $("#divRdDisc_" + PrDtlstId + "").hide();
+            console.log("Checkbox is unchecked.");
+        }
+    }
+
+    function cghRdDisc(rValue, PrDtlstId) {
+        if (rValue == "percent") {
+            $("#divDiscount_" + PrDtlstId + "").show();
+            $("#divDiscount_" + PrDtlstId + "").html("Discount % <br /> <input type='text' id='percentDisc_" + PrDtlstId + "' name='Discount' value='0.00' onfocusout='cghPerDisc(this.value, " + PrDtlstId + ")' class='form-control'/>");
+            //discType_
+            $("#discType_" + PrDtlstId + "").val(1);
+        } else if (rValue == "amount") {
+            $("#divDiscount_" + PrDtlstId + "").show();
+            $("#divDiscount_" + PrDtlstId + "").html("Discount Amt.<br /> <input type='text' id='amountDisc_" + PrDtlstId + "' name='Discount' value='0.00' onfocusout='cghAmtDisc(this.value, " + PrDtlstId + ")' class='form-control'/>");
+            $("#discType_" + PrDtlstId + "").val(2);
+        }
+    }
+
+    function cghPerDisc(PerDisc, PrDtlstId) {
+        console.log(PerDisc);
+        console.log(PrDtlstId);
+        var totAmt = $("[kiraTAE=" + PrDtlstId + "]").val();
+        console.log(totAmt);
+        var DiscAmt = PerDisc / 100 * totAmt;
+        var DiscTotAmt = totAmt - DiscAmt;
+        console.log(DiscAmt);
+        $("[kiraTAE=" + PrDtlstId + "]").val(DiscTotAmt.toFixed(2));
+
+        var taxamt = $("[kiraTax=" + PrDtlstId + "]").val() / 100 * DiscTotAmt;
+        console.log(taxamt);
+        $("[kiraTAI=" + PrDtlstId + "]").val((taxamt + DiscTotAmt).toFixed(2));
+
+        // calc Costdown
+        var lastPrice = $("[kiraLastP=" + PrDtlstId + "]").val();
+        if (lastPrice <= 0) {
+            $("[kiraCostD=" + PrDtlstId + "]").val(0);
+        } else {
+            var curPrice = $("[kiraCurP=" + PrDtlstId + "]").val();
+            var costDown = (lastPrice - curPrice) / lastPrice * 100;
+            $("[kiraCostD=" + PrDtlstId + "]").val(costDown.toFixed(2));
+        }
+    }
+
+    function cghAmtDisc(AmtDisc, PrDtlstId) {
+        console.log(AmtDisc);
+        console.log(PrDtlstId);
+        var totAmt = $("[kiraTAE=" + PrDtlstId + "]").val();
+        console.log(totAmt);
+        var DiscAmt = AmtDisc;
+        var DiscTotAmt = totAmt - DiscAmt;
+        console.log(DiscAmt);
+        $("[kiraTAE=" + PrDtlstId + "]").val(DiscTotAmt);
+
+        var taxamt = $("[kiraTax=" + PrDtlstId + "]").val() / 100 * DiscTotAmt;
+        console.log(taxamt);
+        $("[kiraTAI=" + PrDtlstId + "]").val((taxamt + DiscTotAmt).toFixed(2));
+
+        // calc Costdown
+        var lastPrice = $("[kiraLastP=" + PrDtlstId + "]").val();
+        if (lastPrice <= 0) {
+            $("[kiraCostD=" + PrDtlstId + "]").val(0);
+        } else {
+            var curPrice = $("[kiraCurP=" + PrDtlstId + "]").val();
+            var costDown = (lastPrice - curPrice) / lastPrice * 100;
+            $("[kiraCostD=" + PrDtlstId + "]").val(costDown.toFixed(2));
+        }
+    }
+
 </script>
 
 

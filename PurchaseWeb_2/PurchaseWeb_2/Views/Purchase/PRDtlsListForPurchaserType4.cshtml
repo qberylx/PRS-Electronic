@@ -71,14 +71,9 @@
                                 <td>
                                     @i
                                 </td>
-
-                                <!--
                                 <td>
-                                    <input type="checkbox" id="PoFlagIsChecked" name="PoFlagIsChecked" onchange="UpdatePOFlag(@item.PRDtId)" />
-                                </td>
-                                -->
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Description)
+                                    @*@Html.DisplayFor(modelItem => item.Description)*@
+                                    @Html.Raw(item.Description.Replace(Environment.NewLine, "<br/>"))
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.VendorPartNo)
@@ -91,7 +86,7 @@
 
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.UOM_mst.UOMName)
+                                    @Html.DisplayFor(modelItem => item.UOMName)
                                 </td>
                                 <td>
                                     @{
@@ -108,7 +103,7 @@
 
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Currency_Mst1.Kod)
+                                    @Html.DisplayFor(modelItem => item.CurCode)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.UnitPrice)
@@ -143,7 +138,7 @@
 
                                 </td>
                             </tr>
-
+                            
                             <tr class="expandable-body">
                                 <td colspan="15">
                                     <div class="row">
@@ -153,9 +148,9 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            
-                                                @{ Html.RenderAction("VendorComparisonList", "Purchase", new { PrDtlstId = item.PRDtId });}
-                                            
+                                            <div id="divVDCompareLst_@item.PRDtId">
+                                                @{ Html.RenderAction("VendorComparisonList", "Purchase", new { PrDtlstId = item.PRDtId, no = i });}
+                                            </div>
                                         </div>
                                     </div>
                                 </td>

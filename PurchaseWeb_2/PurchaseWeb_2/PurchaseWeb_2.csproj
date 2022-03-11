@@ -221,6 +221,12 @@
     <Compile Include="ModelData\Menu_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\Month.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\MonthlyBudget.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\Position_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -2422,6 +2428,18 @@
     <Content Include="Views\Purchase\callVendorpart.cshtml" />
     <Content Include="Views\Purchase\callUOM.cshtml" />
     <Content Include="Views\Purchase\callDesc.cshtml" />
+    <Content Include="Views\Purchase\getVendorPurchaser.cshtml" />
+    <Content Include="Views\Purchase\Pr4DetailsLineView.cshtml" />
+    <Content Include="Views\Purchase\VDListPurchaser.cshtml" />
+    <Content Include="Views\Purchase\getCurCode.cshtml" />
+    <Content Include="Views\Purchase\budgetUpdate.cshtml" />
+    <Content Include="Views\Purchase\budgetCprf.cshtml" />
+    <Content Include="Views\Purchase\budgetMonthly.cshtml" />
+    <Content Include="Views\Purchase\MonthlyBudgetMaster.cshtml" />
+    <Content Include="Views\Purchase\getMonthlyBudgetLst.cshtml" />
+    <Content Include="Views\Purchase\groupType.cshtml" />
+    <Content Include="Views\Purchase\groupType1.cshtml" />
+    <Content Include="Views\Purchase\groupType2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

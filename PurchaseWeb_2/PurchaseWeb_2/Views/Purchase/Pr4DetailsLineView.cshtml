@@ -1,0 +1,77 @@
+﻿@model List<PurchaseWeb_2.Models.PRDtlsPurchaser>
+
+@foreach (var item in Model)
+{
+    <tr >
+        <td>
+            @ViewBag.no
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VendorPartNo)
+        </td>
+        <td>
+            @{
+                String strQty = String.Format("{0:n}", item.Qty);
+            }
+            @strQty
+
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UOMName)
+        </td>
+        <td>
+            @{
+                DateTime reqdate = (DateTime)item.ReqDevDate;
+                String strReqdate = reqdate.ToString("dd/MM/yyyy");
+            }
+            @strReqdate
+        </td>
+        <td>
+            @{
+                String strEstimateUnitPrice = String.Format("{0:n5}", item.EstimateUnitPrice);
+            }
+            @strEstimateUnitPrice
+
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CurCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UnitPrice)
+        </td>
+        <td>
+            @{
+                String strTotCostnoTax = String.Format("{0:n2}", item.TotCostnoTax);
+            }
+            @strTotCostnoTax
+
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tax)
+        </td>
+        <td>
+            @{
+                String strTotCostWitTax = String.Format("{0:n2}", item.TotCostWitTax);
+            }
+            @strTotCostWitTax
+
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaxCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaxClass)
+        </td>
+        <td style="display:none">
+            <button type="button" class="btn btn-default" id="UpdatePrDtls" data-toggle="modal" data-target="#modalUpdatePrDtls" data-assigned-id="@item.PRDtId" value="@item.PRDtId" onclick="UpdatePrDtls(@item.PRDtId)">
+                <i class="fa fa-pen"></i>
+            </button>
+
+        </td>
+    </tr>
+}
+
+

@@ -33,6 +33,10 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<decimal> TotCostWitTax { get; set; }
         public string TaxCode { get; set; }
         public Nullable<int> TaxClass { get; set; }
+        public string VDCode { get; set; }
+        public Nullable<decimal> Discount { get; set; }
+        public Nullable<int> DiscType { get; set; }
+        public Nullable<decimal> CurRate { get; set; }
     
         public virtual PR_Details PR_Details { get; set; }
     }

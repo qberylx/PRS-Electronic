@@ -1,0 +1,121 @@
+﻿<div id="divCPRF">
+    @model PurchaseWeb_2.ModelData.PR_Mst
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-info">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h5>CPRF</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div id="notification">
+                            @Html.Partial("_Notifications")
+                        </div>
+                        <div class="col-md-2">
+                            <strong>CPRF NO</strong>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>: </strong> @Html.DisplayFor(model => model.CPRF)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <strong>Budget </strong>
+                        </div>
+                        <div class="col-md-6">
+                            @{String strAssetBudget = String.Format("{0:n2}", Model.AssetBudget); }
+                            <strong>: </strong> MYR @strAssetBudget
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <strong>PR Amount </strong>
+                        </div>
+                        <div class="col-md-6">
+                            @{String strTotCostWitTax = String.Format("{0:n2}", Model.PR_Details.Sum(x => x.TotCostWitTax)); }
+                            <strong>: </strong> MYR @strTotCostWitTax
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <strong>B/O </strong>
+                        </div>
+                        <div class="col-md-6">
+                            @{String strAssetBal = String.Format("{0:n2}", Model.AssetBal); }
+                            <strong>: </strong> MYR @strAssetBal
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <strong>Status </strong>
+                        </div>
+                        <div class="col-md-6">
+                            @if (Model.FlagUpdatedCPRF == true)
+                            {
+                                <strong>: </strong><a style="color:forestgreen"> This PR budget has been updated </a>
+                            }
+                            else
+                            {
+                                <strong>: </strong><a style="color:indianred"> This PR budget not update yet </a>
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+                <hr />
+                @using (Ajax.BeginForm("SaveBudgetCprf", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCPRF" }))
+                {
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Current Budget Balance</strong>
+
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" id="AssetBudget" name="AssetBudget" value="@ViewBag.minBal" class="form-control" onfocusout="chgAssBudget(this.value , @Model.PR_Details.Sum(x => x.TotCostWitTax) ) " />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>B/O After Update</strong>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" id="AssetBal" name="AssetBal" value="" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <button class="btn btn-success" type="submit" value="Save">Update CAPEX Budget</button>
+                                @Html.HiddenFor(model=>model.PRId)
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function chgAssBudget(AssBudget, TotPrAmt) {
+        var curBal = $("#AssetBudget").val();
+        var bal;
+        if (curBal > 0) {
+            bal = curBal - TotPrAmt;
+        } else {
+            bal = AssBudget - TotPrAmt;
+        }
+
+        //set new bal
+        $("#AssetBal").val(bal);
+        
+    }
+</script>

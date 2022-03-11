@@ -1,13 +1,13 @@
-﻿@model IEnumerable<PurchaseWeb_2.ModelData.Department_mst>
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.AccTypeDept>
 
 
-<table class="table">
+<table class="table table-sm">
     <tr>
         <th>
             Department Name
         </th>
         <th>
-            Date Created
+            Department Code
         </th>
         <th></th>
     </tr>
@@ -15,14 +15,14 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Department_name)
+            @Html.DisplayFor(modelItem => item.DeptName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Create_date)
+            @Html.DisplayFor(modelItem => item.DeptCode)
         </td>
         <td>
-            <a href="@Url.Action("departmentEdit","Main", new { id=item.Dpt_id })"  class="btn btn-info"><i class="fa fa-pen"> </i></a> &nbsp;&nbsp;
-            <a href="@Url.Action("departmentDelete","Main", new { id=item.Dpt_id })"  class="btn btn-danger"><i class="fa fa-trash"></i></a>
+            <a href="@Url.Action("departmentEdit","Main", new { id=item.AccTypeDepID })"  class="btn btn-info"><i class="fa fa-pen"> </i></a> &nbsp;&nbsp;
+            <a href="@Url.Action("departmentDelete","Main", new { id=item.AccTypeDepID })"  class="btn btn-danger"><i class="fa fa-trash"></i></a>
 
             
         </td>

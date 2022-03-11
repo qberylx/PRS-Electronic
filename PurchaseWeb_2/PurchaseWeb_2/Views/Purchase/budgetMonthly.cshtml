@@ -1,0 +1,110 @@
+﻿<div id="divbudgetMonthly">
+
+    @model PurchaseWeb_2.ModelData.MonthlyBudget
+
+    <div class="card card-info">
+        <div class="card-header">
+            <div class="card-title">
+                <h5>Monthly Budget</h5>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="notification">
+                @Html.Partial("_Notifications")
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Department</strong>
+                </div>
+                <div class="col-md-6">
+                    <strong>: </strong> @Html.DisplayFor(model => model.AccTypeDept.DeptName)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Budget </strong>
+                </div>
+                <div class="col-md-6">
+                    @{String strAssetBudget = String.Format("{0:n2}", Model.Budget); }
+                    <strong>: </strong> MYR @strAssetBudget
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>PR Amount </strong>
+                </div>
+                <div class="col-md-6">
+                    @{String strTotCostWitTax = String.Format("{0:n2}", ViewBag.PrTotAmount); }
+                    <strong>: </strong> MYR @strTotCostWitTax
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>B/O </strong>
+                </div>
+                <div class="col-md-6">
+                    @{String strAssetBal = String.Format("{0:n2}", Model.Balance); }
+                    <strong>: </strong> MYR @strAssetBal
+                </div>
+            </div>
+            <!--ViewBag.FlagUpdateBudget-->
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Status </strong>
+                </div>
+                <div class="col-md-6">
+                    @if (ViewBag.FlagUpdateBudget == true)
+                    {
+                        <strong>: </strong><a style="color:forestgreen"> This PR budget has been updated </a>
+                    }
+                    else
+                    {
+                        <strong>: </strong><a style="color:indianred"> This PR budget not update yet </a>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        @using (Ajax.BeginForm("SaveBudgetMonthly", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divbudgetMonthly" }))
+        {
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Current Budget Balance </strong>
+
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" id="AssetBudget" name="AssetBudget" value="@Model.Balance" class="form-control" onfocusout="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>B/O After Update </strong>
+                    </div>
+                    <div class="col-md-9">
+                        @{ decimal NewBal = Model.Balance - ViewBag.PrTotAmount;}
+                        <input type="text" id="Balance" name="Balance" value="@NewBal" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-10">
+                        <button class="btn btn-success" type="submit" value="Save">Update Monthly Budget</button>
+                        @Html.HiddenFor(model => model.BudgetId)
+                        <input type="hidden" name="PrMstId" id="PrMstId" value="@ViewBag.PrMstId" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(2000).fadeOut("slow");
+    });
+</script>

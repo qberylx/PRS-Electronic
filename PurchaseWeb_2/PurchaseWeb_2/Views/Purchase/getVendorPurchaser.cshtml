@@ -1,0 +1,6 @@
+﻿
+@Html.DropDownList("VendorCode",
+new SelectList(ViewBag.vendorLst, "VDCODE", "DROPNAME", @ViewBag.vendorCodeSelect),
+new { @class = "custom-select form-control-border" , @onchange= "getChgVendor(this.value," + @ViewBag.PrdtId + ")" })
+
+<input type="hidden" id="VendorCode_@ViewBag.PrdtId" name="[@ViewBag.no].VendorCode" value="@ViewBag.vendorCodeSelect" />

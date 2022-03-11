@@ -40,9 +40,9 @@
                             <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode)
                         </div>
                     }
-                    
+
                 </div>
-                <br />
+                <hr />
                 <div class="row">
                     <div class="col-md-3">
                         <strong>Requisition Date</strong> <br />
@@ -54,15 +54,51 @@
                     </div>
                     <div class="col-md-3">
                         <strong>Department</strong> <br />
-                        @Html.DisplayFor(model => model.Department_mst.Department_name)
+                        @Html.DisplayFor(model => model.AccTypeDept.DeptName)
                     </div>
                     <div class="col-md-3">
                         <strong>Tel Ext.</strong> <br />
-                        @Html.DisplayFor(model => model.Status_Mst.Name)
+                        @Html.DisplayFor(model => model.Usr_mst.TelExt)
                     </div>
                 </div>
+                <hr />
+                @if (Model.PRTypeId == 4)
+                {
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Purpose</strong><br />
+                            @Html.DisplayFor(model => model.Purpose)
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Remarks</strong><br />
+                            @Html.DisplayFor(model => model.Remarks)
+                        </div>
+                        <div class="col-md-4">
+                            @if (Model.AssetFlag == 1)
+                            {
+                                <p><i>New asset</i></p>
+                                if (Model.CPRF == "")
+                                {<span style="color:red ; font-size:small">PR has tag CPRF without CPRF NO. Please enter CPRF no.</span>}
+                                else
+                                { <strong>CPRF NO :</strong> @Html.DisplayFor(model => model.CPRF);
+                            }
+                        }
+                        else if (Model.AssetFlag == 2)
+                        {
+                            <p><i>Improve or add on to the existing assets</i></p>
+                            if (Model.CPRF == "")
+                            {<p class="error">PR has tag without CPRF NO. Please enter CPRF no.</p>}
+                            else
+                            { <strong>CPRF NO :</strong> @Html.DisplayFor(model => model.CPRF);
+                        }
+                    }
+                        </div>
+                    </div>
+                }
+
 
             </div>
+
             <div class="col-md-4">
                 <table class="table">
                     <tr>
@@ -73,7 +109,7 @@
 
                         </th>
                     </tr>
-                    
+
                     <tbody>
                         @if (ViewBag.Files != null)
                         {
@@ -99,11 +135,12 @@
 
 
 
-                        
+
                     </tbody>
                 </table>
             </div>
         </div>
+       
     </div>
     <!-- /.card-body -->
 </div>

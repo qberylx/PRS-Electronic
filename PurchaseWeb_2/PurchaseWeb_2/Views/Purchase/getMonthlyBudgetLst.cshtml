@@ -1,0 +1,59 @@
+﻿@model List<PurchaseWeb_2.ModelData.MonthlyBudget>
+
+<div class="row">
+    <div class="col-5">
+        @using (Ajax.BeginForm("saveMonthlyBudgetLst", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divMonthlyBudgetLst" }))
+        {
+            <div id="notification">
+                @Html.Partial("_Notifications")
+            </div>
+            <table class="table table-sm">
+                <tr>
+                    <th>
+                        No
+                    </th>
+                    <th>
+                        Department
+                    </th>
+                    <th>
+                        Budget Amount (RM)
+                    </th>
+                    <th>
+                        Current Balance (RM)
+                    </th>
+                </tr>
+                @{ int j = 0;}
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    j = i + 1;
+                    <tr>
+                        <td>
+                            @j
+                            @Html.HiddenFor(model => Model[i].BudgetId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => Model[i].AccTypeDept.DeptName)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => Model[i].Budget, new { @class = "form-control", @Value = Model[i].Budget })
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => Model[i].Balance, new { @class = "form-control", @Value = Model[i].Balance })
+                        </td>
+                    </tr>
+
+                }
+
+            </table>
+            <button class="btn btn-success" type="submit" value="save" name="submit">Save</button>
+            <input type="hidden" id="sMonth" name="sMonth" value="@ViewBag.sMonth" />
+            <input type="hidden" id="sYear" name="sYear" value="@ViewBag.sYear" />
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(2000).fadeOut("slow");
+    });
+</script>

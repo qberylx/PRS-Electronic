@@ -48,6 +48,8 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<PR_VendorComparison> PR_VendorComparison { get; set; }
         public virtual DbSet<PO_Mst> PO_Mst { get; set; }
         public virtual DbSet<PRFile> PRFiles { get; set; }
+        public virtual DbSet<MonthlyBudget> MonthlyBudgets { get; set; }
+        public virtual DbSet<Month> Months { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {

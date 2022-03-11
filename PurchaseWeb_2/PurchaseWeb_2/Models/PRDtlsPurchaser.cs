@@ -57,11 +57,16 @@ namespace PurchaseWeb_2.Models
         public Nullable<int> EstCurrId { get; set; }
         [Column(TypeName = "decimal(18,5)")]
         [Required(ErrorMessage = "Please enter the Unit Price")]
-        [RegularExpression(@"^\d+(\.\d{1,2,3,4,5})?$", ErrorMessage = "Valid Decimal number with maximum 2 decimal places.")]
+        [RegularExpression(@"^\d+(\.\d{1,2,3,4,5})?$", ErrorMessage = "Valid Decimal number with maximum 5 decimal places.")]
         [DisplayFormat(DataFormatString = "{0:n5}", ApplyFormatInEditMode = true)]
         public Nullable<decimal> EstimateUnitPrice { get; set; }
         public Nullable<bool> PoFlag { get; set; }
         public bool PoFlagIsChecked { get; set; }
+        public string UOMName { get; set; }
+        public string VendorCode { get; set; }
+        public string AccGroup { get; set; }
+        public string CurCode { get; set; }
+        public Nullable<decimal> EstTotalPrice { get; set; }
 
         public virtual PR_Mst PR_Mst { get; set; }
         public virtual UOM_mst UOM_mst { get; set; }

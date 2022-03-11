@@ -34,7 +34,7 @@
             }
 
         }
-        <table class="table">
+        <table class="table table-sm ">
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.PRNo)
@@ -81,16 +81,27 @@
                     <td>
                         <div class="row">
                             <div class="col-md-4">
-                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
+                                @*foreach (var currency in item.PR_Details.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
                                 {
                                     @currency.Max(s => s.Currency_Mst1.Kod) <br />
+                                }*@
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                {
+                                    @currency.Max(s => s.CurCode) <br />
                                 }
                             </div>
                             <div class="col-md-8">
-                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
+                                @*foreach (var currency in item.PR_Details.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
                                 {
                                     @currency.Sum(s => s.TotCostWitTax) <br />
-                                }
+                                }*@
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                {
+                                    @*currency.Sum(s => s.TotCostWitTax) *@
+                                    String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.TotCostWitTax));
+                                    @strTotAmt
+                                    <br />
+                                        }
                             </div>
                         </div>
                     </td>
@@ -100,8 +111,9 @@
                     <td>
                         @Html.ActionLink("View", "PrHODPuchasingView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
                         @Html.ActionLink("Approve", "ApproveHODPurchasingDept", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                        @*
                         @Html.ActionLink("Reject", "RejectHODPurchasingDept", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
-
+                        *@
                     </td>
                 </tr>
             }

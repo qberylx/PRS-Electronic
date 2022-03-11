@@ -1,0 +1,74 @@
+String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.TotCostWitTax));
+
+function getCurCode(vdCode, PrDtlstId) {
+        alert(vdCode);
+        alert(PrDtlstId);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("getCurCode","Purchase")",
+            data: JSON.stringify({ vdCode: vdCode, PrDtlstId: PrDtlstId }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCurCode_'+PrDtlstId+'').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    @Html.Raw(item.Description.Replace(Environment.NewLine, "<br/>"))
+
+    function chgDiscount(tggleDis, PrDtlstId) {
+        if ($(tggleDis).prop("checked") == true) {
+            console.log("Checkbox is checked.");
+        }
+        else if ($(tggleDis).prop("checked") == false) {
+            console.log("Checkbox is unchecked.");
+        }
+    }
+
+$("#CustomerGrid .details").click(function () {
+    var customerId = $(this).closest("tr").find("td").eq(0).html();
+    $.ajax({
+        type: "POST",
+        url: "/Home/Details",
+        data: '{customerId: "' + customerId + '" }',
+        contentType: "application/json; charset=utf-8",
+        dataType: "html",
+        success: function (response) {
+            $('#dialog').html(response);
+            $('#dialog').dialog('open');
+        },
+        failure: function (response) {
+            alert(response.responseText);
+        },
+        error: function (response) {
+            alert(response.responseText);
+        }
+    });
+});
+
+
+@Url.Action("deleteFile","Purchase",new { PrMstId = item.PrMstId, Fileid = item.FileId})
+
+//too style set zoom less than 
+<style>
+    .zoomedElement {
+        /*background-color: #50CBFF;*/
+        zoom: 90%;
+    }
+
+    .vertical-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+</style>
+
+
+
+

@@ -7,161 +7,280 @@
             <h4>PR Details List</h4>
         </div>
     </div>
-    
-    
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table table-striped table-responsive table-head-fixed" style="width:100%; zoom:95%">
-                    <tr>
-                        <th>
 
-                        </th>
-                        <th>
-                            DomiPartNo
-                        </th>
-                        <th>
-                            VendorPartNo
-                        </th>
-                        <th>
-                            Qty
-                        </th>
-                        <th>
-                            UOM
-                        </th>
-                        <th>
-                            Required <br /> Delivery <br /> Date
-                        </th>
-                        <th>
-                            Remarks
-                        </th>
-                        <th>
-                            Device
-                        </th>
-                        <th>
-                            SO#
-                        </th>
-                        <th>
-                            Curr
-                        </th>
-                        <th>
-                            Unit Price
-                        </th>
-                        @if (ViewBag.PrTypeId == 3)
-                        {
+    @using (Ajax.BeginForm("savePrDtPurchasing", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPRDtlsListForPurchaser" }))
+    {
+        @Html.AntiForgeryToken()
+<div id="notification">
+    @Html.Partial("_Notifications")
+</div>
+        
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-striped table-responsive table-head-fixed table-sm" style="width:100%; zoom:95%">
+                        <tr>
+                            <th>
+
+                            </th>
+                            <th>
+                                DomiPartNo
+                            </th>
+                            <th>
+                                VendorPartNo
+                            </th>
+                            <th>
+                                Qty
+                            </th>
+                            <th>
+                                UOM
+                            </th>
+                            <th>
+                                Required <br /> Delivery <br /> Date
+                            </th>
+                            <th>
+                                Remarks
+                            </th>
+                            <th>
+                                Device
+                            </th>
+                            <th>
+                                SO#
+                            </th>
+                            <th>
+                                Vendor
+                            </th>
+                            <th>
+                                Curr
+                            </th>
+                            <th>
+                                Unit Price
+                            </th>
+                            @*@if (ViewBag.PrTypeId == 3 || ViewBag.PrTypeId == 5)*@
+
                             <th>
                                 Total Amount <br /> (Exc Tax)
                             </th>
-                        }
-                        <th>
-                            Tax %
-                        </th>
-                        <th>
-                            Total Amount <br /> (Inc Tax)
-                        </th>
-                        <th>
-                            Tax <br /> Group
-                        </th>
-                        <th>
-                            Tax <br /> Class
-                        </th>
 
-                        <th></th>
-                    </tr>
+                            <th>
+                                Tax %
+                            </th>
+                            <th>
+                                Total Amount <br /> (Inc Tax)
+                            </th>
+                            <th>
+                                Tax <br /> Group
+                            </th>
+                            <th>
+                                Tax <br /> Class
+                            </th>
 
-                    @{ int i = 0; }
-                    @foreach (var item in Model)
-                    {
-                        i++;
-                        <tr>
-                            <td>
-                                @i
-                            </td>
-                            
-                            <!--
-                            <td>
-                                <input type="checkbox" id="PoFlagIsChecked" name="PoFlagIsChecked" onchange="UpdatePOFlag(@item.PRDtId)" />
-                            </td>
-                            -->
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DomiPartNo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.VendorPartNo)
-                            </td>
-                            <td>
-                                @{
-                                    String strQty = String.Format("{0:n}", item.Qty);
-                                }
-                                @strQty
-
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UOM_mst.UOMName)
-                            </td>
-                            <td>
-                                @{
-                                    DateTime reqdate = (DateTime)item.ReqDevDate;
-                                    String strReqdate = reqdate.ToString("dd/MM/yyyy");
-                                }
-                                @strReqdate
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Remarks)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Device)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.SalesOrder)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Currency_Mst1.Kod)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UnitPrice)
-                            </td>
-                            @if (item.TypePRId == 3)
-                            {
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.TotCostnoTax)
-                                </td>
-                            }
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Tax)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.TotCostWitTax)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.TaxCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.TaxClass)
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-default" id="UpdatePrDtls" data-toggle="modal" data-target="#modalUpdatePrDtls" data-assigned-id="@item.PRDtId" value="@item.PRDtId" onclick="UpdatePrDtls(@item.PRDtId)">
-                                    <i class="fa fa-pen"></i>
-                                </button>
-
-                            </td>
+                            <th style="display:none"></th>
                         </tr>
-                    }
 
-                </table>
+                        @*@{ int i = 0; }*@
+                        @*@foreach (var item in Model)*@
+                        @for (int i = 0; i < Model.Count(); i++)
+                        {
+                            //i++;
+                            int j = i + 1;
+                            <tr>
+                                <td>
+                                    @j
+                                    <input type="hidden" name="[@i].PRDtId" id="PRDtId" value="@Model[i].PRDtId" />
+                                </td>
+
+                                <!--
+                                <td>
+                                    <input type="checkbox" id="PoFlagIsChecked" name="PoFlagIsChecked" onchange="UpdatePOFlag(@Model[i].PRDtId)" />
+                                </td>
+                                -->
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].DomiPartNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].VendorPartNo)
+                                </td>
+                                <td>
+                                    @{
+                                        String strQty = String.Format("{0:n}", Model[i].Qty);
+                                    }
+                                    @strQty
+                                    <input type="hidden" id="qty_@Model[i].PRDtId" name="Qty" value="@Model[i].Qty" />
+
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].UOMName)
+                                </td>
+                                <td>
+                                    @{
+                                        DateTime reqdate = (DateTime)Model[i].ReqDevDate;
+                                        String strReqdate = reqdate.ToString("dd/MM/yyyy");
+                                    }
+                                    @strReqdate
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].Remarks)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].Device)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].SalesOrder)
+                                </td>
+                                <td>
+                                    <div id="DivVendor_@Model[i].PRDtId" style="width:200px">
+                                        @{Html.RenderAction("getVendorPurchaser", "Purchase", new { PRDtId = Model[i].PRDtId, no = i });}
+                                    </div>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].CurCode)
+                                </td>
+                                <td>
+                                    <div id="divUP_@Model[i].PRDtId">
+                                        <input id="UnitPrice_@Model[i].PRDtId" name="[@i].UnitPrice" class="form-control" style="width:150px" value="@Model[i].UnitPrice" onfocusout="fcsUnitPrice(this.value, @Model[i].PRDtId)" />
+                                    </div>
+
+                                    @*@Html.DisplayFor(modelItem => item.UnitPrice)*@
+                                </td>
+                                @*@if (item.TypePRId == 3 || item.TypePRId == 5)*@
+
+                                <td>
+                                    <div id="divTotCostnoTax_@Model[i].PRDtId">
+                                        @Html.DisplayFor(modelItem => Model[i].TotCostnoTax)
+                                    </div>
+                                    <input type="hidden" id="TotCostnoTax_@Model[i].PRDtId" name="[@i].TotCostnoTax" value="@Model[i].TotCostnoTax" />
+                                </td>
+
+                                <td>
+                                    <input id="Tax_@Model[i].PRDtId" name="[@i].Tax" class="form-control" style="width:50px" value="@Model[i].Tax" onfocusout="fcsTax(this.value, @Model[i].PRDtId)" />
+                                    @*@Html.EditorFor(modelItem => item.Tax, new { @class = "form-control", @Value = item.Tax })*@
+                                    @*@Html.DisplayFor(modelItem => item.Tax)*@
+                                </td>
+                                <td>
+                                    <input id="TotCostWitTax_@Model[i].PRDtId" name="[@i].TotCostWitTax" class="form-control" style="width:150px" value="@Model[i].TotCostWitTax" />
+                                    @*@Html.EditorFor(modelItem => item.TotCostWitTax, new { @class = "form-control", @Value = item.TotCostWitTax })*@
+                                    @*@Html.DisplayFor(modelItem => item.TotCostWitTax)*@
+                                </td>
+                                <td>
+                                    <input id="TaxCode" name="[@i].TaxCode" class="form-control" style="width:50px" value="@Model[i].TaxCode" />
+                                    @*@Html.EditorFor(modelItem => item.TaxCode, new { @class = "form-control", @Value = item.TaxCode })*@
+                                    @*@Html.DisplayFor(modelItem => item.TaxCode)*@
+                                </td>
+                                <td>
+                                    <input id="TaxClass" name="[@i].TaxClass" class="form-control" style="width:50px" value="@Model[i].TaxClass" />
+                                    @*@Html.EditorFor(modelItem => item.TaxClass, new { @class = "form-control", @Value = item.TaxClass })*@
+                                    @*@Html.DisplayFor(modelItem => item.TaxClass)*@
+                                </td>
+                                <td style="display:none">
+                                    <button type="button" class="btn btn-default" id="UpdatePrDtls" data-toggle="modal" data-target="#modalUpdatePrDtls" data-assigned-id="@Model[i].PRDtId" value="@Model[i].PRDtId" onclick="UpdatePrDtls(@Model[i].PRDtId)">
+                                        <i class="fa fa-pen"></i>
+                                    </button>
+
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
             </div>
+
+        </div>
+        <div class="card card-footer">
+            <div class="row">
+                <div class="col-md-3">
+                    @*@Html.ActionLink("Return To Main List", "PRProsesList", "Purchase", new { @class = "btn btn-primary" })*@
+                    <input type="submit" id="btnBack" name="submit" value="Back" class="btn btn-primary" />
+                    <input type="submit" id="btnSubmit" name="submit" value="Save" class="btn btn-success" />
+                    <input type="hidden" name="PrMstIdsvPr" id="PrMstIdsvPr" value="@ViewBag.PrMstId" />
+                </div>
+            </div>
+
         </div>
 
-    </div>
-    <div class="card card-footer">
-        <div class="row">
-            <div class="col-md-3">
-                @Html.ActionLink("Return To Main List", "PRProsesList", "Purchase", new { @class = "btn btn-primary" })
-            </div>
-        </div>
-        
-    </div>
-    
+    }
 
-    
+
+
+
+
 </div>
+
+<script type="text/javascript">
+    function getChgVendor(vndrCode,id) {
+        
+        console.log(vndrCode);
+        console.log(id);
+        $("#VendorCode_" + id + "").val(vndrCode);
+        
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetPrVendorDtls", "Purchase")",
+            //data: '{vdCode: "' + vndrCode + '" ,prDtId = "' + id + '" }',
+            data: JSON.stringify({ vdCode: vndrCode, prDtId: id }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "JSON",
+            success: function (response) {
+                //$('#divUP_"' + id + '"').html(response);
+                var len = response.length;
+                for (var i = 0; i < len; i++) {
+                    var bAmount = response[i].BAmount;
+                    var TotCostNoTax = response[i].TotCostNoTax;
+                    var TotCostWithTax = response[i].TotCostWithTax;
+
+                    console.log(bAmount);
+                    console.log(TotCostWithTax);
+                    $("#UnitPrice_" + id + "").val(bAmount.toFixed(5));
+                    $("#TotCostWitTax_" + id + "").val(TotCostWithTax.toFixed(2));
+                    $("#Tax_" + id + "").val(0);
+
+                    $("#TotCostnoTax_" + id + "").val(TotCostNoTax.toFixed(2));
+                    $("#divTotCostnoTax_" + id + "").html(TotCostNoTax.toFixed(2));
+
+                }
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function fcsUnitPrice(unitPrice, id) {
+
+        var qty = $("#qty_" + id + "").val();
+        var tax = $("#Tax_" + id + "").val();
+        var totAmt = parseFloat(qty) * parseFloat(unitPrice);
+        var totTax = parseFloat(tax) / 100 * parseFloat(totAmt);
+        var totAmtTax = parseFloat(totTax) + parseFloat(totAmt);
+
+        console.log(totAmt);
+        $("#divTotCostnoTax_" + id + "").html(totAmt.toFixed(2));
+        
+        $("#TotCostnoTax_" + id + "").val(totAmt.toFixed(2));
+        $("#TotCostWitTax_" + id + "").val(totAmtTax.toFixed(2));
+        
+    }
+
+    function fcsTax(tax, id) {
+
+        var unitPrice = $("#UnitPrice_" + id + "").val();
+        var qty = $("#qty_" + id + "").val();
+        var totAmt = parseFloat(qty) * parseFloat(unitPrice);
+        var totTax = parseFloat(tax) / 100 * parseFloat(totAmt);
+        var totAmtTax = parseFloat(totTax) + parseFloat(totAmt);
+
+        console.log(totAmtTax);
+
+        $("#TotCostWitTax_" + id + "").val(totAmtTax.toFixed(2));
+    }
+
+    $(document).ready(function () {
+        $("#notification").delay(2000).fadeOut("slow");
+    });
+
+
+</script>

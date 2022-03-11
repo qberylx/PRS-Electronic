@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "MonthlyBudgetMaster";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="row">
+    <div class="col-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3>Monthly Budget Setup</h3>
+                </div>
+            </div>
+            
+
+            @using (Ajax.BeginForm("getMonthlyBudgetLst", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divMonthlyBudgetLst" }))
+            {
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-1">
+                            <strong>Month</strong>
+                        </div>
+                        <div class="col-2">
+                            @Html.DropDownList("Selectmonth",
+                                new SelectList(ViewBag.monthLst, "Month1", "MonthName", ViewBag.curMonth),
+                                "Please Select Month",
+                                new { @class = "custom-select form-control-border" })
+                        </div>
+                        <div class="col-1">
+                            <strong>Year</strong>
+                        </div>
+                        <div class="col-2">
+                            <select id="SelectYear" name="SelectYear" class = "custom-select form-control-border" >
+                                <option value="@ViewBag.curYear">@ViewBag.curYear</option>
+                                <option value="@ViewBag.NxtYear">@ViewBag.NxtYear</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-12">
+                            <button class="btn btn-success" value="submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</div>
+
+<div id="divMonthlyBudgetLst">
+    
+</div>
+
+
