@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PurchaseWeb_2.ModelData.GetPOListbyDate_Result>
+﻿@model List<PurchaseWeb_2.ModelData.GetPOListbyDate_Result>
 
 <p>
     @*
@@ -10,251 +10,121 @@
     }
     *@
 </p>
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.RN)
+            No.
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.POId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NoPo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreateDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PRid)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PRNo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TypePRId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RequestDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UserId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DepartmentName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DomiPartNo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.VendorPartNo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Qty)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UOMId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReqDevDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Remarks)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Device)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SalesOrder)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.VendorName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EstCurrId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EstimateUnitPrice)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CurrId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UnitPrice)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TotCostnoTax)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Tax)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TotCostWitTax)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TaxCode)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TaxClass)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PoFlag)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ApprovalHOD)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ApprovalHODStatus)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ApprovalMD)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ApprovalMDStatus)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ModifiedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ModifiedUser)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreateByPO)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreateDatePO)
-        </th>
-        
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.RN)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.POId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NoPo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreateDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PRid)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PRNo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TypePRId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RequestDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DepartmentName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DomiPartNo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.VendorPartNo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Qty)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UOMId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReqDevDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Remarks)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Device)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SalesOrder)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.VendorName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EstCurrId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EstimateUnitPrice)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CurrId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UnitPrice)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TotCostnoTax)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Tax)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TotCostWitTax)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TaxCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TaxClass)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PoFlag)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApprovalHOD)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApprovalHODStatus)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApprovalMD)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApprovalMDStatus)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ModifiedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ModifiedUser)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreateByPO)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreateDatePO)
-        </td>
-        
+        </th>
+        <th>
+            PO No.
+        </th>
+        <th>
+            PO Date
+        </th>
+        <th>
+            Purchaser
+        </th>
+        <th>
+            PR No.
+        </th>
+        <th>
+            PR Date
+        </th>
+        <th>
+            Requestor
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            PO Total Amount
+        </th>
     </tr>
-}
+    @*
+    @foreach (var item in Model)*@
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model[i].RN)
+            </td>
+            <td>
+                @if (Model[i].ExportFlag)
+                {
+                    @Html.CheckBoxFor(modeItem => Model[i].ExportFlag, new { @disabled = "disabled" })
+                }
+                else
+                {
+                    @Html.CheckBoxFor(modeItem => Model[i].ExportFlag)
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model[i].NoPo)
+            </td>
+            <td>
+                @{
+                    String strCreateDatePO = "";
+                    if (Model[i].CreateDatePO != null)
+                    {
+                        DateTime dtCreateDatePO = (DateTime)Model[i].CreateDatePO;
+                        strCreateDatePO = dtCreateDatePO.ToString("dd/MM/yyyy");
+                    }
+                    else
+                    {
+                        strCreateDatePO = DateTime.Now.ToString("dd/MM/yyyy");
+                    }
+                }
 
+                @strCreateDatePO
+                
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model[i].Purchasername)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model[i].PRNo)
+            </td>
+            <td>
+                @{
+                    String strReqdate = "";
+                    if (Model[i].RequisitionDate != null)
+                    {
+                        DateTime reqdate = (DateTime)Model[i].RequisitionDate;
+                        strReqdate = reqdate.ToString("dd/MM/yyyy");
+                    }
+                    else
+                    {
+                        strReqdate = DateTime.Now.ToString("dd/MM/yyyy");
+                    }
+                }
+                    
+                @strReqdate
+                
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model[i].RequestorName)
+            </td>
+            <td>
+                @if (Model[i].Description != null)
+                {
+                    @Html.Raw(Model[i].Description.Replace(Environment.NewLine, "<br/>"))
+                }
+                
+
+            </td>
+            <td>
+                @{String strTotPOAmt = String.Format("{0:n}", Model[i].TotPOAmt);}
+                @strTotPOAmt
+                
+            </td>
+        </tr>
+    }
 </table>
+
+
 
 

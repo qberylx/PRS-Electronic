@@ -18,5 +18,12 @@ namespace PurchaseWeb_2.ModelData
         public string NoPo { get; set; }
         public string CreateBy { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
+        public string PRNo { get; set; }
+        public string Purchasername { get; set; }
+        public string RequestorName { get; set; }
+        public Nullable<System.DateTime> RequisitionDate { get; set; }
+        public Nullable<decimal> TotPOAmt { get; set; }
+        public string Description { get; set; }
+        public Nullable<int> PRid { get; set; }
     }
 }

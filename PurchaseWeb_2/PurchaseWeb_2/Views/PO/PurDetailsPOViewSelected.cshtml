@@ -20,9 +20,10 @@
     {
         <div class="card-body  p-0">
 
+            
             <div class="row">
                 <div class="col-md-12">
-                    <table class="table table-head-fixed text-nowrap table-striped table-responsive">
+                    <table class="table table-head-fixed text-nowrap table-striped table-responsive table-sm">
                         @if (ViewBag.PrTypeId == 3)
                         {
                             <tr>
@@ -196,6 +197,7 @@
                                         @j
                                         @Html.HiddenFor(modeItem => Model[i].PRid)
                                         @Html.HiddenFor(modeItem => Model[i].PRDtId)
+                                        @Html.HiddenFor(modeItem => Model[i].VendorCode)
                                     </td>
                                     <td>
                                         @if (Model[i].PoFlag)
@@ -208,7 +210,9 @@
                                         }
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].Description)
+                                        @Html.Raw(Model[i].Description.Replace(Environment.NewLine, "<br/>"))
+                                        @*
+                                        @Html.DisplayFor(modelItem => Model[i].Description)*@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => Model[i].DomiPartNo)
@@ -217,31 +221,47 @@
                                         @Html.DisplayFor(modelItem => Model[i].VendorName)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].Qty)
+                                        @{String strQty = String.Format("{0:n}", Model[i].Qty);}
+                                        @strQty
+                                        @*
+                                        @Html.DisplayFor(modelItem => Model[i].Qty)*@
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].UOM_mst.UOMName)
+                                        @Html.DisplayFor(modelItem => Model[i].UOMName)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].ReqDevDate)
+                                        @{DateTime reqdate = (DateTime)Model[i].ReqDevDate;
+                                            String strReqdate = reqdate.ToString("dd/MM/yyyy");}
+                                        @strReqdate
+                                        @*
+                                        @Html.DisplayFor(modelItem => Model[i].ReqDevDate)*@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => Model[i].Remarks)
                                     </td>
                                     <th>
-                                        @Html.DisplayFor(modelItem => Model[i].Currency_Mst1.Kod)
+                                        @Html.DisplayFor(modelItem => Model[i].CurCode)
                                     </th>
                                     <th>
-                                        @Html.DisplayFor(modelItem => Model[i].UnitPrice)
+                                        @{String strUnitPrice = String.Format("{0:n}", Model[i].UnitPrice);}
+                                        @strUnitPrice
+                                        @*
+                                        @Html.DisplayFor(modelItem => Model[i].UnitPrice)*@
                                     </th>
                                     <th>
-                                        @Html.DisplayFor(modelItem => Model[i].TotCostnoTax)
+                                        @{String strTotCostnoTax = String.Format("{0:n}", Model[i].TotCostnoTax);}
+                                        @strTotCostnoTax
+                                        @*
+                                        @Html.DisplayFor(modelItem => Model[i].TotCostnoTax)*@
                                     </th>
                                     <th>
                                         @Html.DisplayFor(modelItem => Model[i].Tax)
                                     </th>
                                     <th>
-                                        @Html.DisplayFor(modelItem => Model[i].TotCostWitTax)
+                                        @{String strTotCostWitTax = String.Format("{0:n}", Model[i].TotCostWitTax);}
+                                        @strTotCostWitTax
+                                        @*
+                                        @Html.DisplayFor(modelItem => Model[i].TotCostWitTax)*@
                                     </th>
                                     <th>
                                         @Html.DisplayFor(modelItem => Model[i].TaxCode)
@@ -265,6 +285,7 @@
                                         @j
                                         @Html.HiddenFor(modeItem => Model[i].PRid)
                                         @Html.HiddenFor(modeItem => Model[i].PRDtId)
+                                        @Html.HiddenFor(modeItem => Model[i].VendorCode)
                                     </td>
                                     <td>
                                         @if (Model[i].PoFlag)
@@ -277,37 +298,53 @@
                                         }
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].Description)
+                                        @Html.Raw(Model[i].Description.Replace(Environment.NewLine, "<br/>"))
+                                        @*
+                                        @Html.DisplayFor(modelItem => Model[i].Description)*@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => Model[i].VendorPartNo)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].Qty)
+                                        @{String strQty = String.Format("{0:n}", Model[i].Qty);}
+                                        @strQty
+                                        
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].UOM_mst.UOMName)
+                                        @Html.DisplayFor(modelItem => Model[i].UOMName)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].ReqDevDate)
+                                        @{DateTime reqdate = (DateTime)Model[i].ReqDevDate;
+                                            String strReqdate = reqdate.ToString("dd/MM/yyyy");}
+                                        @strReqdate
+                                        
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].Currency_Mst.Kod)
+                                        @Html.DisplayFor(modelItem => Model[i].CurCode)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].EstimateUnitPrice)
+                                        @{String strEstimateUnitPrice = String.Format("{0:n}", Model[i].EstimateUnitPrice);}
+                                        @strEstimateUnitPrice
+                                        @*
+                                        @Html.DisplayFor(modelItem => Model[i].EstimateUnitPrice)*@
                                     </td>
                                     <th>
-                                        @Html.DisplayFor(modelItem => Model[i].UnitPrice)
+                                        @{String strUnitPrice = String.Format("{0:n}", Model[i].UnitPrice);}
+                                        @strUnitPrice
+                                        
                                     </th>
                                     <th>
-                                        @Html.DisplayFor(modelItem => Model[i].TotCostnoTax)
+                                        @{String strTotCostnoTax = String.Format("{0:n}", Model[i].TotCostnoTax);}
+                                        @strTotCostnoTax
+                                        
                                     </th>
                                     <th>
                                         @Html.DisplayFor(modelItem => Model[i].Tax)
                                     </th>
                                     <th>
-                                        @Html.DisplayFor(modelItem => Model[i].TotCostWitTax)
+                                        @{String strTotCostWitTax = String.Format("{0:n}", Model[i].TotCostWitTax);}
+                                        @strTotCostWitTax
+                                        
                                     </th>
                                     <th>
                                         @Html.DisplayFor(modelItem => Model[i].TaxCode)
@@ -334,6 +371,7 @@
                                         @j
                                         @Html.HiddenFor(modeItem => Model[i].PRid)
                                         @Html.HiddenFor(modeItem => Model[i].PRDtId)
+                                        @Html.HiddenFor(modeItem => Model[i].VendorCode)
                                     </td>
                                     <td>
                                         @if (Model[i].PoFlag)
@@ -353,10 +391,13 @@
                                         @Html.DisplayFor(modelItem => Model[i].VendorPartNo)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].Qty)
+                                        @{String strQty = String.Format("{0:n}", Model[i].Qty);}
+                                        @strQty
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].ReqDevDate)
+                                        @{DateTime reqdate = (DateTime)Model[i].ReqDevDate;
+                                            String strReqdate = reqdate.ToString("dd/MM/yyyy");}
+                                        @strReqdate
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => Model[i].Remarks)
@@ -368,18 +409,20 @@
                                         @Html.DisplayFor(modelItem => Model[i].SalesOrder)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => Model[i].Currency_Mst1.Kod)
-                                        @{ViewBag.Currency = Model[i].Currency_Mst1.Kod;}
+                                        @Html.DisplayFor(modelItem => Model[i].CurCode)
+                                        @{ViewBag.Currency = Model[i].CurCode;}
                                     </td>
                                     <th>
-                                        @Html.DisplayFor(modelItem => Model[i].UnitPrice)
+                                        @{String strUnitPrice = String.Format("{0:n}", Model[i].UnitPrice);}
+                                        @strUnitPrice
                                     </th>
                                     <th>
                                         @Html.DisplayFor(modelItem => Model[i].Tax)
                                     </th>
                                     <th>
                                         <!--col 12-->
-                                        @Html.DisplayFor(modelItem => Model[i].TotCostWitTax)
+                                        @{String strTotCostWitTax = String.Format("{0:n}", Model[i].TotCostWitTax);}
+                                        @strTotCostWitTax
                                     </th>
                                     <th>
                                         @Html.DisplayFor(modelItem => Model[i].TaxCode)
@@ -409,13 +452,13 @@
                             <th>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        @foreach (var item in Model.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
+                                        @foreach (var item in Model.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                         {
-                                            @item.Max(s => s.Currency_Mst1.Kod) <br />
+                                            @item.Max(s => s.CurCode) <br />
                                         }
                                     </div>
                                     <div class="col-md-8">
-                                        @foreach (var item in Model.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
+                                        @foreach (var item in Model.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                         {
                                             @item.Sum(s => s.TotCostWitTax) <br />
                                         }
@@ -434,7 +477,10 @@
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
-            <input type="submit" class="btn btn-primary" value="Send to PO List" />
+            <div id="notification">
+                @Html.Partial("_Notifications")
+            </div>
+            <input type="submit" class="btn btn-success" value="Send to PO List" />
             <input type="hidden" value="@ViewBag.PrMstId" id="PrMstId" name="PrMstId" />
             <input type="hidden" value="@ViewBag.PrTypeId" id="Doctype" name="Doctype" />
         </div>
@@ -443,3 +489,8 @@
 </div>
 
 
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(2000).fadeOut("slow");
+    });
+</script>

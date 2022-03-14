@@ -237,6 +237,7 @@ namespace PurchaseWeb_2.Controllers
 
             var PrMstList = db.PR_Mst
                 .Where(x => x.DepartmentId == userdtls.Dpt_id)
+                .OrderByDescending(x=>x.PRId)
                 .ToList();
 
             if (userdtls.Psn_id == 7)
@@ -1058,10 +1059,12 @@ namespace PurchaseWeb_2.Controllers
             return RedirectToAction("PurMstSelected", "Purchase", new { PrMstId = PrMStId });
         }
 
-        public ActionResult PRListForPurchaser()
+        public ActionResult PRListForPurchaser(int Doctype, int group)
         {
+
             var PrMstList = db.PR_Mst
-                .Where(x => x.StatId == 7 || x.StatId == 11)
+                .Where(x => x.StatId == 7 || x.StatId == 11) 
+                .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group )
                 .ToList();
             return PartialView("PRListForPurchaser", PrMstList);
         }
@@ -1074,6 +1077,9 @@ namespace PurchaseWeb_2.Controllers
             if (PrMst != null)
             {
                 PrMst.StatId = 8;
+                PrMst.PurchaserName = Convert.ToString(Session["Username"]);
+                PrMst.SendHODPurDate = DateTime.Now;
+
                 db.SaveChanges();
             }
 
@@ -1287,6 +1293,10 @@ namespace PurchaseWeb_2.Controllers
                 db.SaveChanges();
             }
 
+            //get Vd accgroup
+            var vd = dbDom1.APVENs.Where(x => x.VENDORID == vc.VDCode).SingleOrDefault();
+
+
             // update pr details
             var PrDtls = db.PR_Details
                 .Where(x => x.PRDtId == vc.PRDtId)
@@ -1294,6 +1304,8 @@ namespace PurchaseWeb_2.Controllers
             if (PrDtls != null)
             {
                 PrDtls.VendorName = vc.VCName;
+                PrDtls.VendorCode = vc.VDCode;
+                PrDtls.AccGroup = vd.IDGRP;
                 PrDtls.UnitPrice = vc.CurPrice;
                 PrDtls.CurrId = PrDtls.EstCurrId;
                 PrDtls.TotCostnoTax = vc.TotCostnoTax;
@@ -1466,7 +1478,9 @@ namespace PurchaseWeb_2.Controllers
         {
             if (submit == "Back")
             {
-                return RedirectToAction("PRListForPurchaser","Purchase");
+                var prMst = db.PR_Mst.Where(x => x.PRId == PrMstIdsvPr).SingleOrDefault();
+
+                return RedirectToAction("PRListForPurchaser","Purchase", new { Doctype = prMst.PRTypeId, group = prMst.PRGroupType });
             } 
             else if(submit == "Save" ) 
             {
@@ -1614,14 +1628,20 @@ namespace PurchaseWeb_2.Controllers
                     if (PrMst.PR_Details.Sum(x=>x.TotCostWitTax) >= 50000.00M)
                     {
                         PrMst.StatId = 5;
+                        PrMst.HODPurDeptApprovalBy = Convert.ToString(Session["Username"]);
+                        PrMst.HODPurDeptApprovalDate = DateTime.Now;
                     }
                     else
                     {
                         PrMst.StatId = 9;
+                        PrMst.HODPurDeptApprovalBy = Convert.ToString(Session["Username"]);
+                        PrMst.HODPurDeptApprovalDate = DateTime.Now;
                     }
                 } else
                 {
                     PrMst.StatId = 9;
+                    PrMst.HODPurDeptApprovalBy = Convert.ToString(Session["Username"]);
+                    PrMst.HODPurDeptApprovalDate = DateTime.Now;
                 }               
                 
                 db.SaveChanges();
@@ -1693,6 +1713,8 @@ namespace PurchaseWeb_2.Controllers
             if (PrMst != null)
             {
                 PrMst.StatId = 9;
+                PrMst.MDApprovalBy = Convert.ToString(Session["Username"]);
+                PrMst.MDApprovalDate = DateTime.Now;
                 db.SaveChanges();
             }
             return RedirectToAction("MDApprovalList");

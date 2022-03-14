@@ -47,6 +47,8 @@
         <EntityTypeShape EntityType="Domi_PurModel.Month" Width="1.5" PointX="10.375" PointY="12.875" />
         <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_AccTypeDept" />
         <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_Months" />
+        <EntityTypeShape EntityType="Domi_PurModel.PrGroupType" Width="1.5" PointX="12.375" PointY="12.875" />
+        <AssociationConnector Association="Domi_PurModel.FK_PR_Mst_PrGroupType" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

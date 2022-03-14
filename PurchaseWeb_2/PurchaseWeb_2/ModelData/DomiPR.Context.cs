@@ -50,6 +50,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<PRFile> PRFiles { get; set; }
         public virtual DbSet<MonthlyBudget> MonthlyBudgets { get; set; }
         public virtual DbSet<Month> Months { get; set; }
+        public virtual DbSet<PrGroupType> PrGroupTypes { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {

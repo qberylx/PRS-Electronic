@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Mst>
 
-<div class="card card-primary">
-    <div class="card-header">
-        <div class="card-title">
-            <h5>Purchase Request List</h5>
+<div class="card card-info">
+    <div class="card-header"">
+        <div class="card-title ">
+            <h6>Purchase Request List</h6>
         </div>
     </div>
     <div class="card-body">
@@ -25,6 +25,9 @@
                     PR Type
                 </th>
                 <th>
+                    PR Group
+                </th>
+                <th>
                     PR Tot. Amount
                 </th>
                 <th>
@@ -32,10 +35,12 @@
                 </th>
                 <th></th>
             </tr>
-            @{ String status = "false"; }
+            @{ String status = "false";
+                String showFlag = "d-none";
+                }
                 @foreach (var item in Model)
                 {
-                    if (item.StatId == 11) { status = "true"; } else { status = "false";  }
+                    if (item.StatId == 11) { status = "true"; showFlag = ""; } else { status = "false"; showFlag = "d-none"; }
                     <tr data-widget="expandable-table"   aria-expanded = "@status" >
                         <td>
                             @Html.DisplayFor(modelItem => item.PRNo)
@@ -44,13 +49,16 @@
                             @Html.DisplayFor(modelItem => item.RequestDate)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Department_mst.Department_name)
+                            @Html.DisplayFor(modelItem => item.AccTypeDept.DeptName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Usr_mst.Username)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.PRType_mst.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PrGroupType1.GroupName)
                         </td>
                         <td style="width:200px">
                             <div class="row">
@@ -85,7 +93,7 @@
 
                         </td>
                     </tr>
-                    <tr class="expandable-body  ">
+                    <tr class="expandable-body @showFlag ">
                         <td colspan="8">
                             <p style="color:indianred; padding-left:2em">@item.HODPurComment</p>
                         </td>

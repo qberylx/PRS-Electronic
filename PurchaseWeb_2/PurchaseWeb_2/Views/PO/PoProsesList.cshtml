@@ -52,6 +52,9 @@
                     PR Type
                 </th>
                 <th>
+                    PR Group
+                </th>
+                <th>
                     Grand Amount
                 </th>
                 <th>
@@ -82,17 +85,25 @@
                         @Html.DisplayFor(modelItem => item.PRType_mst.Name)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.PrGroupType1.GroupName)
+                    </td>
+                    <td>
                         <div class="row">
                             <div class="col-md-4">
-                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                 {
-                                    @currency.Max(s => s.Currency_Mst1.Kod) <br />
+                                    
+                                    @currency.Max(s => s.CurCode) <br />
                                 }
                             </div>
                             <div class="col-md-8">
-                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurrId).GroupBy(x => x.CurrId))
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                 {
-                                    @currency.Sum(s => s.TotCostWitTax) <br />
+                                    String strTotCostWitTax = String.Format("{0:n}", currency.Sum(s => s.TotCostWitTax));
+                                    @strTotCostWitTax
+                                    @*
+                                    @currency.Sum(s => s.TotCostWitTax) *@
+                                        <br />
                                 }
                             </div>
                         </div>

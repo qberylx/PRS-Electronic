@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using PurchaseWeb_2.Extensions;
 using PurchaseWeb_2.ModelData;
 using PurchaseWeb_2.Models;
 using System;
@@ -60,7 +61,8 @@ namespace PurchaseWeb_2.Controllers
                 DomiPartNo = x.DomiPartNo,
                 VendorPartNo = x.VendorPartNo,
                 Qty = (decimal)x.Qty,
-                UOMId = (int)x.UOMId,
+                //UOMId = (int)x.UOMId,
+                UOMName = x.UOMName,
                 ReqDevDate = (DateTime)x.ReqDevDate,
                 Remarks = x.Remarks,
                 Device = x.Device,
@@ -68,7 +70,8 @@ namespace PurchaseWeb_2.Controllers
                 VendorName = x.VendorName ?? "-",
                 EstCurrId = (int)(x.EstCurrId ?? 0),
                 EstimateUnitPrice = (decimal)(x.EstimateUnitPrice ?? 0.00M),
-                CurrId = (int)x.CurrId,
+                //CurrId = (int)x.CurrId,
+                CurCode = x.CurCode,
                 UnitPrice = (decimal)x.UnitPrice,
                 TotCostnoTax = (decimal)(x.TotCostnoTax ?? 0.00M),
                 Tax = (int)x.Tax,
@@ -77,11 +80,13 @@ namespace PurchaseWeb_2.Controllers
                 TaxClass = (int)x.TaxClass,
                 PoFlag = (bool)(x.PoFlag ?? false),
                 NoPo = x.NoPo ?? "",
+                VendorCode = x.VendorCode,
+                AccGroup = x.AccGroup,
                 PR_Mst = x.PR_Mst,
-                UOM_mst = x.UOM_mst,
+                //UOM_mst = x.UOM_mst,
                 Usr_mst = x.Usr_mst,
-                Currency_Mst = x.Currency_Mst,
-                Currency_Mst1 = x.Currency_Mst1,
+                //Currency_Mst = x.Currency_Mst,
+                //Currency_Mst1 = x.Currency_Mst1,
                 PR_VendorComparison = x.PR_VendorComparison
             }).ToList();
 
@@ -109,43 +114,68 @@ namespace PurchaseWeb_2.Controllers
 
             // get first vendor save check the rest of checked line if vendor is the same as first vendor
             // if not the same throw out error saying user have to select same vendor .
-            var chkVendor = pR_Details.Select(x => new {x.VendorName}).Distinct();
-            var countVendor = chkVendor.Select(x => x.VendorName).Count();
-            if (chkVendor == null || countVendor > 1)
+            var countVendor = pR_Details
+                .Where(x => x.PoFlag == true)
+                .Select(x => x.VendorCode)
+                .Distinct().Count();
+            //var countVendor = chkVendor.Select(x => x.VendorCode).Count();
+            if ( countVendor > 1)
             {
                 ViewBag.Message = "Please select line from the same vendor";
-                RedirectToAction("PurDetailsPOViewSelected", "PO", new { PrMstId = PrMstId });
-            }
-
-            // get POid
-            string POnewNo = getNewPoNO(Doctype);
-
-            // update prdetails PO 
-            foreach (PRdtlsViewModel pR_Detail in pR_Details)
+                this.AddNotification("Please select line from the same vendor", NotificationType.ERROR);
+                //RedirectToAction("PurDetailsPOViewSelected", "PO", new { PrMstId = PrMstId });
+            } 
+            else
             {
-                var chkPrDetails = db.PR_Details.SingleOrDefault(x => x.PRDtId == pR_Detail.PRDtId);
-                if (chkPrDetails != null)
+                // get POid
+                string POnewNo = getNewPoNO(Doctype);
+
+                // update prdetails PO 
+                foreach (PRdtlsViewModel pR_Detail in pR_Details)
                 {
-                    if (pR_Detail.PoFlag)
+                    var chkPrDetails = db.PR_Details
+                        .Where(x => x.PRDtId == pR_Detail.PRDtId)
+                        .SingleOrDefault();
+                    if (chkPrDetails != null)
                     {
-                        chkPrDetails.NoPo = POnewNo;
-                        chkPrDetails.PoFlag = true;
-                        db.SaveChanges();
-                    }                    
+                        if (pR_Detail.PoFlag) // if poflag has been check
+                        {
+                            chkPrDetails.NoPo = POnewNo;
+                            chkPrDetails.PoFlag = true;
+                            db.SaveChanges();
+                        }
+                    }
                 }
+
+                //get pr mst
+                var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).SingleOrDefault();
+
+                // wondering if needed to make new table for PO created
+                var PO = db.Set<PO_Mst>();
+                PO.Add(new PO_Mst
+                {
+                    NoPo = POnewNo,
+                    CreateBy = (String)Session["Username"],
+                    CreateDate = DateTime.Now,
+                    PRNo = POnewNo,
+                    PRid = prMst.PRId,
+                    Purchasername = prMst.PurchaserName,
+                    RequestorName = prMst.Usr_mst.Username,
+                    RequisitionDate = prMst.CreateDate,
+                    TotPOAmt = prMst.PR_Details.Where(x=>x.NoPo == POnewNo) 
+                        .Sum(x=>x.TotCostWitTax),
+                    Description = prMst.PR_Details.Where(x => x.NoPo == POnewNo)
+                        .Select(x=>x.Description)
+                        .Take(1)
+                        .First()
+                });
+                db.SaveChanges();
+
+                this.AddNotification("PO No has been created", NotificationType.SUCCESS);
+
+
+                //return RedirectToAction("PurDetailsPOViewSelected", "PO", new { PrMstId = PrMstId });
             }
-
-            // wondering if needed to make new table for PO created
-            var PO = db.Set<PO_Mst>();
-            PO.Add(new PO_Mst
-            {
-                NoPo = POnewNo,
-                CreateBy = (String)Session["Username"],
-                CreateDate = DateTime.Now
-            }) ;
-            db.SaveChanges();
-
-
 
             return RedirectToAction("PurDetailsPOViewSelected", "PO", new { PrMstId = PrMstId });
         }
@@ -241,9 +271,9 @@ namespace PurchaseWeb_2.Controllers
                 dt.Rows.Add(po.RN,
                     po.NoPo,
                     po.PRNo,
-                    po.CreateDate,
+                    po.CreateDatePO,
                     po.Description,
-                    po.UserName
+                    po.RequestorName
                     );
             }
 

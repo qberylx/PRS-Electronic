@@ -115,6 +115,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="NoPo" Type="varchar" MaxLength="20" />
           <Property Name="CreateBy" Type="varchar" MaxLength="50" />
           <Property Name="CreateDate" Type="datetime" />
+          <Property Name="PRNo" Type="varchar" MaxLength="50" />
+          <Property Name="PRid" Type="int" />
+          <Property Name="Purchasername" Type="varchar" MaxLength="50" />
+          <Property Name="RequestorName" Type="varchar" MaxLength="50" />
+          <Property Name="RequisitionDate" Type="datetime" />
+          <Property Name="TotPOAmt" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Description" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Position_mst">
           <Key>
@@ -208,6 +215,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="FlagUpdateMonthlyBudget" Type="bit" />
           <Property Name="PRGroupType" Type="int" />
           <Property Name="HODPurComment" Type="varchar" MaxLength="300" />
+          <Property Name="PurchaserName" Type="varchar" MaxLength="100" />
+          <Property Name="SendHODPurDate" Type="datetime" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -245,6 +254,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="PrMstId" Type="int" />
           <Property Name="FileName" Type="varchar" MaxLength="100" />
           <Property Name="FilePath" Type="varchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="PrGroupType">
+          <Key>
+            <PropertyRef Name="GroupId" />
+          </Key>
+          <Property Name="GroupId" Type="int" Nullable="false" />
+          <Property Name="GroupName" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PRType_mst">
           <Key>
@@ -409,6 +425,18 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PR_Mst_PrGroupType">
+          <End Role="PrGroupType" Type="Self.PrGroupType" Multiplicity="0..1" />
+          <End Role="PR_Mst" Type="Self.PR_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrGroupType">
+              <PropertyRef Name="GroupId" />
+            </Principal>
+            <Dependent Role="PR_Mst">
+              <PropertyRef Name="PRGroupType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PR_Mst_PRType_mst">
           <End Role="PRType_mst" Type="Self.PRType_mst" Multiplicity="0..1" />
           <End Role="PR_Mst" Type="Self.PR_Mst" Multiplicity="*" />
@@ -560,6 +588,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySet Name="PR_Mst" EntityType="Self.PR_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_VendorComparison" EntityType="Self.PR_VendorComparison" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRFile" EntityType="Self.PRFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PrGroupType" EntityType="Self.PrGroupType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRType_mst" EntityType="Self.PRType_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenuMapping_mst" EntityType="Self.RoleMenuMapping_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status_Mst" EntityType="Self.Status_Mst" Schema="dbo" store:Type="Tables" />
@@ -607,6 +636,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           </AssociationSet>
           <AssociationSet Name="FK_PR_Mst_Department_mst" Association="Self.FK_PR_Mst_Department_mst">
             <End Role="Department_mst" EntitySet="Department_mst" />
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PR_Mst_PrGroupType" Association="Self.FK_PR_Mst_PrGroupType">
+            <End Role="PrGroupType" EntitySet="PrGroupType" />
             <End Role="PR_Mst" EntitySet="PR_Mst" />
           </AssociationSet>
           <AssociationSet Name="FK_PR_Mst_PRType_mst" Association="Self.FK_PR_Mst_PRType_mst">
@@ -814,6 +847,11 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
             <End Role="Month" EntitySet="Months" />
             <End Role="MonthlyBudget" EntitySet="MonthlyBudgets" />
           </AssociationSet>
+          <EntitySet Name="PrGroupTypes" EntityType="Domi_PurModel.PrGroupType" />
+          <AssociationSet Name="FK_PR_Mst_PrGroupType" Association="Domi_PurModel.FK_PR_Mst_PrGroupType">
+            <End Role="PrGroupType" EntitySet="PrGroupTypes" />
+            <End Role="PR_Mst" EntitySet="PR_Mst" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -1004,6 +1042,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="FlagUpdateMonthlyBudget" Type="Boolean" />
           <Property Name="PRGroupType" Type="Int32" />
           <Property Name="HODPurComment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PrGroupType1" Relationship="Domi_PurModel.FK_PR_Mst_PrGroupType" FromRole="PR_Mst" ToRole="PrGroupType" />
+          <Property Name="PurchaserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SendHODPurDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1241,49 +1282,14 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="NoPo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="PRNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Purchasername" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RequestorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RequisitionDate" Type="DateTime" Precision="3" />
+          <Property Name="TotPOAmt" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PRid" Type="Int32" />
         </EntityType>
-        <ComplexType Name="GetPOListbyDate_Result">
-          <Property Type="Int64" Name="RN" Nullable="true" />
-          <Property Type="Int32" Name="POId" Nullable="false" />
-          <Property Type="String" Name="NoPo" Nullable="true" MaxLength="50" />
-          <Property Type="DateTime" Name="CreateDate" Nullable="true" Precision="23" />
-          <Property Type="Int32" Name="PRDtId" Nullable="false" />
-          <Property Type="Int32" Name="PRid" Nullable="true" />
-          <Property Type="String" Name="PRNo" Nullable="true" MaxLength="15" />
-          <Property Type="Int32" Name="TypePRId" Nullable="true" />
-          <Property Type="DateTime" Name="RequestDate" Nullable="true" />
-          <Property Type="Int32" Name="UserId" Nullable="true" />
-          <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Description" Nullable="true" MaxLength="300" />
-          <Property Type="String" Name="DomiPartNo" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="VendorPartNo" Nullable="true" MaxLength="50" />
-          <Property Type="Decimal" Name="Qty" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Int32" Name="UOMId" Nullable="true" />
-          <Property Type="DateTime" Name="ReqDevDate" Nullable="true" />
-          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="300" />
-          <Property Type="String" Name="Device" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="SalesOrder" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="VendorName" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="EstCurrId" Nullable="true" />
-          <Property Type="Decimal" Name="EstimateUnitPrice" Nullable="true" Precision="18" Scale="5" />
-          <Property Type="Int32" Name="CurrId" Nullable="true" />
-          <Property Type="Decimal" Name="UnitPrice" Nullable="true" Precision="18" Scale="5" />
-          <Property Type="Decimal" Name="TotCostnoTax" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="Int32" Name="Tax" Nullable="true" />
-          <Property Type="Decimal" Name="TotCostWitTax" Nullable="true" Precision="18" Scale="2" />
-          <Property Type="String" Name="TaxCode" Nullable="true" MaxLength="10" />
-          <Property Type="Int32" Name="TaxClass" Nullable="true" />
-          <Property Type="Boolean" Name="PoFlag" Nullable="true" />
-          <Property Type="String" Name="ApprovalHOD" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="ApprovalHODStatus" Nullable="true" MaxLength="2" />
-          <Property Type="String" Name="ApprovalMD" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="ApprovalMDStatus" Nullable="true" MaxLength="2" />
-          <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
-          <Property Type="Int32" Name="ModifiedUser" Nullable="true" />
-          <Property Type="String" Name="CreateByPO" Nullable="true" MaxLength="50" />
-          <Property Type="DateTime" Name="CreateDatePO" Nullable="true" Precision="23" />
-        </ComplexType>
         <EntityType Name="PRFile">
           <Key>
             <PropertyRef Name="FileId" />
@@ -1377,6 +1383,40 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="PrGroupType">
+          <Key>
+            <PropertyRef Name="GroupId" />
+          </Key>
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <Property Name="GroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Mst_PrGroupType" FromRole="PrGroupType" ToRole="PR_Mst" />
+        </EntityType>
+        <Association Name="FK_PR_Mst_PrGroupType">
+          <End Type="Domi_PurModel.PrGroupType" Role="PrGroupType" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PR_Mst" Role="PR_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrGroupType">
+              <PropertyRef Name="GroupId" />
+            </Principal>
+            <Dependent Role="PR_Mst">
+              <PropertyRef Name="PRGroupType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="GetPOListbyDate_Result">
+          <Property Type="Int64" Name="RN" Nullable="true" />
+          <Property Type="Int32" Name="POId" Nullable="false" />
+          <Property Type="String" Name="NoPo" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="CreateByPO" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="CreateDatePO" Nullable="true" Precision="23" />
+          <Property Type="String" Name="PRNo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="PRid" Nullable="true" />
+          <Property Type="String" Name="Purchasername" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RequestorName" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="RequisitionDate" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="TotPOAmt" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Description" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1525,6 +1565,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="SendHODPurDate" ColumnName="SendHODPurDate" />
+                <ScalarProperty Name="PurchaserName" ColumnName="PurchaserName" />
                 <ScalarProperty Name="HODPurComment" ColumnName="HODPurComment" />
                 <ScalarProperty Name="PRGroupType" ColumnName="PRGroupType" />
                 <ScalarProperty Name="FlagUpdateMonthlyBudget" ColumnName="FlagUpdateMonthlyBudget" />
@@ -1674,6 +1716,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySetMapping Name="PO_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PO_Mst">
               <MappingFragment StoreEntitySet="PO_Mst">
+                <ScalarProperty Name="PRid" ColumnName="PRid" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="TotPOAmt" ColumnName="TotPOAmt" />
+                <ScalarProperty Name="RequisitionDate" ColumnName="RequisitionDate" />
+                <ScalarProperty Name="RequestorName" ColumnName="RequestorName" />
+                <ScalarProperty Name="Purchasername" ColumnName="Purchasername" />
+                <ScalarProperty Name="PRNo" ColumnName="PRNo" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="NoPo" ColumnName="NoPo" />
@@ -1687,43 +1736,15 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
                 <ScalarProperty Name="RN" ColumnName="RN" />
                 <ScalarProperty Name="POId" ColumnName="POId" />
                 <ScalarProperty Name="NoPo" ColumnName="NoPo" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="PRDtId" ColumnName="PRDtId" />
-                <ScalarProperty Name="PRid" ColumnName="PRid" />
-                <ScalarProperty Name="PRNo" ColumnName="PRNo" />
-                <ScalarProperty Name="TypePRId" ColumnName="TypePRId" />
-                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="DomiPartNo" ColumnName="DomiPartNo" />
-                <ScalarProperty Name="VendorPartNo" ColumnName="VendorPartNo" />
-                <ScalarProperty Name="Qty" ColumnName="Qty" />
-                <ScalarProperty Name="UOMId" ColumnName="UOMId" />
-                <ScalarProperty Name="ReqDevDate" ColumnName="ReqDevDate" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="Device" ColumnName="Device" />
-                <ScalarProperty Name="SalesOrder" ColumnName="SalesOrder" />
-                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
-                <ScalarProperty Name="EstCurrId" ColumnName="EstCurrId" />
-                <ScalarProperty Name="EstimateUnitPrice" ColumnName="EstimateUnitPrice" />
-                <ScalarProperty Name="CurrId" ColumnName="CurrId" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="TotCostnoTax" ColumnName="TotCostnoTax" />
-                <ScalarProperty Name="Tax" ColumnName="Tax" />
-                <ScalarProperty Name="TotCostWitTax" ColumnName="TotCostWitTax" />
-                <ScalarProperty Name="TaxCode" ColumnName="TaxCode" />
-                <ScalarProperty Name="TaxClass" ColumnName="TaxClass" />
-                <ScalarProperty Name="PoFlag" ColumnName="PoFlag" />
-                <ScalarProperty Name="ApprovalHOD" ColumnName="ApprovalHOD" />
-                <ScalarProperty Name="ApprovalHODStatus" ColumnName="ApprovalHODStatus" />
-                <ScalarProperty Name="ApprovalMD" ColumnName="ApprovalMD" />
-                <ScalarProperty Name="ApprovalMDStatus" ColumnName="ApprovalMDStatus" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
                 <ScalarProperty Name="CreateByPO" ColumnName="CreateByPO" />
                 <ScalarProperty Name="CreateDatePO" ColumnName="CreateDatePO" />
+                <ScalarProperty Name="PRNo" ColumnName="PRNo" />
+                <ScalarProperty Name="PRid" ColumnName="PRid" />
+                <ScalarProperty Name="Purchasername" ColumnName="Purchasername" />
+                <ScalarProperty Name="RequestorName" ColumnName="RequestorName" />
+                <ScalarProperty Name="RequisitionDate" ColumnName="RequisitionDate" />
+                <ScalarProperty Name="TotPOAmt" ColumnName="TotPOAmt" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1756,6 +1777,14 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
               <MappingFragment StoreEntitySet="Months">
                 <ScalarProperty Name="MonthName" ColumnName="MonthName" />
                 <ScalarProperty Name="Month1" ColumnName="Month" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrGroupTypes">
+            <EntityTypeMapping TypeName="Domi_PurModel.PrGroupType">
+              <MappingFragment StoreEntitySet="PrGroupType">
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

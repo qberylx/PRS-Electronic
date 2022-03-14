@@ -242,6 +242,9 @@
     <Compile Include="ModelData\PRFile.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\PrGroupType.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\PRType_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>

@@ -40,16 +40,19 @@
                     @Html.DisplayNameFor(model => model.PRNo)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.RequestDate)
+                    Request Date
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Department_mst.Department_name)
+                    Department
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Usr_mst.Username)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PRType_mst.Name)
+                    Pr Type
+                </th>
+                <th>
+                    Pr Group
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Status_Mst.Name)
@@ -74,6 +77,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PRType_mst.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrGroupType1.GroupName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Status_Mst.Name)

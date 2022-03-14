@@ -40,22 +40,22 @@
                     @Html.DisplayNameFor(model => model.PRNo)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.RequestDate)
+                    Requisition Date
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Department_mst.Department_name)
+                    Department
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Usr_mst.Username)
+                    Requestor
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PRType_mst.Name)
+                    PR Type
                 </th>
                 <th>
                     Grand Total
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Status_Mst.Name)
+                    Status
                 </th>
                 <th></th>
             </tr>
@@ -70,7 +70,7 @@
                         @Html.DisplayFor(modelItem => item.RequestDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Department_mst.Department_name)
+                        @Html.DisplayFor(modelItem => item.AccTypeDept.DeptName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Usr_mst.Username)
@@ -79,7 +79,22 @@
                         @Html.DisplayFor(modelItem => item.PRType_mst.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.GrandAmt)
+                        <div class="row">
+                            <div class="col-md-4">
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                {
+                                    @currency.Max(s => s.CurCode) <br />
+                                }
+                            </div>
+                            <div class="col-md-8">
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                {
+                                    String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.TotCostWitTax));
+                                    @strTotAmt
+                                    <br />
+                                }
+                            </div>
+                        </div>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Status_Mst.Name)

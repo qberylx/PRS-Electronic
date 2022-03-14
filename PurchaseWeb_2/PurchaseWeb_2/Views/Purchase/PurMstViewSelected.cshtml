@@ -16,13 +16,17 @@
                 <div class="row">
                     @if (Model.PRTypeId != 4)
                     {
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <!--PR no-->
                             <strong>PR No :</strong> @Html.DisplayFor(model => model.PRNo)
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <!--PR type-->
                             <strong>PR Type :</strong>@Html.DisplayFor(model => model.PRType_mst.Name)
+                        </div>
+                        <div class="col-md-4">
+                            <!--PR type-->
+                            <strong>PR Group Type :</strong>@Html.DisplayFor(model => model.PrGroupType1.GroupName)
                         </div>
                     }
                     else

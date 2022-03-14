@@ -93,25 +93,28 @@
 
     function chgPRtype(prType) {
         console.log(prType);
-        if (prType == 4) {
-            $("#PrGroup").hide();
-        } else {
-            $.ajax({
-            type: "POST",
-            url: "@Url.Action("groupType", "Purchase")",
-            data: JSON.stringify({ groupType: prType }),
-            contentType: "application/json; charset=utf-8",
-            dataType: "html",
-            success: function (response) {
-                $("#PrGroup").show();
-                $("#groupType").html(response);
-                
-            },
-            failure: function (response) {
-                alert(response.responseText);
+
+        $.ajax({
+        type: "POST",
+        url: "@Url.Action("groupType", "Purchase")",
+        data: JSON.stringify({ groupType: prType }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "html",
+        success: function (response) {
+            $("#PrGroup").show();
+            $("#groupType").html(response);
+            if (prType == 4) {
+                $("#PrGroup").hide();
             }
-        });
+                
+        },
+        failure: function (response) {
+            alert(response.responseText);
         }
+        });
+
+        
+        
 
     }
 </script>

@@ -43,19 +43,22 @@
                     @Html.DisplayNameFor(model => model.RequestDate)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Department_mst.Department_name)
+                    Department
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Usr_mst.Username)
+                    Requestor
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PRType_mst.Name)
+                    Purchaser
+                </th>
+                <th>
+                    PR Type
                 </th>
                 <th>
                     Grand Amount
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Status_Mst.Name)
+                    PR Status
                 </th>
                 <th></th>
             </tr>
@@ -70,10 +73,13 @@
                         @Html.DisplayFor(modelItem => item.RequestDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Department_mst.Department_name)
+                        @Html.DisplayFor(modelItem => item.AccTypeDept.DeptName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Usr_mst.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PurchaserName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PRType_mst.Name)

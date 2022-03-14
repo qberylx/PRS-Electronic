@@ -53,6 +53,8 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<bool> FlagUpdateMonthlyBudget { get; set; }
         public Nullable<int> PRGroupType { get; set; }
         public string HODPurComment { get; set; }
+        public string PurchaserName { get; set; }
+        public Nullable<System.DateTime> SendHODPurDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }
@@ -63,5 +65,6 @@ namespace PurchaseWeb_2.ModelData
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRFile> PRFiles { get; set; }
         public virtual AccTypeDept AccTypeDept { get; set; }
+        public virtual PrGroupType PrGroupType1 { get; set; }
     }
 }
