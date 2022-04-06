@@ -38,7 +38,7 @@
                     }
                 @foreach (var item in Model)
                 {
-                    if (item.StatId == 2) { status = "true"; showFlag = ""; } else { status = "false"; showFlag = "d-none"; }
+                    if (item.StatId == 2 || item.StatId == 13 ) { status = "true"; showFlag = ""; } else { status = "false"; showFlag = "d-none"; }
                     <tr data-widget="expandable-table"   aria-expanded = "@status"  >
                         <td>
                             @Html.DisplayFor(modelItem => item.PRNo)
@@ -65,7 +65,7 @@
                             @Html.DisplayFor(modelitem => item.PR_Details.Count)
                         </td>
 
-                        @if (item.StatId != 1 && item.StatId != 2)
+                        @if (item.StatId != 1 && item.StatId != 2 && item.StatId != 13)
                         {
                             <td>
                                 @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
@@ -92,7 +92,7 @@
                                         break;
 
                                     case 4: 
-                                        <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType4","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                        <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType4","Purchase", new {PrMstId = item.PRId , PrGroup = item.PRGroupType})">Add Details</a>
                                     
                                         break;
                                     case 5: 
@@ -117,7 +117,11 @@
                     
                     <tr class="expandable-body @showFlag " >
                         <td colspan="7">
-                            <p style="color:indianred; padding-left:2em">@item.HODComment</p>
+                            <p style="color:indianred; padding-left:2em">
+                            @if (item.StatId == 2)
+                            { @item.HODComment }
+                            else if (item.StatId == 13)
+                            { @item.PurchasingComment }</p>
                         </td>
                     </tr>
                 }

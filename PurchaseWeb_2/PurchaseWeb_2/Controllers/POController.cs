@@ -264,6 +264,14 @@ namespace PurchaseWeb_2.Controllers
                                                      new DataColumn("Description"),
                                                      new DataColumn("Requestor") });
 
+            DataTable dt2 = new DataTable("Sheet 1");
+            dt2.Columns.AddRange(new DataColumn[6] { new DataColumn("No"),
+                                                     new DataColumn("POno"),
+                                                     new DataColumn("PRno"),
+                                                     new DataColumn("PrDate"),
+                                                     new DataColumn("Description"),
+                                                     new DataColumn("Requestor") });
+
             var POlist = db.GetPOListbyDate(start, end).ToList();
 
             foreach (var po in POlist)
@@ -277,9 +285,21 @@ namespace PurchaseWeb_2.Controllers
                     );
             }
 
+            foreach (var po in POlist)
+            {
+                dt2.Rows.Add(po.RN,
+                    po.NoPo,
+                    po.PRNo,
+                    po.CreateDatePO,
+                    po.Description,
+                    po.RequestorName
+                    );
+            }
+
             using (XLWorkbook wb = new XLWorkbook()) //Install ClosedXml from Nuget for XLWorkbook  
             {
                 wb.Worksheets.Add(dt);
+                wb.Worksheets.Add(dt2);
                 using (MemoryStream stream = new MemoryStream()) //using System.IO;  
                 {
                     wb.SaveAs(stream);

@@ -26,7 +26,7 @@
                             <strong>Budget </strong>
                         </div>
                         <div class="col-md-6">
-                            @{String strAssetBudget = String.Format("{0:n2}", Model.AssetBudget); }
+                            @{String strAssetBudget = String.Format("{0:n2}", ViewBag.CPRFBalance); }
                             <strong>: </strong> MYR @strAssetBudget
                         </div>
                     </div>
@@ -44,7 +44,8 @@
                             <strong>B/O </strong>
                         </div>
                         <div class="col-md-6">
-                            @{String strAssetBal = String.Format("{0:n2}", Model.AssetBal); }
+                            @{decimal bo = ViewBag.CPRFBalance - Model.PR_Details.Sum(x => x.TotCostWitTax); }
+                            @{String strAssetBal = String.Format("{0:n2}", bo); }
                             <strong>: </strong> MYR @strAssetBal
                         </div>
                     </div>

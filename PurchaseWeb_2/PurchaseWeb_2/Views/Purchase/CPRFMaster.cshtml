@@ -1,0 +1,86 @@
+﻿@model PurchaseWeb_2.Models.CPRFMstModel
+
+@{
+    ViewBag.Title = "CPRFMaster";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">CPRF Master List</h3>
+            </div>
+            <div class="card-body">
+                @using (Ajax.BeginForm("AddCPRF", "Purchase",new { id = "frmAddCPRF" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCPRFList", OnSuccess = "OnSuccess" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="row">
+                        <div class="col-1">
+                            <b>CPRF No. </b>
+                        </div>
+                        <div class="col-2">
+                            @Html.EditorFor(model => model.CPRFNo, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CPRFNo, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-1">
+                            <b>CPRF Budget</b>
+                        </div>
+                        <div class="col-2">
+                            @Html.EditorFor(model => model.CPRFBudget, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CPRFBudget, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-1">
+                            <b>CPRF Balance</b>
+                        </div>
+                        <div class="col-2">
+                            @Html.EditorFor(model => model.CPRFBalance, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CPRFBalance, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-offset-2 col-2">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="divCPRFList">
+    @{ Html.RenderAction("CPRFList", "Purchase");}
+    
+</div>
+
+
+<script>
+    $(function () {
+        
+        $('input#CPRFBudget').blur(function () {
+            var textAmt = (this.value).replace(/,/g, "");
+            var amt = parseFloat(this.value);
+            $(this).val(amt.toFixed(2));
+            $('#CPRFBalance').val(amt.toFixed(2));
+        });
+
+        $('input#CPRFBalance').blur(function () {
+            var textAmt = (this.value).replace(/,/g, "");
+            var amt = parseFloat(this.value);
+            $(this).val(amt.toFixed(2));
+        });
+    });
+
+    $('#frmAddCPRF').reset();
+
+    function OnSuccess() {
+        this.reset();
+        
+    }
+</script>

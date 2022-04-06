@@ -1,0 +1,74 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFMst>
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-info">
+            <div class="card-header">
+
+            </div>
+            <div class="card-body">
+                <div id="notification">
+                    @Html.Partial("_Notifications")
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-sm ">
+                            <tr>
+                                <th>
+                                    No.
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CPRFNo)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CPRFBudget)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CPRFBalance)
+                                </th>
+                                <th></th>
+                            </tr>
+                            @{int i = 0;}
+                            @foreach (var item in Model)
+                            {
+                                i++;
+                                <tr>
+                                    <td>
+                                        @i
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CPRFNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CPRFBudget)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CPRFBalance)
+                                    </td>
+                                    <td>
+                                        @using (Ajax.BeginForm("CprfDelete", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCPRFList", OnSuccess = "OnSuccess" }))
+                                        {
+                                            <input type="hidden" name="CPRFId" id="CPRFId" value="@item.CPRFId" />
+                                            <button  class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(2000).fadeOut("slow");
+    });
+</script>
+
+

@@ -1,8 +1,10 @@
-﻿
-            
+﻿@model List<PurchaseWeb_2.ModelData.PrTypeMap>
+
 <select class="form-control" id="group" name="group">
-    <option value="3">CPRF</option>
-    <option value="4">NoN CPRF</option>
-    <option value="5">WAFER</option>
-    <option value="6">Direct Material</option>
+    @foreach (var pr in Model)
+    {
+        <option value="@pr.GroupId">@pr.PrGroupType.GroupName</option>
+    }
+    
+
 </select>

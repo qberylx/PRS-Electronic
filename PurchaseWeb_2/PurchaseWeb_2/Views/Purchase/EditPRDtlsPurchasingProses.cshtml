@@ -1,0 +1,182 @@
+﻿@model  PurchaseWeb_2.Models.PRDtlsPurProViewModel
+
+<div class="row zoomedElement">
+    <div class="col-md-12">
+        <!--card header-->
+        <div class="card card-primary">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-2 ">
+                        <h3 class="card-title vertical-center">Purchase Request Details</h3>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--card body-->
+        @*using (Html.BeginForm("AddPurDtls", "Purchase",FormMethod.Post))*@
+        @using (Ajax.BeginForm("EdiPurDtlsType4ForPurchasing", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" , OnSuccess= "OnSuccess" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.PRid, new { @Value = Model.PRid })
+            @Html.HiddenFor(model => model.PRDtId, new { @Value = Model.PRDtId })
+            @Html.HiddenFor(model => model.PRNo, new { @Value = Model.PR_Mst.PRNo })
+            @Html.HiddenFor(model => model.TypePRId, new { @Value = Model.PR_Mst.PRTypeId })
+
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-2">
+                        <label class="control-label ">Vendor</label>
+                        <br />
+                        @Model.VendorName
+                    </div>
+
+                    <div class="col-3">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
+                        <br />
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 3, @Value = Model.Description })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-1">
+                        @Html.LabelFor(model => model.VendorPartNo, htmlAttributes: new { @class = "control-label " })
+                        <br />
+                        @Html.EditorFor(model => model.VendorPartNo, new { htmlAttributes = new { @class = "form-control", @Value = Model.VendorPartNo } })
+                        @Html.ValidationMessageFor(model => model.VendorPartNo, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-1">
+                        @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <br />
+                        @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control", @Value = Model.Qty } })
+                        @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-1">
+                        <strong>UOM</strong>
+                        <br />
+                        @Html.DropDownList("UOMName",
+                            new SelectList(ViewBag.UOMList, "UNIT", "UNIT", Model.UOMName),
+                            "Please Select the UOM",
+                            new { @class = "custom-select form-control-border" })
+                        @Html.ValidationMessageFor(model => model.UOMName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-1">
+                        <strong>Req. Delivery Date</strong>
+                        <br />
+                        @{ string ReqDevDate = Model.ReqDevDate?.ToString("dd/MM/yyyy"); }
+                        @ReqDevDate
+                        @*@Html.EditorFor(model => model.ReqDevDate, new { htmlAttributes = new { @class = "form-control", @Value = Model.ReqDevDate } })*@
+                        @Html.ValidationMessageFor(model => model.ReqDevDate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-2">
+                        <strong>Estimated Unit Price</strong>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-3">
+                                @Html.DropDownList("CurCode",
+                                   new SelectList(ViewBag.CurrList, "CURID", "CURID", Model.CurCode),
+                                   new { @class = "custom-select form-control-border" })
+                            </div>
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.EstimateUnitPrice, new { htmlAttributes = new { @class = "form-control", @Value = Model.EstimateUnitPrice } })
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.EstimateUnitPrice, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-1">
+                        <b>Last price</b>
+                        <br />
+                        @Html.EditorFor(model => model.LastPrice, new { htmlAttributes = new { @class = "form-control", @Value = Model.LastPrice, @onfocusout="CostdownUpt(this.val)" } })
+                    </div>
+
+                    <div class="col-2">
+                        <b>Quotation Date</b>
+                        <br />
+                        @{ string LastQuoteDate = Model.LastQuoteDate?.ToString("yyyy-MM-dd"); }
+                        @Html.EditorFor(model => model.LastQuoteDate, new { htmlAttributes = new { @class = "form-control", @Value = LastQuoteDate } })
+                    </div>
+
+                    <div class="col-2">
+                        <b>PO Date</b>
+                        <br />
+                        @{ string poDate = Model.PODate?.ToString("yyyy-MM-dd")  ; }
+                        @Html.EditorFor(model => model.PODate, new { htmlAttributes = new { @class = "form-control", @Value = poDate } })
+                    </div>
+
+                    <div class="col-1">
+                        <b>Last PO No</b>
+                        <br />
+                        
+                        @Html.EditorFor(model => model.LastPONo, new { htmlAttributes = new { @class = "form-control", @Value = Model.LastPONo } })
+                    </div>
+
+                    <div class="col-2">
+                        <b>Remarks</b>
+                        <br />
+                        @Html.TextAreaFor(model => model.PurchasingRemarks, new { @class = "form-control", @rows = 3, @Value = Model.PurchasingRemarks })
+                        @Html.ValidationMessageFor(model => model.PurchasingRemarks, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-1">
+                        <b>Cost Down %</b>
+                        <br />
+                        @Html.EditorFor(model => model.CostDown, new { htmlAttributes = new { @class = "form-control", @Value = Model.CostDown } })
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="card-footer">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" id="btnSubmit" name="Submit" value="Update" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+
+</div>
+
+<script>
+    function OnSuccess() {
+        this.reset();
+        console.log("sini da ok");
+        var PrMstId = $("#PRid").val();
+        //$("#divPRDtlsForm").html();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AddPRDtlsPurchasingProses", "Purchase")",
+            data: '{PrMstId: "' + PrMstId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divPRDtlsForm').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function CostdownUpt(costVal) {
+        console.log($("#LastPrice").val());
+        var difVal = $("#LastPrice").val() - $("#EstimateUnitPrice").val();
+        var costDown = (difVal / $("#LastPrice").val()) * 100;
+        $("#CostDown").val(costDown);
+    }
+</script>

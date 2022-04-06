@@ -55,6 +55,13 @@ namespace PurchaseWeb_2.ModelData
         public string HODPurComment { get; set; }
         public string PurchaserName { get; set; }
         public Nullable<System.DateTime> SendHODPurDate { get; set; }
+        public string AssetNo { get; set; }
+        public string IOrderNo { get; set; }
+        public string CostCentreNo { get; set; }
+        public string ItemNo { get; set; }
+        public string VendorItemNo { get; set; }
+        public Nullable<System.DateTime> SendToProcessingDate { get; set; }
+        public string PurchasingComment { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }

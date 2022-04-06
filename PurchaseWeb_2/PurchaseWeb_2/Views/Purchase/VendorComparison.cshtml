@@ -20,17 +20,20 @@
             <br />
             @Html.ValidationMessageFor(model => model.VDCode, "", new { @class = "text-danger" })
         </div>
-        <div class="col-md-1">
-            Currency Tax Rate<br />
-            <div id="divCurCode_@ViewBag.PrDtlstId">
-                @{ Html.RenderAction("getCurCode", "Purchase");}
-            </div>
-        </div>
+        
         <div class="col-md-1">
             Current Price <br />
             @Html.EditorFor(model => model.CurPrice, new { htmlAttributes = new { @class = "form-control" , @onfocusout = "UpdatePrice(this, "+@ViewBag.PrDtlstId+", "+@ViewBag.Qty+ " )", @Value="0.00", @kiraCurP = ViewBag.PrDtlstId } }) <br />
             @Html.ValidationMessageFor(model => model.CurPrice, "", new { @class = "text-danger" })
         </div>
+
+        <div class="col-md-2">
+            Currency Exch. Rate<br />
+            <div id="divCurCode_@ViewBag.PrDtlstId">
+                @{ Html.RenderAction("getCurCode", "Purchase");}
+            </div>
+        </div>
+
         <div class="col-md-2">
             Quote. Date <br />
             @Html.EditorFor(model => model.QuoteDate, new { htmlAttributes = new { @class = "form-control" } }) <br />
@@ -51,14 +54,16 @@
             @Html.EditorFor(model => model.PODate, new { htmlAttributes = new { @class = "form-control" } }) <br />
             @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
         </div>
-        <div class="col-md-1">
-            Cost Down % <br />
-            @Html.EditorFor(model => model.CostDown, new { htmlAttributes = new { @class = "form-control" , @Value="0.00" , @kiraCostD = ViewBag.PrDtlstId } }) <br />
-            @Html.ValidationMessageFor(model => model.CostDown, "", new { @class = "text-danger" })
-        </div>
+        
         
     </div>
     <div class="row">
+        <div class="col-md-1">
+            Cost Down % <br />
+            @Html.EditorFor(model => model.CostDown, new { htmlAttributes = new { @class = "form-control", @Value = "0.00", @kiraCostD = ViewBag.PrDtlstId } }) <br />
+            @Html.ValidationMessageFor(model => model.CostDown, "", new { @class = "text-danger" })
+        </div>
+
         <div class="col-md-1 pr-3">
             <div class="custom-control custom-switch">
                 <input type="checkbox" class="custom-control-input" id="csDiscount_@ViewBag.PrDtlstId" onchange="chgDiscount(this , @ViewBag.PrDtlstId)">
@@ -72,22 +77,22 @@
                 <label for="amount">Amount</label>
                 <input type="hidden" id="discType_@ViewBag.PrDtlstId" name="DiscType" value="0" />
             </div>
-            
+
         </div>
 
         <div class="col-md-1 pr-3" id="divDiscount_@ViewBag.PrDtlstId" style="display:none">
-            Discount % <br /> <input type="text" id="percentDisc" name="percentDisc" value="0.00" onchange="cghPerDisc(this.value, @ViewBag.PrDtlstId)"/>
+            Discount % <br /> <input type="text" id="percentDisc" name="percentDisc" value="0.00" onchange="cghPerDisc(this.value, @ViewBag.PrDtlstId)" />
         </div>
 
         <div class="col-md-2 pr-3">
             Total Amount (Exc) <br />
-            @Html.EditorFor(model => model.TotCostWitTax, new { htmlAttributes = new { @class = "form-control", @kiraTAE = ViewBag.PrDtlstId , @Value="0.00" } }) <br />
+            @Html.EditorFor(model => model.TotCostWitTax, new { htmlAttributes = new { @class = "form-control", @kiraTAE = ViewBag.PrDtlstId, @Value = "0.00" } }) <br />
             @Html.ValidationMessageFor(model => model.TotCostWitTax, "", new { @class = "text-danger" })
         </div>
         &nbsp;
         <div class="col-md-1 pr-3">
             Tax %<br />
-            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", @Value = "0", @kiraTax = ViewBag.PrDtlstId , @onfocusout = "UpdateTax(this.value , " + @ViewBag.PrDtlstId + " , " + @ViewBag.Qty + ")" } }) <br />
+            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", @Value = "0", @kiraTax = ViewBag.PrDtlstId, @onfocusout = "UpdateTax(this.value , " + @ViewBag.PrDtlstId + " , " + @ViewBag.Qty + ")" } }) <br />
             @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
         </div>
         &nbsp;

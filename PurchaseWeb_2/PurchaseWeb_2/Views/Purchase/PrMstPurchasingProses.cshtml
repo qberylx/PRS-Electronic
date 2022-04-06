@@ -1,0 +1,221 @@
+﻿<div id="divPurChaseMasterSelected">
+
+    @model PurchaseWeb_2.ModelData.PR_Mst
+
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">PURCHASE REQUISITION</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="notification">
+                @Html.Partial("_Notifications")
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        @if (Model.PRTypeId != 4)
+                        {
+                            <div class="col-md-4">
+                                <!--PR no-->
+                                <strong>PR No :</strong> @Html.DisplayFor(model => model.PRNo)
+                            </div>
+                            <div class="col-md-4">
+                                <!--PR type-->
+                                <strong>PR Type :</strong>@Html.DisplayFor(model => model.PRType_mst.Name)
+                            </div>
+                            <div class="col-md-4">
+                                <!--PR type-->
+                                <strong>PR Group Type :</strong>@Html.DisplayFor(model => model.PrGroupType1.GroupName)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-4">
+                                <!--PR no-->
+                                <strong>PR No :</strong> @Html.DisplayFor(model => model.PRNo)
+                            </div>
+                            <div class="col-md-4">
+                                <!--PR type-->
+                                <strong>PR Type :</strong>@Html.DisplayFor(model => model.PRType_mst.Name)
+                            </div>
+                            if (ViewBag.CPRFFlag == false)
+                            {
+                                <div class="col-md-4">
+                                    <!--PR Account-->
+                                    <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode)
+                                </div>
+                            }
+                            if (ViewBag.CPRFFlag == true)
+                            {
+                                <div class="col-md-4">
+                                    <!--PR Account-->
+                                    <strong>CPRF Code :</strong>@Html.DisplayFor(model => model.CPRF)
+                                </div>
+                            }
+
+                        }
+
+                        @{ ViewBag.PrMStId = (int)Model.PRId;}
+
+                    </div>
+
+                    @if (ViewBag.CPRFFlag == false)
+                    {
+                        <br />
+                        <div class="row">
+                            <div class="col-3">
+                                @if (Model.VendorItemNo != "" || Model.VendorItemNo != null)
+                                {
+                                    <b>This is Asset Capitalize : @Model.VendorItemNo</b>
+                                }
+                                else
+                                {
+                                    <b>This is not Asset</b>
+                                }
+                            </div>
+                            <div class="col-3">
+                                @if (Model.AssetFlag == 1)
+                                {
+                                    <strong>Asset Status :</strong><a>New Asset </a>
+                                }
+                                @if (Model.AssetFlag == 0)
+                                {
+                                    <strong>Asset Status :</strong><a>Existing Asset </a>
+                                }
+                            </div>
+                            <div class="col-3">
+                                <strong>Asset No: </strong>@Model.AssetNo
+                            </div>
+                        </div>
+
+                    }
+
+
+                    @if (ViewBag.CPRFFlag == true)
+                    {
+                        <br />
+                        <div class="row">
+                            <div class="col-3">
+                                @if (Model.AssetFlag == 1)
+                                {
+                                    <strong>Asset Status :</strong><a>New Asset </a>
+                                }
+                                @if (Model.AssetFlag == 0)
+                                {
+                                    <strong>Asset Status :</strong><a>Existing Asset </a>
+                                }
+                            </div>
+
+                            <div class="col-3">
+                                <strong>Asset No: @Model.AssetNo </strong>
+                            </div>
+
+                            <div class="col-3">
+                                <strong>Internal Order No: @Model.IOrderNo </strong>
+                            </div>
+
+                            <div class="col-3">
+                                <strong>Cost Centre No: @Model.CostCentreNo </strong>
+                            </div>
+                        </div>
+
+                    }
+
+                    <hr />
+                    
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>Requisition Date</strong> <br />
+                            @Html.DisplayFor(model => model.RequestDate)
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Requestor</strong> <br />
+                            @Html.DisplayFor(model => model.Usr_mst.Username)
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Department</strong> <br />
+                            @Html.DisplayFor(model => model.AccTypeDept.DeptName)
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Tel Ext.</strong> <br />
+                            @Html.DisplayFor(model => model.Usr_mst.TelExt)
+                        </div>
+                    </div>
+                    <br />
+                    @if (Model.PRTypeId == 4)
+                    {
+                        <div class="row">
+                            <div class="col-md-4">
+                                <strong>Purpose</strong><br />
+                                @Html.DisplayFor(model => model.Purpose)
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Remarks</strong><br />
+                                @Html.DisplayFor(model => model.Remarks)
+                            </div>
+
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+
+</div>
+
+<script>
+    function CSNonProductChange() {
+        if ($("#CSNonProduct").is(":checked")) {
+            $("#NonProductflag").val("1");
+        } else {
+            $("#NonProductflag").val("0");
+        }
+    }
+
+
+    function cSCprfChange() {
+        if ($("#cSCprf").is(":checked")) {
+            $("#divRdAsset").show();
+            $("#CPRFflag").val("1");
+            $("#chkNewAsset").val("1");
+        }
+        else {
+            $("#divRdAsset").hide();
+            $("#CPRFflag").val("0");
+            $("#chkNewAsset").val("0");
+            $("#chkExtAsset").val("0");
+        }
+    }
+
+    function extAsset() {
+        if ($("#customRadio1").is(":checked")) {
+            $("#customRadio1").val("1");
+            $("#customRadio2").val("0");
+        }
+    }
+
+    function newAsset() {
+        if ($("#customRadio1").is(":checked")) {
+            $("#customRadio1").val("0");
+            $("#customRadio2").val("1");
+        }
+    }
+
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(2000).fadeOut("slow");
+    });
+</script>

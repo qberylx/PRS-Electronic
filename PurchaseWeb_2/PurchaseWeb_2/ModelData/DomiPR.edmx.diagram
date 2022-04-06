@@ -49,6 +49,10 @@
         <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_Months" />
         <EntityTypeShape EntityType="Domi_PurModel.PrGroupType" Width="1.5" PointX="12.375" PointY="12.875" />
         <AssociationConnector Association="Domi_PurModel.FK_PR_Mst_PrGroupType" />
+        <EntityTypeShape EntityType="Domi_PurModel.PrTypeMap" Width="1.5" PointX="13.375" PointY="8.75" />
+        <AssociationConnector Association="Domi_PurModel.FK_PrTypeMap_PrGroupType" />
+        <EntityTypeShape EntityType="Domi_PurModel.CPRFMst" Width="1.5" PointX="14.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.AuditPR_Log" Width="1.5" PointX="0.75" PointY="14.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFMst>
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-info">
+            <div class="card-header">
+
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CPRFNo)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CPRFBudget)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CPRFBalance)
+                                </th>
+                                <th></th>
+                            </tr>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CPRFNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CPRFBudget)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CPRFBalance)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.CPRFId }) |
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.CPRFId })
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

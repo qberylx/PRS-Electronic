@@ -1,0 +1,142 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Mst>
+
+<div class="card card-info">
+    <div class="card-header" ">
+        <div class="card-title ">
+            <h6>Purchase Request List</h6>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-responsive table-head-fixed table-sm table-striped" style="width:100%">
+            <tr>
+                <th>
+                    PRNo
+                </th>
+                <th>
+                    Requisition Date
+                </th>
+                <th>
+                    Department
+                </th>
+                <th>
+                    Requestor
+                </th>
+                <th>
+                    PR Type
+                </th>
+                <th>
+                    PR Group
+                </th>
+                <th>
+                    Est. Tot. Amount
+                </th>
+                <th>
+                    PR Tot. Amount
+                </th>
+                <th>
+                    PR Status
+                </th>
+                <th></th>
+            </tr>
+            @{ String status = "false";
+                String showFlag = "d-none";
+            }
+            @foreach (var item in Model)
+            {
+                if (item.StatId == 11) { status = "true"; showFlag = ""; } else { status = "false"; showFlag = "d-none"; }
+                <tr data-widget="expandable-table" aria-expanded="@status">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PRNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccTypeDept.DeptName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Usr_mst.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PRType_mst.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrGroupType1.GroupName)
+                    </td>
+                    
+                    <td style="width:200px">
+                        <div class="row">
+                            <div class="col-md-4">
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                {
+                                    @currency.Max(s => s.CurCode) <br />
+                                }
+                            </div>
+                            <div class="col-md-8">
+
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                {
+                                    @*currency.Sum(s => s.TotCostWitTax) *@
+                                    String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.EstTotalPrice));
+                                    @strTotAmt
+                                    <br />
+                                }
+                            </div>
+                        </div>
+                    </td>
+
+                    
+
+                    <td style="width:200px">
+                        <div class="row">
+                            <div class="col-md-4">
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                {
+                                    @currency.Max(s => s.CurCode) <br />
+                                }
+                            </div>
+                            <div class="col-md-8">
+
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                {
+                                    @*currency.Sum(s => s.TotCostWitTax) *@
+                                    String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.TotCostWitTax));
+                                    @strTotAmt
+                                    <br />
+                                }
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status_Mst.Name)
+                    </td>
+                    <td>
+
+                        @if (item.PRTypeId == 4)
+                        {
+                            @Html.ActionLink("Details", "PRDtlsPurchasingProses", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                            @Html.ActionLink("Budget", "budgetUpdate", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
+                            @Html.ActionLink("Send To Processing", "PRProcessing", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Details", "PRDtlsPurchasingProsesStockable", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                            @Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                        }
+
+
+
+                    </td>
+                </tr>
+                <tr class="expandable-body @showFlag ">
+                    <td colspan="8">
+                        <p style="color:indianred; padding-left:2em">@item.HODPurComment</p>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+
+

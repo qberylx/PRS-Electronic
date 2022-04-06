@@ -21,7 +21,7 @@
 
 <div class="row">
     <div class="col-md-8">
-        @{ Html.RenderAction("PurMstSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+        @{ Html.RenderAction("PurMstSelected", "Purchase", new { PrMstId = ViewBag.PrMstId , PrGroup = ViewBag.PrGroup });}
     </div>
     <div class="col-md-4">
         @{ Html.RenderAction("UploadQuo", "Purchase", new { PrMstId = ViewBag.PrMstId });}
@@ -59,9 +59,23 @@
                     <!--first column-->
                     <div class="col-md-4">
                         <div class="form-group">
+                            <label class="control-label col-md-10">Vendor</label>
+                            <div class="col-md-10">
+                                <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode" >
+                                    <option value="">Select option</option>
+                                    @foreach (var vendor in ViewBag.vendorlist)
+                                    {
+                                        <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
+                                    }
+                                </select>
+                                @Html.ValidationMessageFor(model => model.VendorCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
-                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control" , @rows = 3 })
+                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 3 })
                                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                             </div>
                         </div>

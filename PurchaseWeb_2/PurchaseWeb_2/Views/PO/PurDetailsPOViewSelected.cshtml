@@ -38,7 +38,7 @@
                                     DomiPartNo
                                 </th>
                                 <th>
-                                    VendorName
+                                    Vendor Name
                                 </th>
                                 <th>
                                     Qty
@@ -103,6 +103,9 @@
                                     Req. Delivery Date
                                 </th>
                                 <th>
+                                    Vendor Name
+                                </th>
+                                <th>
                                     Currency
                                 </th>
                                 <th>
@@ -160,6 +163,9 @@
                                 </th>
                                 <th>
                                     SalesOrder
+                                </th>
+                                <th>
+                                    Vendor Name
                                 </th>
                                 <th>
                                     Currency
@@ -320,6 +326,9 @@
                                         
                                     </td>
                                     <td>
+                                        @Html.DisplayFor(modelItem => Model[i].VendorName)
+                                    </td>
+                                    <td>
                                         @Html.DisplayFor(modelItem => Model[i].CurCode)
                                     </td>
                                     <td>
@@ -407,6 +416,9 @@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => Model[i].SalesOrder)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => Model[i].VendorName)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => Model[i].CurCode)

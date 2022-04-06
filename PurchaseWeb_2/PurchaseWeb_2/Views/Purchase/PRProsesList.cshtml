@@ -23,7 +23,7 @@
                                         <option value="2">Stockable - Wafer - Consignment</option>
                                         <option value="3">Stockable - Non Wafer - Non Consign</option>
                                         <option value="5">Stockable - Non Wafer - Consignment</option>
-                                        <option value="4">Non Stockable</option>
+                                        <option value="4" selected>Non Stockable</option>
                                     </select>
                                 </div>
                             </div>
@@ -32,7 +32,7 @@
                             <div class="row">
                                 <div class="col-10">
                                     <div id="groupType">
-                                        @{ Html.RenderAction("groupType", "Purchase", new { groupType = 1 });}
+                                        @{ Html.RenderAction("groupType", "Purchase", new { groupType = 4 });}
                                     </div>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@
 <div class="row">
     <div class="col-md-12">
         <div id="divPrMstList">
-            @{ Html.RenderAction("PRListForPurchaser", "Purchase", new { Doctype = 1, group = 1 });}
+            @{ Html.RenderAction("PRListForPurchaser", "Purchase", new { Doctype = 4, group = 4 });}
         </div>        
     </div>
 </div>
@@ -61,9 +61,9 @@
 
     function chgPRtype(prType) {
         console.log(prType);
-        if (prType == 4) {
-            $("#PrGroup").hide();
-        } 
+        //if (prType == 4) {
+        //    $("#PrGroup").hide();
+        //} 
 
         $.ajax({
             type: "POST",
@@ -74,9 +74,9 @@
             success: function (response) {
                 $("#PrGroup").show();
                 $("#groupType").html(response);
-                if (prType == 4) {
-                    $("#PrGroup").hide();
-                }
+                //if (prType == 4) {
+                //    $("#PrGroup").hide();
+                //}
 
             },
             failure: function (response) {

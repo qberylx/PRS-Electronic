@@ -1,0 +1,327 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Details>
+
+
+<div class="card card-success">
+    <div class="card-header">
+        <h3 class="card-title vertical-center">Purchase Request Details List</h3>
+        <!--
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+        -->
+    </div>
+    <div class="card-body table-responsive p-0" style="height: 300px;">
+
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-head-fixed text-nowrap table-striped table-responsive table-md">
+                    @if (ViewBag.PrTypeId == 3 || ViewBag.PrTypeId == 5)
+                    {
+                        <tr>
+                            <th>
+                                No.
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DomiPartNo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.VendorName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Qty)
+                            </th>
+                            <th>
+                                UOM
+                            </th>
+                            <th>
+                                Req. Delivery Date
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Remarks)
+                            </th>
+
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    }
+                    else if (ViewBag.PrTypeId == 4)
+                    {
+                        <tr>
+                            <th>
+                                No.
+                            </th>
+                            <th>
+                                Vendor Name
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.VendorPartNo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Qty)
+                            </th>
+                            <th>
+                                UOM
+                            </th>
+                            <th>
+                                Req. Delivery Date
+                            </th>
+                            <th>
+                                Currency
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.EstimateUnitPrice)
+                            </th>
+
+                            <th></th>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <th>
+                                No.
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DomiPartNo)
+                            </th>
+                            <th>
+                                Vendor Name
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.VendorPartNo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Qty)
+                            </th>
+                            <th>
+                                Req. Delivery Date
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Remarks)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Device)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SalesOrder)
+                            </th>
+
+                            <th></th>
+                        </tr>
+                    }
+
+
+                    @{ int i = 0;}
+                    @if (ViewBag.PrTypeId == 3 || ViewBag.PrTypeId == 5)
+                    {
+                        foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DomiPartNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VendorName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Qty)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UOMName)
+                                </td>
+                                <td>
+                                    @{ DateTime reqDevDate = (DateTime)item.ReqDevDate; }
+                                    @reqDevDate.ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Remarks)
+                                </td>
+                                <td>
+                                    @using (Ajax.BeginForm("EditPRDtlsPurchasingProsesStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPRDtlsForm" }))
+                                    {
+                                        <input type="hidden" id="EditPrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                        <input type="hidden" id="EditPrMstId" name="PrMstId" value="@item.PRid" />
+                                        <button class="btn btn-primary"><i class="fa fa-pen fa-xs"></i></button>
+                                    }
+                                </td>
+                                <td>
+                                    @using (Ajax.BeginForm("DeletePRDtlsPurchasingProsesStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                                    {
+                                        <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                        <input type="hidden" id="DelPrMstId" name="DelPrMstId" value="@item.PRid" />
+                                        <button class="btn btn-danger"><i class="fa fa-trash fa-xs"></i></button>
+                                    }
+
+                                </td>
+                                
+                            </tr>
+                        }
+                    }
+                    else if (ViewBag.PrTypeId == 4)
+                    {
+                        foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VendorName)
+                                </td>
+                                <td>
+                                    @*
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    *@
+                                    @Html.Raw(item.Description.Replace(Environment.NewLine, "<br/>"))
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VendorPartNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Qty)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UOMName)
+                                </td>
+                                <td>
+                                    @{ DateTime reqDevDate = (DateTime)item.ReqDevDate; }
+                                    @reqDevDate.ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CurCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EstimateUnitPrice)
+                                </td>
+                                <td>
+                                    @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                                    {
+                                        <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                        <input type="hidden" id="DelPrMstId" name="DelPrMstId" value="@item.PRid" />
+                                        <button class="btn btn-danger"><i class="fa fa-trash fa-xs"></i></button>
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DomiPartNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VendorName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VendorPartNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Qty)
+                                </td>
+                                <td>
+                                    @{ DateTime reqDevDate = (DateTime)item.ReqDevDate; }
+                                    @reqDevDate.ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Remarks)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Device)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SalesOrder)
+                                </td>
+                                <td>
+                                    @using (Ajax.BeginForm("EditPRDtlsPurchasingProsesStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPRDtlsForm" }))
+                                    {
+                                        <input type="hidden" id="EditPrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                        <input type="hidden" id="EditPrMstId" name="PrMstId" value="@item.PRid" />
+                                        <button class="btn btn-primary"><i class="fa fa-pen fa-xs"></i></button>
+                                    }
+                                </td>
+                                <td>
+                                    @using (Ajax.BeginForm("DeletePRDtlsPurchasingProsesStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                                    {
+                                        <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                        <input type="hidden" id="DelPrMstId" name="DelPrMstId" value="@item.PRid" />
+                                        <button class="btn btn-danger"><i class="fa fa-trash fa-xs"></i></button>
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+                    }
+
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    @if (ViewBag.PrTypeId == 4)
+    {
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-md-12">
+                    <table style="margin-right:0px;margin-left:auto;padding:4px">
+                        <tr>
+                            <td> <strong>Estimated Total Price :</strong></td>
+                            <td style="padding-left:2em;padding-right:1em">
+                                @foreach (var currency in Model.OrderBy(x => x.CurCode).GroupBy(x => x.CurCode))
+                                {
+
+                                    @currency.Max(x => x.CurCode) <br />
+
+                                }
+                            </td>
+                            <td>
+                                @foreach (var currency in Model.OrderBy(x => x.CurCode).GroupBy(x => x.CurCode))
+                                {
+                                    String strTotCostWitTax = String.Format("{0:n}", currency.Sum(s => s.EstTotalPrice));
+                                    @strTotCostWitTax <br />
+
+                                    //@currency.Sum(x => x.EstTotalPrice)
+
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+

@@ -1,0 +1,102 @@
+﻿<div id="divbudgetMonthly">
+
+    
+    <div class="card card-info">
+        <div class="card-header">
+            <div class="card-title">
+                <h5>Monthly Budget</h5>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="notification">
+                @Html.Partial("_Notifications")
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Department</strong>
+                </div>
+                <div class="col-md-6">
+                    <strong>: </strong> @ViewBag.department
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Budget </strong>
+                </div>
+                <div class="col-md-6">
+
+                    
+                    <strong>: </strong><a style="color:mediumvioletred">Budget still has not setup yet.</a> 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>PR Amount </strong>
+                </div>
+                <div class="col-md-6">
+                    
+                    <strong>: </strong> MYR @ViewBag.PrTotAmount
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>B/O </strong>
+                </div>
+                <div class="col-md-6">
+
+                    <strong>: </strong> <a style="color:mediumvioletred">Budget still has not setup yet.</a>
+                </div>
+            </div>
+            <!--ViewBag.FlagUpdateBudget-->
+            <div class="row">
+                <div class="col-md-2">
+                    <strong>Status </strong>
+                </div>
+                <div class="col-md-6">
+                    
+
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Current Budget Balance </strong>
+
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" id="AssetBudget" name="AssetBudget" value="" class="form-control" onfocusout="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>B/O After Update </strong>
+                    </div>
+                    <div class="col-md-9">
+                        
+                        <input type="text" id="Balance" name="Balance" value="" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-10">
+                        
+                        
+                        <input type="hidden" name="PrMstId" id="PrMstId" value="" />
+                    </div>
+                </div>
+            </div>
+        
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(2000).fadeOut("slow");
+    });
+</script>

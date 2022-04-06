@@ -1,0 +1,8 @@
+﻿@model List<PurchaseWeb_2.ModelData.PrTypeMap>
+<select class="form-control" id="group" name="group">
+    @foreach (var pr in Model)
+    {
+        <option value="@pr.GroupId">@pr.PrGroupType.GroupName</option>
+    }
+
+</select>

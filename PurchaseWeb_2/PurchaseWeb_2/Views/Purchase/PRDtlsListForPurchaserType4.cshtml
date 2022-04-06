@@ -19,6 +19,9 @@
 
                             </th>
                             <th>
+                                Vendor Name
+                            </th>
+                            <th>
                                 Description
                             </th>
                             <th>
@@ -34,11 +37,12 @@
                                 Required <br /> Delivery <br /> Date
                             </th>
                             <th>
-                                Estimated <br /> Unit Price
-                            </th>
-                            <th>
                                 Currency
                             </th>
+                            <th>
+                                Estimated <br /> Unit Price
+                            </th>
+
                             <th>
                                 Actual Unit Price
                             </th>
@@ -72,6 +76,9 @@
                                     @i
                                 </td>
                                 <td>
+                                    @Html.DisplayFor(modelItem => item.VendorName)
+                                </td>
+                                <td>
                                     @*@Html.DisplayFor(modelItem => item.Description)*@
                                     @Html.Raw(item.Description.Replace(Environment.NewLine, "<br/>"))
                                 </td>
@@ -96,15 +103,18 @@
                                     @strReqdate
                                 </td>
                                 <td>
+                                    @Html.DisplayFor(modelItem => item.CurCode)
+                                </td>
+                                <td>
                                     @{
                                         String strEstimateUnitPrice = String.Format("{0:n5}", item.EstimateUnitPrice);
                                     }
                                     @strEstimateUnitPrice
 
                                 </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CurCode)
-                                </td>
+                                    
+                                
+                                
                                 <td>
                                     @Html.DisplayFor(modelItem => item.UnitPrice)
                                 </td>

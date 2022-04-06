@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "PurchasingProsesPR";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Create Purchase Request</h3>
+            </div>
+            <div class="card-body">
+                @using (Ajax.BeginForm("PRListForPurchasingProses", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPrMstList" }))
+                {
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    <select class="form-control" data-val="true" data-val-number="The field TypePRId must be a number." id="Doctype" name="Doctype" onchange="chgPRtype(this.value)">
+                                        <!--<option value="0">Please choose your PR type</option>-->
+                                        <option value="1">Stockable - Wafer - Non Consign</option>
+                                        <option value="2">Stockable - Wafer - Consignment</option>
+                                        <option value="3">Stockable - Non Wafer - Non Consign</option>
+                                        <option value="5">Stockable - Non Wafer - Consignment</option>
+                                        <option value="4">Non Stockable</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3" id="PrGroup">
+                            <div class="row">
+                                <div class="col-10">
+                                    <div id="groupType">
+                                        @{ Html.RenderAction("groupType", "Purchase", new { groupType = 1 });}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <button class="btn btn-success"><i class="fa fa-plus-circle">&nbsp; Get The List</i></button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="divPrMstList">
+            @{ Html.RenderAction("PRListForPurchasingProses", "Purchase", new { Doctype = 1, group = 1 });}
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    function chgPRtype(prType) {
+        console.log(prType);
+        //if (prType == 4) {
+        //    $("#PrGroup").hide();
+        //}
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("groupType", "Purchase")",
+            data: JSON.stringify({ groupType: prType }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#PrGroup").show();
+                $("#groupType").html(response);
+                //if (prType == 4) {
+                //    $("#PrGroup").hide();
+                //}
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+
+    }
+</script>

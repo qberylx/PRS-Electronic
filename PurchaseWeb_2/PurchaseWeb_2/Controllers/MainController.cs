@@ -90,7 +90,9 @@ namespace PurchaseWeb_2.Controllers
                 Menu_ParentId = menu_.Menu_ParentId,
                 Active        = true,
                 Ordering      = menu_.Ordering,
-                MenuLayer     = menu_.MenuLayer
+                MenuLayer     = menu_.MenuLayer,
+                Controller    = menu_.Controller,
+                Action        = menu_.Action
             });
             db.SaveChanges();
 
@@ -131,6 +133,8 @@ namespace PurchaseWeb_2.Controllers
                     menu.Menu_url = menu_.Menu_url;
                     menu.Menu_ParentId = menu_.Menu_ParentId;
                     menu.Ordering = menu_.Ordering;
+                    menu.Controller = menu_.Controller;
+                    menu.Action = menu_.Action;
                 }
                 db.SaveChanges();
 
@@ -205,7 +209,7 @@ namespace PurchaseWeb_2.Controllers
         public ActionResult getMenulist(int roleid)
         {
             List<RoleMenuMapping_mst> menuList = db.RoleMenuMapping_mst
-                .Where(x => x.RoleId == roleid)                                    
+                .Where(x => x.RoleId == roleid && x.Menu_mst.Active == true)                                    
                 .ToList();
             MenuCheckboxViewModel mcVM = new MenuCheckboxViewModel();
 

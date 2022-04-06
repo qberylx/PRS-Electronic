@@ -45,6 +45,28 @@
           <Property Name="ExpName" Type="varchar" MaxLength="100" />
           <Property Name="ExpCode" Type="varchar" MaxLength="10" />
         </EntityType>
+        <EntityType Name="AuditPR_Log">
+          <Key>
+            <PropertyRef Name="AuditPrId" />
+          </Key>
+          <Property Name="AuditPrId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ModifiedBy" Type="varchar" MaxLength="20" />
+          <Property Name="ModifiedOn" Type="date" />
+          <Property Name="ActionBtn" Type="varchar" MaxLength="10" />
+          <Property Name="ColumnStr" Type="varchar(max)" />
+          <Property Name="ValueStr" Type="varchar(max)" />
+          <Property Name="PRId" Type="int" />
+          <Property Name="PRDtlsId" Type="int" />
+        </EntityType>
+        <EntityType Name="CPRFMst">
+          <Key>
+            <PropertyRef Name="CPRFId" />
+          </Key>
+          <Property Name="CPRFId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CPRFNo" Type="varchar" MaxLength="20" />
+          <Property Name="CPRFBudget" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CPRFBalance" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
         <EntityType Name="Currency_Mst">
           <Key>
             <PropertyRef Name="CurrId" />
@@ -122,6 +144,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="RequisitionDate" Type="datetime" />
           <Property Name="TotPOAmt" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Description" Type="varchar(max)" />
+          <Property Name="ExportFlag" Type="bit" />
         </EntityType>
         <EntityType Name="Position_mst">
           <Key>
@@ -154,7 +177,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="Remarks" Type="varchar(max)" />
           <Property Name="Device" Type="varchar" MaxLength="100" />
           <Property Name="SalesOrder" Type="varchar" MaxLength="50" />
-          <Property Name="VendorName" Type="varchar" MaxLength="50" />
+          <Property Name="VendorName" Type="varchar" MaxLength="150" />
           <Property Name="EstCurrId" Type="int" />
           <Property Name="EstimateUnitPrice" Type="decimal" Precision="18" Scale="5" />
           <Property Name="EstTotalPrice" Type="decimal" Precision="18" Scale="2" />
@@ -178,6 +201,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="VendorCode" Type="varchar" MaxLength="50" />
           <Property Name="AccGroup" Type="varchar" MaxLength="10" />
           <Property Name="CurCode" Type="varchar" MaxLength="50" />
+          <Property Name="ItemNo" Type="varchar" MaxLength="10" />
+          <Property Name="LastPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="LastQuoteDate" Type="date" />
+          <Property Name="PODate" Type="date" />
+          <Property Name="LastPONo" Type="varchar" MaxLength="50" />
+          <Property Name="PurchasingRemarks" Type="varchar(max)" />
+          <Property Name="CostDown" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -217,6 +247,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="HODPurComment" Type="varchar" MaxLength="300" />
           <Property Name="PurchaserName" Type="varchar" MaxLength="100" />
           <Property Name="SendHODPurDate" Type="datetime" />
+          <Property Name="AssetNo" Type="varchar" MaxLength="15" />
+          <Property Name="IOrderNo" Type="varchar" MaxLength="15" />
+          <Property Name="CostCentreNo" Type="varchar" MaxLength="15" />
+          <Property Name="ItemNo" Type="varchar" MaxLength="15" />
+          <Property Name="VendorItemNo" Type="varchar" MaxLength="10" />
+          <Property Name="SendToProcessingDate" Type="date" />
+          <Property Name="PurchasingComment" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -261,6 +298,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           </Key>
           <Property Name="GroupId" Type="int" Nullable="false" />
           <Property Name="GroupName" Type="varchar" MaxLength="50" />
+          <Property Name="CPRFFlag" Type="bit" />
         </EntityType>
         <EntityType Name="PRType_mst">
           <Key>
@@ -268,6 +306,14 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           </Key>
           <Property Name="PRTypeId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PrTypeMap">
+          <Key>
+            <PropertyRef Name="PRTypeMapId" />
+          </Key>
+          <Property Name="PRTypeMapId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PRType" Type="int" />
+          <Property Name="GroupId" Type="int" />
         </EntityType>
         <EntityType Name="RoleMenuMapping_mst">
           <Key>
@@ -497,6 +543,18 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PrTypeMap_PrGroupType">
+          <End Role="PrGroupType" Type="Self.PrGroupType" Multiplicity="0..1" />
+          <End Role="PrTypeMap" Type="Self.PrTypeMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrGroupType">
+              <PropertyRef Name="GroupId" />
+            </Principal>
+            <Dependent Role="PrTypeMap">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RoleMenuMapping_mst_Menu_mst">
           <End Role="Menu_mst" Type="Self.Menu_mst" Multiplicity="0..1" />
           <End Role="RoleMenuMapping_mst" Type="Self.RoleMenuMapping_mst" Multiplicity="*" />
@@ -577,6 +635,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySet Name="AccTypeDept" EntityType="Self.AccTypeDept" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccTypeDivision" EntityType="Self.AccTypeDivision" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccTypeExpenses" EntityType="Self.AccTypeExpenses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AuditPR_Log" EntityType="Self.AuditPR_Log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CPRFMst" EntityType="Self.CPRFMst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency_Mst" EntityType="Self.Currency_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department_mst" EntityType="Self.Department_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" Schema="dbo" store:Type="Tables" />
@@ -590,6 +650,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySet Name="PRFile" EntityType="Self.PRFile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrGroupType" EntityType="Self.PrGroupType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRType_mst" EntityType="Self.PRType_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PrTypeMap" EntityType="Self.PrTypeMap" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenuMapping_mst" EntityType="Self.RoleMenuMapping_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status_Mst" EntityType="Self.Status_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -661,6 +722,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <AssociationSet Name="FK_PRFile_PR_Mst" Association="Self.FK_PRFile_PR_Mst">
             <End Role="PR_Mst" EntitySet="PR_Mst" />
             <End Role="PRFile" EntitySet="PRFile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrTypeMap_PrGroupType" Association="Self.FK_PrTypeMap_PrGroupType">
+            <End Role="PrGroupType" EntitySet="PrGroupType" />
+            <End Role="PrTypeMap" EntitySet="PrTypeMap" />
           </AssociationSet>
           <AssociationSet Name="FK_RoleMenuMapping_mst_Menu_mst" Association="Self.FK_RoleMenuMapping_mst_Menu_mst">
             <End Role="Menu_mst" EntitySet="Menu_mst" />
@@ -852,6 +917,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
             <End Role="PrGroupType" EntitySet="PrGroupTypes" />
             <End Role="PR_Mst" EntitySet="PR_Mst" />
           </AssociationSet>
+          <EntitySet Name="PrTypeMaps" EntityType="Domi_PurModel.PrTypeMap" />
+          <AssociationSet Name="FK_PrTypeMap_PrGroupType" Association="Domi_PurModel.FK_PrTypeMap_PrGroupType">
+            <End Role="PrGroupType" EntitySet="PrGroupTypes" />
+            <End Role="PrTypeMap" EntitySet="PrTypeMaps" />
+          </AssociationSet>
+          <EntitySet Name="CPRFMsts" EntityType="Domi_PurModel.CPRFMst" />
+          <EntitySet Name="AuditPR_Log" EntityType="Domi_PurModel.AuditPR_Log" />
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -966,7 +1038,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="UOMId" Type="Int32" />
           <Property Name="ReqDevDate" Type="DateTime" Precision="0" />
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="VendorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VendorName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="CurrId" Type="Int32" />
           <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="TotCostnoTax" Type="Decimal" Precision="18" Scale="2" />
@@ -998,6 +1070,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="AccGroup" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="CurCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="EstTotalPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ItemNo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LastPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="LastQuoteDate" Type="DateTime" Precision="0" />
+          <Property Name="PODate" Type="DateTime" Precision="0" />
+          <Property Name="LastPONo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PurchasingRemarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CostDown" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -1045,6 +1124,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <NavigationProperty Name="PrGroupType1" Relationship="Domi_PurModel.FK_PR_Mst_PrGroupType" FromRole="PR_Mst" ToRole="PrGroupType" />
           <Property Name="PurchaserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="SendHODPurDate" Type="DateTime" Precision="3" />
+          <Property Name="AssetNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="IOrderNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="CostCentreNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="ItemNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="VendorItemNo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SendToProcessingDate" Type="DateTime" Precision="0" />
+          <Property Name="PurchasingComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1289,6 +1375,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="TotPOAmt" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="PRid" Type="Int32" />
+          <Property Name="ExportFlag" Type="Boolean" />
         </EntityType>
         <EntityType Name="PRFile">
           <Key>
@@ -1390,6 +1477,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="GroupId" Type="Int32" Nullable="false" />
           <Property Name="GroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Mst_PrGroupType" FromRole="PrGroupType" ToRole="PR_Mst" />
+          <NavigationProperty Name="PrTypeMaps" Relationship="Domi_PurModel.FK_PrTypeMap_PrGroupType" FromRole="PrGroupType" ToRole="PrTypeMap" />
+          <Property Name="CPRFFlag" Type="Boolean" />
         </EntityType>
         <Association Name="FK_PR_Mst_PrGroupType">
           <End Type="Domi_PurModel.PrGroupType" Role="PrGroupType" Multiplicity="0..1" />
@@ -1417,6 +1506,49 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Type="Decimal" Name="TotPOAmt" Nullable="true" Precision="18" Scale="2" />
           <Property Type="String" Name="Description" Nullable="true" />
         </ComplexType>
+        <EntityType Name="PrTypeMap">
+          <Key>
+            <PropertyRef Name="PRTypeMapId" />
+          </Key>
+          <Property Name="PRTypeMapId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PRType" Type="Int32" />
+          <Property Name="GroupId" Type="Int32" />
+          <NavigationProperty Name="PrGroupType" Relationship="Domi_PurModel.FK_PrTypeMap_PrGroupType" FromRole="PrTypeMap" ToRole="PrGroupType" />
+        </EntityType>
+        <Association Name="FK_PrTypeMap_PrGroupType">
+          <End Type="Domi_PurModel.PrGroupType" Role="PrGroupType" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PrTypeMap" Role="PrTypeMap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrGroupType">
+              <PropertyRef Name="GroupId" />
+            </Principal>
+            <Dependent Role="PrTypeMap">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CPRFMst">
+          <Key>
+            <PropertyRef Name="CPRFId" />
+          </Key>
+          <Property Name="CPRFId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CPRFNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CPRFBudget" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CPRFBalance" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="AuditPR_Log">
+          <Key>
+            <PropertyRef Name="AuditPrId" />
+          </Key>
+          <Property Name="AuditPrId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="0" />
+          <Property Name="ActionBtn" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ColumnStr" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ValueStr" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PRId" Type="Int32" />
+          <Property Name="PRDtlsId" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1518,6 +1650,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySetMapping Name="PR_Details">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Details">
               <MappingFragment StoreEntitySet="PR_Details">
+                <ScalarProperty Name="CostDown" ColumnName="CostDown" />
+                <ScalarProperty Name="PurchasingRemarks" ColumnName="PurchasingRemarks" />
+                <ScalarProperty Name="LastPONo" ColumnName="LastPONo" />
+                <ScalarProperty Name="PODate" ColumnName="PODate" />
+                <ScalarProperty Name="LastQuoteDate" ColumnName="LastQuoteDate" />
+                <ScalarProperty Name="LastPrice" ColumnName="LastPrice" />
+                <ScalarProperty Name="ItemNo" ColumnName="ItemNo" />
                 <ScalarProperty Name="EstTotalPrice" ColumnName="EstTotalPrice" />
                 <ScalarProperty Name="CurCode" ColumnName="CurCode" />
                 <ScalarProperty Name="AccGroup" ColumnName="AccGroup" />
@@ -1565,6 +1704,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="PurchasingComment" ColumnName="PurchasingComment" />
+                <ScalarProperty Name="SendToProcessingDate" ColumnName="SendToProcessingDate" />
+                <ScalarProperty Name="VendorItemNo" ColumnName="VendorItemNo" />
+                <ScalarProperty Name="ItemNo" ColumnName="ItemNo" />
+                <ScalarProperty Name="CostCentreNo" ColumnName="CostCentreNo" />
+                <ScalarProperty Name="IOrderNo" ColumnName="IOrderNo" />
+                <ScalarProperty Name="AssetNo" ColumnName="AssetNo" />
                 <ScalarProperty Name="SendHODPurDate" ColumnName="SendHODPurDate" />
                 <ScalarProperty Name="PurchaserName" ColumnName="PurchaserName" />
                 <ScalarProperty Name="HODPurComment" ColumnName="HODPurComment" />
@@ -1716,6 +1862,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySetMapping Name="PO_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PO_Mst">
               <MappingFragment StoreEntitySet="PO_Mst">
+                <ScalarProperty Name="ExportFlag" ColumnName="ExportFlag" />
                 <ScalarProperty Name="PRid" ColumnName="PRid" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="TotPOAmt" ColumnName="TotPOAmt" />
@@ -1783,8 +1930,42 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <EntitySetMapping Name="PrGroupTypes">
             <EntityTypeMapping TypeName="Domi_PurModel.PrGroupType">
               <MappingFragment StoreEntitySet="PrGroupType">
+                <ScalarProperty Name="CPRFFlag" ColumnName="CPRFFlag" />
                 <ScalarProperty Name="GroupName" ColumnName="GroupName" />
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrTypeMaps">
+            <EntityTypeMapping TypeName="Domi_PurModel.PrTypeMap">
+              <MappingFragment StoreEntitySet="PrTypeMap">
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="PRType" ColumnName="PRType" />
+                <ScalarProperty Name="PRTypeMapId" ColumnName="PRTypeMapId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CPRFMsts">
+            <EntityTypeMapping TypeName="Domi_PurModel.CPRFMst">
+              <MappingFragment StoreEntitySet="CPRFMst">
+                <ScalarProperty Name="CPRFBalance" ColumnName="CPRFBalance" />
+                <ScalarProperty Name="CPRFBudget" ColumnName="CPRFBudget" />
+                <ScalarProperty Name="CPRFNo" ColumnName="CPRFNo" />
+                <ScalarProperty Name="CPRFId" ColumnName="CPRFId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuditPR_Log">
+            <EntityTypeMapping TypeName="Domi_PurModel.AuditPR_Log">
+              <MappingFragment StoreEntitySet="AuditPR_Log">
+                <ScalarProperty Name="PRDtlsId" ColumnName="PRDtlsId" />
+                <ScalarProperty Name="PRId" ColumnName="PRId" />
+                <ScalarProperty Name="ValueStr" ColumnName="ValueStr" />
+                <ScalarProperty Name="ColumnStr" ColumnName="ColumnStr" />
+                <ScalarProperty Name="ActionBtn" ColumnName="ActionBtn" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="AuditPrId" ColumnName="AuditPrId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -65,12 +65,27 @@ namespace PurchaseWeb_2.Models
         //[RegularExpression(@"^\d+(\.\d{1,2,3,4,5})?$", ErrorMessage = "Valid Decimal number with maximum 5 decimal places.")]
         public decimal EstimateUnitPrice { get; set; }
         public bool PoFlag { get; set; }
+        [Required(ErrorMessage = "Please select UOM ")]
         public string UOMName { get; set; }
+        [Required(ErrorMessage = "Please select Vendor ")]
         public string VendorCode { get; set; }
         public string AccGroup { get; set; }
         public string CurCode { get; set; }
 
         public decimal EstTotalPrice { get; set; }
+        public Nullable<decimal> LastPrice { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public Nullable<System.DateTime> LastQuoteDate { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public Nullable<System.DateTime> PODate { get; set; }
+
+        public string LastPONo { get; set; }
+        public string PurchasingRemarks { get; set; }
+        public Nullable<decimal> CostDown { get; set; }
+
 
 
         public virtual PR_Mst PR_Mst { get; set; }

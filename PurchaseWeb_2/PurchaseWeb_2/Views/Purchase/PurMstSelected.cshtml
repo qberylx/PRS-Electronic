@@ -13,6 +13,9 @@
             </div>
         </div>
         <div class="card-body">
+            <div id="notification">
+                @Html.Partial("_Notifications")
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
@@ -41,67 +44,100 @@
                                 <!--PR type-->
                                 <strong>PR Type :</strong>@Html.DisplayFor(model => model.PRType_mst.Name)
                             </div>
-                            <div class="col-md-4">
-                                <!--PR Account-->
-                                <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode)
-                            </div>
+                            if (ViewBag.CPRFFlag == false)
+                            {
+                                <div class="col-md-4">
+                                    <!--PR Account-->
+                                    <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode)
+                                </div>
+                            }
+                            if (ViewBag.CPRFFlag == true)
+                            {
+                                <div class="col-md-4">
+                                    <!--PR Account-->
+                                    <strong>CPRF Code :</strong>@Html.DisplayFor(model => model.CPRF)
+                                </div>
+                            }
+
                         }
 
                         @{ ViewBag.PrMStId = (int)Model.PRId;}
 
                     </div>
-                    <hr />
-                    @if (Model.PRTypeId == 4)
+
+                    @if (ViewBag.CPRFFlag == false)
                     {
-                        using (Ajax.BeginForm("GetAccountNo", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurChaseMasterSelected" }))
-                        {
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <strong>Expenses Type :</strong> <br />
-                                    @Html.DropDownList("AccTypeExpensesID",
-                                 new SelectList(ViewBag.ExpList, "ExpCode", "ExpName"),
-                                 "Please Select Expenses Type",
-                                 new { @class = "custom-select form-control-border" })
-                                </div>
-                                <div class="col-md-2">
-                                    <strong>Division :</strong> <br />
-                                    @Html.DropDownList("AccTypeDivId",
-                                 new SelectList(ViewBag.DivList, "DivCode", "DivName"),
-                                 "Please Select Division",
-                                 new { @class = "custom-select form-control-border" })
-                                </div>
-                                <div class="col-md-2">
-                                    <strong>Department :</strong> <br />
-                                    @Html.DropDownList("AccTypeDepID",
-                                 new SelectList(ViewBag.DptList, "DeptCode", "DeptName"),
-                                 "Please Select Department",
-                                 new { @class = "custom-select form-control-border" })
-                                </div>
-                                <div class="col-md-2">
-                                    <strong>CC LVl 1 :</strong> <br />
-                                    @Html.DropDownList("AccCCLvl1ID",
-                                 new SelectList(ViewBag.CCLvl1, "CCLvl1Code", "CCLvl1Name"),
-                                 "Please Select CC Lvl 1",
-                                 new { @class = "custom-select form-control-border" })
-                                </div>
-                                <div class="col-md-3">
-                                    <strong>CC Lvl 2 :</strong> <br />
-                                    @Html.DropDownList("AccCCLvl2ID",
-                                 new SelectList(ViewBag.CCLvl2, "CCLvl2Code", "CCLvl2Name"),
-                                 "Please Select CC Lvl 2",
-                                 new { @class = "custom-select form-control-border" })
-                                </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-3">
+                                @if (Model.VendorItemNo != "" || Model.VendorItemNo != null)
+                                {
+                                    <b>This is Asset Capitalize : @Model.VendorItemNo</b>
+                                }
+                                else
+                                {
+                                    <b>This is not Asset</b>
+                                }
                             </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-12 text-md-right">
-                                    <input type="hidden" value="@ViewBag.PrMStId" id="PrMStId" name="PrMStId" />
-                                    <input type="submit" value="Update Account No" id="btnSaveAcc" name="btnSaveAcc" class="btn btn-primary">
-                                </div>
+                            <div class="col-3">
+                                @if (Model.AssetFlag == 1)
+                                {
+                                    <strong>Asset Status :</strong><a>New Asset </a>
+                                }
+                                @if (Model.AssetFlag == 0)
+                                {
+                                    <strong>Asset Status :</strong><a>Existing Asset </a>
+                                }
+                            </div>
+                            <div class="col-3">
+                                <strong>Asset No: </strong>@Model.AssetNo
+                            </div>
+                        </div>
+
+                    }
+
+
+                    @if (ViewBag.CPRFFlag == true)
+                    {
+                        <br />
+                        <div class="row">
+                            <div class="col-3">
+                                @if (Model.AssetFlag == 1)
+                                {
+                                    <strong>Asset Status :</strong><a>New Asset </a>
+                                }
+                                @if (Model.AssetFlag == 0)
+                                {
+                                    <strong>Asset Status :</strong><a>Existing Asset </a>
+                                }
                             </div>
 
-                            <hr />
-                        }
+                            <div class="col-3">
+                                <strong>Asset No: @Model.AssetNo </strong>
+                            </div>
+
+                            <div class="col-3">
+                                <strong>Internal Order No: @Model.IOrderNo </strong>
+                            </div>
+
+                            <div class="col-3">
+                                <strong>Cost Centre No: @Model.CostCentreNo </strong>
+                            </div>
+                        </div>
+
+                    }
+
+                    <hr />
+                    @if (Model.PRTypeId == 4 && ViewBag.CPRFFlag == false)
+                    {
+                        Html.RenderAction("AccountNoForm", "Purchase", new { PrMstId = ViewBag.PrMstId, PrGroup = ViewBag.PrGroup });
+                        
+                    }
+
+                    @if (Model.PRTypeId == 4 && ViewBag.CPRFFlag == true)
+                    {
+                        Html.RenderAction("CPRFForm", "Purchase", new { PrMstId = ViewBag.PrMstId, PrGroup = ViewBag.PrGroup });
+                        <hr />
                     }
 
                     <div class="row">
@@ -115,7 +151,7 @@
                         </div>
                         <div class="col-md-3">
                             <strong>Department</strong> <br />
-                            @Html.DisplayFor(model => model.Department_mst.Department_name)
+                            @Html.DisplayFor(model => model.AccTypeDept.DeptName)
                         </div>
                         <div class="col-md-3">
                             <strong>Tel Ext.</strong> <br />
@@ -134,24 +170,7 @@
                                 <strong>Remarks</strong><br />
                                 @Html.DisplayFor(model => model.Remarks)
                             </div>
-                            <div class="col-md-4">
-                                @if (Model.AssetFlag == 1)
-                                {
-                                    <p><i>New asset</i></p>
-                                    if (Model.CPRF == "")
-                                    {<span style="color:red ; font-size:small">PR has tag CPRF without CPRF NO. Please enter CPRF no.</span>}
-                                    else
-                                    { <strong>CPRF NO :</strong> @Html.DisplayFor(model => model.CPRF); }
-                                }
-                                else if (Model.AssetFlag == 2)
-                                {
-                                    <p><i>Improve or add on to the existing assets</i></p>
-                                    if (Model.CPRF == "")
-                                    {<p class="error">PR has tag without CPRF NO. Please enter CPRF no.</p>}
-                                    else
-                                    { <strong>CPRF NO :</strong> @Html.DisplayFor(model => model.CPRF); }
-                                }
-                            </div>
+
                         </div>
                     }
 
@@ -161,45 +180,23 @@
                         {
                             <hr />
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <strong>Purpose</strong> <br />
                                     <textarea id="Purpose" name="Purpose" placeholder="Purpose" class="form-control" value="@Model.Purpose"></textarea> <br />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <strong>Remarks </strong> <br />
                                     <textarea id="Remarks" name="Remarks" placeholder="Remarks" class="form-control" value="@Model.Remarks"></textarea>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="custom-control custom-switch">
-                                        <input type="hidden" id="CPRFflag" name="CPRFflag" value="0" />
-                                        <input type="checkbox" class="custom-control-input" id="cSCprf" name="cSCprf" onchange="cSCprfChange()" >
-                                        <label class="custom-control-label" for="cSCprf">Is this PR for CPRF?</label>
-                                    </div>
-                                    <hr />
 
-                                    <div id="divRdAsset" style="display:none">
-                                        <div class="custom-control custom-radio">
-                                            <input type="hidden" id="chkNewAsset" name="chkNewAsset" value="0" />
-                                            <input class="custom-control-input" type="radio" id="customRadio1" name="RdAsset" onclick="newAsset()" checked="checked">
-                                            <label for="customRadio1" class="custom-control-label">New asset</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input type="hidden" id="chkExtAsset" name="chkExtAsset" value="0" />
-                                            <input class="custom-control-input" type="radio" id="customRadio2" name="RdAsset" onclick="extAsset()">
-                                            <label for="customRadio2" class="custom-control-label">Improve or add on to the existing assets</label>
-                                        </div>
-
-                                        <strong>CPRF NO.:</strong>
-                                        <input type="text" id="CPRF" name="CPRF" value="@Model.CPRF" />
-                                    </div>
-
-
-
-                                </div>
                             </div>
                             <div class="row">
-                                <input type="hidden" value="@ViewBag.PrMStId" id="AssetPrMStId" name="AssetPrMStId" />
-                                <button class="btn btn-primary " type="submit">Save</button>
+                                <div class="col-10"></div>
+                                <div class="col-2">
+                                    <input type="hidden" name="AssetPrGroup" id="CPRFPrGroup" value="@ViewBag.PrGroup" />
+                                    <input type="hidden" value="@ViewBag.PrMStId" id="AssetPrMStId" name="AssetPrMStId" />
+                                    <button class="btn btn-info " type="submit">Save   </button>
+                                </div>
                             </div>
                         }
 
@@ -214,6 +211,15 @@
 </div>
 
 <script>
+    function CSNonProductChange() {
+        if ($("#CSNonProduct").is(":checked")) {
+            $("#NonProductflag").val("1");
+        } else {
+            $("#NonProductflag").val("0");
+        }
+    }
+
+
     function cSCprfChange() {
         if ($("#cSCprf").is(":checked")) {
             $("#divRdAsset").show();
@@ -232,7 +238,7 @@
         if ($("#customRadio1").is(":checked")) {
             $("#customRadio1").val("1");
             $("#customRadio2").val("0");
-        } 
+        }
     }
 
     function newAsset() {
@@ -242,13 +248,11 @@
         }
     }
 
-    $('form1').on('submit', function () {
-        // do validation here
-        alert("sini");
-        return false;
-        /*
-        if ( not valid )
-            return false;
-        */
-    });
+   
 </script>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(2000).fadeOut("slow");
+    });
+</script>     

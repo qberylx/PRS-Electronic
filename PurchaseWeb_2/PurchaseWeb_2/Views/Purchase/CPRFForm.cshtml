@@ -1,0 +1,83 @@
+﻿@model PurchaseWeb_2.Models.CPRFFormView
+
+@using (Ajax.BeginForm("UpdateCPRF", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurChaseMasterSelected" }))
+{
+    <div class="row">
+        <div class="col-1">
+            <b>CPRF NO :</b>
+        </div>
+        <div class="col-2">
+            <select class="fstdropdown-select form-control-border" id="CPRF" name="CPRF" data-val="true" data-val-required="Please select CPRF No" aria-describedby="CPRF-error" aria-invalid="true">
+                <option value="">Select option</option>
+                @foreach (var cprf in ViewBag.cprfList)
+                {
+                    <option value="@cprf.CPRFNo">@cprf.CPRFNo</option>
+                }
+            </select>
+            @Html.ValidationMessageFor(model => model.CPRF, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-2">
+            <b>Internal Order NO :</b>
+        </div>
+        <div class="col-2">
+            @Html.EditorFor(model => model.IOrderNo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.IOrderNo, "", new { @class = "text-danger" })
+            
+        </div>
+        <div class="col-2">
+            <b>Cost Centre NO :</b>
+        </div>
+        <div class="col-2">
+            @Html.EditorFor(model => model.CostCentreNo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CostCentreNo, "", new { @class = "text-danger" })
+
+        </div>
+
+
+    </div>
+    <br />
+    <div class="row">
+
+        <div class="col-2">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="AssetFlag" id="AssetFlag1" value="1" checked="checked"  />
+                <label class="form-check-label">New Asset</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="AssetFlag" id="AssetFlag2" value="0" />
+                <label class="form-check-label">Existing Asset</label>
+            </div>
+        </div>
+        <div class="col-1">
+            <b>ASSET NO :</b>
+        </div>
+        <div class="col-2">
+            @Html.EditorFor(model => model.AssetNo, new { htmlAttributes = new { @class = "form-control", @Value = "-" } })
+            @Html.ValidationMessageFor(model => model.AssetNo, "", new { @class = "text-danger" })
+            @if ((string)TempData["alertAssetNo"] != "")
+            {
+                <a class="text-danger">@TempData["alertAssetNo"]</a>
+            }
+
+        </div>
+        <div class="col-3">
+            <div class="custom-control custom-switch">
+                <input type="hidden" id="NonProductflag" name="NonProductflag" value="0" />
+                <input type="checkbox" class="custom-control-input" id="CSNonProduct" name="CSNonProduct" onchange="CSNonProductChange()" />
+                <label class="custom-control-label" for="CSNonProduct">Is this non production asset?</label>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-10">
+
+        </div>
+        <div class="col-2">
+            <input type="hidden" name="CPRFPrId" id="CPRFPrId" value="@ViewBag.PrMstId" />
+            <input type="hidden" name="CPRFPrGroup" id="CPRFPrGroup" value="@ViewBag.PrGroup" />
+            <button class="btn btn-info" type="submit" value="update" name="UpCPRF">Update CPRF</button>
+        </div>
+    </div>
+}
+

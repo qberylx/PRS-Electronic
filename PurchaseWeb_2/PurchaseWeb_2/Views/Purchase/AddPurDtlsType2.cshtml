@@ -21,7 +21,7 @@
 
 <div class="row">
     <div class="col-md-8">
-        @{ Html.RenderAction("PurMstSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+        @{ Html.RenderAction("PurMstSelected", "Purchase", new { PrMstId = ViewBag.PrMstId , PrGroup = 0 });}
     </div>
     <div class="col-md-4">
         @{ Html.RenderAction("UploadQuo", "Purchase", new { PrMstId = ViewBag.PrMstId });}

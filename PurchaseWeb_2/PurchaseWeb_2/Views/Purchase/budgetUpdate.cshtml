@@ -114,11 +114,19 @@
 </div>
 
 <div class="row">
-    <div class="col-4">
-        @{Html.RenderAction("budgetCprf", "Purchase", new { PrMstId = Model.PRId });}
-    </div>
-    <div class="col-4">
-        @{Html.RenderAction("budgetMonthly", "Purchase", new { PrMstId = Model.PRId });}
-    </div>
+    @if (Model.PrGroupType1.CPRFFlag == true)
+    {
+        <div class="col-4">
+            @{Html.RenderAction("budgetCprf", "Purchase", new { PrMstId = Model.PRId });}
+        </div>
+    }
+    else
+    {
+        <div class="col-4">
+            @{Html.RenderAction("budgetMonthly", "Purchase", new { PrMstId = Model.PRId });}
+        </div>
+    }
+
+
 </div>
 

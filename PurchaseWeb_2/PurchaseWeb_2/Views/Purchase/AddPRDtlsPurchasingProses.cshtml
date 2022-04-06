@@ -1,0 +1,169 @@
+﻿@model PurchaseWeb_2.Models.PRdtlsViewModel
+
+<div class="row zoomedElement">
+    <div class="col-md-12">
+        <!--card header-->
+        <div class="card card-primary">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-2 ">
+                        <h3 class="card-title vertical-center">Purchase Request Details</h3>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--card body-->
+        @*using (Html.BeginForm("AddPurDtls", "Purchase",FormMethod.Post))*@
+        @using (Ajax.BeginForm("AddPRDtlsType4ForPurchasing", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", OnSuccess = "OnSuccessAdd" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.PRid, new { @Value = ViewBag.PrMstId })
+            @Html.HiddenFor(model => model.PRNo, new { @Value = ViewBag.PrNo })
+            @Html.HiddenFor(model => model.TypePRId, new { @Value = ViewBag.PRTypeId })
+
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-2">
+                        <label class="control-label ">Vendor</label>
+                        <br />
+                        @Html.DropDownList("VendorCode",
+                            new SelectList(ViewBag.vendorlist, "VENDORID", "VENDNAME"),
+                            "Please Select the Vendor",
+                            new { @class = "custom-select form-control-border" })
+
+                        <!--
+                        <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode">
+                            <option value="">Select option</option>
+                            @foreach (var vendor in ViewBag.vendorlist)
+                            {
+                                <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
+                            }
+                        </select>
+                        -->
+                        @Html.ValidationMessageFor(model => model.VendorCode, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-3">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
+                        <br />
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 3, })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-1">
+                        @Html.LabelFor(model => model.VendorPartNo, htmlAttributes: new { @class = "control-label " })
+                        <br />
+                        @Html.EditorFor(model => model.VendorPartNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.VendorPartNo, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-1">
+                        @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <br />
+                        @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-1">
+                        <strong>UOM</strong>
+                        <br />
+                        @Html.DropDownList("UOMName",
+                            new SelectList(ViewBag.UOMList, "UNIT", "UNIT"),
+                            "Please Select the UOM",
+                            new { @class = "custom-select form-control-border" })
+                        @Html.ValidationMessageFor(model => model.UOMName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-1">
+                        <strong>Req. Delivery Date</strong>
+                        <br />
+
+                        @Html.EditorFor(model => model.ReqDevDate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ReqDevDate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-2">
+                        <strong>Estimated Unit Price</strong>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-3">
+                                @Html.DropDownList("CurCode",
+                                   new SelectList(ViewBag.CurrList, "CURID", "CURID", "MYR"),
+                                   new { @class = "custom-select form-control-border" })
+                            </div>
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.EstimateUnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.EstimateUnitPrice, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-1">
+                        <b>Last price</b>
+                        <br />
+                        @Html.EditorFor(model => model.LastPrice, new { htmlAttributes = new { @class = "form-control", @onfocusout = "CostdownUpt(this.val)" } })
+                    </div>
+
+                    <div class="col-1">
+                        <b>Quotation Date</b>
+                        <br />
+                        @Html.EditorFor(model => model.LastQuoteDate, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+
+                    <div class="col-1">
+                        <b>PO Date</b>
+                        <br />
+                        @Html.EditorFor(model => model.PODate, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+
+                    <div class="col-1">
+                        <b>Last PO No</b>
+                        <br />
+                        @Html.EditorFor(model => model.LastPONo, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+
+                    <div class="col-2">
+                        <b>Remarks</b>
+                        <br />
+                        @Html.TextAreaFor(model => model.PurchasingRemarks, new { @class = "form-control", @rows = 3 })
+                        @Html.ValidationMessageFor(model => model.PurchasingRemarks, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-1">
+                        <b>Cost Down %</b>
+                        <br />
+                        @Html.EditorFor(model => model.CostDown, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+
+                </div>
+
+
+
+            </div>
+            <div class="card-footer">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" id="btnSubmit" name="Submit" value="Add PR Details" class="btn btn-primary" />
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+
+</div>
+
+<script>
+    function CostdownUpt(costVal) {
+        console.log($("#LastPrice").val());
+        var difVal = $("#LastPrice").val() - $("#EstimateUnitPrice").val();
+        var costDown = (difVal / $("#LastPrice").val()) * 100;
+        $("#CostDown").val(costDown);
+    }
+</script>

@@ -18,12 +18,16 @@ namespace PurchaseWeb_2.ModelData
         public PrGroupType()
         {
             this.PR_Mst = new HashSet<PR_Mst>();
+            this.PrTypeMaps = new HashSet<PrTypeMap>();
         }
     
         public int GroupId { get; set; }
         public string GroupName { get; set; }
+        public Nullable<bool> CPRFFlag { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Mst> PR_Mst { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PrTypeMap> PrTypeMaps { get; set; }
     }
 }

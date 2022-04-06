@@ -1,0 +1,159 @@
+﻿@model PurchaseWeb_2.Models.PRdtlsViewModel
+
+@{
+    ViewBag.Title = "PRDtlsPurchasingProsesStockable";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<style>
+    .zoomedElement {
+        /*background-color: #50CBFF;*/
+        zoom: 90%;
+    }
+
+    .vertical-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-8">
+        @{ Html.RenderAction("PurMstSelected", "Purchase", new { PrMstId = ViewBag.PrMstId, PrGroup = 0 });}
+    </div>
+    <div class="col-md-4">
+        @{ Html.RenderAction("UploadQuo", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+    </div>
+</div>
+
+
+<div id="divPRDtlsForm">
+    @{Html.RenderAction("AddPRDtlsPurchasingStockable", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="divPurDtlsList">
+            @{Html.RenderAction("PRDtlsListPurchasingStockable", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+        </div>
+    </div>
+</div>
+
+<!--Modal to reject-->
+<div class="modal fade" id="rejectPR" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reject PR</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @{Html.RenderAction("RejectPRPurchasingForm", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add UOM -->
+<div class="modal fade" id="addUOM" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            @*{Html.RenderAction("AddUOM", "Purchase");}*@
+            <div class="modal-header">
+                <h5 class="modal-title">Add UOM</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("AddUOM", "Purchase", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UOM_mst.UOMName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.UOM_mst.UOMName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.UOM_mst.UOMName, "", new { @class = "text-danger" })
+
+                            <input type="hidden" id="PrMstId" name="PrMstId" value="@ViewBag.PrMstId" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="form-group">
+                        <input type="submit" name="AddUOM" value="Add" class="btn btn-primary" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('input#Qty').blur(function () {
+            var textAmt = (this.value).replace(/,/g, "");
+            var amt = parseFloat(this.value);
+            $(this).val(amt.toFixed(2));
+        });
+    });
+</script>
+
+
+<div class="row">
+    <div class="col-4">
+        @Html.ActionLink("Return To Main PR", "PurchasingProsesPR", "Purchase", null, new { @class = "btn btn-primary" })
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectPR">
+            Reject PR
+        </button>
+    </div>
+    
+</div>
+
+
+
+<script>
+
+    function domiChange(itemno) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("callVendorpart","Purchase")",
+            data: '{itemno: "' + itemno + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divVendorPartNo').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("callUOM","Purchase")",
+            data: '{itemno: "' + itemno + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divUOM').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    };
+</script>
+
