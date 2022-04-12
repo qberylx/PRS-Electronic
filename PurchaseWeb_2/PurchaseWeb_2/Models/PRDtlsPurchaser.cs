@@ -68,6 +68,13 @@ namespace PurchaseWeb_2.Models
         public string CurCode { get; set; }
         public Nullable<decimal> EstTotalPrice { get; set; }
 
+        public Nullable<decimal> LastPrice { get; set; }
+        public Nullable<System.DateTime> LastQuoteDate { get; set; }
+        public Nullable<System.DateTime> PODate { get; set; }
+        public string LastPONo { get; set; }
+        public string PurchasingRemarks { get; set; }
+        public Nullable<decimal> CostDown { get; set; }
+
         public virtual PR_Mst PR_Mst { get; set; }
         public virtual UOM_mst UOM_mst { get; set; }
         public virtual Usr_mst Usr_mst { get; set; }

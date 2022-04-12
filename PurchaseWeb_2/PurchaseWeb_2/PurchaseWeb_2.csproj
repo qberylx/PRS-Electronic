@@ -192,6 +192,9 @@
     <Compile Include="ModelData\CSCCD.cs">
       <DependentUpon>SageDom1.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\CSCRD.cs">
+      <DependentUpon>SageDom1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\Currency_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -242,6 +245,9 @@
     </Compile>
     <Compile Include="ModelData\POVUPR.cs">
       <DependentUpon>SageDom1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\PO_CSV_Header.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\PO_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
@@ -2475,6 +2481,7 @@
     <Content Include="Views\Purchase\AddPRDtlsPurchasingStockable.cshtml" />
     <Content Include="Views\Purchase\callVendorHidden.cshtml" />
     <Content Include="Views\Purchase\RejectPRPurchasingForm.cshtml" />
+    <Content Include="Views\Purchase\callCurrency.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

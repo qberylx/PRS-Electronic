@@ -13,6 +13,7 @@
         <EntityTypeShape EntityType="dom1Model.POVUPR" Width="1.5" PointX="10.875" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="dom1Model.APVENPOVUPR" />
         <AssociationConnector Association="dom1Model.POVUPRICITMV" />
+        <EntityTypeShape EntityType="dom1Model.CSCRD" Width="1.5" PointX="0.875" PointY="0.625" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

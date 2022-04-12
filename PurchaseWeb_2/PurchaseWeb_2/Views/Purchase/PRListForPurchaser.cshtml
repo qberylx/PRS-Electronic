@@ -28,7 +28,13 @@
                     PR Group
                 </th>
                 <th>
+                    PR Est. Tot. Amount
+                </th>
+                <th>
                     PR Tot. Amount
+                </th>
+                <th>
+                    PR Tot. Amount (MYR)
                 </th>
                 <th>
                     PR Status
@@ -73,12 +79,36 @@
                                     @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                     {
                                         @*currency.Sum(s => s.TotCostWitTax) *@
+                                        String strTotAmtEst = String.Format("{0:n2}", currency.Sum(s => s.EstTotalPrice));
+                                        @strTotAmtEst
+                                        <br />
+                                    }
+                                </div>
+                            </div>
+                        </td>
+                        <td style="width:200px">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                    {
+                                        @currency.Max(s => s.CurCode) <br />
+                                    }
+                                </div>
+                                <div class="col-md-8">
+
+                                    @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                    {
+                                        @*currency.Sum(s => s.TotCostWitTax) *@
                                         String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.TotCostWitTax));
                                         @strTotAmt
                                         <br />
                                     }
                                 </div>
                             </div>
+                        </td>
+                        <td>
+                            @{String strTotAmtMYR = String.Format("{0:n2}", item.PR_Details.Sum(s=>s.TotCostWitTaxMYR)  ); }
+                            @strTotAmtMYR
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Status_Mst.Name)

@@ -160,6 +160,26 @@
           <Property Name="DECSEP" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="NEGDISP" Type="smallint" Nullable="false" />
         </EntityType>
+        <EntityType Name="CSCRD">
+          <Key>
+            <PropertyRef Name="HOMECUR" />
+            <PropertyRef Name="RATETYPE" />
+            <PropertyRef Name="SOURCECUR" />
+            <PropertyRef Name="RATEDATE" />
+          </Key>
+          <Property Name="HOMECUR" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="RATETYPE" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="SOURCECUR" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="RATEDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="AUDTDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="AUDTTIME" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="AUDTUSER" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="AUDTORG" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="RATE" Type="decimal" Precision="15" Scale="7" Nullable="false" />
+          <Property Name="SPREAD" Type="decimal" Precision="15" Scale="7" Nullable="false" />
+          <Property Name="DATEMATCH" Type="smallint" Nullable="false" />
+          <Property Name="RATEOPER" Type="smallint" Nullable="false" />
+        </EntityType>
         <EntityType Name="ICITMV">
           <Key>
             <PropertyRef Name="ITEMNO" />
@@ -282,6 +302,7 @@
         <EntityContainer Name="dom1ModelStoreContainer">
           <EntitySet Name="APVEN" EntityType="Self.APVEN" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CSCCD" EntityType="Self.CSCCD" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CSCRD" EntityType="Self.CSCRD" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ICITMV" EntityType="Self.ICITMV" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ICUCOD" EntityType="Self.ICUCOD" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="POVIA" EntityType="Self.POVIA" Schema="dbo" store:Type="Tables" />
@@ -584,6 +605,7 @@
             <End Role="POVUPR" EntitySet="POVUPRs" />
             <End Role="ICITMV" EntitySet="ICITMVs" />
           </AssociationSet>
+          <EntitySet Name="CSCRDs" EntityType="dom1Model.CSCRD" />
         </EntityContainer>
         <Association Name="APVENPOVUPR">
           <End Type="dom1Model.APVEN" Role="APVEN" Multiplicity="1" />
@@ -611,6 +633,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CSCRD">
+          <Key>
+            <PropertyRef Name="HOMECUR" />
+            <PropertyRef Name="RATETYPE" />
+            <PropertyRef Name="SOURCECUR" />
+            <PropertyRef Name="RATEDATE" />
+          </Key>
+          <Property Name="HOMECUR" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="RATETYPE" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="SOURCECUR" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="RATEDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="AUDTDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="AUDTTIME" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="AUDTUSER" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="AUDTORG" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="RATE" Type="Decimal" Nullable="false" Precision="15" Scale="7" />
+          <Property Name="SPREAD" Type="Decimal" Nullable="false" Precision="15" Scale="7" />
+          <Property Name="DATEMATCH" Type="Int16" Nullable="false" />
+          <Property Name="RATEOPER" Type="Int16" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -892,6 +934,24 @@
                 <ScalarProperty Name="AMOUNTLVL9" ColumnName="AMOUNTLVL9" />
                 <ScalarProperty Name="ROUNDMETHD" ColumnName="ROUNDMETHD" />
                 <ScalarProperty Name="ROUNDAMT" ColumnName="ROUNDAMT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CSCRDs">
+            <EntityTypeMapping TypeName="dom1Model.CSCRD">
+              <MappingFragment StoreEntitySet="CSCRD">
+                <ScalarProperty Name="RATEOPER" ColumnName="RATEOPER" />
+                <ScalarProperty Name="DATEMATCH" ColumnName="DATEMATCH" />
+                <ScalarProperty Name="SPREAD" ColumnName="SPREAD" />
+                <ScalarProperty Name="RATE" ColumnName="RATE" />
+                <ScalarProperty Name="AUDTORG" ColumnName="AUDTORG" />
+                <ScalarProperty Name="AUDTUSER" ColumnName="AUDTUSER" />
+                <ScalarProperty Name="AUDTTIME" ColumnName="AUDTTIME" />
+                <ScalarProperty Name="AUDTDATE" ColumnName="AUDTDATE" />
+                <ScalarProperty Name="RATEDATE" ColumnName="RATEDATE" />
+                <ScalarProperty Name="SOURCECUR" ColumnName="SOURCECUR" />
+                <ScalarProperty Name="RATETYPE" ColumnName="RATETYPE" />
+                <ScalarProperty Name="HOMECUR" ColumnName="HOMECUR" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

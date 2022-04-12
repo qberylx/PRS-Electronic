@@ -61,7 +61,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-10">Vendor</label>
                             <div class="col-md-10">
-                                <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode" >
+                                <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode" onchange="vendorchg(this.value)" >
                                     <option value="">Select option</option>
                                     @foreach (var vendor in ViewBag.vendorlist)
                                     {
@@ -131,9 +131,11 @@
                             <div class="col-md-10">
                                 <div class="row">
                                     <div class="col-md-3">
-                                        @Html.DropDownList("CurCode",
+                                        <div id="divCur">
+                                            @Html.DropDownList("CurCode",
                                            new SelectList(ViewBag.CurrList, "CURID", "CURID", "MYR"),
                                            new { @class = "custom-select form-control-border" })
+                                        </div>                                        
                                     </div>
                                     <div class="col-md-9">
                                         @Html.EditorFor(model => model.EstimateUnitPrice, new { htmlAttributes = new { @class = "form-control" } })
@@ -229,3 +231,24 @@
 <div>
     @Html.ActionLink("Return To Main PR", "PurRequest", "Purchase", null, new { @class = "btn btn-primary" })
 </div>
+
+<script>
+    function vendorchg(id) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("callCurrency","Purchase")",
+            data: '{VendorId: "' + id + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCur').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>

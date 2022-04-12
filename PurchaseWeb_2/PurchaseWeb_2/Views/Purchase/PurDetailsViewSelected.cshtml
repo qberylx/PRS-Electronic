@@ -181,10 +181,14 @@
                                     @Html.DisplayFor(modelItem => item.UOMName)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.ReqDevDate)
+                                    @{
+                                        DateTime reqdate = (DateTime)item.ReqDevDate;
+                                        String strReqdate = reqdate.ToString("dd/MM/yyyy");
+                                    }
+                                    @strReqdate
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.CurCode)
+                                    @Html.DisplayFor(modelItem => item.EstCurCode)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.EstimateUnitPrice)
@@ -259,15 +263,15 @@
                         <tr>
                             <td> <strong>Estimated Total Price :</strong></td>
                             <td style="padding-left:2em;padding-right:1em">
-                                @foreach (var currency in Model.OrderBy(x => x.CurCode).GroupBy(x => x.CurCode))
+                                @foreach (var currency in Model.OrderBy(x => x.EstCurCode).GroupBy(x => x.EstCurCode))
                                 {
 
-                                    @currency.Max(x => x.CurCode) <br />
+                                    @currency.Max(x => x.EstCurCode) <br />
 
                                 }
                             </td>
                             <td>
-                                @foreach (var currency in Model.OrderBy(x => x.CurCode).GroupBy(x => x.CurCode))
+                                @foreach (var currency in Model.OrderBy(x => x.EstCurCode).GroupBy(x => x.EstCurCode))
                                 {
                                     String strTotCostWitTax = String.Format("{0:n}", currency.Sum(s => s.EstTotalPrice));
                                     @strTotCostWitTax <br />

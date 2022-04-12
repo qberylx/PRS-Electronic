@@ -85,6 +85,8 @@ namespace PurchaseWeb_2.Models
         public string LastPONo { get; set; }
         public string PurchasingRemarks { get; set; }
         public Nullable<decimal> CostDown { get; set; }
+        public Nullable<decimal> TotCostWitTaxMYR { get; set; }
+        public string EstCurCode { get; set; }
 
 
 

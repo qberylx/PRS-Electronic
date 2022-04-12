@@ -469,7 +469,10 @@
                                             @item.Max(s => s.CurCode) <br />
                                         }
                                     </div>
-                                    <div class="col-md-8">
+                                    
+                                        &nbsp;
+                                    
+                                    <div class="col-md-7">
                                         @foreach (var item in Model.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                         {
                                             @item.Sum(s => s.TotCostWitTax) <br />

@@ -35,7 +35,7 @@
                             <strong>PR Amount </strong>
                         </div>
                         <div class="col-md-6">
-                            @{String strTotCostWitTax = String.Format("{0:n2}", Model.PR_Details.Sum(x => x.TotCostWitTax)); }
+                            @{String strTotCostWitTax = String.Format("{0:n2}", Model.PR_Details.Sum(x => x.TotCostWitTaxMYR)); }
                             <strong>: </strong> MYR @strTotCostWitTax
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                             <strong>B/O </strong>
                         </div>
                         <div class="col-md-6">
-                            @{decimal bo = ViewBag.CPRFBalance - Model.PR_Details.Sum(x => x.TotCostWitTax); }
+                            @{decimal bo = ViewBag.CPRFBalance - Model.PR_Details.Sum(x => x.TotCostWitTaxMYR); }
                             @{String strAssetBal = String.Format("{0:n2}", bo); }
                             <strong>: </strong> MYR @strAssetBal
                         </div>
@@ -77,7 +77,7 @@
 
                             </div>
                             <div class="col-md-9">
-                                <input type="text" id="AssetBudget" name="AssetBudget" value="@ViewBag.minBal" class="form-control" onfocusout="chgAssBudget(this.value , @Model.PR_Details.Sum(x => x.TotCostWitTax) ) " />
+                                <input type="text" id="AssetBudget" name="AssetBudget" value="@ViewBag.CPRFBalance" class="form-control" onfocusout="chgAssBudget(this.value , @Model.PR_Details.Sum(x => x.TotCostWitTaxMYR) ) " />
                             </div>
                         </div>
                         <div class="row">
@@ -85,7 +85,7 @@
                                 <strong>B/O After Update</strong>
                             </div>
                             <div class="col-md-9">
-                                <input type="text" id="AssetBal" name="AssetBal" value="" class="form-control" />
+                                <input type="text" id="AssetBal" name="AssetBal" value="@strAssetBal" class="form-control" />
                             </div>
                         </div>
                     </div>

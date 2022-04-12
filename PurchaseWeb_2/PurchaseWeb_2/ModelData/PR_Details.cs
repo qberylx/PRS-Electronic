@@ -68,6 +68,8 @@ namespace PurchaseWeb_2.ModelData
         public string LastPONo { get; set; }
         public string PurchasingRemarks { get; set; }
         public Nullable<decimal> CostDown { get; set; }
+        public Nullable<decimal> TotCostWitTaxMYR { get; set; }
+        public string EstCurCode { get; set; }
     
         public virtual PR_Mst PR_Mst { get; set; }
         public virtual UOM_mst UOM_mst { get; set; }

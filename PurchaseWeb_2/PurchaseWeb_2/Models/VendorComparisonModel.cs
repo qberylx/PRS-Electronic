@@ -53,6 +53,10 @@ namespace PurchaseWeb_2.Models
         public Nullable<decimal> Discount { get; set; }
         public Nullable<int> DiscType { get; set; }
         public Nullable<decimal> CurRate { get; set; }
+        public string VdCurCode { get; set; }
+        public Nullable<decimal> TotCostnoTaxVendorCur { get; set; }
+        public Nullable<decimal> TotCostWitTaxVendorCur { get; set; }
+        public Nullable<decimal> CurPriceMYR { get; set; }
 
         public virtual PR_Details PR_Details { get; set; }
     }

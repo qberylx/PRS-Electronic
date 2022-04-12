@@ -19,6 +19,7 @@ namespace PurchaseWeb_2.ModelData
         {
             this.PR_Details = new HashSet<PR_Details>();
             this.PRFiles = new HashSet<PRFile>();
+            this.PO_Mst = new HashSet<PO_Mst>();
         }
     
         public int PRId { get; set; }
@@ -73,5 +74,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual ICollection<PRFile> PRFiles { get; set; }
         public virtual AccTypeDept AccTypeDept { get; set; }
         public virtual PrGroupType PrGroupType1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PO_Mst> PO_Mst { get; set; }
     }
 }

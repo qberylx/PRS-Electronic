@@ -16,14 +16,36 @@
             <th>
                 Last Price
             </th>
-            <th>
+            <th style="display:none">
                 Last Quotation Date
             </th>
-            <th>
+            <th style="display: none">
                 PO Date
             </th>
+
             <th>
                 Cost Down
+            </th>
+            <th>
+                Disc.Type
+            </th>
+            <th>
+                Discount
+            </th>
+            <th>
+                Tot. Amaunt (Exc.Tax)
+            </th>
+            <th>
+                Tax
+            </th>
+            <th>
+                Tot. Amaunt (Icl. Tax)
+            </th>
+            <th>
+                Tax Group
+            </th>
+            <th>
+                Tax Class
             </th>
             <th>
                 Winner
@@ -42,7 +64,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.CurPrice)
                 </td>
-                <td>
+                <td >
                     @{
                         DateTime QuoteDate = (DateTime)item.QuoteDate;
                         String strQuoteDate = QuoteDate.ToString("dd/MM/yyyy");
@@ -60,7 +82,7 @@
                         @Html.DisplayFor(modelItem => item.LastPrice)
                     }
                 </td>
-                <td>
+                <td style="display: none">
                     @{
                         String strLastQuoteDate = "";
 
@@ -74,7 +96,7 @@
                     @strLastQuoteDate
 
                 </td>
-                <td>
+                <td style="display: none">
                     @{
                         String strPODate = "";
 
@@ -91,6 +113,42 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.CostDown)
                 </td>
+
+                <td>
+                    @if (item.DiscType == 1)
+                    {
+                       <a>%</a>
+                    }
+                    else
+                    {
+                      <a>Amount</a>
+                    }
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discount)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotCostnoTax)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tax)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotCostWitTax)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaxCode)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaxClass)
+                </td>
+
                 <td>
                     @{ if (item.FlagWin == true)
                         {

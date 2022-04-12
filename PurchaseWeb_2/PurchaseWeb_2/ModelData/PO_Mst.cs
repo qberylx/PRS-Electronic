@@ -25,6 +25,8 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<decimal> TotPOAmt { get; set; }
         public string Description { get; set; }
         public Nullable<int> PRid { get; set; }
-        public Nullable<bool> ExportFlag { get; set; }
+        public bool ExportFlag { get; set; }
+    
+        public virtual PR_Mst PR_Mst { get; set; }
     }
 }

@@ -25,5 +25,6 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<System.DateTime> RequisitionDate { get; set; }
         public Nullable<decimal> TotPOAmt { get; set; }
         public string Description { get; set; }
+        public Nullable<bool> ExportFlag { get; set; }
     }
 }

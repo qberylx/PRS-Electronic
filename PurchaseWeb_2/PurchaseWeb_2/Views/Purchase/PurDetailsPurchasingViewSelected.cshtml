@@ -107,6 +107,9 @@
                                 Total Cost (Icl.)
                             </th>
                             <th>
+                                Cost Down (%)
+                            </th>
+                            <th>
                                 Tax Group
                             </th>
                             <th>
@@ -288,6 +291,10 @@
                                 <th>
                                     @{String strTotCostWitTax = String.Format("{0:n}", item.TotCostWitTax);}
                                     @strTotCostWitTax
+                                </th>
+                                <th>
+                                    @{String strCostDown = String.Format("{0:n}", item.CostDown);}
+                                    @strCostDown
                                 </th>
                                 <th>
                                     @Html.DisplayFor(modelItem => item.TaxCode)

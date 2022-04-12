@@ -54,6 +54,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<PrTypeMap> PrTypeMaps { get; set; }
         public virtual DbSet<CPRFMst> CPRFMsts { get; set; }
         public virtual DbSet<AuditPR_Log> AuditPR_Log { get; set; }
+        public virtual DbSet<PO_CSV_Header> PO_CSV_Header { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {

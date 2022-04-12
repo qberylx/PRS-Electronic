@@ -1,4 +1,4 @@
-﻿@model List<PurchaseWeb_2.ModelData.GetPOListbyDate_Result>
+﻿@model List<PurchaseWeb_2.ModelData.PO_Mst>
 
 <p>
     @*
@@ -11,119 +11,151 @@
     *@
 </p>
 
-<table class="table">
-    <tr>
-        <th>
-            No.
-        </th>
-        <th>
+<div class="card-info">
+    <div class="card-header">
 
-        </th>
-        <th>
-            PO No.
-        </th>
-        <th>
-            PO Date
-        </th>
-        <th>
-            Purchaser
-        </th>
-        <th>
-            PR No.
-        </th>
-        <th>
-            PR Date
-        </th>
-        <th>
-            Requestor
-        </th>
-        <th>
-            Description
-        </th>
-        <th>
-            PO Total Amount
-        </th>
-    </tr>
-    @*
-    @foreach (var item in Model)*@
-    @for (int i = 0; i < Model.Count(); i++)
+    </div>
+    @*@using (Ajax.BeginForm("ExportToCSV", "PO", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPOListByDate" }))*@
+    @using (Html.BeginForm("ExportToCSV", "PO", FormMethod.Post))
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => Model[i].RN)
-            </td>
-            <td>
-                @if (Model[i].ExportFlag)
+        <div class="card-body">
+            <table class="table table-sm table-responsive">
+                <tr>
+                    <th>
+                        No.
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+                        PO No.
+                    </th>
+                    <th>
+                        PR Type
+                    </th>
+                    <th>
+                        PO Date
+                    </th>
+                    <th>
+                        Purchaser
+                    </th>
+                    <th>
+                        PR No.
+                    </th>
+                    <th>
+                        PR Date
+                    </th>
+                    <th>
+                        Requestor
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        PO Total Amount
+                    </th>
+                </tr>
+
+                @*
+                    @foreach (var item in Model)*@
+                @for (int i = 0; i < Model.Count(); i++)
                 {
-                    @Html.CheckBoxFor(modeItem => Model[i].ExportFlag, new { @disabled = "disabled" })
-                }
-                else
-                {
-                    @Html.CheckBoxFor(modeItem => Model[i].ExportFlag)
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => Model[i].NoPo)
-            </td>
-            <td>
-                @{
-                    String strCreateDatePO = "";
-                    if (Model[i].CreateDatePO != null)
-                    {
-                        DateTime dtCreateDatePO = (DateTime)Model[i].CreateDatePO;
-                        strCreateDatePO = dtCreateDatePO.ToString("dd/MM/yyyy");
-                    }
-                    else
-                    {
-                        strCreateDatePO = DateTime.Now.ToString("dd/MM/yyyy");
-                    }
+                    <tr>
+                        <td>
+                            @i
+                            @*@Html.DisplayFor(modelItem => Model[i].RN)*@
+                            @Html.HiddenFor(Model => Model[i].POId)
+                            @Html.HiddenFor(Model => Model[i].CreateDate)
+                            @Html.HiddenFor(Model => Model[i].NoPo)
+                            @Html.HiddenFor(Model => Model[i].CreateBy)
+
+                        </td>
+                        <td>
+
+                            @if (Model[i].ExportFlag)
+                            {
+                                @Html.CheckBoxFor(modeItem => Model[i].ExportFlag, new { @disabled = "disabled" })
+                            }
+                            else
+                            {
+                                @Html.CheckBoxFor(modeItem => Model[i].ExportFlag)
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model[i].NoPo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model[i].PR_Mst.PRType_mst.Name)
+                        </td>
+                        <td>
+                            @{
+                                String strCreateDatePO = "";
+                                if (Model[i].CreateDate != null)
+                                {
+                                    DateTime dtCreateDatePO = (DateTime)Model[i].CreateDate;
+                                    strCreateDatePO = dtCreateDatePO.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    strCreateDatePO = DateTime.Now.ToString("dd/MM/yyyy");
+                                }
+                            }
+
+                            @strCreateDatePO
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model[i].Purchasername)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model[i].PRNo)
+                        </td>
+                        <td>
+                            @{
+                                String strReqdate = "";
+                                if (Model[i].RequisitionDate != null)
+                                {
+                                    DateTime reqdate = (DateTime)Model[i].RequisitionDate;
+                                    strReqdate = reqdate.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    strReqdate = DateTime.Now.ToString("dd/MM/yyyy");
+                                }
+                            }
+
+                            @strReqdate
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model[i].RequestorName)
+                        </td>
+                        <td>
+                            @if (Model[i].Description != null)
+                            {
+                                @Html.Raw(Model[i].Description.Replace(Environment.NewLine, "<br/>"))
+                            }
+
+
+                        </td>
+                        <td>
+                            @{String strTotPOAmt = String.Format("{0:n}", Model[i].TotPOAmt);}
+                            @strTotPOAmt
+
+                        </td>
+                    </tr>
                 }
 
-                @strCreateDatePO
-                
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => Model[i].Purchasername)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => Model[i].PRNo)
-            </td>
-            <td>
-                @{
-                    String strReqdate = "";
-                    if (Model[i].RequisitionDate != null)
-                    {
-                        DateTime reqdate = (DateTime)Model[i].RequisitionDate;
-                        strReqdate = reqdate.ToString("dd/MM/yyyy");
-                    }
-                    else
-                    {
-                        strReqdate = DateTime.Now.ToString("dd/MM/yyyy");
-                    }
-                }
-                    
-                @strReqdate
-                
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => Model[i].RequestorName)
-            </td>
-            <td>
-                @if (Model[i].Description != null)
-                {
-                    @Html.Raw(Model[i].Description.Replace(Environment.NewLine, "<br/>"))
-                }
-                
-
-            </td>
-            <td>
-                @{String strTotPOAmt = String.Format("{0:n}", Model[i].TotPOAmt);}
-                @strTotPOAmt
-                
-            </td>
-        </tr>
+            </table>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-info" type="submit">Export CSV</button>
+            
+        </div>
     }
-</table>
+
+</div>
+
 
 
 

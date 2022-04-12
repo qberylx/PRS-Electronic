@@ -58,6 +58,9 @@
                     Grand Amount
                 </th>
                 <th>
+                    Grand Amount (MYR)
+                </th>
+                <th>
                     PR Status
                 </th>
                 <th></th>
@@ -110,6 +113,9 @@
                                         }
                             </div>
                         </div>
+                    </td>
+                    <td>
+                        @item.PR_Details.Sum(s=>s.TotCostWitTaxMYR)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Status_Mst.Name)
