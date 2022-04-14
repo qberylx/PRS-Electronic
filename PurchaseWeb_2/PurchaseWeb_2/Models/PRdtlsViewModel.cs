@@ -65,6 +65,7 @@ namespace PurchaseWeb_2.Models
         //[RegularExpression(@"^\d+(\.\d{1,2,3,4,5})?$", ErrorMessage = "Valid Decimal number with maximum 5 decimal places.")]
         public decimal EstimateUnitPrice { get; set; }
         public bool PoFlag { get; set; }
+        public bool NoPoFlag { get; set; }
         [Required(ErrorMessage = "Please select UOM ")]
         public string UOMName { get; set; }
         [Required(ErrorMessage = "Please select Vendor ")]
@@ -87,7 +88,11 @@ namespace PurchaseWeb_2.Models
         public Nullable<decimal> CostDown { get; set; }
         public Nullable<decimal> TotCostWitTaxMYR { get; set; }
         public string EstCurCode { get; set; }
-
+        public string LastVendorName { get; set; }
+        public string LastCur { get; set; }
+        public Nullable<decimal> LastCurExc { get; set; }
+        public Nullable<decimal> LastPriceVendor { get; set; }
+        public string LastVendorCode { get; set; }
 
 
         public virtual PR_Mst PR_Mst { get; set; }

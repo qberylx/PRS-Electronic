@@ -5,21 +5,33 @@
     @using (Ajax.BeginForm("VendorComparison", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivVendorCompareList" + @ViewBag.PrDtlstId, OnSuccess = "OnSuccess(" + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + ")" }))
     {
         @Html.AntiForgeryToken()
-
+        
+        
+        
         <div class="row">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="col-md-2">
-                Vendor name
-                <select class="fstdropdown-select form-control-border" id="VDCode" name="VDCode" onchange="getCurCode(this.value, @ViewBag.PrDtlstId)">
-                    <option value="">Select option</option>
-                    @foreach (var vd in ViewBag.vdLst)
-                    {
-                        <option value="@vd.VENDORID">@vd.VENDORID - @vd.VENDNAME</option>
-                    }
-                </select>
+            
+            <div class="col-2">
+                <div class="custom-control custom-switch">
+                    &nbsp; <input type="checkbox" class="custom-control-input" id="swNewVendor" onchange="swNewVendorChg(@ViewBag.PrDtlstId)" />
+                           <label class="custom-control-label" for="swNewVendor">Vendor not in the list?</label>
+                </div>
+            </div>
 
+            <div class="col-md-3">
+                Vendor name
+                <div id="divVendorList_@ViewBag.PrDtlstId">
+                    <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode" onchange="getCurCode(this.value, @ViewBag.PrDtlstId)">
+                        <option value="">Select option</option>
+                        @foreach (var vd in ViewBag.vdLst)
+                        {
+                            <option value="@vd.VENDORID">@vd.VENDORID - @vd.VENDNAME</option>
+                        }
+                    </select>
+                </div>
+                
                 <br />
-                @Html.ValidationMessageFor(model => model.VDCode, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.VendorCode, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-1">
@@ -37,7 +49,7 @@
 
             <div class="col-2">
                 Current Price (MYR) <br />
-                @Html.EditorFor(model => model.CurPriceMYR, new { htmlAttributes = new { @class = "form-control", @onfocusout = "UpdatePrice(this.value, " + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + " )", @Value = "0.00", @kiraCurPMYR = ViewBag.PrDtlstId } }) <br />
+                @Html.EditorFor(model => model.CurPriceMYR, new { htmlAttributes = new { @class = "form-control", @onchange = "UpdatePrice(this.value, " + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + " )", @Value = "0.00", @kiraCurPMYR = ViewBag.PrDtlstId } }) <br />
                 @Html.ValidationMessageFor(model => model.CurPriceMYR, "", new { @class = "text-danger" })
             </div>
 
@@ -111,11 +123,27 @@
                 @Html.HiddenFor(model => model.TotCostWitTaxVendorCur, new { @class = "form-control", @kiraTAIvd = ViewBag.PrDtlstId, @Value = "0.00" })
             </div>
             &nbsp;
+            <div class="col-md-2 pr-3">
+                Payment Terms<br />
+                <div id="divTerms_@ViewBag.PrDtlstId">
+                    <select class="fstdropdown-select form-control-border" id="PayTerms" name="PayTerms">
+                        <option value="">Select option</option>
+                        @foreach (var vd in ViewBag.termlist)
+                        {
+                            <option value="@vd.TERMSCODE">@vd.TERMSCODE - @vd.CODEDESC</option>
+                        }
+                    </select>
+                </div>
+                
+                @Html.ValidationMessageFor(model => model.PayTerms, "", new { @class = "text-danger" })
+            </div>
+            &nbsp;
             <div class="col-md-1 pr-3">
-                Total Group<br />
+                Tax Code<br />
                 @Html.EditorFor(model => model.TaxCode, new { htmlAttributes = new { @class = "form-control", @Value = "SSTG" } }) <br />
                 @Html.ValidationMessageFor(model => model.TaxCode, "", new { @class = "text-danger" })
             </div>
+
             &nbsp;
             <div class="col-md-1 pr-3">
                 Tax Class<br />
@@ -133,7 +161,7 @@
 
     }
 
-    <script type="text/javascript">
+<script type="text/javascript">
         function OnSuccess(PrDtlstId,Qty) {
             console.log("OnSuccess prDtId=" + PrDtlstId);
             console.log("OnSuccess Qty=" + Qty);
@@ -142,19 +170,16 @@
 
             UpdatePrice(0, PrDtlstId, Qty);
 
-        
+
     }
 
-    $(document).ready(function () {
-        $("#notification").delay(3000).fadeOut("slow");
 
-        
+    function UpdatePrice(Price, PrDtlstId, Qty) {
+        console.log("UpdatePrice Price=" + Price + " Qty=" + Qty);
 
-    });
-
-        function UpdatePrice(Price, PrDtlstId, Qty) {
-            console.log("UpdatePrice Price=" + Price + " Qty=" + Qty);
-        var totamt = Qty * Price;
+        var curRate = $("[curRate=" + PrDtlstId + "]").val();
+        var totamtVd = Qty * Price;
+        var totamt = Qty * Price * curRate ;
 
         // update cost MYR
         $("[kiraCurPMYR=" + PrDtlstId + "]").val(totamt.toFixed(2));
@@ -165,14 +190,14 @@
         $("[kiraTAE=" + PrDtlstId + "]").val(totamt.toFixed(2));
         $("[kiraTAE=" + PrDtlstId + "]").attr("value", totamt.toFixed(2));
 
-        $("[kiraTAEvd=" + PrDtlstId + "]").val(totamt.toFixed(2));
-        $("[kiraTAEvd=" + PrDtlstId + "]").attr("value", totamt.toFixed(2));
+        $("[kiraTAEvd=" + PrDtlstId + "]").val(totamtVd.toFixed(2));
+        $("[kiraTAEvd=" + PrDtlstId + "]").attr("value", totamtVd.toFixed(2));
         console.log("kiraTAEvd=" + $("[kiraTAEvd=" + PrDtlstId + "]").val());
 
         // update tot cost with tax
         var taxamt = $("[kiraTax=" + PrDtlstId + "]").val() / 100 * totamt;
         $("[kiraTAI=" + PrDtlstId + "]").val((taxamt + totamt).toFixed(2));
-        $("[kiraTAIvd=" + PrDtlstId + "]").val((taxamt + totamt).toFixed(2));
+        $("[kiraTAIvd=" + PrDtlstId + "]").val((taxamt + totamtVd).toFixed(2));
         console.log("kiraTAIvd=" + $("[kiraTAIvd=" + PrDtlstId + "]").val());
 
         // calc Costdown
@@ -270,7 +295,23 @@
             contentType: "application/json; charset=utf-8",
             dataType: "html",
             success: function (response) {
-                $('#divCurCode_'+PrDtlstId+'').html(response);
+                $('#divCurCode_' + PrDtlstId + '').html(response);
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("getTermsCode","Purchase")",
+            data: JSON.stringify({ vdCode: vdCode, PrDtlstId: PrDtlstId }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divTerms_' + PrDtlstId + '').html(response);
+
             },
             failure: function (response) {
                 alert(response.responseText);
@@ -405,6 +446,48 @@
         }
     }
 
-    </script>
+    function swNewVendorChg(PrDtlstId) {
+        if ($("#swNewVendor").is(":checked")) {
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("callNewVendor","Purchase")",
+                data: '',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#divVendorList_' + PrDtlstId).html(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        } else {
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("callVendorList","Purchase")",
+                data: '',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#divVendorList_' + PrDtlstId).html(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        }
+    }
+
+</script>
 
 

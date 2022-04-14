@@ -64,18 +64,16 @@
                 <label class="form-check-label">Existing Asset</label>
             </div>
         </div>
-        <div class="col-1">
-            <b>ASSET NO :</b>
-        </div>
         <div class="col-2">
+            <b>ASSET NO :</b>
             @Html.EditorFor(model => model.AssetNo, new { htmlAttributes = new { @class = "form-control", @Value = "-" } })
             @Html.ValidationMessageFor(model => model.AssetNo, "", new { @class = "text-danger" })
             @if ((string)TempData["alertAssetNo"] != "")
             {
                 <a class="text-danger">@TempData["alertAssetNo"]</a>
             }
-
         </div>
+        
     </div>
     <br />
     <div class="row">

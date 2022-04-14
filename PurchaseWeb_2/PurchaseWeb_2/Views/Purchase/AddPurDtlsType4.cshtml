@@ -60,14 +60,20 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label col-md-10">Vendor</label>
+                            <div class="custom-control custom-switch">
+                                &nbsp; <input type="checkbox" class="custom-control-input" id="swNewVendor" onchange="swNewVendorChg()" />
+                                <label class="custom-control-label" for="swNewVendor">Vendor not in the list?</label>
+                            </div> 
                             <div class="col-md-10">
-                                <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode" onchange="vendorchg(this.value)" >
-                                    <option value="">Select option</option>
-                                    @foreach (var vendor in ViewBag.vendorlist)
-                                    {
-                                        <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
-                                    }
-                                </select>
+                                <div id="divVendorList">
+                                    <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode" onchange="vendorchg(this.value)">
+                                        <option value="">Select option</option>
+                                        @foreach (var vendor in ViewBag.vendorlist)
+                                        {
+                                            <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
+                                        }
+                                    </select>
+                                </div>                                
                                 @Html.ValidationMessageFor(model => model.VendorCode, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -132,7 +138,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div id="divCur">
-                                            @Html.DropDownList("CurCode",
+                                            @Html.DropDownList("EstCurCode",
                                            new SelectList(ViewBag.CurrList, "CURID", "CURID", "MYR"),
                                            new { @class = "custom-select form-control-border" })
                                         </div>                                        
@@ -250,5 +256,47 @@
                 alert(response.responseText);
             }
         });
+    }
+
+    function swNewVendorChg() {
+        if ($("#swNewVendor").is(":checked")) {
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("callNewVendor","Purchase")",
+                data: '',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#divVendorList').html(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        } else {
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("callVendorList","Purchase")",
+                data: '',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#divVendorList').html(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        }
     }
 </script>

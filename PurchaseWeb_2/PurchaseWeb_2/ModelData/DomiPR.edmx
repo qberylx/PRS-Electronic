@@ -245,6 +245,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="CostDown" Type="decimal" Precision="18" Scale="2" />
           <Property Name="TotCostWitTaxMYR" Type="decimal" Precision="18" Scale="2" />
           <Property Name="EstCurCode" Type="varchar" MaxLength="10" />
+          <Property Name="PayTerms" Type="varchar" MaxLength="50" />
+          <Property Name="PayDesc" Type="varchar(max)" />
+          <Property Name="LastVendorName" Type="varchar" MaxLength="150" />
+          <Property Name="LastCur" Type="varchar" MaxLength="50" />
+          <Property Name="LastCurExc" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="LastPriceVendor" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="LastVendorCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -323,6 +330,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="TotCostnoTaxVendorCur" Type="decimal" Precision="18" Scale="2" />
           <Property Name="TotCostWitTaxVendorCur" Type="decimal" Precision="18" Scale="2" />
           <Property Name="CurPriceMYR" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PayTerms" Type="varchar" MaxLength="50" />
+          <Property Name="PayDesc" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="PRFile">
           <Key>
@@ -347,6 +356,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           </Key>
           <Property Name="PRTypeId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="PRTypeNo" Type="int" />
         </EntityType>
         <EntityType Name="PrTypeMap">
           <Key>
@@ -1173,6 +1183,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="CostDown" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="TotCostWitTaxMYR" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="EstCurCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PayTerms" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PayDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LastVendorName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="LastCur" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastCurExc" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="LastPriceVendor" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="LastVendorCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -1325,6 +1342,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="PRTypeId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Mst_PRType_mst" FromRole="PRType_mst" ToRole="PR_Mst" />
+          <Property Name="PRTypeNo" Type="Int32" />
         </EntityType>
         <Association Name="FK_PR_Mst_PRType_mst">
           <End Type="Domi_PurModel.PRType_mst" Role="PRType_mst" Multiplicity="0..1" />
@@ -1448,6 +1466,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="TotCostnoTaxVendorCur" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="TotCostWitTaxVendorCur" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="CurPriceMYR" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PayTerms" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PayDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_PR_VendorComparison_PR_Details">
           <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="0..1" />
@@ -1798,6 +1818,13 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <EntitySetMapping Name="PR_Details">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Details">
               <MappingFragment StoreEntitySet="PR_Details">
+                <ScalarProperty Name="LastVendorCode" ColumnName="LastVendorCode" />
+                <ScalarProperty Name="LastPriceVendor" ColumnName="LastPriceVendor" />
+                <ScalarProperty Name="LastCurExc" ColumnName="LastCurExc" />
+                <ScalarProperty Name="LastCur" ColumnName="LastCur" />
+                <ScalarProperty Name="LastVendorName" ColumnName="LastVendorName" />
+                <ScalarProperty Name="PayDesc" ColumnName="PayDesc" />
+                <ScalarProperty Name="PayTerms" ColumnName="PayTerms" />
                 <ScalarProperty Name="EstCurCode" ColumnName="EstCurCode" />
                 <ScalarProperty Name="TotCostWitTaxMYR" ColumnName="TotCostWitTaxMYR" />
                 <ScalarProperty Name="CostDown" ColumnName="CostDown" />
@@ -1920,6 +1947,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <EntitySetMapping Name="PRType_mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PRType_mst">
               <MappingFragment StoreEntitySet="PRType_mst">
+                <ScalarProperty Name="PRTypeNo" ColumnName="PRTypeNo" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="PRTypeId" ColumnName="PRTypeId" />
               </MappingFragment>
@@ -1983,6 +2011,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <EntitySetMapping Name="PR_VendorComparison">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_VendorComparison">
               <MappingFragment StoreEntitySet="PR_VendorComparison">
+                <ScalarProperty Name="PayDesc" ColumnName="PayDesc" />
+                <ScalarProperty Name="PayTerms" ColumnName="PayTerms" />
                 <ScalarProperty Name="CurPriceMYR" ColumnName="CurPriceMYR" />
                 <ScalarProperty Name="TotCostWitTaxVendorCur" ColumnName="TotCostWitTaxVendorCur" />
                 <ScalarProperty Name="TotCostnoTaxVendorCur" ColumnName="TotCostnoTaxVendorCur" />

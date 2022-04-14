@@ -86,7 +86,8 @@
                                 <th>
                                     No.
                                 </th>
-                                <th></th>
+                                <th>Yes</th>
+                                <th>No</th>
                                 <th>
                                     Description
                                 </th>
@@ -301,6 +302,16 @@
                                         else
                                         {
                                             @Html.CheckBoxFor(modeItem => Model[i].PoFlag)
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].NoPoFlag)
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].NoPoFlag, new { @disabled = "disabled" })
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].NoPoFlag)
                                         }
                                     </td>
                                     <td>

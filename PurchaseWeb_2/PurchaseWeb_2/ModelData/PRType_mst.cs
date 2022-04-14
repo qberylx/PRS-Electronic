@@ -22,6 +22,7 @@ namespace PurchaseWeb_2.ModelData
     
         public int PRTypeId { get; set; }
         public string Name { get; set; }
+        public Nullable<int> PRTypeNo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Mst> PR_Mst { get; set; }

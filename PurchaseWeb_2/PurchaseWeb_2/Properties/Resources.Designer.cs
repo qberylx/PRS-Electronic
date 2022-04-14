@@ -61,7 +61,7 @@ namespace PurchaseWeb_2.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to data source=&quot;ML0001868\SQLEXPRESS&quot;; database=&quot;Domi_Pur&quot; ;user id=sa;password=password;.
+        ///   Looks up a localized string similar to data source=&quot;Testserver1&quot;; database=&quot;Domi_Pur&quot; ;user id=pruser;password=user2020;.
         /// </summary>
         internal static string ConnectionString {
             get {
@@ -70,11 +70,11 @@ namespace PurchaseWeb_2.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to data source=&quot;Testserver1&quot;; database=&quot;Domi_Pur&quot; ;user id=pruser;password=user2020;.
+        ///   Looks up a localized string similar to data source=&quot;ML0001868\SQLEXPRESS&quot;; database=&quot;Domi_Pur&quot; ;user id=sa;password=password;.
         /// </summary>
-        internal static string ConnectionString1 {
+        internal static string ConnectionString2 {
             get {
-                return ResourceManager.GetString("ConnectionString1", resourceCulture);
+                return ResourceManager.GetString("ConnectionString2", resourceCulture);
             }
         }
     }

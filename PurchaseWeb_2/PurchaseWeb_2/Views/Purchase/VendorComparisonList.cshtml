@@ -2,6 +2,9 @@
 
     @model IEnumerable<PurchaseWeb_2.ModelData.PR_VendorComparison>
 
+    <div id="notification">
+        @Html.Partial("_Notifications")
+    </div>
     <table class="table table-sm table-responsive">
         <tr>
             <th>
@@ -64,7 +67,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.CurPrice)
                 </td>
-                <td >
+                <td>
                     @{
                         DateTime QuoteDate = (DateTime)item.QuoteDate;
                         String strQuoteDate = QuoteDate.ToString("dd/MM/yyyy");
@@ -106,9 +109,9 @@
                             strPODate = PODate.ToString("dd/MM/yyyy");
                         }
                     }
-                    
+
                     @strPODate
-                    
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CostDown)
@@ -117,11 +120,11 @@
                 <td>
                     @if (item.DiscType == 1)
                     {
-                       <a>%</a>
+                        <a>%</a>
                     }
                     else
                     {
-                      <a>Amount</a>
+                        <a>Amount</a>
                     }
                 </td>
 
@@ -152,23 +155,23 @@
                 <td>
                     @{ if (item.FlagWin == true)
                         {
-                            <a ><strong>Winner</strong></a>
+                            <a><strong>Winner</strong></a>
                         }
                     }
-                    
+
                 </td>
 
                 <td>
                     @*@using (Ajax.BeginForm("VendorComparisonWinner", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPRDtlsForPurchaser" }))*@
                     @using (Html.BeginForm("VendorComparisonWinner", "Purchase", FormMethod.Post, new { @class = "winform" }))
                     {
-                        <button class="btn btn-success" ><i class="fa fa-check-circle"></i></button>
+                        <button class="btn btn-success"><i class="fa fa-check-circle"></i></button>
                         <input type="hidden" value="@item.VCId" id="VCIdw" name="VCIdw" />
                     }
 
                 </td>
                 <td>
-                    @using (Ajax.BeginForm("VendorComparisonDelete", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divVDCompareLst_"+item.PRDtId+"" }))
+                    @using (Ajax.BeginForm("VendorComparisonDelete", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divVDCompareLst_" + item.PRDtId + "" }))
                     {
                         <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
                         <input type="hidden" value="@item.VCId" id="VCIdDel" name="VCIdDel" />
@@ -181,3 +184,9 @@
 
     </table>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(2000).fadeOut("slow");
+    });
+</script> 

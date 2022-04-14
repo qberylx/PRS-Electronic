@@ -14,9 +14,9 @@ namespace PurchaseWeb_2.Models
         public int VCId { get; set; }
         public Nullable<int> PRDtId { get; set; }
         [Required(ErrorMessage = "Please select Vendor")]
-        public string VDCode { get; set; }
+        public string VendorCode { get; set; }
         
-        public string VCName { get; set; }
+        public string VendorName { get; set; }
         [Column(TypeName = "decimal(18,5)")]
         [Required(ErrorMessage = "Please enter the Current Price")]
         //[RegularExpression(@"^\d+(\.\d{1,2,3,4,5})?$", ErrorMessage = "Valid Decimal number with maximum 5 decimal places.")]
@@ -57,6 +57,9 @@ namespace PurchaseWeb_2.Models
         public Nullable<decimal> TotCostnoTaxVendorCur { get; set; }
         public Nullable<decimal> TotCostWitTaxVendorCur { get; set; }
         public Nullable<decimal> CurPriceMYR { get; set; }
+        [Required(ErrorMessage = "Please select Payment Terms ")]
+        public string PayTerms { get; set; }
+        public string PayDesc { get; set; }
 
         public virtual PR_Details PR_Details { get; set; }
     }

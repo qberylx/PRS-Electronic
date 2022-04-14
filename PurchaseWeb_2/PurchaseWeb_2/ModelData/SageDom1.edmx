@@ -5,6 +5,58 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="dom1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="APRTA">
+          <Key>
+            <PropertyRef Name="TERMSCODE" />
+          </Key>
+          <Property Name="TERMSCODE" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="AUDTDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="AUDTTIME" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="AUDTUSER" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="AUDTORG" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="CODEDESC" Type="char" MaxLength="60" Nullable="false" />
+          <Property Name="SWACTV" Type="smallint" Nullable="false" />
+          <Property Name="DATEINACTV" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="DATELASTMN" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="SWMULTPAYM" Type="smallint" Nullable="false" />
+          <Property Name="CODEVAT" Type="smallint" Nullable="false" />
+          <Property Name="CODEDISTYP" Type="smallint" Nullable="false" />
+          <Property Name="DISDAYSTR1" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISDAYSTR2" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISDAYSTR3" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISDAYSTR4" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISDAYEND1" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISDAYEND2" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISDAYEND3" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISDAYEND4" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISMTHADD1" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISMTHADD2" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISMTHADD3" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISMTHADD4" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISDAYUSE1" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISDAYUSE2" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISDAYUSE3" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DISDAYUSE4" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="CODEDUETYP" Type="smallint" Nullable="false" />
+          <Property Name="DUEDAYSTR1" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEDAYSTR2" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEDAYSTR3" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEDAYSTR4" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEDAYEND1" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEDAYEND2" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEDAYEND3" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEDAYEND4" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEMTHADD1" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEMTHADD2" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEMTHADD3" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEMTHADD4" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEDAYUSE1" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEDAYUSE2" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEDAYUSE3" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="DUEDAYUSE4" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="CNTENTERED" Type="decimal" Precision="7" Scale="0" Nullable="false" />
+          <Property Name="PCTDUETOT" Type="decimal" Precision="9" Scale="5" Nullable="false" />
+        </EntityType>
         <EntityType Name="APVEN">
           <Key>
             <PropertyRef Name="VENDORID" />
@@ -300,6 +352,7 @@
           <Property Name="ROUNDAMT" Type="decimal" Precision="19" Scale="6" Nullable="false" />
         </EntityType>
         <EntityContainer Name="dom1ModelStoreContainer">
+          <EntitySet Name="APRTA" EntityType="Self.APRTA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="APVEN" EntityType="Self.APVEN" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CSCCD" EntityType="Self.CSCCD" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CSCRD" EntityType="Self.CSCRD" Schema="dbo" store:Type="Tables" />
@@ -606,6 +659,7 @@
             <End Role="ICITMV" EntitySet="ICITMVs" />
           </AssociationSet>
           <EntitySet Name="CSCRDs" EntityType="dom1Model.CSCRD" />
+          <EntitySet Name="APRTAs" EntityType="dom1Model.APRTA" />
         </EntityContainer>
         <Association Name="APVENPOVUPR">
           <End Type="dom1Model.APVEN" Role="APVEN" Multiplicity="1" />
@@ -652,6 +706,58 @@
           <Property Name="SPREAD" Type="Decimal" Nullable="false" Precision="15" Scale="7" />
           <Property Name="DATEMATCH" Type="Int16" Nullable="false" />
           <Property Name="RATEOPER" Type="Int16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="APRTA">
+          <Key>
+            <PropertyRef Name="TERMSCODE" />
+          </Key>
+          <Property Name="TERMSCODE" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="AUDTDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="AUDTTIME" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="AUDTUSER" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="AUDTORG" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="CODEDESC" Type="String" Nullable="false" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="SWACTV" Type="Int16" Nullable="false" />
+          <Property Name="DATEINACTV" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="DATELASTMN" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="SWMULTPAYM" Type="Int16" Nullable="false" />
+          <Property Name="CODEVAT" Type="Int16" Nullable="false" />
+          <Property Name="CODEDISTYP" Type="Int16" Nullable="false" />
+          <Property Name="DISDAYSTR1" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISDAYSTR2" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISDAYSTR3" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISDAYSTR4" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISDAYEND1" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISDAYEND2" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISDAYEND3" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISDAYEND4" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISMTHADD1" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISMTHADD2" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISMTHADD3" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISMTHADD4" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISDAYUSE1" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISDAYUSE2" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISDAYUSE3" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DISDAYUSE4" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="CODEDUETYP" Type="Int16" Nullable="false" />
+          <Property Name="DUEDAYSTR1" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEDAYSTR2" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEDAYSTR3" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEDAYSTR4" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEDAYEND1" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEDAYEND2" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEDAYEND3" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEDAYEND4" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEMTHADD1" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEMTHADD2" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEMTHADD3" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEMTHADD4" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEDAYUSE1" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEDAYUSE2" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEDAYUSE3" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="DUEDAYUSE4" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
+          <Property Name="CNTENTERED" Type="Decimal" Nullable="false" Precision="7" Scale="0" />
+          <Property Name="PCTDUETOT" Type="Decimal" Nullable="false" Precision="9" Scale="5" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -952,6 +1058,59 @@
                 <ScalarProperty Name="SOURCECUR" ColumnName="SOURCECUR" />
                 <ScalarProperty Name="RATETYPE" ColumnName="RATETYPE" />
                 <ScalarProperty Name="HOMECUR" ColumnName="HOMECUR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="APRTAs">
+            <EntityTypeMapping TypeName="dom1Model.APRTA">
+              <MappingFragment StoreEntitySet="APRTA">
+                <ScalarProperty Name="PCTDUETOT" ColumnName="PCTDUETOT" />
+                <ScalarProperty Name="CNTENTERED" ColumnName="CNTENTERED" />
+                <ScalarProperty Name="DUEDAYUSE4" ColumnName="DUEDAYUSE4" />
+                <ScalarProperty Name="DUEDAYUSE3" ColumnName="DUEDAYUSE3" />
+                <ScalarProperty Name="DUEDAYUSE2" ColumnName="DUEDAYUSE2" />
+                <ScalarProperty Name="DUEDAYUSE1" ColumnName="DUEDAYUSE1" />
+                <ScalarProperty Name="DUEMTHADD4" ColumnName="DUEMTHADD4" />
+                <ScalarProperty Name="DUEMTHADD3" ColumnName="DUEMTHADD3" />
+                <ScalarProperty Name="DUEMTHADD2" ColumnName="DUEMTHADD2" />
+                <ScalarProperty Name="DUEMTHADD1" ColumnName="DUEMTHADD1" />
+                <ScalarProperty Name="DUEDAYEND4" ColumnName="DUEDAYEND4" />
+                <ScalarProperty Name="DUEDAYEND3" ColumnName="DUEDAYEND3" />
+                <ScalarProperty Name="DUEDAYEND2" ColumnName="DUEDAYEND2" />
+                <ScalarProperty Name="DUEDAYEND1" ColumnName="DUEDAYEND1" />
+                <ScalarProperty Name="DUEDAYSTR4" ColumnName="DUEDAYSTR4" />
+                <ScalarProperty Name="DUEDAYSTR3" ColumnName="DUEDAYSTR3" />
+                <ScalarProperty Name="DUEDAYSTR2" ColumnName="DUEDAYSTR2" />
+                <ScalarProperty Name="DUEDAYSTR1" ColumnName="DUEDAYSTR1" />
+                <ScalarProperty Name="CODEDUETYP" ColumnName="CODEDUETYP" />
+                <ScalarProperty Name="DISDAYUSE4" ColumnName="DISDAYUSE4" />
+                <ScalarProperty Name="DISDAYUSE3" ColumnName="DISDAYUSE3" />
+                <ScalarProperty Name="DISDAYUSE2" ColumnName="DISDAYUSE2" />
+                <ScalarProperty Name="DISDAYUSE1" ColumnName="DISDAYUSE1" />
+                <ScalarProperty Name="DISMTHADD4" ColumnName="DISMTHADD4" />
+                <ScalarProperty Name="DISMTHADD3" ColumnName="DISMTHADD3" />
+                <ScalarProperty Name="DISMTHADD2" ColumnName="DISMTHADD2" />
+                <ScalarProperty Name="DISMTHADD1" ColumnName="DISMTHADD1" />
+                <ScalarProperty Name="DISDAYEND4" ColumnName="DISDAYEND4" />
+                <ScalarProperty Name="DISDAYEND3" ColumnName="DISDAYEND3" />
+                <ScalarProperty Name="DISDAYEND2" ColumnName="DISDAYEND2" />
+                <ScalarProperty Name="DISDAYEND1" ColumnName="DISDAYEND1" />
+                <ScalarProperty Name="DISDAYSTR4" ColumnName="DISDAYSTR4" />
+                <ScalarProperty Name="DISDAYSTR3" ColumnName="DISDAYSTR3" />
+                <ScalarProperty Name="DISDAYSTR2" ColumnName="DISDAYSTR2" />
+                <ScalarProperty Name="DISDAYSTR1" ColumnName="DISDAYSTR1" />
+                <ScalarProperty Name="CODEDISTYP" ColumnName="CODEDISTYP" />
+                <ScalarProperty Name="CODEVAT" ColumnName="CODEVAT" />
+                <ScalarProperty Name="SWMULTPAYM" ColumnName="SWMULTPAYM" />
+                <ScalarProperty Name="DATELASTMN" ColumnName="DATELASTMN" />
+                <ScalarProperty Name="DATEINACTV" ColumnName="DATEINACTV" />
+                <ScalarProperty Name="SWACTV" ColumnName="SWACTV" />
+                <ScalarProperty Name="CODEDESC" ColumnName="CODEDESC" />
+                <ScalarProperty Name="AUDTORG" ColumnName="AUDTORG" />
+                <ScalarProperty Name="AUDTUSER" ColumnName="AUDTUSER" />
+                <ScalarProperty Name="AUDTTIME" ColumnName="AUDTTIME" />
+                <ScalarProperty Name="AUDTDATE" ColumnName="AUDTDATE" />
+                <ScalarProperty Name="TERMSCODE" ColumnName="TERMSCODE" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

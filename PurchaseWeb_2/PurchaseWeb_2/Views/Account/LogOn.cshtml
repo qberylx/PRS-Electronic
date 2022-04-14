@@ -1,6 +1,6 @@
 ﻿@model PurchaseWeb_2.Models.LogOnModel
 @{
-    ViewBag.Title = "DOmi PR System";
+    ViewBag.Title = "Purchase Request System";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,46 +9,71 @@
 <br />
 <br />
 <br />
-<br />
-<br />
-<br />
-<div class="clear-loading spinner">
+
+<!--<div class="clear-loading spinner">
     <span></span>
-</div>
-<div class="w3ls-login box box--big">
-    <!-- form starts here -->
-    @*using (Html.BeginForm("LogOn", "Account", FormMethod.Post)) *@
-    <form action="~/Account/LogOn" method="post">
-        @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count() > 0)
-        {
-            <div class="alert alert-danger">
-                @Html.ValidationSummary(true, "")
-            </div>
-        }
-
-        <div class="agile-field-txt">
-            <label><i class="fa fa-user" aria-hidden="true"></i> Username </label>
-            <!--input type="text" name="UserName" placeholder="Enter User Name" required="" /> -->
-            @Html.EditorFor(model => model.UserName)
-            @Html.ValidationMessageFor(model => model.UserName, "")
+</div>-->
+<div class="container">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-4"></div>
+        <div class="col-4 ">
+            <img src="~/images/dominantLogo.png" />
         </div>
-        <div class="agile-field-txt">
-            <label><i class="fa fa-unlock-alt" aria-hidden="true"></i> password </label>
-            <!--<input type="password" name="Password" placeholder="Enter Password" required="" id="myInput" />-->
-            @Html.EditorFor(model => model.Password)
-            @Html.ValidationMessageFor(model => model.Password, "")
-            <div class="agile_label">
-                <!--<input id="check3" name="check3" type="checkbox" value="show password" onclick="myFunction()">-->
-                <!--<label class="check" for="check3">Show password</label>-->
-            </div>
-            <!--<div class="agile-right">
-                <a href="#">forgot password?</a>
-            </div>-->
-        </div>
-
-        <input type="submit" value="LOGIN">
-    </form>
+        <div class="col-4"></div>
+    </div>
 </div>
+
+<div class="container">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <font style="font-family: 'Times New Roman', Times, serif; color: whitesmoke; font-size: 50px; ">PURCHASE REQUEST SYSTEM</font>
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
+<div class="container">
+    <div class="row align-content-center justify-content-center">
+        <div class="col-12">
+            <div class="w3ls-login box box--big">
+                <!-- form starts here -->
+                @*using (Html.BeginForm("LogOn", "Account", FormMethod.Post)) *@
+                <form action="~/Account/LogOn" method="post">
+                    @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count() > 0)
+                    {
+                        <div class="alert alert-danger">
+                            @Html.ValidationSummary(true, "")
+                        </div>
+                    }
+
+                    <div class="agile-field-txt">
+                        <label><i class="fa fa-user" aria-hidden="true"></i> Username </label>
+                        <!--input type="text" name="UserName" placeholder="Enter User Name" required="" /> -->
+                        @Html.EditorFor(model => model.UserName)
+                        @Html.ValidationMessageFor(model => model.UserName, "")
+                    </div>
+                    <div class="agile-field-txt">
+                        <label><i class="fa fa-unlock-alt" aria-hidden="true"></i> password </label>
+                        <!--<input type="password" name="Password" placeholder="Enter Password" required="" id="myInput" />-->
+                        @Html.EditorFor(model => model.Password)
+                        @Html.ValidationMessageFor(model => model.Password, "")
+                        <div class="agile_label">
+                            <!--<input id="check3" name="check3" type="checkbox" value="show password" onclick="myFunction()">-->
+                            <!--<label class="check" for="check3">Show password</label>-->
+                        </div>
+                        <!--<div class="agile-right">
+                    <a href="#">forgot password?</a>
+                </div>-->
+                    </div>
+
+                    <input type="submit" value="LOGIN">
+                </form>
+            </div>
+        </div>
+    </div> 
+    
+</div>
+
 <br />
 <br />
 <br />

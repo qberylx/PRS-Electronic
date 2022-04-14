@@ -29,7 +29,7 @@ namespace PurchaseWeb_2.Controllers
         public ActionResult PoProsesList()
         {
             var PRMstList = db.PR_Mst
-                .Where(x => x.StatId == 9)
+                .Where(x => x.StatId == 9 && x.PR_Details.Where(pr => pr.PoFlag == null || pr.PoFlag == false).Count() > 0 )
                 .ToList();
 
             return View("PoProsesList", PRMstList);
@@ -83,6 +83,7 @@ namespace PurchaseWeb_2.Controllers
                 TaxCode = x.TaxCode,
                 TaxClass = (int)x.TaxClass,
                 PoFlag = (bool)(x.PoFlag ?? false),
+                NoPoFlag = (bool)(x.PoFlag ?? false),
                 NoPo = x.NoPo ?? "",
                 VendorCode = x.VendorCode,
                 AccGroup = x.AccGroup,
@@ -116,6 +117,17 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrDetails = db.Set<PR_Details>();
 
+            //check if user tick PoFlag and NoPoFlag together
+            foreach (PRdtlsViewModel pR_Detail in pR_Details)
+            {
+                if (pR_Detail.PoFlag == true && pR_Detail.NoPoFlag == true)
+                {
+                    ViewBag.Message = "Please tick one box for one line ";
+                    this.AddNotification("Please tick one box for one line", NotificationType.ERROR);
+                    return RedirectToAction("PurDetailsPOViewSelected", "PO", new { PrMstId = PrMstId });
+                }
+            }
+
             // get first vendor save check the rest of checked line if vendor is the same as first vendor
             // if not the same throw out error saying user have to select same vendor .
             var countVendor = pR_Details
@@ -131,9 +143,6 @@ namespace PurchaseWeb_2.Controllers
             } 
             else
             {
-                // get POid
-                string POnewNo = getNewPoNO(Doctype);
-
                 // update prdetails PO 
                 foreach (PRdtlsViewModel pR_Detail in pR_Details)
                 {
@@ -144,38 +153,55 @@ namespace PurchaseWeb_2.Controllers
                     {
                         if (pR_Detail.PoFlag) // if poflag has been check
                         {
+                            //get PRtypeNo
+                            var prType = db.PRType_mst
+                                .Where(x => x.PRTypeId == Doctype)
+                                .SingleOrDefault();
+
+                            // get POid
+                            string POnewNo = getNewPoNO((int)prType.PRTypeNo);
+
                             chkPrDetails.NoPo = POnewNo;
                             chkPrDetails.PoFlag = true;
                             db.SaveChanges();
+
+                            //get pr mst
+                            var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).SingleOrDefault();
+
+                            // wondering if needed to make new table for PO created
+                            var PO = db.Set<PO_Mst>();
+                            PO.Add(new PO_Mst
+                            {
+                                NoPo = POnewNo,
+                                CreateBy = (String)Session["Username"],
+                                CreateDate = DateTime.Now,
+                                PRNo = POnewNo,
+                                PRid = prMst.PRId,
+                                Purchasername = prMst.PurchaserName,
+                                RequestorName = prMst.Usr_mst.Username,
+                                RequisitionDate = prMst.CreateDate,
+                                TotPOAmt = prMst.PR_Details.Where(x => x.NoPo == POnewNo)
+                                    .Sum(x => x.TotCostWitTax),
+                                Description = prMst.PR_Details.Where(x => x.NoPo == POnewNo)
+                                    .Select(x => x.Description)
+                                    .Take(1)
+                                    .First()
+                            });
+                            db.SaveChanges();
+
+                            this.AddNotification("PO No has been created", NotificationType.SUCCESS);
+                        } 
+
+                        if (pR_Detail.NoPoFlag)// if no poflag has been check
+                        {
+                            chkPrDetails.PoFlag = true;
+                            db.SaveChanges();
                         }
+
                     }
                 }
 
-                //get pr mst
-                var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).SingleOrDefault();
-
-                // wondering if needed to make new table for PO created
-                var PO = db.Set<PO_Mst>();
-                PO.Add(new PO_Mst
-                {
-                    NoPo = POnewNo,
-                    CreateBy = (String)Session["Username"],
-                    CreateDate = DateTime.Now,
-                    PRNo = POnewNo,
-                    PRid = prMst.PRId,
-                    Purchasername = prMst.PurchaserName,
-                    RequestorName = prMst.Usr_mst.Username,
-                    RequisitionDate = prMst.CreateDate,
-                    TotPOAmt = prMst.PR_Details.Where(x=>x.NoPo == POnewNo) 
-                        .Sum(x=>x.TotCostWitTax),
-                    Description = prMst.PR_Details.Where(x => x.NoPo == POnewNo)
-                        .Select(x=>x.Description)
-                        .Take(1)
-                        .First()
-                });
-                db.SaveChanges();
-
-                this.AddNotification("PO No has been created", NotificationType.SUCCESS);
+                
 
 
                 //return RedirectToAction("PurDetailsPOViewSelected", "PO", new { PrMstId = PrMstId });
@@ -188,7 +214,16 @@ namespace PurchaseWeb_2.Controllers
         {
             string NewPoNO = "";
             int currYear = DateTime.Now.Year;
-            string initial = "PPR";
+            string initial = "";
+            if (Doctype == 4 || Doctype == 5)
+            {
+                initial = "POC";
+            }
+            else
+            {
+                initial = "PO";
+            }
+            
             ObjectParameter lstDocNo = new ObjectParameter("LastDocNo", typeof(string));
             var getDocNo = db.GetDocNo(initial, Doctype, currYear, lstDocNo);
             NewPoNO = Convert.ToString(lstDocNo.Value);
@@ -465,7 +500,7 @@ namespace PurchaseWeb_2.Controllers
             }
 
 
-            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "Grid.csv");
+            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "PurchaseOrder.csv");
             
         }
 

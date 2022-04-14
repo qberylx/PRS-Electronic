@@ -32,5 +32,6 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<POVIA> POVIAs { get; set; }
         public virtual DbSet<POVUPR> POVUPRs { get; set; }
         public virtual DbSet<CSCRD> CSCRDs { get; set; }
+        public virtual DbSet<APRTA> APRTAs { get; set; }
     }
 }

@@ -180,6 +180,9 @@
     <Compile Include="ModelData\AccTypeExpens.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\APRTA.cs">
+      <DependentUpon>SageDom1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\APVEN.cs">
       <DependentUpon>SageDom1.tt</DependentUpon>
     </Compile>
@@ -397,6 +400,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="images\bg.jpg" />
+    <Content Include="images\dominantLogo.png" />
     <Content Include="ModelData\DomiPR.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DomiPR.Context.cs</LastGenOutput>
@@ -2482,6 +2486,10 @@
     <Content Include="Views\Purchase\callVendorHidden.cshtml" />
     <Content Include="Views\Purchase\RejectPRPurchasingForm.cshtml" />
     <Content Include="Views\Purchase\callCurrency.cshtml" />
+    <Content Include="Views\Purchase\getTermsCode.cshtml" />
+    <Content Include="Views\Purchase\callNewVendor.cshtml" />
+    <Content Include="Views\Purchase\callVendorList.cshtml" />
+    <Content Include="Views\Purchase\callCurrencyName.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

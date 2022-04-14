@@ -41,6 +41,8 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<decimal> TotCostnoTaxVendorCur { get; set; }
         public Nullable<decimal> TotCostWitTaxVendorCur { get; set; }
         public Nullable<decimal> CurPriceMYR { get; set; }
+        public string PayTerms { get; set; }
+        public string PayDesc { get; set; }
     
         public virtual PR_Details PR_Details { get; set; }
     }

@@ -1,0 +1,15 @@
+﻿<select class="form-control form-control-border" id="PayTerms" name="PayTerms">
+    <option value="">Select option</option>
+    @foreach (var vd in ViewBag.termlist)
+    {
+        if (vd.TERMSCODE == ViewBag.payTerms)
+        {
+            <option value="@vd.TERMSCODE" selected="selected">@vd.TERMSCODE - @vd.CODEDESC</option>
+        }
+        else
+        {
+            <option value="@vd.TERMSCODE">@vd.TERMSCODE - @vd.CODEDESC</option>
+        }
+
+    }
+</select>

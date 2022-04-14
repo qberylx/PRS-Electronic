@@ -1,0 +1,7 @@
+﻿<select class="form-control form-control-border" id="VendorCode" name="VendorCode" onchange="vendorchg(this.value)">
+    <option value="">Select option</option>
+    @foreach (var vendor in ViewBag.vendorlist)
+    {
+        <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
+    }
+</select>

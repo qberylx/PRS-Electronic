@@ -115,13 +115,14 @@
                         @if (item.PRTypeId == 4)
                         {
                             @Html.ActionLink("Details", "PRDtlsPurchasingProses", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
-                            @Html.ActionLink("Budget", "budgetUpdate", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
-                            @Html.ActionLink("Send To Processing", "PRProcessing", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                            //@Html.ActionLink("Budget", "budgetUpdate", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
+                            @Html.ActionLink("Send To Sourcing", "PRProcessing", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
                         }
                         else
                         {
                             @Html.ActionLink("Details", "PRDtlsPurchasingProsesStockable", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
-                            @Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                            //@Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                            @Html.ActionLink("Send To Proses PO", "SendToPoProses", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
                         }
 
 

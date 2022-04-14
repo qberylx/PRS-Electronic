@@ -73,7 +73,12 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult AddPurRequest(int Doctype , int group)
         {
-            string PRnewNo = getNewPrNO(Doctype);
+            //get PrtypeNo
+            var prType = db.PRType_mst
+                .Where(x=>x.PRTypeId == Doctype)
+                .SingleOrDefault();
+            
+            string PRnewNo = getNewPrNO((int)prType.PRTypeNo);
             string username = Convert.ToString(Session["Username"]);
             //get User id and department id
             var userdtls = db.Usr_mst
@@ -255,14 +260,15 @@ namespace PurchaseWeb_2.Controllers
                             .FirstOrDefault();
 
             var PrMstList = db.PR_Mst
-                .Where(x => x.DepartmentId == userdtls.Dpt_id)
+                .Where(x => x.DepartmentId == userdtls.Dpt_id && x.StatId != 9)
                 .OrderByDescending(x=>x.PRId)
                 .ToList();
 
             if (userdtls.Psn_id == 7)
             {
                 PrMstList = db.PR_Mst
-                .ToList();
+                    .Where(x => x.StatId != 9)
+                    .ToList();
             }
 
             return PartialView("PrMstList", PrMstList);
@@ -1200,7 +1206,17 @@ namespace PurchaseWeb_2.Controllers
                 .FirstOrDefault();
 
             // find vendor name
-            var vendor = dbDom1.APVENs.Where(x => x.VENDORID == pR_.VendorCode).SingleOrDefault();
+            string VendorName = "";
+            if (pR_.VendorCode == "0")
+            {
+                VendorName = pR_.VendorName;
+            }
+            else
+            {
+                var vendor = dbDom1.APVENs.Where(x => x.VENDORID == pR_.VendorCode).SingleOrDefault();
+                VendorName = vendor.VENDNAME.Trim();
+            }
+            
 
             try
             {
@@ -1219,7 +1235,7 @@ namespace PurchaseWeb_2.Controllers
                     ReqDevDate          = pR_.ReqDevDate,
                     Remarks             = "-",
                     VendorCode          = pR_.VendorCode.Trim(),
-                    VendorName          = vendor.VENDNAME.Trim(),
+                    VendorName          = VendorName, //vendor.VENDNAME.Trim(),
                     VendorPartNo        = pR_.VendorPartNo,
                     Device              = "-",
                     SalesOrder          = "-",
@@ -1280,7 +1296,7 @@ namespace PurchaseWeb_2.Controllers
                     pR_.ReqDevDate +"|"+
                     "-" +"|"+
                     pR_.VendorCode.Trim() +"|"+
-                    vendor.VENDNAME.Trim() +"|"+
+                    VendorName +"|"+
                     pR_.VendorPartNo +"|"+
                     "-" +"|"+
                     "-" +"|"+
@@ -1308,6 +1324,22 @@ namespace PurchaseWeb_2.Controllers
             return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
         }
 
+        public ActionResult callNewVendor()
+        {
+            return PartialView("callNewVendor");
+        }
+
+        public ActionResult callVendorList()
+        {
+            // get from sage the vendorlist
+            var vendorlist = dbDom1.APVENs
+                .Where(x => x.SWACTV == 1)
+                .ToList();
+            ViewBag.vendorlist = vendorlist;
+
+            return PartialView("callVendorList");
+        }
+
         public ActionResult callCurrency(string VendorId)
         {
             var currency = dbDom1.APVENs
@@ -1316,6 +1348,29 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.currCode = currency.CURNCODE;
 
             return PartialView("callCurrency");
+        }
+
+        public ActionResult callCurrencyName(string VendorID)
+        {
+            var vendorCode = dbDom1.APVENs
+                .Where(x => x.VENDORID == VendorID)
+                .SingleOrDefault();
+            ViewBag.currCode = vendorCode.CURNCODE;
+
+            var currExch = dbDom1.CSCRDs.Where(x => x.HOMECUR == "MYR" && x.RATETYPE == "SP" && x.SOURCECUR == vendorCode.CURNCODE)
+                    .OrderByDescending(o => o.RATEDATE)
+                    .FirstOrDefault();
+
+            if (vendorCode.CURNCODE == "MYR")
+            {
+                ViewBag.ExchRate = "1";
+            }
+            else
+            {
+                ViewBag.ExchRate = currExch.RATE;
+            }
+
+            return PartialView("callCurrencyName");
         }
 
 
@@ -1771,6 +1826,13 @@ namespace PurchaseWeb_2.Controllers
 
             ViewBag.vdLst = vdLst;
 
+            //payment terms
+            var terms = dbDom1.APRTAs
+                .Where(x => x.SWACTV == 1)
+                .ToList();
+
+            ViewBag.termlist = terms;
+
             return PartialView("VendorComparison");
 
         }
@@ -1778,17 +1840,38 @@ namespace PurchaseWeb_2.Controllers
         [HttpPost]
         public ActionResult VendorComparison(VendorComparisonModel pR_Vendor, int PrDtlstId)
         {
-            var vd = dbDom1.APVENs
-                .Where(x => x.VENDORID == pR_Vendor.VDCode)
+            // get vendor name
+            String VendorName = "";
+            if (pR_Vendor.VendorCode == "0")
+            {
+                VendorName = pR_Vendor.VendorName;
+            }else
+            {
+                var vd = dbDom1.APVENs
+                .Where(x => x.VENDORID == pR_Vendor.VendorCode)
                 .SingleOrDefault();
 
+                VendorName = vd.VENDNAME;
+            }
             
+
+            var PayTerms = dbDom1.APRTAs
+                .Where(x => x.TERMSCODE == pR_Vendor.PayTerms)
+                .SingleOrDefault();
+
+            if (pR_Vendor.PayTerms == null)
+            {
+                this.AddNotification("Please select Payment Terms", NotificationType.ERROR);
+                return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = PrDtlstId });
+            }
+
+
             var VC = db.Set<PR_VendorComparison>();
             VC.Add(new PR_VendorComparison
             {
                 PRDtId = PrDtlstId,
-                VDCode = pR_Vendor.VDCode,
-                VCName = vd.SHORTNAME,
+                VDCode = pR_Vendor.VendorCode,
+                VCName = VendorName.Trim(),
                 CurPrice = pR_Vendor.CurPrice,
                 QuoteDate = pR_Vendor.QuoteDate,
                 LastPrice = pR_Vendor.LastPrice,
@@ -1809,8 +1892,10 @@ namespace PurchaseWeb_2.Controllers
                 VdCurCode = pR_Vendor.VdCurCode,
                 TotCostnoTaxVendorCur = pR_Vendor.TotCostnoTaxVendorCur,
                 TotCostWitTaxVendorCur = pR_Vendor.TotCostWitTaxVendorCur,
-                CurPriceMYR = pR_Vendor.CurPriceMYR
-            });
+                CurPriceMYR = pR_Vendor.CurPriceMYR,
+                PayTerms = pR_Vendor.PayTerms.Trim(),
+                PayDesc = PayTerms.CODEDESC.Trim()
+            }) ;
             db.SaveChanges();
 
             //return PartialView("VendorComparison");
@@ -1887,6 +1972,8 @@ namespace PurchaseWeb_2.Controllers
                 PrDtls.TaxCode = vc.TaxCode;
                 PrDtls.TaxClass = vc.TaxClass;
                 PrDtls.TotCostWitTaxMYR = vc.TotCostWitTax;
+                PrDtls.PayTerms = vc.PayTerms;
+                PrDtls.PayDesc = vc.PayDesc;
                 db.SaveChanges();
             }
 
@@ -1899,9 +1986,9 @@ namespace PurchaseWeb_2.Controllers
                 ModifiedBy = Username,
                 ModifiedOn = DateTime.Now,
                 ActionBtn = "UPDATE",
-                ColumnStr = "VendorName | VendorCode | AccGroup | UnitPrice | CurCode | TotCostnoTax | Tax | TotCostWitTax | TaxCode | TaxClass | TotCostWitTaxMYR |",
+                ColumnStr = "VendorName | VendorCode | AccGroup | UnitPrice | CurCode | TotCostnoTax | Tax | TotCostWitTax | TaxCode | TaxClass | TotCostWitTaxMYR |PayTerms |PayDesc ",
                 ValueStr = vc.VCName +"|"+ vc.VDCode + "|" + vd.IDGRP + "|" + vc.CurPrice + "|" + vc.VdCurCode + "|" + vc.TotCostnoTaxVendorCur + "|" +
-                        vc.Tax + "|" + vc.TotCostWitTaxVendorCur + "|" + vc.TaxCode + "|" + vc.TaxClass + "|" + vc.TotCostWitTax,
+                        vc.Tax + "|" + vc.TotCostWitTaxVendorCur + "|" + vc.TaxCode + "|" + vc.TaxClass + "|" + vc.TotCostWitTax + "|" + vc.PayTerms + "|" +  vc.PayDesc,
                 PRId = PrDtls.PRid,
                 PRDtlsId = PrDtls.PRDtId
 
@@ -1924,6 +2011,24 @@ namespace PurchaseWeb_2.Controllers
             return PartialView("VDListPurchaser");
         }
 
+        public ActionResult getTermsCode(String vdCode, int PrDtlstId)
+        {
+            var vendorCode = dbDom1.APVENs
+                .Where(x => x.VENDORID == vdCode)
+                .SingleOrDefault();
+
+            ViewBag.payTerms = vendorCode.TERMSCODE;
+
+            //payment terms
+            var terms = dbDom1.APRTAs
+                .Where(x => x.SWACTV == 1)
+                .ToList();
+
+            ViewBag.termlist = terms;
+
+            return PartialView("getTermsCode");
+        }
+
         public ActionResult getCurCode(String vdCode , int PrDtlstId)
         {
             if (vdCode != null)
@@ -1939,6 +2044,19 @@ namespace PurchaseWeb_2.Controllers
                 ViewBag.Qty = PrDtls.Qty;
                 ViewBag.vdCode = vendorCode.CURNCODE;
                 ViewBag.PrDtlstId = PrDtlstId;
+
+                var currExch = dbDom1.CSCRDs.Where(x => x.HOMECUR == "MYR" && x.RATETYPE == "SP" && x.SOURCECUR == vendorCode.CURNCODE)
+                    .OrderByDescending(o => o.RATEDATE)
+                    .FirstOrDefault();
+
+                if (vendorCode.CURNCODE == "MYR")
+                {
+                    ViewBag.ExchRate = "1";
+                } else
+                {
+                    ViewBag.ExchRate = currExch.RATE; 
+                }
+
             } else
             {
                 var PrDtls = db.PR_Details
@@ -1948,6 +2066,7 @@ namespace PurchaseWeb_2.Controllers
                 ViewBag.Qty = PrDtls.Qty;
                 ViewBag.vdCode = "MYR";
                 ViewBag.PrDtlstId = PrDtlstId;
+                ViewBag.vdCode = "1";
             }
 
             return PartialView("getCurCode");
@@ -2429,11 +2548,28 @@ namespace PurchaseWeb_2.Controllers
         public ActionResult PRListForPurchasingProses(int Doctype, int group)
         {
             var PrMstList = db.PR_Mst
-                .Where(x => x.StatId == 7 || x.StatId == 11)
+                .Where(x => x.StatId == 7 || x.StatId == 11 || x.StatId == 12)
                 .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                 .ToList();
             return PartialView("PRListForPurchasingProses", PrMstList);
 
+        }
+
+        public ActionResult SendToPoProses(int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+            if (PrMst != null)
+            {
+                PrMst.StatId = 9;
+                PrMst.PurchaserName = Convert.ToString(Session["Username"]);
+                PrMst.SendToProcessingDate = DateTime.Now;
+
+                db.SaveChanges();
+            }
+
+            return View("PurchasingProsesPR");
         }
 
         public ActionResult PRDtlsPurchasingProses(int PrMstId)
@@ -2566,6 +2702,13 @@ namespace PurchaseWeb_2.Controllers
                 LastPONo = x.LastPONo,
                 PurchasingRemarks = x.PurchasingRemarks,
                 CostDown = x.CostDown,
+                EstCurCode = x.EstCurCode,
+                LastVendorName  = x.LastVendorName,
+                LastCur = x.LastCur,
+                LastCurExc = x.LastCurExc,
+                LastPriceVendor = x.LastPriceVendor,
+                LastVendorCode = x.LastVendorCode,
+
 
                 PR_Mst = x.PR_Mst,
                 Usr_mst = x.Usr_mst
@@ -2609,6 +2752,10 @@ namespace PurchaseWeb_2.Controllers
                 prDtls.LastPONo = proViewModel.LastPONo;
                 prDtls.PurchasingRemarks = proViewModel.PurchasingRemarks;
                 prDtls.CostDown = proViewModel.CostDown;
+                prDtls.LastVendorCode = proViewModel.LastVendorCode;
+                prDtls.LastVendorName = proViewModel.LastVendorName;
+                prDtls.LastCur = proViewModel.LastCur;
+                prDtls.LastCurExc = proViewModel.LastCurExc;
                 db.SaveChanges();
             }
 
@@ -2621,10 +2768,11 @@ namespace PurchaseWeb_2.Controllers
                 ModifiedOn = DateTime.Now,
                 ActionBtn = "UPDATE",
                 ColumnStr = "Description | VendorPartNo | Qty | UOMName | CurCode | EstimateUnitPrice | LastPrice | LastQuoteDate " +
-                "| PODate | LastPONo | PurchasingRemarks | CostDown",
+                "| PODate | LastPONo | PurchasingRemarks | CostDown | LastVendorCode | LastVendorName | LastCur | LastCurExc ",
                 ValueStr = proViewModel.Description +" | "+ proViewModel.VendorPartNo + " | " + proViewModel.Qty + " | " + proViewModel.UOMName + " | " +
                 proViewModel.CurCode + " | " + proViewModel.EstimateUnitPrice + " | " + proViewModel.LastPrice + " | " + proViewModel.LastQuoteDate + " | " +
-                proViewModel.PODate + " | " + proViewModel.LastPONo + " | " + proViewModel.PurchasingRemarks + " | " + proViewModel.CostDown,
+                proViewModel.PODate + " | " + proViewModel.LastPONo + " | " + proViewModel.PurchasingRemarks + " | " + proViewModel.CostDown + " | " +
+                proViewModel.LastVendorCode + " | " + proViewModel.LastVendorName + " | " + proViewModel.LastCur + " | " + proViewModel.LastCurExc,
                 PRId = proViewModel.PRid,
                 PRDtlsId = proViewModel.PRDtId
 
@@ -2643,6 +2791,9 @@ namespace PurchaseWeb_2.Controllers
 
             // find vendor name
             var vendor = dbDom1.APVENs.Where(x => x.VENDORID == viewModel.VendorCode).SingleOrDefault();
+
+            //find last vendor name LastVendorName
+            var lastVendor = dbDom1.APVENs.Where(x => x.VENDORID == viewModel.LastVendorCode).SingleOrDefault();
 
             try
             {
@@ -2671,7 +2822,7 @@ namespace PurchaseWeb_2.Controllers
                     EstimateUnitPrice = viewModel.EstimateUnitPrice,
                     EstTotalPrice = viewModel.EstimateUnitPrice * viewModel.Qty,
                     UOMName = viewModel.UOMName,
-                    CurCode = viewModel.CurCode,
+                    EstCurCode = viewModel.CurCode,
                     Tax = 0,
                     TaxCode = "SSTG",
                     TaxClass = 1,
@@ -2680,7 +2831,12 @@ namespace PurchaseWeb_2.Controllers
                     PODate = viewModel.PODate,
                     LastPONo = viewModel.LastPONo,
                     PurchasingRemarks = viewModel.PurchasingRemarks,
-                    CostDown = viewModel.CostDown
+                    CostDown = viewModel.CostDown,
+                    LastVendorName = lastVendor.VENDNAME.Trim(),
+                    LastPriceVendor = viewModel.LastPriceVendor,
+                    LastCur = viewModel.LastCur,
+                    LastCurExc = viewModel.LastCurExc
+
                 });
                 db.SaveChanges();
 
