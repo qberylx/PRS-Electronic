@@ -52,7 +52,10 @@
                     PR Type
                 </th>
                 <th>
-                    Grand Total
+                    Grand Amount
+                </th>
+                <th>
+                    Grand Amount (MYR)
                 </th>
                 <th>
                     Status
@@ -81,12 +84,14 @@
                     <td>
                         <div class="row">
                             <div class="col-md-4">
+                                
                                 @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                 {
                                     @currency.Max(s => s.CurCode) <br />
                                 }
                             </div>
                             <div class="col-md-8">
+                                
                                 @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                 {
                                     String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.TotCostWitTax));
@@ -97,9 +102,13 @@
                         </div>
                     </td>
                     <td>
+                        @item.PR_Details.Sum(s=>s.TotCostWitTaxMYR)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.Status_Mst.Name)
                     </td>
                     <td>
+                        @Html.ActionLink("View", "PrHODPuchasingViewSummary", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info", @target="_blank" })
                         @Html.ActionLink("View", "PrHODPuchasingView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
                         @Html.ActionLink("Approve", "ApproveMD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
                         @Html.ActionLink("Reject", "RejectMD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })

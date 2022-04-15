@@ -485,12 +485,12 @@ namespace PurchaseWeb_2.Controllers
                 mail.From = new MailAddress("mqatadahabdaziz@gmail.com");
                 mail.Subject = @"Web Approval";
                 string Body = @"Hey , your User Id has been approve. 
-                                You may login to lalala";
+                                You may login to Dominant Purchase Order System";
                 mail.Body = Body;
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient();
-                smtp.Host = "smtp.gmail.com";
-                smtp.Port = 587;
+                smtp.Host = "smtp.gmail.com";// mail1.dominant-semi.com
+                smtp.Port = 587; // 28
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials = new System.Net.NetworkCredential("mqatadahabdaziz@gmail.com", "qu3@Gmail"); // Enter seders User name and password       
                 smtp.EnableSsl = true;

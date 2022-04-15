@@ -1,0 +1,26 @@
+﻿
+<div class="row">
+    <div class="col-md-4">
+        <select class="form-control form-control-border" id="VdCurCode" name="VdCurCode" onchange="getCurExg(this.value, @ViewBag.PrDtlstId)">
+            <option value="">Select option</option>
+            @foreach (var cur in ViewBag.curList)
+            {
+                if (cur.CURID == "MYR")
+                {
+                    <option value="@cur.CURID" selected>@cur.CURID</option>
+                }
+                else
+                {
+                    <option value="@cur.CURID">@cur.CURID</option>
+                }
+
+            }
+        </select>
+    </div>
+    <div class="col-md-8">
+        <input type="text" id="curRate" name="CurRate" class="form-control" value="@ViewBag.ExchRate" onfocusout="chgCurRate(this.value, @ViewBag.PrDtlstId, @ViewBag.Qty)" curRate="@ViewBag.PrDtlstId" />
+    </div>
+</div>
+
+
+

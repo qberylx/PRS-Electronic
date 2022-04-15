@@ -1340,6 +1340,18 @@ namespace PurchaseWeb_2.Controllers
             return PartialView("callVendorList");
         }
 
+        public ActionResult callVendorListSourcing(int PrDtlstId)
+        {
+            // get from sage the vendorlist
+            var vendorlist = dbDom1.APVENs
+                .Where(x => x.SWACTV == 1)
+                .ToList();
+            ViewBag.vendorlist = vendorlist;
+            ViewBag.PrDtlstId = PrDtlstId;
+
+            return PartialView("callVendorListSourcing");
+        }
+
         public ActionResult callCurrency(string VendorId)
         {
             var currency = dbDom1.APVENs
@@ -2072,6 +2084,23 @@ namespace PurchaseWeb_2.Controllers
             return PartialView("getCurCode");
         }
 
+        public ActionResult getCurCodeList(int PrDtlstId)
+        {
+            var curList = dbDom1.CSCCDs.ToList();
+
+            ViewBag.curList = curList;
+            ViewBag.PrDtlstId = PrDtlstId;
+
+            //get qty
+            var PrDtls = db.PR_Details
+                    .Where(x => x.PRDtId == PrDtlstId)
+                    .SingleOrDefault();
+
+            ViewBag.Qty = PrDtls.Qty;
+
+            return PartialView("getCurCodeList");
+        }
+
         [HttpGet]
         public ActionResult PRDtlsListForPurchaser(int PrMstId)
         {
@@ -2387,6 +2416,16 @@ namespace PurchaseWeb_2.Controllers
             return RedirectToAction("HODPurApprovalList");
         }
 
+        public  ActionResult PrHODPuchasingViewSummary(int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+
+
+            return View("PrHODPuchasingViewSummary", PrMst);
+        }
+
         public ActionResult PrHODPuchasingView(int PrMstId)
         {
             var PrMst = db.PR_Mst
@@ -2408,6 +2447,8 @@ namespace PurchaseWeb_2.Controllers
 
             return View("PrHODPuchasingView");
         }
+
+
 
         public ActionResult PurDetailsPurchasingViewSelected(int PrMstId)
         {
@@ -2756,6 +2797,7 @@ namespace PurchaseWeb_2.Controllers
                 prDtls.LastVendorName = proViewModel.LastVendorName;
                 prDtls.LastCur = proViewModel.LastCur;
                 prDtls.LastCurExc = proViewModel.LastCurExc;
+                prDtls.LastPriceVendor = proViewModel.LastPriceVendor;
                 db.SaveChanges();
             }
 

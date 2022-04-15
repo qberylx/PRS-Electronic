@@ -1,0 +1,8 @@
+﻿<select class="form-control form-control-border" id="VendorCode" name="VendorCode" onchange="getCurCode(this.value, @ViewBag.PrDtlstId)">
+    <option value="">Select option</option>
+    @foreach (var vendor in ViewBag.vendorlist)
+    {
+        <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
+    }
+</select>
+

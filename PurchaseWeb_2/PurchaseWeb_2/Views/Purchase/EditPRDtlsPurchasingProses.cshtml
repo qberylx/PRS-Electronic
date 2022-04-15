@@ -115,9 +115,9 @@
                     </div>
 
                     <div class="col-1">
-                        <b>Last Price</b>
+                        <b>Last Price </b>
                         <br />
-                        @Html.EditorFor(model => model.LastPriceVendor, new { htmlAttributes = new { @class = "form-control" ,@onfocusout = "LastPriceVendorChg(this.value)" } })
+                        @Html.EditorFor(model => model.LastPriceVendor, new { htmlAttributes = new { @class = "form-control" ,@Value=Model.LastPriceVendor , @onfocusout = "LastPriceVendorChg(this.value)" } })
                     </div>
 
                     <div id="divCurr" class="col-1">

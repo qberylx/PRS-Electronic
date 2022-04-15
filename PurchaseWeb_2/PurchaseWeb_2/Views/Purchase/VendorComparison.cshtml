@@ -13,8 +13,8 @@
             
             <div class="col-2">
                 <div class="custom-control custom-switch">
-                    &nbsp; <input type="checkbox" class="custom-control-input" id="swNewVendor" onchange="swNewVendorChg(@ViewBag.PrDtlstId)" />
-                           <label class="custom-control-label" for="swNewVendor">Vendor not in the list?</label>
+                    &nbsp; <input type="checkbox" class="custom-control-input" id="swNewVendor_@ViewBag.PrDtlstId" onchange="swNewVendorChg(@ViewBag.PrDtlstId)" />
+                           <label class="custom-control-label" for="swNewVendor_@ViewBag.PrDtlstId">Vendor not in the list?</label>
                 </div>
             </div>
 
@@ -127,7 +127,6 @@
                 Payment Terms<br />
                 <div id="divTerms_@ViewBag.PrDtlstId">
                     <select class="fstdropdown-select form-control-border" id="PayTerms" name="PayTerms">
-                        <option value="">Select option</option>
                         @foreach (var vd in ViewBag.termlist)
                         {
                             <option value="@vd.TERMSCODE">@vd.TERMSCODE - @vd.CODEDESC</option>
@@ -447,7 +446,7 @@
     }
 
     function swNewVendorChg(PrDtlstId) {
-        if ($("#swNewVendor").is(":checked")) {
+        if ($("#swNewVendor_" + PrDtlstId).is(":checked")) {
 
             $.ajax({
                 type: "POST",
@@ -466,12 +465,27 @@
                 }
             });
 
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("getCurCodeList","Purchase")",
+                data: JSON.stringify({ PrDtlstId: PrDtlstId }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#divCurCode_' + PrDtlstId + '').html(response);
+
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
         } else {
 
             $.ajax({
                 type: "POST",
-                url: "@Url.Action("callVendorList","Purchase")",
-                data: '',
+                url: "@Url.Action("callVendorListSourcing","Purchase")",
+                data: '{PrDtlstId: "' + PrDtlstId + '" }',
                 contentType: "application/json; charset=utf-8",
                 dataType: "html",
                 success: function (response) {
@@ -484,6 +498,8 @@
                     alert(response.responseText);
                 }
             });
+
+
 
         }
     }

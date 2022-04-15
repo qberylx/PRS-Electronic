@@ -67,14 +67,14 @@
                     <td style="width:200px">
                         <div class="row">
                             <div class="col-md-4">
-                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.EstCurCode).GroupBy(x => x.EstCurCode))
                                 {
-                                    @currency.Max(s => s.CurCode) <br />
+                                    @currency.Max(s => s.EstCurCode) <br />
                                 }
                             </div>
                             <div class="col-md-8">
 
-                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.EstCurCode).GroupBy(x => x.EstCurCode))
                                 {
                                     @*currency.Sum(s => s.TotCostWitTax) *@
                                     String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.EstTotalPrice));
@@ -115,12 +115,14 @@
                         @if (item.PRTypeId == 4)
                         {
                             @Html.ActionLink("Details", "PRDtlsPurchasingProses", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                            <a>&nbsp;</a>
                             //@Html.ActionLink("Budget", "budgetUpdate", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
                             @Html.ActionLink("Send To Sourcing", "PRProcessing", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
                         }
                         else
                         {
                             @Html.ActionLink("Details", "PRDtlsPurchasingProsesStockable", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                            <a>&nbsp;</a>
                             //@Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
                             @Html.ActionLink("Send To Proses PO", "SendToPoProses", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
                         }
@@ -131,7 +133,7 @@
                 </tr>
                 <tr class="expandable-body @showFlag ">
                     <td colspan="8">
-                        <p style="color:indianred; padding-left:2em">@item.HODPurComment</p>
+                        <p style="color:indianred; padding-left:2em">@item.HODPurComment </p>
                     </td>
                 </tr>
             }

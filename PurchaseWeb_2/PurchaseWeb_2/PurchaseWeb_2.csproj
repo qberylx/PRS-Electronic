@@ -2490,6 +2490,9 @@
     <Content Include="Views\Purchase\callNewVendor.cshtml" />
     <Content Include="Views\Purchase\callVendorList.cshtml" />
     <Content Include="Views\Purchase\callCurrencyName.cshtml" />
+    <Content Include="Views\Purchase\callVendorListSourcing.cshtml" />
+    <Content Include="Views\Purchase\getCurCodeList.cshtml" />
+    <Content Include="Views\Purchase\PrHODPuchasingViewSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
