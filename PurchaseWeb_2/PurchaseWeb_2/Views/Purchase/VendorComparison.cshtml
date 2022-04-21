@@ -47,6 +47,10 @@
                 </div>
             </div>
 
+            
+        </div>
+
+        <div class="row">
             <div class="col-2">
                 Current Price (MYR) <br />
                 @Html.EditorFor(model => model.CurPriceMYR, new { htmlAttributes = new { @class = "form-control", @onchange = "UpdatePrice(this.value, " + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + " )", @Value = "0.00", @kiraCurPMYR = ViewBag.PrDtlstId } }) <br />
@@ -73,10 +77,6 @@
                 @Html.EditorFor(model => model.PODate, new { htmlAttributes = new { @class = "form-control" } }) <br />
                 @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
             </div>
-
-
-        </div>
-        <div class="row">
             <div class="col-md-1">
                 Cost Down % <br />
                 @Html.EditorFor(model => model.CostDown, new { htmlAttributes = new { @class = "form-control", @Value = "0.00", @kiraCostD = ViewBag.PrDtlstId } }) <br />
@@ -102,6 +102,10 @@
             <div class="col-md-1 pr-3" id="divDiscount_@ViewBag.PrDtlstId" style="display:none">
                 Discount % <br /> <input type="text" id="percentDisc" name="percentDisc" value="0.00" onchange="cghPerDisc(this.value, @ViewBag.PrDtlstId)" />
             </div>
+        </div>
+
+        <div class="row">
+            
 
             <div class="col-md-2 pr-3">
                 Total Amount (Exc) <br chgCurRate />

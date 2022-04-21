@@ -4,7 +4,7 @@
     ViewBag.Title = "PoProsesList";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
-
+<h1>PO Process</h1>
 <div class="card card-primary">
     <div class="card-header">
         <h3 class="card-title">List of PR for HOD Puchasing Department Approval</h3>
@@ -16,6 +16,10 @@
         </div>
     </div>
     <div class="body">
+        <div id="notification">
+            @Html.Partial("_Notifications")
+        </div>
+
         @ViewBag.Message
 
         @if (ViewBag.Message != null)
@@ -92,7 +96,7 @@
                             <div class="col-md-4">
                                 @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                 {
-                                    
+
                                     @currency.Max(s => s.CurCode) <br />
                                 }
                             </div>
@@ -102,8 +106,8 @@
                                     String strTotCostWitTax = String.Format("{0:n}", currency.Sum(s => s.TotCostWitTax));
                                     @strTotCostWitTax
                                     @*
-                                    @currency.Sum(s => s.TotCostWitTax) *@
-                                        <br />
+                                        @currency.Sum(s => s.TotCostWitTax) *@
+                                    <br />
                                 }
                             </div>
                         </div>
@@ -116,7 +120,7 @@
                     </td>
                     <td>
                         @Html.ActionLink("View", "POProsesView", "PO", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
-                        
+
                     </td>
                 </tr>
             }
@@ -128,5 +132,10 @@
 <script>
     $(document).ready(function () {
         $("#divAlert").delay(3000).fadeOut("slow");
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(2500).fadeOut("slow");
     });
 </script>

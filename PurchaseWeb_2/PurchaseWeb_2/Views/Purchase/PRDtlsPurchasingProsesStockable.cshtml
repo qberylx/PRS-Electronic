@@ -4,6 +4,7 @@
     ViewBag.Title = "PRDtlsPurchasingProsesStockable";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
+<h1>Purchasing Proses PR</h1>
 <style>
     .zoomedElement {
         /*background-color: #50CBFF;*/
@@ -107,12 +108,17 @@
 
 
 <div class="row">
-    <div class="col-4">
-        @Html.ActionLink("Return To Main PR", "PurchasingProsesPR", "Purchase", null, new { @class = "btn btn-primary" })
-        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectPR">
-            Reject PR
-        </button>
+    <div class="container">
+        <div class="row">
+            <div class="col-4 col-centered">
+                @Html.ActionLink("Return To Main PR", "PurchasingProsesPR", "Purchase", null, new { @class = "btn btn-primary" })
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectPR">
+                    Reject PR
+                </button>
+            </div>
+        </div>
     </div>
+    
     
 </div>
 

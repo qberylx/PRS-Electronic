@@ -482,18 +482,22 @@ namespace PurchaseWeb_2.Controllers
                 String email = user.Email;
                 MailMessage mail = new MailMessage();
                 mail.To.Add(email);
-                mail.From = new MailAddress("mqatadahabdaziz@gmail.com");
+                //mail.From = new MailAddress("mqatadahabdaziz@gmail.com");
+                //mail.From = new MailAddress("prs.system@dominant-semi.com");
+                mail.From = new MailAddress("itsupport@dominant-semi.com","prs.system@dominant-semi.com");
                 mail.Subject = @"Web Approval";
                 string Body = @"Hey , your User Id has been approve. 
                                 You may login to Dominant Purchase Order System";
                 mail.Body = Body;
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient();
-                smtp.Host = "smtp.gmail.com";// mail1.dominant-semi.com
-                smtp.Port = 587; // 28
+                smtp.Host = "mail1.dominant-semi.com";// mail1.dominant-semi.com smtp.gmail.com
+                smtp.Port = 28; // 28 587
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new System.Net.NetworkCredential("mqatadahabdaziz@gmail.com", "qu3@Gmail"); // Enter seders User name and password       
-                smtp.EnableSsl = true;
+                //itsupport @dominant-semi.com
+                //Domi$dm1n
+                smtp.Credentials = new System.Net.NetworkCredential("itsupport@dominant-semi.com", "Domi$dm1n"); // Enter seders User name and password       
+                //smtp.EnableSsl = true;
                 smtp.Send(mail);
 
 

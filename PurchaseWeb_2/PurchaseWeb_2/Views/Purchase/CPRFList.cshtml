@@ -28,6 +28,7 @@
                                     @Html.DisplayNameFor(model => model.CPRFBalance)
                                 </th>
                                 <th></th>
+                                <th></th>
                             </tr>
                             @{int i = 0;}
                             @foreach (var item in Model)
@@ -46,11 +47,14 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.CPRFBalance)
                                     </td>
+                                    <td style="text-align:right">
+                                        <a href="@Url.Action("CprfEdit","Purchase", new { CPRFId=item.CPRFId })" class="btn btn-info"><i class="fa fa-pen"> </i></a>
+                                    </td>
                                     <td>
                                         @using (Ajax.BeginForm("CprfDelete", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCPRFList", OnSuccess = "OnSuccess" }))
                                         {
                                             <input type="hidden" name="CPRFId" id="CPRFId" value="@item.CPRFId" />
-                                            <button  class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
                                         }
                                     </td>
                                 </tr>

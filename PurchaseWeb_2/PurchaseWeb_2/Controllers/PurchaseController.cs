@@ -12,14 +12,49 @@ using System.Web.Mvc;
 using System.IO;
 using PurchaseWeb_2.Extensions;
 using PurchaseWeb_2.Models;
+using System.Net.Mail;
 
 namespace PurchaseWeb_2.Controllers
 {
     [SessionCheck]
+
     public class PurchaseController : Controller
     {
         Domi_PurEntities db = new Domi_PurEntities();
         dom1Entities dbDom1 = new dom1Entities();
+
+        //EMail
+        public string SendEmail(string userEmail , string Subject , string body)
+        {
+            try
+            {
+                String email = userEmail;
+                MailMessage mail = new MailMessage();
+                mail.To.Add(email);
+                mail.From = new MailAddress("itsupport@dominant-semi.com", "prs.system@dominant-semi.com");
+                mail.Subject = Subject;
+                mail.Body = body;
+                mail.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "mail1.dominant-semi.com";// mail1.dominant-semi.com smtp.gmail.com
+                smtp.Port = 28; // 28 587
+                smtp.UseDefaultCredentials = false;
+                //itsupport @dominant-semi.com
+                //Domi$dm1n
+                smtp.Credentials = new System.Net.NetworkCredential("itsupport@dominant-semi.com", "Domi$dm1n"); // Enter seders User name and password       
+                                                                                                                 //smtp.EnableSsl = true;
+                smtp.Send(mail);
+
+                return ("Email Sent");
+            }
+            catch (SmtpException ex)
+            {
+                string msg = "Mail cannot be sent because of the server problem:";
+                msg += ex.Message;
+                return (msg);
+            }
+            
+        }
 
         // GET: Purchase
         public ActionResult Index()
@@ -127,13 +162,41 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult PRhod(int PrMstId)
         {
-            //update statid = 3 (Pending Approval HOD)
             var PrMst = db.PR_Mst.SingleOrDefault(pr => pr.PRId == PrMstId);
+            // check if account is empty
+            if (PrMst.AccountCode == null && PrMst.PrGroupType1.CPRFFlag == false && PrMst.PRTypeId == 4)
+            {
+                this.AddNotification("Please dont leave Account Code empty", NotificationType.ERROR);
+                return View("PurRequest");
+            }
+
+            //update statid = 3 (Pending Approval HOD)
+
             if (PrMst != null)
             {
                 PrMst.StatId = 3;
                 db.SaveChanges();
             }
+
+            //subject
+            string subject = @"PR "+PrMst.PRNo +" send for HOD Approval ";
+            //body
+            string body = @"Login to http://prs.dominant-semi.com/ for PR " + PrMst.PRNo + " HOD Approval ";
+            //user email
+            String userEmail = PrMst.Usr_mst.Email;
+
+            SendEmail(userEmail, subject, body);
+
+            //hod email
+            var usrMst = db.Usr_mst
+                .Where(x => x.Dpt_id == PrMst.DepartmentId && x.Psn_id == 2)
+                .ToList();
+            foreach (var Usr in usrMst)
+            {
+                SendEmail(Usr.Email, subject, body);
+            };
+                        
+
             return View("PurRequest");
         }
 
@@ -172,6 +235,29 @@ namespace PurchaseWeb_2.Controllers
 
             ViewBag.Message = PrMst.PRNo + " is Approved !";
 
+            //send email to user
+            string userEmail = PrMst.Usr_mst.Email;
+            string subject = @"PR "+PrMst.PRNo+" has been approved by HOD ";
+            string body = @"PR "+PrMst.PRNo+" has been approved and has been sent to purchasing for processing. ";
+
+            SendEmail(userEmail, subject, body);
+
+            // send email to HOD
+            var usrmst = db.Usr_mst.Where(x => x.Username == Username).SingleOrDefault();
+            userEmail = usrmst.Email;
+            subject = @"PR " + PrMst.PRNo + " has been approved ";
+            body = @"PR " + PrMst.PRNo + " has been approved and has been sent to purchasing for processing. ";
+
+            SendEmail(userEmail, subject, body);
+
+            // send email to purchasing
+            userEmail = "pr.purchasing@dominant-semi.com";
+            subject = @"PR " + PrMst.PRNo + " has been approved by HOD ";
+            body = @"PR " + PrMst.PRNo + " has been approved and has been sent to purchasing for processing. " +
+                " Kindly go to http://prs.dominant-semi.com/ for futher action.";
+
+            SendEmail(userEmail, subject, body);
+
             return RedirectToAction("ApprovalHOD");
         }
 
@@ -193,6 +279,20 @@ namespace PurchaseWeb_2.Controllers
             }
 
             ViewBag.Message = PrMst.PRNo + " is send back to User !";
+
+            //send email to user
+            string userEmail = PrMst.Usr_mst.Email;
+            string subject = @"PR " + PrMst.PRNo + " has been reject by HOD ";
+            string body = @"PR " + PrMst.PRNo + " has been rejected " +
+                "Kindly go to http://prs.dominant-semi.com/ for futher action. ";
+
+            SendEmail(userEmail, subject, body);
+
+            // send email to HOD
+            var usrmst = db.Usr_mst.Where(x => x.Username == Username).SingleOrDefault();
+            userEmail = usrmst.Email;
+            subject = @"PR " + PrMst.PRNo + " has been Rejected ";
+            body = @"PR " + PrMst.PRNo + " has been rejected and sent back to "+PrMst.Usr_mst.Username+". ";
 
             return RedirectToAction("ApprovalHOD");
         }
@@ -814,8 +914,9 @@ namespace PurchaseWeb_2.Controllers
             }
             catch
             {
+                string _path = Path.Combine(Server.MapPath("~/UploadedFile/Quotation"));
                 ViewBag.PurMasterID = PurMasterID;
-                ViewBag.Message = "File fail to Upload!!";
+                ViewBag.Message = "File fail to Upload. Check path : "+_path+" !!" ;
                 return PartialView("UploadQuo", PurMasterID);
             }
         }
@@ -1469,8 +1570,10 @@ namespace PurchaseWeb_2.Controllers
             decimal TotAmt = (decimal)prMstSingle.PR_Details.Sum(x => x.TotCostWitTax);
 
             var budgetSingle = db.MonthlyBudgets
-                .Where(x => x.DepId == prMstSingle.DepartmentId && x.Month == sMonth && x.Year == sYear)
+                .Where(x => x.DepId == prMstSingle.BudgetDept && x.Month == sMonth && x.Year == sYear)
                 .SingleOrDefault();
+
+            var accDept = db.AccTypeDepts.Where(x => x.AccTypeDepID == prMstSingle.BudgetDept).SingleOrDefault();
 
             if (budgetSingle != null)
             {
@@ -1479,11 +1582,13 @@ namespace PurchaseWeb_2.Controllers
                 ViewBag.PrTotAmount = TotAmt;
                 ViewBag.PrMstId = PrMstId;
                 ViewBag.FlagUpdateBudget = prMstSingle.FlagUpdateMonthlyBudget;
+                ViewBag.departName = accDept.DeptName;
 
                 return PartialView("budgetMonthly", budgetSingle);
             }
             else
             {
+                ViewBag.departName = accDept.DeptName;
                 ViewBag.department = prMstSingle.AccTypeDept.DeptName;
                 ViewBag.Budget = 0;
                 ViewBag.Balance = 0;
@@ -1622,6 +1727,7 @@ namespace PurchaseWeb_2.Controllers
                         PrMst.ItemNo        = "CAPEX"; 
                         PrMst.AssetFlag     = AssetFlag;
                         PrMst.AssetNo       = AssetNo;
+                        PrMst.BudgetDept    = int.Parse(AccTypeDepID);
                         db.SaveChanges();
                     }
 
@@ -1639,14 +1745,16 @@ namespace PurchaseWeb_2.Controllers
                         "VendorItemNo|"+
                         "ItemNo      |"+
                         "AssetFlag   |"+
-                        "AssetNo     |",
+                        "AssetNo     |"+
+                        "BudgetDept  |",
                         
                         ValueStr = 
                         AccCode +"|"+
                         "99920" +"|"+
                         "CAPEX" +"|"+
                         AssetFlag +"|"+
-                        AssetNo +"|",
+                        AssetNo +"|"+
+                        AccTypeDepID + "|",
                         
                         PRId = PrMStId,
                         PRDtlsId = 0
@@ -1664,6 +1772,30 @@ namespace PurchaseWeb_2.Controllers
                     if (PrMst != null)
                     {
                         PrMst.AccountCode = AccCode;
+                        PrMst.BudgetDept = int.Parse(AccTypeDepID);
+                        db.SaveChanges();
+
+                        string Username = (string)Session["Username"];
+                        // add audit log for PR
+                        var auditLog = db.Set<AuditPR_Log>();
+                        auditLog.Add(new AuditPR_Log
+                        {
+                            ModifiedBy = Username,
+                            ModifiedOn = DateTime.Now,
+                            ActionBtn = "UPDATE",
+
+                            ColumnStr =
+                            "AccountCode |" +
+                            "BudgetDept  |",
+
+                            ValueStr =
+                            AccCode + "|" +
+                            AccTypeDepID + "|",
+
+                            PRId = PrMStId,
+                            PRDtlsId = 0
+
+                        });
                         db.SaveChanges();
                     }
                 }
@@ -1675,8 +1807,39 @@ namespace PurchaseWeb_2.Controllers
                         PrMst.ItemNo = "CAPEX";
                         PrMst.AssetFlag = AssetFlag;
                         PrMst.AssetNo = AssetNo;
+                        PrMst.BudgetDept = int.Parse(AccTypeDepID);
+                        db.SaveChanges();
+
+                        string Username = (string)Session["Username"];
+                        // add audit log for PR
+                        var auditLog = db.Set<AuditPR_Log>();
+                        auditLog.Add(new AuditPR_Log
+                        {
+                            ModifiedBy = Username,
+                            ModifiedOn = DateTime.Now,
+                            ActionBtn = "UPDATE",
+
+                            ColumnStr =
+                            "AccountCode |" +
+                            "ItemNo      |" +
+                            "AssetFlag   |" +
+                            "AssetNo     |" +
+                            "BudgetDept  |",
+
+                            ValueStr =
+                            AccCode + "|" +
+                            "CAPEX" + "|" +
+                            AssetFlag + "|" +
+                            AssetNo + "|" +
+                            AccTypeDepID + "|",
+
+                            PRId = PrMStId,
+                            PRDtlsId = 0
+
+                        });
                         db.SaveChanges();
                     }
+
                 }
                 
                 this.AddNotification("Update Successful", NotificationType.SUCCESS);
@@ -1689,7 +1852,7 @@ namespace PurchaseWeb_2.Controllers
         {
 
             var PrMstList = db.PR_Mst
-                .Where(x => x.StatId == 12 ) 
+                .Where(x => x.StatId == 12 || x.StatId == 11) 
                 .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group )
                 .ToList();
             return PartialView("PRListForPurchaser", PrMstList);
@@ -1708,6 +1871,33 @@ namespace PurchaseWeb_2.Controllers
 
                 db.SaveChanges();
             }
+
+            // send email to HOD Purchasing
+            var usrmst = db.Usr_mst.Where(x => x.Psn_id == 5).SingleOrDefault();
+            if (usrmst != null)
+            {
+                string userEmail = usrmst.Email;
+                string subject = @"PR " + PrMst.PRNo + " has been sent for HOD Purchasing Approval ";
+                string body = @"PR " + PrMst.PRNo + " has been sent for Approval. " +
+                    "Kindly login to http://prs.dominant-semi.com/ for further action.";
+
+                SendEmail(userEmail, subject, body);
+            }
+            
+
+            // send email to Purchaser
+            var usrmstPur = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+            if (usrmstPur != null)
+            {
+                string userEmail = usrmstPur.Email;
+                string subject = @"PR " + PrMst.PRNo + " has been sent for HOD Purchasing Approval ";
+                string body = @"PR " + PrMst.PRNo + " has been sent for Approval. " +
+                    "Kindly login to http://prs.dominant-semi.com/ for further action.";
+
+                SendEmail(userEmail, subject, body);
+            }
+            
+
 
             return View("PurchasingProsesPR");
         }
@@ -1829,7 +2019,14 @@ namespace PurchaseWeb_2.Controllers
                 .SingleOrDefault();
 
             ViewBag.Qty = prdtls.Qty;
-            ViewBag.lastPrice = prdtls.LastPrice;
+            if (prdtls.LastPrice <= 0  || prdtls.LastPrice == null)
+            {
+                ViewBag.lastPrice = 0;
+            } else
+            {
+                ViewBag.lastPrice = prdtls.LastPrice;
+            }
+            
 
             // get vendor list
             var vdLst = dbDom1.APVENs
@@ -2398,12 +2595,40 @@ namespace PurchaseWeb_2.Controllers
                 }               
                 
                 db.SaveChanges();
+
+                //send email to user
+                string userEmail = PrMst.Usr_mst.Email;
+                string subject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
+                string body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. ";
+
+                SendEmail(userEmail, subject, body);
+
+                //send email to purchaser
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                userEmail = usrmst.Email;
+                subject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
+                body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. " +
+                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                SendEmail(userEmail, subject, body);
+
+                //send email to purchasing HOD
+                var usrmstHOD = db.Usr_mst.Where(x => x.Username == PrMst.HODPurDeptApprovalBy).SingleOrDefault();
+                userEmail = usrmstHOD.Email;
+                subject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
+                body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. " +
+                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                SendEmail(userEmail, subject, body);
+
             }
             return RedirectToAction("HODPurApprovalList");
         }
 
         public ActionResult RejectHODPurchasingDept(int PrMstId, string comment)
         {
+            string Username = (string)Session["Username"];
+
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
                 .SingleOrDefault();
@@ -2412,6 +2637,24 @@ namespace PurchaseWeb_2.Controllers
                 PrMst.StatId = 11;
                 PrMst.HODPurComment = comment;
                 db.SaveChanges();
+
+                //send email to purchaser
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                string userEmail = usrmst.Email;
+                string subject = @"PR " + PrMst.PRNo + " has been reject by Purchasing HOD  ";
+                string body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to " + PrMst.PurchaserName + " . " +
+                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                SendEmail(userEmail, subject, body);
+
+                //send email to purchasing HOD
+                var usrmstHOD = db.Usr_mst.Where(x => x.Username == Username).SingleOrDefault();
+                userEmail = usrmstHOD.Email;
+                subject = @"PR " + PrMst.PRNo + " has been rejected by Purchasing HOD  ";
+                body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to "+ PrMst.PurchaserName + " . " +
+                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                SendEmail(userEmail, subject, body);
             }
             return RedirectToAction("HODPurApprovalList");
         }
@@ -2567,6 +2810,28 @@ namespace PurchaseWeb_2.Controllers
             var CPRFList = db.CPRFMsts.ToList();
 
             return PartialView("CPRFList", CPRFList);
+        }
+
+        [HttpGet]
+        public ActionResult CprfEdit(int CPRFId)
+        {
+            var cprf = db.CPRFMsts.Where(x => x.CPRFId == CPRFId).FirstOrDefault();
+
+            return View("CprfEdit", cprf);
+        }
+
+        [HttpPost]
+        public ActionResult CprfEdit(CPRFMst cPRF)
+        {
+            var cprf = db.CPRFMsts.Where(x => x.CPRFId == cPRF.CPRFId).FirstOrDefault();
+            if(cprf != null)
+            {
+                cprf.CPRFBalance = cPRF.CPRFBalance;
+                cprf.CPRFBudget = cPRF.CPRFBudget;
+                db.SaveChanges();
+            }
+
+            return View("CPRFMaster");
         }
 
         public ActionResult CprfDelete(int CPRFId)
@@ -3406,6 +3671,21 @@ namespace PurchaseWeb_2.Controllers
 
                     db.SaveChanges();
                 }
+
+                //send email to user
+                string userEmail = PrMst.Usr_mst.Email;
+                string subject = @"PR " + PrMst.PRNo + " has been reject by purchasing. ";
+                string body = @"Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                SendEmail(userEmail, subject, body);
+
+                // send email to purchaser
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                userEmail = usrmst.Email;
+                subject = @"PR " + PrMst.PRNo + " has been reject by purchasing. ";
+                body = @"Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                SendEmail(userEmail, subject, body);
 
                 return View();
             } else

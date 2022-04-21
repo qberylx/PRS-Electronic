@@ -9,6 +9,7 @@ using System.Data.Entity.Core.Objects;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -20,6 +21,40 @@ namespace PurchaseWeb_2.Controllers
     {
         Domi_PurEntities db = new Domi_PurEntities();
         dom1Entities dbDom1 = new dom1Entities();
+
+        //EMail
+        public string SendEmail(string userEmail, string Subject, string body)
+        {
+            try
+            {
+                String email = userEmail;
+                MailMessage mail = new MailMessage();
+                mail.To.Add(email);
+                mail.From = new MailAddress("itsupport@dominant-semi.com", "prs.system@dominant-semi.com");
+                mail.Subject = Subject;
+                mail.Body = body;
+                mail.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "mail1.dominant-semi.com";// mail1.dominant-semi.com smtp.gmail.com
+                smtp.Port = 28; // 28 587
+                smtp.UseDefaultCredentials = false;
+                //itsupport @dominant-semi.com
+                //Domi$dm1n
+                smtp.Credentials = new System.Net.NetworkCredential("itsupport@dominant-semi.com", "Domi$dm1n"); // Enter seders User name and password       
+                                                                                                                 //smtp.EnableSsl = true;
+                smtp.Send(mail);
+
+                return ("Email Sent");
+            }
+            catch (SmtpException ex)
+            {
+                string msg = "Mail cannot be sent because of the server problem:";
+                msg += ex.Message;
+                return (msg);
+            }
+
+        }
+
         // GET: PO
         public ActionResult Index()
         {
@@ -45,6 +80,30 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.PrMstId = PrMstId;
 
             return View("POProsesView");
+        }
+
+        public ActionResult POReject( int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+            if(PrMst != null)
+            {
+                PrMst.StatId = 12;
+                db.SaveChanges();
+                this.AddNotification("PR " + PrMst.PRNo + " has been rejected back to Sourcing", NotificationType.SUCCESS);
+
+                //send email to purchaser
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                string userEmail = usrmst.Email;
+                string subject = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List  ";
+                string body = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List and has been sent back to purchasing. " +
+                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                SendEmail(userEmail, subject, body);
+            }
+
+            return RedirectToAction("PoProsesList", "PO");
         }
 
         public ActionResult PurDetailsPOViewSelected(int PrMstId)
@@ -190,6 +249,14 @@ namespace PurchaseWeb_2.Controllers
                             db.SaveChanges();
 
                             this.AddNotification("PO No has been created", NotificationType.SUCCESS);
+
+                            //send email to user
+                            string userEmail = prMst.Usr_mst.Email;
+                            string subject = @"PO No : "+POnewNo+" has been created from  PR " + prMst.PRNo + "  ";
+                            string body = @"PO No : " + POnewNo + " has been created from  PR " + prMst.PRNo + "  ";
+
+                            SendEmail(userEmail, subject, body);
+
                         } 
 
                         if (pR_Detail.NoPoFlag)// if no poflag has been check
@@ -281,8 +348,21 @@ namespace PurchaseWeb_2.Controllers
             }
             //var POlist = db.GetPOListbyDate(start, end).ToList();
             var POlist = db.PO_Mst
-                .Where(x => x.CreateDate >= start && x.CreateDate <= end)
+                .Where(x => x.CreateDate >= start && x.CreateDate <= end && (x.PR_Mst.PRTypeId == 2 || x.PR_Mst.PRTypeId == 5))
                 .ToList();
+
+            if (searchPo.selcons == 0)
+            {
+                POlist = db.PO_Mst
+                .Where(x => x.CreateDate >= start && x.CreateDate <= end && ( x.PR_Mst.PRTypeId == 2 || x.PR_Mst.PRTypeId == 5 ))
+                .ToList();
+            } else
+            {
+                POlist = db.PO_Mst
+                .Where(x => x.CreateDate >= start && x.CreateDate <= end && (x.PR_Mst.PRTypeId != 2 && x.PR_Mst.PRTypeId != 5) )
+                .ToList();
+            }
+            
 
             return PartialView("POListByDate", POlist);
         }
@@ -471,7 +551,7 @@ namespace PurchaseWeb_2.Controllers
                     sb.Append(',');
                     sb.Append(pr.DomiPartNo.ToString() + ',');
                     sb.Append("N1000S" + ',');
-                    sb.Append(pr.Description.ToString().Replace(',',' ') + ',');
+                    sb.Append(pr.Description.ToString().Replace(',',' ').Replace("\n", "").Replace("\r", "") + ',');
                     sb.Append(pr.VendorPartNo.ToString() + ',');
                     sb.Append("FALSE" + ',');
                     sb.Append(pr.UOMName.ToString() + ',');

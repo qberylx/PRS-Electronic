@@ -506,7 +506,14 @@
             <div id="notification">
                 @Html.Partial("_Notifications")
             </div>
-            <input type="submit" class="btn btn-success" value="Send to PO List" />
+            <div class="container">
+                <div class="row">
+                    <div class="col-centered">
+                        <input type="submit" class="btn btn-success" value="Send to PO List" />
+                    </div>
+                </div>
+            </div>
+            
             <input type="hidden" value="@ViewBag.PrMstId" id="PrMstId" name="PrMstId" />
             <input type="hidden" value="@ViewBag.PrTypeId" id="Doctype" name="Doctype" />
         </div>

@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 
+<h1>User Purchase Request</h1>
 <div class="row">
     <div class="col-md-12">
         <div class="card card-primary">
@@ -28,7 +29,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3" id="PrGroup" >
+                        <div class="col-3" id="PrGroup">
                             <div class="row">
                                 <div class="col-10">
                                     <div id="groupType">
@@ -43,16 +44,21 @@
                         </div>
                     </div>
                 }
-                </div>
             </div>
         </div>
+    </div>
+</div>
+<div id="notification">
+    @Html.Partial("_Notifications")
 </div>
 
 <div class="row">
     <div class="col-md-12">
+        
+
         <div id="divPrMstList">
             @{Html.RenderAction("PrMstList", "Purchase");}
-        </div>        
+        </div>
     </div>
 </div>
 
@@ -77,6 +83,11 @@
 </div>
 
 <script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    );
+    
+
     // to create PRHead
     function addPRHead() {
         var TypePrID = $("#TypePRId").val();
@@ -101,21 +112,21 @@
         contentType: "application/json; charset=utf-8",
         dataType: "html",
         success: function (response) {
-            $("#PrGroup").show();
-            $("#groupType").html(response);
-            //if (prType == 4) {
-            //    $("#PrGroup").hide();
-            //}
-                
+        $("#PrGroup").show();
+        $("#groupType").html(response);
+        //if (prType == 4) {
+        //    $("#PrGroup").hide();
+        //}
+
         },
         failure: function (response) {
-            alert(response.responseText);
+        alert(response.responseText);
         }
         });
 
-        
-        
 
-    }
-</script>
+
+
+        }
+        </script>
 

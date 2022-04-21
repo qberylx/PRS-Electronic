@@ -298,6 +298,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="VendorItemNo" Type="varchar" MaxLength="10" />
           <Property Name="SendToProcessingDate" Type="date" />
           <Property Name="PurchasingComment" Type="varchar(max)" />
+          <Property Name="BudgetDept" Type="int" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -1245,6 +1246,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="SendToProcessingDate" Type="DateTime" Precision="0" />
           <Property Name="PurchasingComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="PO_Mst" Relationship="Domi_PurModel.FK_PO_Mst_PR_Mst" FromRole="PR_Mst" ToRole="PO_Mst" />
+          <Property Name="BudgetDept" Type="Int32" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1881,6 +1883,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="BudgetDept" ColumnName="BudgetDept" />
                 <ScalarProperty Name="PurchasingComment" ColumnName="PurchasingComment" />
                 <ScalarProperty Name="SendToProcessingDate" ColumnName="SendToProcessingDate" />
                 <ScalarProperty Name="VendorItemNo" ColumnName="VendorItemNo" />

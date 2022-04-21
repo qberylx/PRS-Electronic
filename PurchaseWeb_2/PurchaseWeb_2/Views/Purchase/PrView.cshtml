@@ -32,10 +32,15 @@
                         <span>Please enter your comment for reject PR.</span>
                     </div>
                     <br />
-                    <div class="row-cols-md-12">
-                        <button type="submit" class="btn btn-danger" id="HODReject" name="HODReject">Reject</button>
-                        <input type="hidden" id="PrmstIdHod" name="PrmstIdHod" value="@ViewBag.PrMstId" />
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-centered">
+                                <button type="submit" class="btn btn-danger" id="HODReject" name="HODReject">Reject</button>
+                                <input type="hidden" id="PrmstIdHod" name="PrmstIdHod" value="@ViewBag.PrMstId" />
+                            </div>
+                        </div>
                     </div>
+                    
                 
 
             }
@@ -43,27 +48,32 @@
         </div>
     </div>
     <br />
-    <div class="row">
-        @if (ViewBag.StatusId == 8 && (ViewBag.PstId == 5 || ViewBag.PstId == 7))
-        {
-            @Html.ActionLink("Return To Main PR", "HODPurApprovalList", "Purchase", null, new { @class = "btn btn-primary" })
-        }
-        else if (ViewBag.StatusId == 3 && (ViewBag.PstId == 2 || ViewBag.PstId == 7))
-        {
-            @Html.ActionLink("Return To Main PR", "ApprovalHOD", "Purchase", null, new { @class = "btn btn-primary" })
-        }
-        else if (ViewBag.StatusId == 5 && (ViewBag.PstId == 3 || ViewBag.PstId == 7))
-        {
-            @Html.ActionLink("Return To Main PR", "MDApprovalList", "Purchase", null, new { @class = "btn btn-primary" })
-        }
-        else
-        {
-            @Html.ActionLink("Return To Main PR", "PurRequest", "Purchase", null, new { @class = "btn btn-primary" })
-        }
+    <div class="container">
+        <div class="row">
+            <div class="col-centered">
+                @if (ViewBag.StatusId == 8 && (ViewBag.PstId == 5 || ViewBag.PstId == 7))
+                {
+                    @Html.ActionLink("Return To Main PR", "HODPurApprovalList", "Purchase", null, new { @class = "btn btn-primary" })
+                }
+                else if (ViewBag.StatusId == 3 && (ViewBag.PstId == 2 || ViewBag.PstId == 7))
+                {
+                    @Html.ActionLink("Return To Main PR", "ApprovalHOD", "Purchase", null, new { @class = "btn btn-primary" })
+                }
+                else if (ViewBag.StatusId == 5 && (ViewBag.PstId == 3 || ViewBag.PstId == 7))
+                {
+                    @Html.ActionLink("Return To Main PR", "MDApprovalList", "Purchase", null, new { @class = "btn btn-primary" })
+                }
+                else
+                {
+                    @Html.ActionLink("Return To Main PR", "PurRequest", "Purchase", null, new { @class = "btn btn-primary" })
+                }
 
-        <!--Add reject with comments-->
+                <!--Add reject with comments-->
 
+            </div>
+        </div>
     </div>
+    
 </div>
 
 <script>

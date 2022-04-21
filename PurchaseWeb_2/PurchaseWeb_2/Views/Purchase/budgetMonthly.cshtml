@@ -17,7 +17,7 @@
                     <strong>Department</strong>
                 </div>
                 <div class="col-md-6">
-                    <strong>: </strong> @Html.DisplayFor(model => model.AccTypeDept.DeptName)
+                    <strong>: </strong> @ViewBag.departName @*@Html.DisplayFor(model => model.AccTypeDept.DeptName)*@
                 </div>
             </div>
             <div class="row">
@@ -92,7 +92,7 @@
             </div>
             <div class="card-footer">
                 <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-centered">
                         <button class="btn btn-success" type="submit" value="Save">Update Monthly Budget</button>
                         @Html.HiddenFor(model => model.BudgetId)
                         <input type="hidden" name="PrMstId" id="PrMstId" value="@ViewBag.PrMstId" />

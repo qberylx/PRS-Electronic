@@ -15,6 +15,6 @@ namespace PurchaseWeb_2.Models
         [DataType(DataType.Date)]
         //[DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime ToDate { get; set; }
-
+        public int selcons { get; set; }
     }
 }
