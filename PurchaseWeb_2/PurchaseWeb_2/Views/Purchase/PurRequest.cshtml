@@ -3,6 +3,28 @@
     ViewBag.Title = "PurRequest";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
+<script>
+    function chgPRtypeQue(id) {
+        console.log(id);
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("groupType", "Purchase")",
+            data: JSON.stringify({ groupType: id }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+            $("#PrGroup").show();
+            $("#groupType").html(response);
+        
+
+        },
+            failure: function (response) {
+            alert(response.responseText);
+        }
+        });
+    }
+</script>
 
 <h1>User Purchase Request</h1>
 <div class="row">
@@ -18,7 +40,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <div class="col-md-10">
-                                    <select class="form-control" data-val="true" data-val-number="The field TypePRId must be a number." id="Doctype" name="Doctype" onchange="chgPRtype(this.value)">
+                                    <select class="form-control" data-val="true" data-val-number="The field TypePRId must be a number." id="Doctype" name="Doctype" onchange="chgPRtypeQue(this.value)">
                                         <!--<option value="0">Please choose your PR type</option>-->
                                         <option value="1">Stockable - Wafer - Non Consign</option>
                                         <option value="2">Stockable - Wafer - Consignment</option>
@@ -82,11 +104,13 @@
     </div>
 </div>
 
-<script>
+
+
+<script type="text/javascript">
     $(document).ready(function () {
         $("#notification").delay(3000).fadeOut("slow");
     );
-    
+
 
     // to create PRHead
     function addPRHead() {
@@ -123,10 +147,5 @@
         alert(response.responseText);
         }
         });
-
-
-
-
-        }
-        </script>
-
+    }
+</script>

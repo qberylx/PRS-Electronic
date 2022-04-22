@@ -31,6 +31,9 @@
                         PO No.
                     </th>
                     <th>
+                        PR No.
+                    </th>
+                    <th>
                         PR Type
                     </th>
                     <th>
@@ -39,9 +42,7 @@
                     <th>
                         Purchaser
                     </th>
-                    <th>
-                        PR No.
-                    </th>
+
                     <th>
                         PR Date
                     </th>
@@ -85,6 +86,9 @@
                             @Html.DisplayFor(modelItem => Model[i].NoPo)
                         </td>
                         <td>
+                            @Html.DisplayFor(modelItem => Model[i].PRNo)
+                        </td>
+                        <td>
                             @Html.DisplayFor(modelItem => Model[i].PR_Mst.PRType_mst.Name)
                         </td>
                         <td>
@@ -107,9 +111,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => Model[i].Purchasername)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model[i].PRNo)
-                        </td>
+                        
                         <td>
                             @{
                                 String strReqdate = "";

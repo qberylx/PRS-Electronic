@@ -1863,42 +1863,66 @@ namespace PurchaseWeb_2.Controllers
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
                 .SingleOrDefault();
+            
             if (PrMst != null)
             {
-                PrMst.StatId = 8;
-                PrMst.PurchaserName = Convert.ToString(Session["Username"]);
-                PrMst.SendHODPurDate = DateTime.Now;
+                // if pr type 4
+                if (PrMst.PRTypeId == 4)
+                {
+                    PrMst.StatId = 8;
+                    PrMst.PurchaserName = Convert.ToString(Session["Username"]);
+                    PrMst.SendHODPurDate = DateTime.Now;
 
-                db.SaveChanges();
+                    db.SaveChanges();
+
+                    // send email to HOD Purchasing
+                    var usrmst = db.Usr_mst.Where(x => x.Psn_id == 5).SingleOrDefault();
+                    if (usrmst != null)
+                    {
+                        string userEmail = usrmst.Email;
+                        string subject = @"PR " + PrMst.PRNo + " has been sent for HOD Purchasing Approval ";
+                        string body = @"PR " + PrMst.PRNo + " has been sent for Approval. " +
+                            "Kindly login to http://prs.dominant-semi.com/ for further action.";
+
+                        SendEmail(userEmail, subject, body);
+                    }
+
+
+                    // send email to Purchaser
+                    var usrmstPur = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                    if (usrmstPur != null)
+                    {
+                        string userEmail = usrmstPur.Email;
+                        string subject = @"PR " + PrMst.PRNo + " has been sent for HOD Purchasing Approval ";
+                        string body = @"PR " + PrMst.PRNo + " has been sent for Approval. " +
+                            "Kindly login to http://prs.dominant-semi.com/ for further action.";
+
+                        SendEmail(userEmail, subject, body);
+                    }
+                }
+                else
+                {
+                    PrMst.StatId = 9;
+                    PrMst.PurchaserName = Convert.ToString(Session["Username"]);
+                    PrMst.SendHODPurDate = DateTime.Now;
+
+                    db.SaveChanges();
+
+                    // send email to Purchaser
+                    var usrmstPur = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                    if (usrmstPur != null)
+                    {
+                        string userEmail = usrmstPur.Email;
+                        string subject = @"PR " + PrMst.PRNo + " has been sent for PO Processing ";
+                        string body = @"PR " + PrMst.PRNo + " has been sent for Po Processing. " +
+                            "Kindly login to http://prs.dominant-semi.com/ for further action.";
+
+                        SendEmail(userEmail, subject, body);
+                    }
+                }
+
+                
             }
-
-            // send email to HOD Purchasing
-            var usrmst = db.Usr_mst.Where(x => x.Psn_id == 5).SingleOrDefault();
-            if (usrmst != null)
-            {
-                string userEmail = usrmst.Email;
-                string subject = @"PR " + PrMst.PRNo + " has been sent for HOD Purchasing Approval ";
-                string body = @"PR " + PrMst.PRNo + " has been sent for Approval. " +
-                    "Kindly login to http://prs.dominant-semi.com/ for further action.";
-
-                SendEmail(userEmail, subject, body);
-            }
-            
-
-            // send email to Purchaser
-            var usrmstPur = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
-            if (usrmstPur != null)
-            {
-                string userEmail = usrmstPur.Email;
-                string subject = @"PR " + PrMst.PRNo + " has been sent for HOD Purchasing Approval ";
-                string body = @"PR " + PrMst.PRNo + " has been sent for Approval. " +
-                    "Kindly login to http://prs.dominant-semi.com/ for further action.";
-
-                SendEmail(userEmail, subject, body);
-            }
-            
-
-
             return View("PurchasingProsesPR");
         }
 
@@ -1906,6 +1930,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var Prmst = db.PR_Mst.Where(x => x.PRId == PrMstId).SingleOrDefault();
 
+            Session["groupType"] = Prmst.PRGroupType;
             ViewBag.PrTypeID = Prmst.PRTypeId;
             ViewBag.PrMstId = PrMstId;
 

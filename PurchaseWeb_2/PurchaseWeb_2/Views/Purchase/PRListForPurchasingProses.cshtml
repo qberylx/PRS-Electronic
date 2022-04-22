@@ -114,16 +114,38 @@
 
                         @if (item.PRTypeId == 4)
                         {
-                            @Html.ActionLink("Details", "PRDtlsPurchasingProses", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                            <table>
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink("Details", "PRDtlsPurchasingProses", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Send To Sourcing", "PRProcessing", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            
                             <a>&nbsp;</a>
                             //@Html.ActionLink("Budget", "budgetUpdate", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
-                            @Html.ActionLink("Send To Sourcing", "PRProcessing", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                            
                         }
                         else
                         {
-                            @Html.ActionLink("Details", "PRDtlsPurchasingProsesStockable", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                            <table>
+                                <tr>
+                                    <td>
+                                        @Html.ActionLink("Details", "PRDtlsPurchasingProsesStockable", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Send To PO Process", "PurHODApproval", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            
                             <a>&nbsp;</a>
-                            @Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                            
                             //@Html.ActionLink("Send To Sourcing", "SendToPoProses", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
                         }
 
@@ -132,7 +154,7 @@
                     </td>
                 </tr>
                 <tr class="expandable-body @showFlag ">
-                    <td colspan="8">
+                    <td colspan="12">
                         <p style="color:indianred; padding-left:2em">@item.HODPurComment </p>
                     </td>
                 </tr>

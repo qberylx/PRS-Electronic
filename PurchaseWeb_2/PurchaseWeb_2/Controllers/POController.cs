@@ -135,10 +135,10 @@ namespace PurchaseWeb_2.Controllers
                 EstimateUnitPrice = (decimal)(x.EstimateUnitPrice ?? 0.00M),
                 //CurrId = (int)x.CurrId,
                 CurCode = x.CurCode,
-                UnitPrice = (decimal)x.UnitPrice,
+                UnitPrice = (decimal)(x.UnitPrice ?? 0.00M),
                 TotCostnoTax = (decimal)(x.TotCostnoTax ?? 0.00M),
                 Tax = (int)x.Tax,
-                TotCostWitTax = (decimal)x.TotCostWitTax,
+                TotCostWitTax = (decimal)(x.TotCostWitTax ?? 0.00M),
                 TaxCode = x.TaxCode,
                 TaxClass = (int)x.TaxClass,
                 PoFlag = (bool)(x.PoFlag ?? false),
@@ -202,6 +202,17 @@ namespace PurchaseWeb_2.Controllers
             } 
             else
             {
+                //get PRtypeNo
+                var prType = db.PRType_mst
+                    .Where(x => x.PRTypeId == Doctype)
+                    .SingleOrDefault();
+
+                // get POid
+                string POnewNo = getNewPoNO((int)prType.PRTypeNo);
+
+                //get poFlag
+                bool PoFlag1 = false;
+
                 // update prdetails PO 
                 foreach (PRdtlsViewModel pR_Detail in pR_Details)
                 {
@@ -212,51 +223,11 @@ namespace PurchaseWeb_2.Controllers
                     {
                         if (pR_Detail.PoFlag) // if poflag has been check
                         {
-                            //get PRtypeNo
-                            var prType = db.PRType_mst
-                                .Where(x => x.PRTypeId == Doctype)
-                                .SingleOrDefault();
-
-                            // get POid
-                            string POnewNo = getNewPoNO((int)prType.PRTypeNo);
-
                             chkPrDetails.NoPo = POnewNo;
                             chkPrDetails.PoFlag = true;
                             db.SaveChanges();
 
-                            //get pr mst
-                            var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).SingleOrDefault();
-
-                            // wondering if needed to make new table for PO created
-                            var PO = db.Set<PO_Mst>();
-                            PO.Add(new PO_Mst
-                            {
-                                NoPo = POnewNo,
-                                CreateBy = (String)Session["Username"],
-                                CreateDate = DateTime.Now,
-                                PRNo = POnewNo,
-                                PRid = prMst.PRId,
-                                Purchasername = prMst.PurchaserName,
-                                RequestorName = prMst.Usr_mst.Username,
-                                RequisitionDate = prMst.CreateDate,
-                                TotPOAmt = prMst.PR_Details.Where(x => x.NoPo == POnewNo)
-                                    .Sum(x => x.TotCostWitTax),
-                                Description = prMst.PR_Details.Where(x => x.NoPo == POnewNo)
-                                    .Select(x => x.Description)
-                                    .Take(1)
-                                    .First()
-                            });
-                            db.SaveChanges();
-
-                            this.AddNotification("PO No has been created", NotificationType.SUCCESS);
-
-                            //send email to user
-                            string userEmail = prMst.Usr_mst.Email;
-                            string subject = @"PO No : "+POnewNo+" has been created from  PR " + prMst.PRNo + "  ";
-                            string body = @"PO No : " + POnewNo + " has been created from  PR " + prMst.PRNo + "  ";
-
-                            SendEmail(userEmail, subject, body);
-
+                            PoFlag1 = true;
                         } 
 
                         if (pR_Detail.NoPoFlag)// if no poflag has been check
@@ -268,7 +239,44 @@ namespace PurchaseWeb_2.Controllers
                     }
                 }
 
+                if (PoFlag1)
+                {
+                    //get pr mst
+                    var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).SingleOrDefault();
+
+                    // wondering if needed to make new table for PO created
+                    var PO = db.Set<PO_Mst>();
+                    PO.Add(new PO_Mst
+                    {
+                        NoPo = POnewNo,
+                        CreateBy = (String)Session["Username"],
+                        CreateDate = DateTime.Now,
+                        PRNo = prMst.PRNo,
+                        PRid = prMst.PRId,
+                        Purchasername = prMst.PurchaserName,
+                        RequestorName = prMst.Usr_mst.Username,
+                        RequisitionDate = prMst.CreateDate,
+                        TotPOAmt = prMst.PR_Details.Where(x => x.NoPo == POnewNo)
+                            .Sum(x => x.TotCostWitTax),
+                        Description = prMst.PR_Details.Where(x => x.NoPo == POnewNo)
+                            .Select(x => x.Description)
+                            .Take(1)
+                            .First()
+                    });
+                    db.SaveChanges();
+
+                    this.AddNotification("PO No has been created", NotificationType.SUCCESS);
+
+                    //send email to user
+                    string userEmail = prMst.Usr_mst.Email;
+                    string subject = @"PO No : " + POnewNo + " has been created from  PR " + prMst.PRNo + "  ";
+                    string body = @"PO No : " + POnewNo + " has been created from  PR " + prMst.PRNo + "  ";
+
+                    SendEmail(userEmail, subject, body);
+                }
                 
+
+
 
 
                 //return RedirectToAction("PurDetailsPOViewSelected", "PO", new { PrMstId = PrMstId });
@@ -496,7 +504,14 @@ namespace PurchaseWeb_2.Controllers
                 sb.Append("1" + ',');
                 sb.Append(getPO.CreateDate?.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo) + ',');
                 sb.Append(prdt.ReqDevDate?.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo) + ',');
-                sb.Append(prdt.Remarks.ToString().Replace(',',' ') + ',');
+                if (prdt.PR_Mst.PRTypeId == 4 && prdt.PR_Mst.PrGroupType1.CPRFFlag == false)
+                {
+                    sb.Append(prdt.Remarks.ToString().Replace(',', ' ') + '|' + prdt.PR_Mst.AccountCode.ToString() + ',');
+                }else
+                {
+                    sb.Append(prdt.Remarks.ToString().Replace(',', ' ') + ',');
+                }
+                
                 sb.Append(prdt.PRNo.ToString() + '/' + getPO.CreateBy + ',');
                 sb.Append( ',');
                 sb.Append( ',');
@@ -551,7 +566,7 @@ namespace PurchaseWeb_2.Controllers
                     sb.Append(',');
                     sb.Append(pr.DomiPartNo.ToString() + ',');
                     sb.Append("N1000S" + ',');
-                    sb.Append(pr.Description.ToString().Replace(',',' ').Replace("\n", "").Replace("\r", "") + ',');
+                    sb.Append(pr.Description.ToString().Replace(',',' ').Replace("\n", "").Replace("\r", "") +  ',');
                     sb.Append(pr.VendorPartNo.ToString() + ',');
                     sb.Append("FALSE" + ',');
                     sb.Append(pr.UOMName.ToString() + ',');

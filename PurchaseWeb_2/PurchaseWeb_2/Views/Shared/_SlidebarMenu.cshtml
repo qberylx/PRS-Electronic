@@ -1,5 +1,5 @@
-﻿@model IEnumerable<PurchaseWeb_2.Models.MenuModel> 
-    <!-- Main Sidebar Container -->
+﻿@model IEnumerable<PurchaseWeb_2.Models.MenuModel>
+<!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/Main/Dashboard" class="brand-link">
@@ -39,9 +39,9 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" data-expandSidebar="true">
                 <!-- Add icons to the links using the .nav-icon class
-            with font-awesome or any other icon font library -->
+                with font-awesome or any other icon font library -->
 
                 @foreach (var m in Model)
                 {
@@ -49,7 +49,7 @@
                     {
                         var submenu = Model.Where(n => n.Menu_ParentId == m.MenuId).ToList();
 
-                        <li class="nav-item">
+                        <li class="nav-item menu-is-opening menu-open">
 
                             @if (submenu != null && submenu.Count > 0)
                             {
@@ -72,10 +72,10 @@
                                         <i class="right fas fa-angle-left"></i>
                                     </p>
                                 </a>
-                                <ul class="nav nav-treeview">
+                                <ul class="nav nav-treeview" data-widget="treeview" role="menu" data-accordion="false" data-expandSidebar="true">
                                     @foreach (var e in submenu)
                                     {
-                                        <li class="nav-item " style="word-wrap:break-word;" >
+                                        <li class="nav-item menu-is-opening menu-open" style="word-wrap:break-word;">
                                             <a href="@Url.Action(e.Action, e.Controller)" class="nav-link " id="menu" onclick="chosenMenu(@e.MenuId)">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>@e.MenuName</p>
@@ -91,7 +91,7 @@
                             {
                                 //if parent menu does not have child menu
 
-                            <li class="nav-item">
+                            <li class="nav-item menu-is-opening menu-open">
                                 <a href="#" class="nav-link ">
                                     @if (m.MenuName == "Admin")
                                     {
@@ -110,28 +110,28 @@
                                     <i class="right fas fa-angle-left"></i>
                                 </a>
                             </li>
-                            }
-                        </li>
+                        }
+                            </li>
                         }
                     }
 
 
                 <!--
-            <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Simple Link
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>
-                -->
+                <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Simple Link
+                                <span class="right badge badge-danger">New</span>
+                            </p>
+                        </a>
+                    </li>
+                    -->
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
     </div>
-                <!-- /.sidebar -->
-            
+    <!-- /.sidebar -->
+
 </aside>
 <!--/. Main sidebar-->
