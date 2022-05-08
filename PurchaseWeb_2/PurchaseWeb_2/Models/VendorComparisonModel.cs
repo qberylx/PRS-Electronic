@@ -61,6 +61,11 @@ namespace PurchaseWeb_2.Models
         public string PayTerms { get; set; }
         public string PayDesc { get; set; }
 
+        public string QuoteName { get; set; }
+        public string QuotePath { get; set; }
+        [Required(ErrorMessage = "Please key in Quotation No")]
+        public string QuoteNo { get; set; }
+
         public virtual PR_Details PR_Details { get; set; }
     }
 }

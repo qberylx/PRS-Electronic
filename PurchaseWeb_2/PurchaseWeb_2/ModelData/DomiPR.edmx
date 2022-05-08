@@ -333,6 +333,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="CurPriceMYR" Type="decimal" Precision="18" Scale="2" />
           <Property Name="PayTerms" Type="varchar" MaxLength="50" />
           <Property Name="PayDesc" Type="varchar(max)" />
+          <Property Name="QuoteName" Type="varchar" MaxLength="100" />
+          <Property Name="QuotePath" Type="varchar" MaxLength="300" />
+          <Property Name="QuoteNo" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PRFile">
           <Key>
@@ -1470,6 +1473,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="CurPriceMYR" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="PayTerms" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="PayDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="QuoteName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="QuotePath" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="QuoteNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_PR_VendorComparison_PR_Details">
           <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="0..1" />
@@ -2014,6 +2020,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <EntitySetMapping Name="PR_VendorComparison">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_VendorComparison">
               <MappingFragment StoreEntitySet="PR_VendorComparison">
+                <ScalarProperty Name="QuoteNo" ColumnName="QuoteNo" />
+                <ScalarProperty Name="QuotePath" ColumnName="QuotePath" />
+                <ScalarProperty Name="QuoteName" ColumnName="QuoteName" />
                 <ScalarProperty Name="PayDesc" ColumnName="PayDesc" />
                 <ScalarProperty Name="PayTerms" ColumnName="PayTerms" />
                 <ScalarProperty Name="CurPriceMYR" ColumnName="CurPriceMYR" />

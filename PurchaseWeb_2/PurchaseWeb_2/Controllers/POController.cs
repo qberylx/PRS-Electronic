@@ -485,6 +485,7 @@ namespace PurchaseWeb_2.Controllers
             }
 
 
+            int PORHSEQ;
             //PO Master
             foreach (PO_Mst getPO in getPOListby.Where(x=>x.ExportFlag == true).ToList() )
             {
@@ -493,9 +494,11 @@ namespace PurchaseWeb_2.Controllers
                     .OrderByDescending(o => o.RATEDATE)
                     .FirstOrDefault();
 
+                PORHSEQ = 3000 + getPO.POId;
+
                 //PO main
                 sb.Append("1" + ',');
-                sb.Append(getPO.POId.ToString() + ',');
+                sb.Append(PORHSEQ.ToString() + ',');
                 sb.Append(getPO.CreateDate?.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo) + ',');
                 sb.Append(getPO.NoPo.ToString() + ',');
                 sb.Append( ',');
@@ -550,13 +553,15 @@ namespace PurchaseWeb_2.Controllers
                 int PORLREV = 0;
                 int PORLSEQ = 3000;
                 int DETAILNUM = 0;
+                
                 foreach (var pr in prdtList)
                 {
                     PORLREV = PORLREV + 1000;
                     DETAILNUM = DETAILNUM + 1;
+                    PORHSEQ = 3000 + getPO.POId;
 
                     sb.Append("2" + ',');
-                    sb.Append(getPO.POId.ToString() + ',');
+                    sb.Append(PORHSEQ.ToString() + ',');
                     sb.Append(PORLREV.ToString() + ',');
 
                     PORLSEQ = PORLSEQ + 1;

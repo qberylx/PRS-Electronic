@@ -87,7 +87,9 @@
                         @foreach (var item in Model)
                         {
                             i++;
-                            <tr data-widget="expandable-table" aria-expanded="false">
+                            ViewBag.PrId = item.PRid;
+
+                            <tr data-widget="expandable-table" aria-expanded="true">
                                 <td>
                                     @i
                                 </td>
@@ -230,6 +232,8 @@
             <div class="row">
                 <div class="col-centered">
                     @Html.ActionLink("Return To Main List", "PRProsesList", "Purchase", new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Budget", "budgetUpdate", "Purchase", new { PrMstId = ViewBag.PrId }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = ViewBag.PrId }, new { @class = "btn btn-success" })
                 </div>
             </div>
         </div>

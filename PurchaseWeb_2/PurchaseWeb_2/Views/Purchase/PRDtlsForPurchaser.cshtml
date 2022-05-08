@@ -33,6 +33,15 @@
 
     <div id="loader" class="center"></div>
 
+    <div class="row">
+        <div class="col-md-8">
+            @{ Html.RenderAction("PrMstPurchasingProses", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+        </div>
+        <div class="col-md-4">
+            @{ Html.RenderAction("UploadQuo", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+        </div>
+    </div>
+
 <div class="row">
     <div class="col-md-12">
         @if (ViewBag.PrTypeID != 4)

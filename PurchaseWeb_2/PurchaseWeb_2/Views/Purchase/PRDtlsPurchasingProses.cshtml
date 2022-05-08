@@ -311,6 +311,7 @@
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectPR">
                 Reject PR
             </button>
+            @Html.ActionLink("Send To Sourcing", "PRProcessing", "Purchase", new { PrMstId = ViewBag.PrMstId }, new { @class = "btn btn-success" })
         </div>
     </div>
 </div>

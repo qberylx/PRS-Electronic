@@ -2448,7 +2448,6 @@
     <Content Include="Views\PO\POListByDate.cshtml" />
     <Content Include="Views\Main\EditUser.cshtml" />
     <Content Include="Views\Purchase\UOMmaster.cshtml" />
-    <Content Include="Views\Purchase\UploadQuoList.cshtml" />
     <Content Include="Views\Purchase\callVendorpart.cshtml" />
     <Content Include="Views\Purchase\callUOM.cshtml" />
     <Content Include="Views\Purchase\callDesc.cshtml" />
@@ -2494,6 +2493,7 @@
     <Content Include="Views\Purchase\getCurCodeList.cshtml" />
     <Content Include="Views\Purchase\PrHODPuchasingViewSummary.cshtml" />
     <Content Include="Views\Purchase\CprfEdit.cshtml" />
+    <Content Include="Views\Purchase\UploadQuoList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

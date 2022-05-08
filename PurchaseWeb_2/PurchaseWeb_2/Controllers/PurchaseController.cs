@@ -1869,6 +1869,16 @@ namespace PurchaseWeb_2.Controllers
                 // if pr type 4
                 if (PrMst.PRTypeId == 4)
                 {
+                    //check if all item in pr dtls have winner reject if there are
+                    foreach(var prdt in PrMst.PR_Details.ToList())
+                    {
+                        if (prdt.TotCostWitTax == null)
+                        {
+                            this.AddNotification("There are still item left in the PR without Winner Vendor", NotificationType.ERROR);
+                            return View("PRProsesList");
+                        }
+                    }
+
                     PrMst.StatId = 8;
                     PrMst.PurchaserName = Convert.ToString(Session["Username"]);
                     PrMst.SendHODPurDate = DateTime.Now;
@@ -2072,7 +2082,7 @@ namespace PurchaseWeb_2.Controllers
         }
 
         [HttpPost]
-        public ActionResult VendorComparison(VendorComparisonModel pR_Vendor, int PrDtlstId)
+        public ActionResult VendorComparison(VendorComparisonModel pR_Vendor, HttpPostedFileBase file, int PrDtlstId)
         {
             // get vendor name
             String VendorName = "";
@@ -2099,6 +2109,29 @@ namespace PurchaseWeb_2.Controllers
                 return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = PrDtlstId });
             }
 
+            if (pR_Vendor.QuoteNo == null)
+            {
+                this.AddNotification("Please key-in Quotation No", NotificationType.ERROR);
+                return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = PrDtlstId });
+            }
+
+            string _FileName = "";
+            string _path = "";
+
+            try
+            {
+                if (file.ContentLength > 0)
+                {
+                    _FileName = Path.GetFileName(file.FileName);
+                    _path = Path.Combine(Server.MapPath("~/UploadedFile/Quotation"), _FileName);
+                    file.SaveAs(_path);
+                }
+                
+            }
+            catch
+            {
+                this.AddNotification("File fail to Upload.", NotificationType.ERROR);
+            }
 
             var VC = db.Set<PR_VendorComparison>();
             VC.Add(new PR_VendorComparison
@@ -2128,14 +2161,20 @@ namespace PurchaseWeb_2.Controllers
                 TotCostWitTaxVendorCur = pR_Vendor.TotCostWitTaxVendorCur,
                 CurPriceMYR = pR_Vendor.CurPriceMYR,
                 PayTerms = pR_Vendor.PayTerms.Trim(),
-                PayDesc = PayTerms.CODEDESC.Trim()
-            }) ;
+                PayDesc = PayTerms.CODEDESC.Trim(),
+                QuoteNo = pR_Vendor.QuoteNo,
+                QuoteName = _FileName,
+                QuotePath = _path
+            });
             db.SaveChanges();
+
+
 
             //return PartialView("VendorComparison");
             return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = PrDtlstId });
         }
 
+        
         public ActionResult VendorComparisonList(int PrDtlstId)
         {
             var VCList = db.PR_VendorComparison

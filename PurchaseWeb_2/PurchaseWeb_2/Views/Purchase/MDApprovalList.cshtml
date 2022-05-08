@@ -102,13 +102,15 @@
                         </div>
                     </td>
                     <td>
-                        @item.PR_Details.Sum(s=>s.TotCostWitTaxMYR)
+                        @{String strTotAmtMyr = String.Format("{0:n2}", @item.PR_Details.Sum(s => s.TotCostWitTaxMYR));}
+                        @*item.PR_Details.Sum(s => s.TotCostWitTaxMYR)*@
+                        @strTotAmtMyr
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Status_Mst.Name)
                     </td>
                     <td>
-                        @Html.ActionLink("View", "PrHODPuchasingViewSummary", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info", @target="_blank" })
+                        @*@Html.ActionLink("View", "PrHODPuchasingViewSummary", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info", @target="_blank" })*@
                         @Html.ActionLink("View", "PrHODPuchasingView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
                         @Html.ActionLink("Approve", "ApproveMD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
                         @Html.ActionLink("Reject", "RejectMD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })

@@ -11,6 +11,8 @@
                 <h3 class="card-title">Create Purchase Request</h3>
             </div>
             <div class="card-body">
+                
+
                 @using (Ajax.BeginForm("PRListForPurchaser", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPrMstList" }))
                 {
                     <div class="row">
@@ -50,6 +52,9 @@
 
 <div class="row">
     <div class="col-md-12">
+        <div id="notification">
+            @Html.Partial("_Notifications")
+        </div>
         <div id="divPrMstList">
             @{int groupTypeSession = (int)(Session["groupType"] ?? 0); }
             @if (groupTypeSession != 0)
@@ -62,12 +67,14 @@
 
             }
 
-        </div>        
+        </div>
     </div>
 </div>
 
 <script>
-    
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    });
 
     function chgPRtype(prType) {
         console.log(prType);

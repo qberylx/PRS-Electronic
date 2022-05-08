@@ -1,170 +1,210 @@
 ﻿
-    @model PurchaseWeb_2.Models.VendorComparisonModel
+@model PurchaseWeb_2.Models.VendorComparisonModel
 
-    @*using (Html.BeginForm("VendorComparison", "Purchase", FormMethod.Post)) *@
-    @using (Ajax.BeginForm("VendorComparison", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivVendorCompareList" + @ViewBag.PrDtlstId, OnSuccess = "OnSuccess(" + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + ")" }))
-    {
-        @Html.AntiForgeryToken()
-        
-        
-        
-        <div class="row">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            
-            <div class="col-2">
-                <div class="custom-control custom-switch">
-                    &nbsp; <input type="checkbox" class="custom-control-input" id="swNewVendor_@ViewBag.PrDtlstId" onchange="swNewVendorChg(@ViewBag.PrDtlstId)" />
-                           <label class="custom-control-label" for="swNewVendor_@ViewBag.PrDtlstId">Vendor not in the list?</label>
-                </div>
-            </div>
+@*using (Html.BeginForm("VendorComparison", "Purchase", FormMethod.Post)) *@
+@using (Ajax.BeginForm("VendorComparison", "Purchase", 
+    new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivVendorCompareList" + @ViewBag.PrDtlstId, OnSuccess = "OnSuccess(" + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + ")" }, 
+    new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
 
-            <div class="col-md-3">
-                Vendor name
-                <div id="divVendorList_@ViewBag.PrDtlstId">
-                    <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode" onchange="getCurCode(this.value, @ViewBag.PrDtlstId)">
-                        <option value="">Select option</option>
-                        @foreach (var vd in ViewBag.vdLst)
-                        {
-                            <option value="@vd.VENDORID">@vd.VENDORID - @vd.VENDNAME</option>
-                        }
-                    </select>
-                </div>
-                
-                <br />
-                @Html.ValidationMessageFor(model => model.VendorCode, "", new { @class = "text-danger" })
-            </div>
 
-            <div class="col-md-1">
-                Current Price <br />
-                @Html.EditorFor(model => model.CurPrice, new { htmlAttributes = new { @class = "form-control", @onfocusout = "UpdatePrice(this.value, " + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + " )", @Value = "0.00", @kiraCurP = ViewBag.PrDtlstId } }) <br />
-                @Html.ValidationMessageFor(model => model.CurPrice, "", new { @class = "text-danger" })
-            </div>
 
-            <div class="col-md-2">
-                Currency Exch. Rate<br />
-                <div id="divCurCode_@ViewBag.PrDtlstId">
-                    @{ Html.RenderAction("getCurCode", "Purchase");}
-                </div>
-            </div>
+    <div class="row">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            
-        </div>
-
-        <div class="row">
-            <div class="col-2">
-                Current Price (MYR) <br />
-                @Html.EditorFor(model => model.CurPriceMYR, new { htmlAttributes = new { @class = "form-control", @onchange = "UpdatePrice(this.value, " + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + " )", @Value = "0.00", @kiraCurPMYR = ViewBag.PrDtlstId } }) <br />
-                @Html.ValidationMessageFor(model => model.CurPriceMYR, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-md-2">
-                Quote. Date <br />
-                @Html.EditorFor(model => model.QuoteDate, new { htmlAttributes = new { @class = "form-control" } }) <br />
-                @Html.ValidationMessageFor(model => model.QuoteDate, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-1">
-                Last Price (MYR)<br />
-                @Html.EditorFor(model => model.LastPrice, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.lastPrice, @kiraLastP = ViewBag.PrDtlstId, @onfocusout = "UpdateCostDown(this.value , " + @ViewBag.PrDtlstId + " )" } }) <br />
-                @Html.ValidationMessageFor(model => model.LastPrice, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-2" style="display:none">
-                Quote. Date <br />
-                @Html.EditorFor(model => model.LastQuoteDate, new { htmlAttributes = new { @class = "form-control" } }) <br />
-                @Html.ValidationMessageFor(model => model.LastQuoteDate, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-2" style="display:none">
-                PO. Date <br />
-                @Html.EditorFor(model => model.PODate, new { htmlAttributes = new { @class = "form-control" } }) <br />
-                @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-1">
-                Cost Down % <br />
-                @Html.EditorFor(model => model.CostDown, new { htmlAttributes = new { @class = "form-control", @Value = "0.00", @kiraCostD = ViewBag.PrDtlstId } }) <br />
-                @Html.ValidationMessageFor(model => model.CostDown, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-md-1 pr-3">
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="csDiscount_@ViewBag.PrDtlstId" onchange="chgDiscount(this , @ViewBag.PrDtlstId)">
-                    <label class="custom-control-label" for="csDiscount_@ViewBag.PrDtlstId">Discount?</label>
-                </div>
-                <br />
-                <div id="divRdDisc_@ViewBag.PrDtlstId" style="display:none">
-                    <input type="radio" id="percent_@ViewBag.PrDtlstId" name="rdDiscount" value="percent" onclick="cghRdDisc( this.value, @ViewBag.PrDtlstId)">
-                    <label for="percent">%</label>
-                    <input type="radio" id="amount_@ViewBag.PrDtlstId" name="rdDiscount" value="amount" onclick="cghRdDisc( this.value, @ViewBag.PrDtlstId)">
-                    <label for="amount">Amount</label>
-                    <input type="hidden" id="discType_@ViewBag.PrDtlstId" name="DiscType" value="0" />
-                </div>
-
-            </div>
-
-            <div class="col-md-1 pr-3" id="divDiscount_@ViewBag.PrDtlstId" style="display:none">
-                Discount % <br /> <input type="text" id="percentDisc" name="percentDisc" value="0.00" onchange="cghPerDisc(this.value, @ViewBag.PrDtlstId)" />
+        <div class="col-2">
+            <div class="custom-control custom-switch">
+                &nbsp; <input type="checkbox" class="custom-control-input" id="swNewVendor_@ViewBag.PrDtlstId" onchange="swNewVendorChg(@ViewBag.PrDtlstId)" />
+                <label class="custom-control-label" for="swNewVendor_@ViewBag.PrDtlstId">Vendor not in the list?</label>
             </div>
         </div>
 
-        <div class="row">
-            
+        <div class="col-md-3">
+            Vendor name
+            <div id="divVendorList_@ViewBag.PrDtlstId">
+                <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode" onchange="getCurCode(this.value, @ViewBag.PrDtlstId)">
+                    <option value="">Select option</option>
+                    @foreach (var vd in ViewBag.vdLst)
+                    {
+                        <option value="@vd.VENDORID">@vd.VENDORID - @vd.VENDNAME</option>
+                    }
+                </select>
+            </div>
 
-            <div class="col-md-2 pr-3">
-                Total Amount (Exc) <br chgCurRate />
-                @Html.EditorFor(model => model.TotCostnoTax, new { htmlAttributes = new { @class = "form-control", @kiraTAE = ViewBag.PrDtlstId, @Value = "0.00" } }) <br />
-                @Html.ValidationMessageFor(model => model.TotCostnoTax, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.TotCostnoTaxVendorCur, new { @class = "form-control", @kiraTAEvd = ViewBag.PrDtlstId, @Value = "0.00" })
+            <br />
+            @Html.ValidationMessageFor(model => model.VendorCode, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-1">
+            Current Price <br />
+            @Html.EditorFor(model => model.CurPrice, new { htmlAttributes = new { @class = "form-control", @onfocusout = "UpdatePrice(this.value, " + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + " )", @Value = "0.00", @kiraCurP = ViewBag.PrDtlstId } }) <br />
+            @Html.ValidationMessageFor(model => model.CurPrice, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-2">
+            Currency Exch. Rate<br />
+            <div id="divCurCode_@ViewBag.PrDtlstId">
+                @{ Html.RenderAction("getCurCode", "Purchase");}
             </div>
-            &nbsp;
-            <div class="col-md-1 pr-3">
-                Tax %<br />
-                @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", @Value = "0", @kiraTax = ViewBag.PrDtlstId, @onfocusout = "UpdateTax(this.value , " + @ViewBag.PrDtlstId + " , " + @ViewBag.Qty + ")" } }) <br />
-                @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+        </div>
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-2">
+            Current Price (MYR) <br />
+            @Html.EditorFor(model => model.CurPriceMYR, new { htmlAttributes = new { @class = "form-control", @onchange = "UpdatePrice(this.value, " + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + " )", @Value = "0.00", @kiraCurPMYR = ViewBag.PrDtlstId } }) <br />
+            @Html.ValidationMessageFor(model => model.CurPriceMYR, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-2">
+            Quote. Date <br />
+            @Html.EditorFor(model => model.QuoteDate, new { htmlAttributes = new { @class = "form-control" } }) <br />
+            @Html.ValidationMessageFor(model => model.QuoteDate, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-1">
+            Last Price (MYR)<br />
+            @Html.EditorFor(model => model.LastPrice, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.lastPrice, @kiraLastP = ViewBag.PrDtlstId, @onfocusout = "UpdateCostDown(this.value , " + @ViewBag.PrDtlstId + " )" } }) <br />
+            @Html.ValidationMessageFor(model => model.LastPrice, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2" style="display:none">
+            Quote. Date <br />
+            @Html.EditorFor(model => model.LastQuoteDate, new { htmlAttributes = new { @class = "form-control" } }) <br />
+            @Html.ValidationMessageFor(model => model.LastQuoteDate, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2" style="display:none">
+            PO. Date <br />
+            @Html.EditorFor(model => model.PODate, new { htmlAttributes = new { @class = "form-control" } }) <br />
+            @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-1">
+            Cost Down % <br />
+            @Html.EditorFor(model => model.CostDown, new { htmlAttributes = new { @class = "form-control", @Value = "0.00", @kiraCostD = ViewBag.PrDtlstId } }) <br />
+            @Html.ValidationMessageFor(model => model.CostDown, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-1 pr-3">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="csDiscount_@ViewBag.PrDtlstId" onchange="chgDiscount(this , @ViewBag.PrDtlstId)">
+                <label class="custom-control-label" for="csDiscount_@ViewBag.PrDtlstId">Discount?</label>
             </div>
-            &nbsp;
-            <div class="col-md-2 pr-3">
-                Total Amount (Icl)<br />
-                @Html.EditorFor(model => model.TotCostWitTax, new { htmlAttributes = new { @class = "form-control", @Value = "0.00", @kiraTAI = ViewBag.PrDtlstId } }) <br />
-                @Html.ValidationMessageFor(model => model.TotCostWitTax, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.TotCostWitTaxVendorCur, new { @class = "form-control", @kiraTAIvd = ViewBag.PrDtlstId, @Value = "0.00" })
+            <br />
+            <div id="divRdDisc_@ViewBag.PrDtlstId" style="display:none">
+                <input type="radio" id="percent_@ViewBag.PrDtlstId" name="rdDiscount" value="percent" onclick="cghRdDisc( this.value, @ViewBag.PrDtlstId)">
+                <label for="percent">%</label>
+                <input type="radio" id="amount_@ViewBag.PrDtlstId" name="rdDiscount" value="amount" onclick="cghRdDisc( this.value, @ViewBag.PrDtlstId)">
+                <label for="amount">Amount</label>
+                <input type="hidden" id="discType_@ViewBag.PrDtlstId" name="DiscType" value="0" />
             </div>
-            &nbsp;
-            <div class="col-md-2 pr-3">
-                Payment Terms<br />
-                <div id="divTerms_@ViewBag.PrDtlstId">
-                    <select class="fstdropdown-select form-control-border" id="PayTerms" name="PayTerms">
-                        @foreach (var vd in ViewBag.termlist)
-                        {
-                            <option value="@vd.TERMSCODE">@vd.TERMSCODE - @vd.CODEDESC</option>
-                        }
-                    </select>
+
+        </div>
+
+        <div class="col-md-1 pr-3" id="divDiscount_@ViewBag.PrDtlstId" style="display:none">
+            Discount % <br /> <input type="text" id="percentDisc" name="percentDisc" value="0.00" onchange="cghPerDisc(this.value, @ViewBag.PrDtlstId)" />
+        </div>
+    </div>
+
+    <div class="row">
+
+
+        <div class="col-md-2 pr-3">
+            Total Amount (Exc) <br chgCurRate />
+            @Html.EditorFor(model => model.TotCostnoTax, new { htmlAttributes = new { @class = "form-control", @kiraTAE = ViewBag.PrDtlstId, @Value = "0.00" } }) <br />
+            @Html.ValidationMessageFor(model => model.TotCostnoTax, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.TotCostnoTaxVendorCur, new { @class = "form-control", @kiraTAEvd = ViewBag.PrDtlstId, @Value = "0.00" })
+        </div>
+        &nbsp;
+        <div class="col-md-1 pr-3">
+            Tax %<br />
+            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", @Value = "0", @kiraTax = ViewBag.PrDtlstId, @onfocusout = "UpdateTax(this.value , " + @ViewBag.PrDtlstId + " , " + @ViewBag.Qty + ")" } }) <br />
+            @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+        </div>
+        &nbsp;
+        <div class="col-md-2 pr-3">
+            Total Amount (Icl)<br />
+            @Html.EditorFor(model => model.TotCostWitTax, new { htmlAttributes = new { @class = "form-control", @Value = "0.00", @kiraTAI = ViewBag.PrDtlstId } }) <br />
+            @Html.ValidationMessageFor(model => model.TotCostWitTax, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.TotCostWitTaxVendorCur, new { @class = "form-control", @kiraTAIvd = ViewBag.PrDtlstId, @Value = "0.00" })
+        </div>
+        &nbsp;
+        <div class="col-md-2 pr-3">
+            Payment Terms<br />
+            <div id="divTerms_@ViewBag.PrDtlstId">
+                <select class="fstdropdown-select form-control-border" id="PayTerms" name="PayTerms">
+                    @foreach (var vd in ViewBag.termlist)
+                    {
+                        <option value="@vd.TERMSCODE">@vd.TERMSCODE - @vd.CODEDESC</option>
+                    }
+                </select>
+            </div>
+
+            @Html.ValidationMessageFor(model => model.PayTerms, "", new { @class = "text-danger" })
+        </div>
+        &nbsp;
+        <div class="col-md-1 pr-3">
+            Tax Code<br />
+            @Html.EditorFor(model => model.TaxCode, new { htmlAttributes = new { @class = "form-control", @Value = "SSTG" } }) <br />
+            @Html.ValidationMessageFor(model => model.TaxCode, "", new { @class = "text-danger" })
+        </div>
+
+        &nbsp;
+        <div class="col-md-1 pr-3">
+            Tax Class<br />
+            @Html.EditorFor(model => model.TaxClass, new { htmlAttributes = new { @class = "form-control", @Value = "1" } }) <br />
+            @Html.ValidationMessageFor(model => model.TaxClass, "", new { @class = "text-danger" })
+        </div>
+        
+    </div>
+
+    //quotation
+    <div class="row">
+        <div class="col-1">
+            <b>Quotation No:</b>
+        </div>
+        <div class="col-2">
+            <input type="text" id="QuoteNo" name="QuoteNo" class="form-control" />
+            <input type="hidden" value="@ViewBag.PrDtlstId" id="vendorPrDtlstId" name="vendorPrDtlstId" />
+        </div>
+        <div class="col-2">
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="file" name="file">
+                    <label class="custom-file-label" for="file">Choose file</label>
                 </div>
-                
-                @Html.ValidationMessageFor(model => model.PayTerms, "", new { @class = "text-danger" })
-            </div>
-            &nbsp;
-            <div class="col-md-1 pr-3">
-                Tax Code<br />
-                @Html.EditorFor(model => model.TaxCode, new { htmlAttributes = new { @class = "form-control", @Value = "SSTG" } }) <br />
-                @Html.ValidationMessageFor(model => model.TaxCode, "", new { @class = "text-danger" })
-            </div>
+            </div>            
+        </div>
+        
+    </div>
 
-            &nbsp;
-            <div class="col-md-1 pr-3">
-                Tax Class<br />
-                @Html.EditorFor(model => model.TaxClass, new { htmlAttributes = new { @class = "form-control", @Value = "1" } }) <br />
-                @Html.ValidationMessageFor(model => model.TaxClass, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-1">
+    
+
+    <div class="container">
+        <div class="row">
+            <div class="col-centered">
                 <br />
                 <input type="hidden" value="@ViewBag.PrDtlstId" id="PrDtlstId" name="PrDtlstId" />
                 <input type="hidden" value="@ViewBag.Qty" id="PrdtlsQty" name="PrdtlsQty" />
                 <button class="btn btn-success"><i class="fa fa-plus-circle"> Add</i></button>
             </div>
         </div>
+    </div>
+
+}
 
 
-    }
 
 <script type="text/javascript">
+    $('#file').on('change', function () {
+        //get the file name
+        var fileName = $(this).val();
+        //replace the "Choose a file" label
+        var cleanFileName = fileName.replace('C:\\fakepath\\', " ");
+        $(this).next('.custom-file-label').html(cleanFileName);
+    })
+
+
         function OnSuccess(PrDtlstId,Qty) {
             console.log("OnSuccess prDtId=" + PrDtlstId);
             console.log("OnSuccess Qty=" + Qty);
@@ -314,6 +354,21 @@
             dataType: "html",
             success: function (response) {
                 $('#divTerms_' + PrDtlstId + '').html(response);
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("getVendorCode","Purchase")",
+            data: JSON.stringify({ vdCode: vdCode, PrDtlstId: PrDtlstId }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divVdCode_' + PrDtlstId + '').html(response);
 
             },
             failure: function (response) {
