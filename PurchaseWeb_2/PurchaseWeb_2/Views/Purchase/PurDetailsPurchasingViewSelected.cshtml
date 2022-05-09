@@ -247,7 +247,7 @@
                         foreach (var item in Model)
                         {
                             i++;
-                            <tr>
+                            <tr data-widget="expandable-table" aria-expanded="true">
                                 <td>
                                     @i
                                 </td>
@@ -310,6 +310,17 @@
                                         <button class="btn btn-danger"><i class="fa fa-trash fa-xs"></i></button>
                                     }
 
+                                </td>
+                            </tr>
+                            <tr class="expandable-body">
+                                <td colspan="16">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div id="divVDCompareLst_@item.PRDtId">
+                                                @{ Html.RenderAction("VendorComparisonListHOD", "Purchase", new { PrDtlstId = item.PRDtId });}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         }

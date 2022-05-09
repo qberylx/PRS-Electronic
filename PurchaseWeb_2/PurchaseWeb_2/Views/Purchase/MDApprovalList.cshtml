@@ -115,6 +115,12 @@
                         @Html.ActionLink("Approve", "ApproveMD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
                         @Html.ActionLink("Reject", "RejectMD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
 
+                        @{ if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
+                            {
+                                @Html.ActionLink("ReSend to MD", "EmailMD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-secondary" })
+                            }
+                        }
+
                     </td>
                 </tr>
             }

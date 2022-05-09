@@ -98,6 +98,22 @@ namespace PurchaseWeb_2.Controllers
                 {
                     return RedirectToAction("Dashboard", "Main");
                 }
+                else if (userRoleId == "3")
+                {
+                    return RedirectToAction("MDApprovalList", "Purchase");
+                }
+                else if (userRoleId == "2")
+                {
+                    return RedirectToAction("ApprovalHOD", "Purchase");
+                }
+                else if (userRoleId == "4")
+                {
+                    return RedirectToAction("PurchasingProsesPR", "Purchase");
+                }
+                else if (userRoleId == "5")
+                {
+                    return RedirectToAction("HODPurApprovalList", "Purchase");
+                }
                 else
                 {
                     return RedirectToAction("PurRequest", "Purchase");

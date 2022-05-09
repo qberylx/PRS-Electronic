@@ -2186,6 +2186,20 @@ namespace PurchaseWeb_2.Controllers
             return PartialView("VendorComparisonList", VCList);
         }
 
+        public ActionResult VendorComparisonListHOD(int PrDtlstId)
+        {
+            var VCList = db.PR_VendorComparison
+                .Where(x => x.PRDtId == PrDtlstId)
+                .ToList();
+
+            var MaxPrice = VCList.Max(x => x.TotCostWitTax).GetValueOrDefault();
+
+            ViewBag.MaxPrice = MaxPrice;
+            ViewBag.PrDtlstId = PrDtlstId;
+
+            return PartialView("VendorComparisonListHOD", VCList);
+        }
+
         public ActionResult VendorComparisonDelete(int VCIdDel)
         {
             var vcDel = db.PR_VendorComparison.Where(x => x.VCId == VCIdDel).SingleOrDefault();
@@ -2630,6 +2644,24 @@ namespace PurchaseWeb_2.Controllers
             return View("HODPurApprovalList", PRMstList);
         }
 
+        public ActionResult EmailMD(int PrMstId)
+        {
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+
+            //send email to MD
+            var MDUser = db.Usr_mst.Where(x => x.Psn_id == 3).FirstOrDefault();
+            string MDEmail = MDUser.Email;
+            string MDsubject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
+            string MDbody = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD . <br/>" +
+                " PR Total Amount has exceed RM 30K and need MD Approval to continue for PO Processing. <br/>" +
+                " Kindly login to http://prs.dominant-semi.com/ for further action.";
+
+            SendEmail(MDEmail, MDsubject, MDbody);
+
+            return RedirectToAction("MDApprovalList");
+
+        }
+
         public ActionResult ApproveHODPurchasingDept(int PrMstId)
         {
             var PrMst = db.PR_Mst
@@ -2644,6 +2676,16 @@ namespace PurchaseWeb_2.Controllers
                         PrMst.StatId = 5;
                         PrMst.HODPurDeptApprovalBy = Convert.ToString(Session["Username"]);
                         PrMst.HODPurDeptApprovalDate = DateTime.Now;
+
+                        //send email to MD
+                        var MDUser = db.Usr_mst.Where(x => x.Psn_id == 3).FirstOrDefault();
+                        string MDEmail = MDUser.Email;
+                        string MDsubject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
+                        string MDbody = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD . <br/>" +
+                            " PR Total Amount has exceed RM 30K and need MD Approval to continue for PO Processing. <br/>" +
+                            " Kindly login to http://prs.dominant-semi.com/ for further action.";
+
+                        SendEmail(MDEmail, MDsubject, MDbody);
                     }
                     else
                     {
@@ -2671,7 +2713,7 @@ namespace PurchaseWeb_2.Controllers
                 var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
                 userEmail = usrmst.Email;
                 subject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
-                body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. " +
+                body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. <br/> " +
                     "Kindly login to http://prs.dominant-semi.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body);
@@ -2680,7 +2722,7 @@ namespace PurchaseWeb_2.Controllers
                 var usrmstHOD = db.Usr_mst.Where(x => x.Username == PrMst.HODPurDeptApprovalBy).SingleOrDefault();
                 userEmail = usrmstHOD.Email;
                 subject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
-                body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. " +
+                body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. <br/>" +
                     "Kindly login to http://prs.dominant-semi.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body);
@@ -2706,7 +2748,7 @@ namespace PurchaseWeb_2.Controllers
                 var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
                 string userEmail = usrmst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been reject by Purchasing HOD  ";
-                string body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to " + PrMst.PurchaserName + " . " +
+                string body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to " + PrMst.PurchaserName + " . <br/> " +
                     "Kindly login to http://prs.dominant-semi.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body);
@@ -2715,7 +2757,7 @@ namespace PurchaseWeb_2.Controllers
                 var usrmstHOD = db.Usr_mst.Where(x => x.Username == Username).SingleOrDefault();
                 userEmail = usrmstHOD.Email;
                 subject = @"PR " + PrMst.PRNo + " has been rejected by Purchasing HOD  ";
-                body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to "+ PrMst.PurchaserName + " . " +
+                body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to "+ PrMst.PurchaserName + " .<br/> " +
                     "Kindly login to http://prs.dominant-semi.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body);

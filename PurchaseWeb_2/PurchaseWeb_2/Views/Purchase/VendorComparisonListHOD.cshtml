@@ -1,0 +1,291 @@
+﻿<div id="DivVendorCompareList@{@ViewBag.PrDtlstId}">
+
+    @model IEnumerable<PurchaseWeb_2.ModelData.PR_VendorComparison>
+
+    <div id="notification">
+        @Html.Partial("_Notifications")
+    </div>
+    <h4>
+        Vendor Comparison
+    </h4>
+    <table class="table table-sm table-responsive">
+        <tr>
+            <th>
+                Vendor
+            </th>
+            <th >
+                Current <br /> Price
+            </th>
+            <th>
+                Quotation <br /> Date
+            </th>
+            <th>
+                Last <br /> Price
+            </th>
+            <th style="display:none">
+                Last Quotation Date
+            </th>
+            <th style="display: none">
+                PO Date
+            </th>
+
+            <th>
+                Cost <br /> Down
+            </th>
+            <th>
+                Disc.Type
+            </th>
+            <th>
+                Discount
+            </th>
+            <th>
+                Tot. Amount <br /> (Exc.Tax)
+            </th>
+            <th>
+                Tax
+            </th>
+            <th>
+                Tot. Amount <br /> (Icl. Tax)
+            </th>
+            <th>
+                Tax <br /> Group
+            </th>
+            <th>
+                Tax <br /> Class
+            </th>
+            <th>
+                Quotation No
+            </th>
+
+            <th>
+
+            </th>
+            <th>
+                Selected <br /> Vendor
+            </th>
+            <th>
+                Total <br /> Amount
+            </th>
+            <th>
+                Yearly <br /> Save (%)
+            </th>
+            <th>
+                Cost Saving <br /> (Between Supplier) %
+            </th>
+
+            <th></th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VCName)
+                </td>
+                <td>
+                    @*Html.DisplayFor(modelItem => item.CurPriceMYR)*@
+                    @{
+                        string sCurPriceMYR = String.Format("{0:n}", item.CurPriceMYR);
+                    }
+                    @sCurPriceMYR
+                </td>
+                <td>
+                    @{
+                        DateTime QuoteDate = (DateTime)item.QuoteDate;
+                        String strQuoteDate = QuoteDate.ToString("dd/MM/yyyy");
+                    }
+                    @strQuoteDate
+
+                </td>
+                <td>
+                    @if (item.LastPrice == null || item.LastPrice == 0.00M)
+                    {
+                        <a>New</a>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.LastPrice)
+                    }
+                </td>
+                <td style="display: none">
+                    @{
+                        String strLastQuoteDate = "";
+
+                        if (item.LastQuoteDate != null)
+                        {
+                            DateTime LastQuoteDate = (DateTime)item.LastQuoteDate;
+                            strLastQuoteDate = LastQuoteDate.ToString("dd/MM/yyyy");
+                        }
+                    }
+
+                    @strLastQuoteDate
+
+                </td>
+                <td style="display: none">
+                    @{
+                        String strPODate = "";
+
+                        if (item.PODate != null)
+                        {
+                            DateTime PODate = (DateTime)item.PODate;
+                            strPODate = PODate.ToString("dd/MM/yyyy");
+                        }
+                    }
+
+                    @strPODate
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CostDown)
+                </td>
+
+                <td>
+                    @if (item.DiscType == 1)
+                    {
+                        <a>%</a>
+                    }
+                    else
+                    {
+                        <a>Amount</a>
+                    }
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discount)
+                </td>
+
+                <td>
+                    @*Html.DisplayFor(modelItem => item.TotCostnoTax)*@
+                    @{
+                        string sTotCostnoTax = String.Format("{0:n}", item.TotCostnoTax);
+                    }
+                    @sTotCostnoTax
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tax)
+                </td>
+
+                <td>
+                    @*Html.DisplayFor(modelItem => item.TotCostWitTax)*@
+                    @{
+                        string sTotCostWitTax = String.Format("{0:n}", item.TotCostWitTax);
+                    }
+                    @sTotCostWitTax
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaxCode)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaxClass)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuoteNo)
+                </td>
+
+                <td>
+                    @{ if (item.QuoteName != null && item.QuoteName != "")
+                        {
+                            <a href="~/UploadedFile/Quotation/@item.QuoteName" class="btn btn-info" target="_blank"><i class="fas fa-eye"></i></a>
+                        }
+                        else
+                        {
+                            <a>No File</a>
+                        }
+                    }
+
+                </td>
+
+                <td>
+                    @{ if (item.FlagWin == true)
+                        {
+                            <a><strong>Winner</strong></a>
+                        }
+                    }
+
+                </td>
+
+                <td>
+                    @*Tot Amount*@
+                    @{ decimal TotAmtMYR = 0.00M;
+                        TotAmtMYR = (decimal)(item.TotCostWitTax );
+                        string sTotAmtMYR = String.Format("{0:n}", TotAmtMYR);
+                    }
+                    @{ if (item.FlagWin == true)
+                        {
+                           <a>@sTotAmtMYR</a>
+                        } 
+                     }
+
+
+                </td>
+
+                <td>
+                    @*Yearly Save*@
+                    @{ decimal YSave = 0.00M;}
+                    @{ if (item.LastPrice > 0)
+                        {
+                            YSave = (decimal)((item.LastPrice - TotAmtMYR) / item.LastPrice * 100);
+                        }
+                        else
+                        {
+                            YSave = 0;
+                        }
+                    }
+                    @{ if (item.FlagWin == true)
+                        {
+                            <a>@YSave</a>
+                        }
+                    }
+                    
+                </td>
+
+                <td>
+                    @*Saving Between Supplier *@
+                    @{
+                        decimal MaxPrice = ViewBag.MaxPrice ;
+                        decimal CostSave = (MaxPrice - TotAmtMYR) / MaxPrice * 100;
+                        string sCostSave = String.Format("{0:n}", CostSave);
+                    }
+                    @{ if (item.FlagWin == true)
+                        {
+                            <a>@sCostSave</a>
+                        }
+                    }
+                    
+                </td>
+    
+
+                    <td style="display:none">
+                    @*@using (Ajax.BeginForm("VendorComparisonWinner", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPRDtlsForPurchaser" }))*@
+                    @using (Html.BeginForm("VendorComparisonWinner", "Purchase", FormMethod.Post, new { @class = "winform" }))
+                    {
+                        <button class="btn btn-success"><i class="fa fa-check-circle"></i></button>
+                        <input type="hidden" value="@item.VCId" id="VCIdw" name="VCIdw" />
+                    }
+
+                </td>
+                <td style="display:none">
+                    @using (Ajax.BeginForm("VendorComparisonDelete", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divVDCompareLst_" + item.PRDtId + "" }))
+                    {
+                        <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                        <input type="hidden" value="@item.VCId" id="VCIdDel" name="VCIdDel" />
+                    }
+                </td>
+            </tr>
+            <tr>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    });
+</script>
