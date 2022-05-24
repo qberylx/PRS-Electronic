@@ -109,7 +109,15 @@
             <div class="card-footer">
                 <div class="row">
                     <div class="col-centered">
-                        @Html.ActionLink("Back to List", "PRProsesList", "Purchase", null, new { @class = "btn btn-primary" })
+                        @if (Model.StatId == 9)
+                        {
+                            @Html.ActionLink("Return To Main PR", "PoProsesList", "PO", null, new { @class = "btn btn-primary" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Back to List", "PRProsesList", "Purchase", null, new { @class = "btn btn-primary" })
+                        }
+
                     </div>
                 </div>
                 

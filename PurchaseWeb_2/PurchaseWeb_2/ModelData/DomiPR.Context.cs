@@ -99,5 +99,14 @@ namespace PurchaseWeb_2.ModelData
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPOListbyDate_Result>("GetPOListbyDate", fromDateParameter, toDateParameter);
         }
+    
+        public virtual ObjectResult<SP_Comparison_Report_Result> SP_Comparison_Report(Nullable<int> prMstId)
+        {
+            var prMstIdParameter = prMstId.HasValue ?
+                new ObjectParameter("PrMstId", prMstId) :
+                new ObjectParameter("PrMstId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Comparison_Report_Result>("SP_Comparison_Report", prMstIdParameter);
+        }
     }
 }

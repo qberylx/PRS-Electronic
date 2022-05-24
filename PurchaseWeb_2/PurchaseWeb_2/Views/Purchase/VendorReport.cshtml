@@ -1,0 +1,30 @@
+﻿@model PurchaseWeb_2.Models.ReportParam
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+</head>
+<body>
+
+    Hi,
+    <br />
+
+    Kindly review attached PR
+    <br />
+    Kindly login to http://prs.dominant-semi.com/ for further action.
+    <br />
+    @if(ViewBag.MD == "MD")
+    {
+        <p>Or kindly reply 'Ok'/'Approve' to give an approval or 'Reject' to send this PR back. <br /><br /></p>
+    }
+    <br />
+    @{Html.RenderAction("VendorComparisonReport", "Purchase", new { PrMstId = Model.PrMstId });}
+
+
+
+</body>
+</html>
+
+

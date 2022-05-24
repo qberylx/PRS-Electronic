@@ -35,10 +35,10 @@
                             @Html.DisplayFor(model => Model[i].AccTypeDept.DeptName)
                         </td>
                         <td>
-                            @Html.EditorFor(model => Model[i].Budget, new { @class = "form-control", @Value = Model[i].Budget })
+                            @Html.EditorFor(model => Model[i].Budget, new { htmlAttributes = new { @class = "form-control", @Value = Model[i].Budget, @no = i, @id = "Budget(" + i + ")", @onkeyup = "BudgetUpdate(" + i + ",this.value)" } })
                         </td>
                         <td>
-                            @Html.EditorFor(model => Model[i].Balance, new { @class = "form-control", @Value = Model[i].Balance })
+                            @Html.EditorFor(model => Model[i].Balance, new { htmlAttributes = new { @class = "form-control", @Value = Model[i].Balance, @no = i, @id = "Balance_"+i  } })
                         </td>
                     </tr>
 
@@ -61,4 +61,12 @@
     $(document).ready(function () {
         $("#notification").delay(2000).fadeOut("slow");
     });
+
+    function BudgetUpdate(i,budget) {
+        console.log(i);
+        console.log(budget);
+        //console.log($("#Balance_0").val());
+        //var bal = $("#Balance_0").val()
+        $("#Balance_" + i).val(budget);
+    }
 </script>

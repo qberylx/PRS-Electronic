@@ -22,6 +22,7 @@
 <div class="row">
     <div class="col-md-8">
         @{ Html.RenderAction("PrMstPurchasingProses", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+
     </div>
     <div class="col-md-4">
         @{ Html.RenderAction("UploadQuo", "Purchase", new { PrMstId = ViewBag.PrMstId });}
@@ -127,6 +128,16 @@
                     </div>
                     <br />
                     <div class="row">
+                        <div class="col-1">
+                            <b>Item No</b>
+                            <br />
+                            <select class="form-control form-control-border" id="DomiPartNo" name="DomiPartNo">
+                                <option value="NS">NS</option>
+                                <option value="CAPEX" >CAPEX</option>
+                                <option value="CAPEX02">CAPEX02</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.DomiPartNo, "", new { @class = "text-danger" })
+                        </div>
                         <div class="col-2">
                             <b>Last Vendor</b>
                             <br />

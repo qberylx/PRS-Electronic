@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/PurchaseWeb_2/PurchaseWeb_2/ExcelFiles

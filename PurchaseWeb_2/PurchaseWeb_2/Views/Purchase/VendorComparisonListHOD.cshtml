@@ -248,8 +248,17 @@
                     @*Saving Between Supplier *@
                     @{
                         decimal MaxPrice = ViewBag.MaxPrice ;
-                        decimal CostSave = (MaxPrice - TotAmtMYR) / MaxPrice * 100;
-                        string sCostSave = String.Format("{0:n}", CostSave);
+                        string sCostSave = "0.00";
+                        if (ViewBag.MaxPrice > 0)
+                        {
+                            decimal CostSave = (MaxPrice - TotAmtMYR) / MaxPrice * 100;
+                            sCostSave = String.Format("{0:n}", CostSave);
+                        }
+                        else
+                        {
+                            sCostSave = "0.00";
+                        }
+
                     }
                     @{ if (item.FlagWin == true)
                         {

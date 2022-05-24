@@ -105,10 +105,61 @@
                 <br />
                 <div class="row">
                     <div class="col-1">
+                        <b>Item No</b>
+                        <br />
+                        <select class="form-control form-control-border" id="DomiPartNo" name="DomiPartNo">
+                            <option value="NS">NS</option>
+                            <option value="CAPEX">CAPEX</option>
+                            <option value="CAPEX02">CAPEX02</option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.DomiPartNo, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-2">
+                        <b>Last Vendor</b>
+                        <br />
+                        <select class="form-control form-control-border" id="LastVendorCode" name="LastVendorCode" onchange="VendorChg(this.value)">
+                            <option value="">Select option</option>
+                            @foreach (var vendor in ViewBag.vendorlist)
+                            {
+                                <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(model => model.LastVendorCode, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-1">
                         <b>Last price</b>
                         <br />
+                        @Html.EditorFor(model => model.LastPriceVendor, new { htmlAttributes = new { @class = "form-control", @onfocusout = "LastPriceVendorChg(this.value)" } })
+                        @*
                         @Html.EditorFor(model => model.LastPrice, new { htmlAttributes = new { @class = "form-control", @onfocusout = "CostdownUpt(this.val)" } })
+                        *@
                     </div>
+
+
+                    <div id="divCurr" class="col-1">
+                        <div class="row">
+                            <div class="col-6">
+                                <b>Curr.</b>
+                                <br />
+                                @Html.DropDownList("LastCur",
+                                           new SelectList(ViewBag.CurrList, "CURID", "CURID", "MYR"),
+                                           new { @class = "custom-select form-control-border" })
+                            </div>
+
+                            <div class="col-6">
+                                <b>Exg. Rate</b>
+                                <br />
+                                @Html.EditorFor(model => model.LastCurExc, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-1">
+                        <b>Last price (MYR)</b>
+                        <br />
+                        @Html.EditorFor(model => model.LastPrice, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+
 
                     <div class="col-1">
                         <b>Quotation Date</b>
@@ -135,7 +186,7 @@
                         @Html.ValidationMessageFor(model => model.PurchasingRemarks, "", new { @class = "text-danger" })
                     </div>
 
-                    <div class="col-1">
+                    <div class="col-1" style="display:none">
                         <b>Cost Down %</b>
                         <br />
                         @Html.EditorFor(model => model.CostDown, new { htmlAttributes = new { @class = "form-control" } })
@@ -165,5 +216,55 @@
         var difVal = $("#LastPrice").val() - $("#EstimateUnitPrice").val();
         var costDown = (difVal / $("#LastPrice").val()) * 100;
         $("#CostDown").val(costDown);
+    }
+</script>
+
+
+<script>
+    $(function () {
+        $('input#Qty').blur(function () {
+            var amt = parseFloat(this.value);
+            $(this).val(amt.toFixed(2));
+        });
+    });
+
+    $(function () {
+        $('input#EstimateUnitPrice').blur(function () {
+            var amt = parseFloat(this.value);
+            $(this).val(amt.toFixed(5));
+        });
+    });
+
+</script>
+
+
+<script>
+    function OnSuccessAdd() {
+        this.reset();
+    }
+
+    function VendorChg(VendorID) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("callCurrencyName","Purchase")",
+            data: '{VendorID: "' + VendorID + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCurr').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function LastPriceVendorChg(lastPrice) {
+        console.log($("#LastPriceVendor").val());
+        var Price = lastPrice * $("#LastCurExc").val();
+        $("#LastPrice").val(Price.toFixed(5));
     }
 </script>

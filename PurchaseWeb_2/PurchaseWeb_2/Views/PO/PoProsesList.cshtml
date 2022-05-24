@@ -65,6 +65,9 @@
                     Status
                 </th>
                 <th>
+                    Budget Status
+                </th>
+                <th>
                     PR Details Left
                 </th>
                 <th></th>
@@ -116,9 +119,19 @@
                         @Html.DisplayFor(modelItem => item.Status_Mst.Name)
                     </td>
                     <td>
+                        @if (item.FlagUpdatedCPRF == true || item.FlagUpdateMonthlyBudget == true)
+                        {
+                            <p>Reviewed</p>
+                        }
+                    </td>
+                    <td>
                         @item.PR_Details.Where(x => x.PoFlag == null || x.PoFlag == false).Count()
                     </td>
                     <td>
+                        @if (item.PRTypeId == 4)
+                        {
+                            @Html.ActionLink("Budget", "budgetUpdate", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
+                        }
                         @Html.ActionLink("View", "POProsesView", "PO", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
 
                     </td>

@@ -69,48 +69,59 @@
                         {
                             <td>
                                 @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                                @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
+                                {
+                                    @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
+                                }
+                                
                             </td>
                         }
                         else
                         {
-                            <td>
-                                @switch (item.PRTypeId)
-                                {
-                                    case 1:
-                                        <!--<button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>-->
-                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtls","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-                                        break;
+                    <td>
+                        @switch (item.PRTypeId)
+                        {
+                            case 1:
+                                <!--<button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>-->
+                                <a class="btn btn-primary" href="@Url.Action("AddPurDtls","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                break;
 
-                                    case 2: 
-                                        <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType2","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-                                    
-                                        break;
+                            case 2:
+                                <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType2","Purchase", new {PrMstId = item.PRId})">Add Details</a>
 
-                                    case 3: 
-                                        <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-                                    
-                                        break;
+                                break;
 
-                                    case 4: 
-                                        <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType4","Purchase", new {PrMstId = item.PRId , PrGroup = item.PRGroupType})">Add Details</a>
-                                    
-                                        break;
-                                    case 5: 
-                                        <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-                                    
-                                        break;
+                            case 3:
+                                <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
 
+                                break;
 
-                                }
+                            case 4:
+                                <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType4","Purchase", new {PrMstId = item.PRId , PrGroup = item.PRGroupType})">Add Details</a>
 
-                                @Html.ActionLink("Send", "PRhod", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                                break;
+                            case 5:
+                                <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
 
-                                @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
-
-                                @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                                break;
 
 
-                            </td>
+                        }
+
+                        @Html.ActionLink("Send", "PRhod", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+
+                        @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
+
+                        @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+
+                        @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
+                        {
+                            @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
+                        }
+
+
+
+                    </td>
                         }
 
                     </tr>

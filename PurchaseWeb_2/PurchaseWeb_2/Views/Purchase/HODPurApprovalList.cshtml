@@ -107,15 +107,16 @@
                                 @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                 {
                                     @*currency.Sum(s => s.TotCostWitTax) *@
-                                    String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.TotCostWitTax));
+                                String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.TotCostWitTax));
                                     @strTotAmt
                                     <br />
-                                        }
+                                }
                             </div>
                         </div>
                     </td>
                     <td>
-                        @item.PR_Details.Sum(s=>s.TotCostWitTaxMYR)
+                        @{String sTotCostWitTaxMYR = String.Format("{0:n2}", item.PR_Details.Sum(s => s.TotCostWitTaxMYR)); }
+                        @sTotCostWitTaxMYR
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Status_Mst.Name)

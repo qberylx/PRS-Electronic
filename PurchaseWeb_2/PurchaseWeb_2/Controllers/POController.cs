@@ -30,7 +30,8 @@ namespace PurchaseWeb_2.Controllers
                 String email = userEmail;
                 MailMessage mail = new MailMessage();
                 mail.To.Add(email);
-                mail.From = new MailAddress("itsupport@dominant-semi.com", "prs.system@dominant-semi.com");
+                //mail.From = new MailAddress("itsupport@dominant-semi.com", "prs.system@dominant-semi.com");
+                mail.From = new MailAddress("prs.system@dominant-semi.com", "prs.system");
                 mail.Subject = Subject;
                 mail.Body = body;
                 mail.IsBodyHtml = true;
@@ -40,8 +41,9 @@ namespace PurchaseWeb_2.Controllers
                 smtp.UseDefaultCredentials = false;
                 //itsupport @dominant-semi.com
                 //Domi$dm1n
-                smtp.Credentials = new System.Net.NetworkCredential("itsupport@dominant-semi.com", "Domi$dm1n"); // Enter seders User name and password       
-                                                                                                                 //smtp.EnableSsl = true;
+                smtp.Credentials = new System.Net.NetworkCredential("prs.system@dominant-semi.com", "Prs1305");
+                //smtp.Credentials = new System.Net.NetworkCredential("itsupport@dominant-semi.com", "Domi$dm1n"); // Enter seders User name and password       
+                //smtp.EnableSsl = true;
                 smtp.Send(mail);
 
                 return ("Email Sent");

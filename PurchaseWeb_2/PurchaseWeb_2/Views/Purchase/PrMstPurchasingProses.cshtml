@@ -49,6 +49,21 @@
                                 <div class="col-md-4">
                                     <!--PR Account-->
                                     <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode)
+                                    <br />
+                                    @using (Ajax.BeginForm("editAccountCode","Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurChaseMasterSelected" }))
+                                    {
+                                        
+                                        @Html.EditorFor(model => model.AccountCode, new { htmlAttributes = new { @class = "form-control" } }) 
+                                        <input type="hidden" name="PrMstId" value="@Model.PRId" />
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-centered">
+                                                <button class="btn btn-primary">Save Account Code</button>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                    }
                                 </div>
                             }
                             if (ViewBag.CPRFFlag == true)

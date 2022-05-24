@@ -156,6 +156,7 @@
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\POController.cs" />
     <Compile Include="Controllers\PurchaseController.cs" />
+    <Compile Include="Controllers\RazorViewToStringHelper.cs" />
     <Compile Include="Controllers\SessionCheck.cs" />
     <Compile Include="CustomAttribute\CustomAttribute.cs" />
     <Compile Include="Data\MenuDT.cs" />
@@ -294,6 +295,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SageDom1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\SP_Comparison_Report_Result.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\Status_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -321,6 +325,7 @@
     <Compile Include="Models\PRDtlsPurProViewModel.cs" />
     <Compile Include="Models\PRdtlsViewModel.cs" />
     <Compile Include="Models\PRMstView.cs" />
+    <Compile Include="Models\ReportParam.cs" />
     <Compile Include="Models\ResultforPOListbyDate.cs" />
     <Compile Include="Models\SearchPoListbyDate.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -2495,9 +2500,16 @@
     <Content Include="Views\Purchase\CprfEdit.cshtml" />
     <Content Include="Views\Purchase\UploadQuoList.cshtml" />
     <Content Include="Views\Purchase\VendorComparisonListHOD.cshtml" />
+    <Content Include="Views\Purchase\PRDashBoard.cshtml" />
+    <Content Include="Views\Purchase\DashBoardPrMstList.cshtml" />
+    <Content Include="Views\Purchase\DashboardPrView.cshtml" />
+    <Content Include="Views\Purchase\PRAttachment.cshtml" />
+    <Content Include="Views\Purchase\VendorReport.cshtml" />
+    <Content Include="Views\Purchase\VendorComparisonReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ExcelFiles\" />
     <Folder Include="UploadedFile\Quotation\" />
     <Folder Include="Views\Admin\" />
     <Folder Include="Views\Test\" />

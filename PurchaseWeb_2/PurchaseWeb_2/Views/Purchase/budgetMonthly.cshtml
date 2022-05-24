@@ -70,7 +70,7 @@
         <hr />
         @using (Ajax.BeginForm("SaveBudgetMonthly", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divbudgetMonthly" }))
         {
-            <div class="card-body">
+            <div class="card-body" style="display:none">
                 <div class="row">
                     <div class="col-md-3">
                         <strong>Current Budget Balance </strong>
@@ -93,7 +93,8 @@
             <div class="card-footer">
                 <div class="row">
                     <div class="col-centered">
-                        <button class="btn btn-success" type="submit" value="Save">Update Monthly Budget</button>
+                        <button class="btn btn-success" type="submit" value="save" id="submit1" name="submit">Update Monthly Budget</button>
+                        <button class="btn btn-info" type="submit" value="pass" id="submit2" name="submit">Passed the Budget</button>
                         @Html.HiddenFor(model => model.BudgetId)
                         <input type="hidden" name="PrMstId" id="PrMstId" value="@ViewBag.PrMstId" />
                     </div>
@@ -106,6 +107,6 @@
 
 <script>
     $(document).ready(function () {
-        $("#notification").delay(2000).fadeOut("slow");
+        $("#notification").delay(3000).fadeOut("slow");
     });
 </script>

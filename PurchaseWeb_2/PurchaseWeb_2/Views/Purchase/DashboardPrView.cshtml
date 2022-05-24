@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "PR System";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>Dashboard Pr View</h2>
+
+<div class="invoice p-3 mb-3">
+    <div class="row">
+        <div class="col-md-12">
+            @{ Html.RenderAction("PurMstViewSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @{ if (ViewBag.PrTypeId == 4)
+                {
+                    Html.RenderAction("PurDetailsPurchasingViewSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });
+                } else
+                {
+                    Html.RenderAction("PurDetailsViewSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });
+                }
+             }
+            
+        </div>
+    </div>
+    <br />
+    <div class="container">
+        <div class="row">
+            <div class="col-centered">
+                    @Html.ActionLink("Return To Main PR", "PRDashBoard", "Purchase", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+

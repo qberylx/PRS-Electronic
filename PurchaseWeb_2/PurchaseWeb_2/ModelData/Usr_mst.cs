@@ -30,6 +30,7 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<System.DateTime> Date_modified { get; set; }
         public Nullable<bool> Flag_Aproval { get; set; }
         public string TelExt { get; set; }
+        public Nullable<bool> SourcingFlag { get; set; }
     
         public virtual Department_mst Department_mst { get; set; }
         public virtual Position_mst Position_mst { get; set; }

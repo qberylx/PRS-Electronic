@@ -92,7 +92,10 @@
                                     Description
                                 </th>
                                 <th>
-                                    VendorPartNo
+                                    Item No
+                                </th>
+                                <th>
+                                    VendorPart No
                                 </th>
                                 <th>
                                     Qty
@@ -320,6 +323,9 @@
                                         @Html.DisplayFor(modelItem => Model[i].Description)*@
                                     </td>
                                     <td>
+                                        @Html.DisplayFor(modelItem => Model[i].DomiPartNo)
+                                    </td>
+                                    <td>
                                         @Html.DisplayFor(modelItem => Model[i].VendorPartNo)
                                     </td>
                                     <td>
@@ -474,19 +480,22 @@
                             <td></td>
                             <th>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-3">
                                         @foreach (var item in Model.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                         {
                                             @item.Max(s => s.CurCode) <br />
                                         }
                                     </div>
+                                    <div class="col-1">
+                                        &nbsp;
+                                    </div>
                                     
                                         &nbsp;
                                     
-                                    <div class="col-md-7">
+                                    <div class="col-5">
                                         @foreach (var item in Model.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                         {
-                                            @item.Sum(s => s.TotCostWitTax) <br />
+                                            @String.Format("{0:n}", item.Sum(s => s.TotCostWitTax)) <br />
                                         }
                                     </div>
                                 </div>

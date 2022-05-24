@@ -299,6 +299,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="SendToProcessingDate" Type="date" />
           <Property Name="PurchasingComment" Type="varchar(max)" />
           <Property Name="BudgetDept" Type="int" />
+          <Property Name="SourcingName" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -344,7 +345,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="FileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PrMstId" Type="int" />
           <Property Name="FileName" Type="varchar" MaxLength="100" />
-          <Property Name="FilePath" Type="varchar" MaxLength="300" />
+          <Property Name="FilePath" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="PrGroupType">
           <Key>
@@ -417,6 +418,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="Date_modified" Type="datetime" />
           <Property Name="Flag_Aproval" Type="bit" />
           <Property Name="TelExt" Type="varchar" MaxLength="10" />
+          <Property Name="SourcingFlag" Type="bit" />
         </EntityType>
         <Association Name="FK_MonthlyBudget_AccTypeDept">
           <End Role="AccTypeDept" Type="Self.AccTypeDept" Multiplicity="0..1" />
@@ -692,6 +694,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
         <Function Name="GetPOListbyDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FromDate" Type="date" Mode="In" />
           <Parameter Name="ToDate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="SP_Comparison_Report" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PrMstId" Type="int" Mode="In" />
         </Function>
         <Function Name="usp_GetMenuData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserId" Type="varchar" Mode="In" />
@@ -1032,6 +1037,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
             <End Role="PR_Mst" EntitySet="PR_Mst" />
             <End Role="PO_Mst" EntitySet="PO_Mst" />
           </AssociationSet>
+          <FunctionImport Name="SP_Comparison_Report" ReturnType="Collection(Domi_PurModel.SP_Comparison_Report_Result)">
+          <Parameter Name="PrMstId" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -1057,6 +1065,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Mst_Usr_mst" FromRole="Usr_mst" ToRole="PR_Mst" />
           <Property Name="TelExt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="AccTypeDept" Relationship="Domi_PurModel.FK_Usr_mst_AccTypeDept" FromRole="Usr_mst" ToRole="AccTypeDept" />
+          <Property Name="SourcingFlag" Type="Boolean" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -1250,6 +1259,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="PurchasingComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="PO_Mst" Relationship="Domi_PurModel.FK_PO_Mst_PR_Mst" FromRole="PR_Mst" ToRole="PO_Mst" />
           <Property Name="BudgetDept" Type="Int32" />
+          <Property Name="SourcingName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1514,7 +1524,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="FileId" Type="Int32" Nullable="false" />
           <Property Name="PrMstId" Type="Int32" />
           <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="FilePath" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="FilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PRFile_PR_Mst" FromRole="PRFile" ToRole="PR_Mst" />
         </EntityType>
         <Association Name="FK_PRFile_PR_Mst">
@@ -1725,6 +1735,25 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="SP_Comparison_Report_Result">
+          <Property Type="Int32" Name="noid" Nullable="true" />
+          <Property Type="Int32" Name="PRDtId" Nullable="true" />
+          <Property Type="String" Name="description" Nullable="true" />
+          <Property Type="Decimal" Name="qty" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="oldquote_date" Nullable="true" />
+          <Property Type="Decimal" Name="oldquote_price" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="vendor1_name" Nullable="true" MaxLength="300" />
+          <Property Type="Decimal" Name="vendor1_price" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="vendor2_name" Nullable="true" MaxLength="300" />
+          <Property Type="Decimal" Name="vendor2_price" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="vendor3_name" Nullable="true" MaxLength="300" />
+          <Property Type="Decimal" Name="vendor3_price" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Selected_vendor" Nullable="true" MaxLength="300" />
+          <Property Type="Decimal" Name="Selected_price" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="total_amount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="YearlySaving" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="SupplierSaving" Nullable="true" Precision="18" Scale="2" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1789,6 +1818,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <EntitySetMapping Name="Usr_mst">
             <EntityTypeMapping TypeName="Domi_PurModel.Usr_mst">
               <MappingFragment StoreEntitySet="Usr_mst">
+                <ScalarProperty Name="SourcingFlag" ColumnName="SourcingFlag" />
                 <ScalarProperty Name="TelExt" ColumnName="TelExt" />
                 <ScalarProperty Name="Flag_Aproval" ColumnName="Flag_Aproval" />
                 <ScalarProperty Name="Date_modified" ColumnName="Date_modified" />
@@ -1889,6 +1919,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="SourcingName" ColumnName="SourcingName" />
                 <ScalarProperty Name="BudgetDept" ColumnName="BudgetDept" />
                 <ScalarProperty Name="PurchasingComment" ColumnName="PurchasingComment" />
                 <ScalarProperty Name="SendToProcessingDate" ColumnName="SendToProcessingDate" />
@@ -2200,6 +2231,29 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_Comparison_Report" FunctionName="Domi_PurModel.Store.SP_Comparison_Report">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Domi_PurModel.SP_Comparison_Report_Result">
+                <ScalarProperty Name="noid" ColumnName="noid" />
+                <ScalarProperty Name="PRDtId" ColumnName="PRDtId" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="qty" ColumnName="qty" />
+                <ScalarProperty Name="oldquote_date" ColumnName="oldquote_date" />
+                <ScalarProperty Name="oldquote_price" ColumnName="oldquote_price" />
+                <ScalarProperty Name="vendor1_name" ColumnName="vendor1_name" />
+                <ScalarProperty Name="vendor1_price" ColumnName="vendor1_price" />
+                <ScalarProperty Name="vendor2_name" ColumnName="vendor2_name" />
+                <ScalarProperty Name="vendor2_price" ColumnName="vendor2_price" />
+                <ScalarProperty Name="vendor3_name" ColumnName="vendor3_name" />
+                <ScalarProperty Name="vendor3_price" ColumnName="vendor3_price" />
+                <ScalarProperty Name="Selected_vendor" ColumnName="Selected_vendor" />
+                <ScalarProperty Name="Selected_price" ColumnName="Selected_price" />
+                <ScalarProperty Name="total_amount" ColumnName="total_amount" />
+                <ScalarProperty Name="YearlySaving" ColumnName="YearlySaving" />
+                <ScalarProperty Name="SupplierSaving" ColumnName="SupplierSaving" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

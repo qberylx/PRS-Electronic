@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "PR System";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>PR DashBoard</h2>
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Purchase Request List</h3>
+            </div>
+            <div class="card-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+
+
+        <div id="divPrMstList">
+            @{Html.RenderAction("DashBoardPrMstList", "Purchase");}
+        </div>
+    </div>
+</div>

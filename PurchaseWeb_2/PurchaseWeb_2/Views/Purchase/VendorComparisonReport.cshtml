@@ -1,0 +1,163 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.SP_Comparison_Report_Result>
+
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    tr {
+        text-align: center;
+    }
+
+    thead {
+        background-color: lightgrey;
+    }
+
+    tbody {
+        font-size: 15px;
+    }
+</style>
+<table style="width:100%">
+    <thead>
+        <tr>
+            <th style="width:2%">
+                <b>No</b>
+            </th>
+            <th style="width:16%">
+                <b>Description</b>
+            </th>
+            <th style="width:6%">
+                <b>Qty</b>
+            </th>
+            <th style="width:8%">
+                <b>Old Quote</b>
+            </th>
+            <th style="width:8%">
+                <b>Vendor 1</b>
+            </th>
+            <th style="width:8%">
+                <b>Vendor 2</b>
+            </th>
+            <th style="width:8%">
+                <b>Vendor 3</b>
+            </th>
+            <th style="width:8%">
+                <b>Selected Vendor</b>
+            </th>
+            <th style="width:5%">
+                <b>Selected Price</b>
+            </th>
+            <th style="width:5%">
+                <b>Total Amount</b>
+            </th>
+            <th style="width:4%">
+                <b>
+                    Yearly <br />
+                    Saving (%)
+                </b>
+            </th>
+            <th style="width:4%">
+                <b>
+                    Saving <br />
+                    (Between Suppliers)
+                </b>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int i = 0;}
+        @foreach (var item in Model)
+        {
+            i = i + 1;
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @item.description
+                </td>
+                <td>
+                    @item.qty
+                </td>
+                <td>
+                    @{
+                        DateTime dod;
+                        if (item.oldquote_date != null)
+                        {
+                            dod = (DateTime)item.oldquote_date;
+                            <a>@dod.ToString("dd/MM/yyyy")</a>
+                        }
+                        else
+                        {
+                            <a></a>
+                        }
+                    }
+
+                    <br /><br />
+                    @{ String oqp = String.Format("{0:n}", item.oldquote_price); }
+                    RM @oqp
+                </td>
+                <td>
+                    @item.vendor1_name <br /><br />
+                    @{ String vp1 = String.Format("{0:n}", item.vendor1_price); }
+                    RM @vp1
+                </td>
+                <td>
+                    @item.vendor2_name <br /><br />
+                    @{ String vp2 = String.Format("{0:n}", item.vendor2_price); }
+                    RM @vp2
+
+                </td>
+                <td>
+                    @item.vendor3_name <br /><br />
+                    @{ String vp3 = String.Format("{0:n}", item.vendor3_price); }
+                    RM @vp3
+
+                </td>
+                <td>
+                    @item.Selected_vendor
+                </td>
+                <td>
+                    @{ String sp = String.Format("{0:n}", item.Selected_price); }
+                    RM @sp
+                </td>
+                <td>
+                    @{ String ta = String.Format("{0:n}", item.total_amount); }
+                    RM @ta
+                </td>
+                <td>
+                    @item.YearlySaving
+                </td>
+                <td>
+                    @item.SupplierSaving
+                </td>
+            </tr>
+        }
+        <tr>
+            <td colspan="3"></td>
+            <td>
+                <b>Total Summary</b>
+            </td>
+            <td>
+                RM @String.Format("{0:n}", Model.Sum(x => x.vendor1_price))
+            </td>
+            <td>
+                RM @String.Format("{0:n}", Model.Sum(x => x.vendor2_price))
+            </td>
+            <td>
+                RM @String.Format("{0:n}", Model.Sum(x => x.vendor3_price))
+            </td>
+            <td></td>
+            <td>
+                RM @String.Format("{0:n}", Model.Sum(x => x.Selected_price))
+            </td>
+            <td>
+                RM @String.Format("{0:n}", Model.Sum(x => x.total_amount))
+            </td>
+            <td colspan="2"></td>
+        </tr>
+    </tbody>
+
+</table>
