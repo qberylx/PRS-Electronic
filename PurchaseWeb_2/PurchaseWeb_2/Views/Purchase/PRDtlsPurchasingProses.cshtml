@@ -73,7 +73,7 @@
                         <div class="col-3">
                             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
                             <br />
-                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 3, })
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 3, @id="box" })
                             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                         </div>
 
@@ -329,6 +329,22 @@
 
 
 <script>
+    var box = document.getElementById('box');
+    var charlimit = 80; // char limit per line
+    box.onkeyup = function () {
+        var lines = box.value.split('\n');
+        for (var i = 0; i < lines.length; i++) {
+            if (lines[i].length <= charlimit) continue;
+            var j = 0; space = charlimit;
+            while (j++ <= charlimit) {
+                if (lines[i].charAt(j) === ' ') space = j;
+            }
+            lines[i + 1] = lines[i].substring(space + 1) + (lines[i + 1] || "");
+            lines[i] = lines[i].substring(0, space);
+        }
+        box.value = lines.slice(0, 30).join('\n');
+    };
+
     function OnSuccessAdd() {
         this.reset();
     }

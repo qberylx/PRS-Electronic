@@ -469,14 +469,14 @@ namespace PurchaseWeb_2.Controllers
                             .FirstOrDefault();
 
             var PrMstList = db.PR_Mst
-                .Where(x => x.DepartmentId == userdtls.Dpt_id )
+                .Where(x => x.DepartmentId == userdtls.Dpt_id && x.DeActiveFlag != true )
                 .OrderByDescending(x=>x.PRId)
                 .ToList();
 
             if (userdtls.Psn_id == 7)
             {
                 PrMstList = db.PR_Mst
-                    .Where(x => x.StatId != 9)
+                    .Where(x => x.StatId != 9 && x.DeActiveFlag != true)
                     .OrderByDescending(x => x.PRId)
                     .ToList();
             }
@@ -588,9 +588,13 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult DelPRMst(int PrMstId)
         {
-            PR_Mst prMst = new PR_Mst() { PRId = PrMstId };
-            db.PR_Mst.Attach(prMst);
-            db.PR_Mst.Remove(prMst);
+
+            //PR_Mst prMst = new PR_Mst() { PRId = PrMstId };
+            //db.PR_Mst.Attach(prMst);
+            //db.PR_Mst.Remove(prMst);
+
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+            PrMst.DeActiveFlag = true;
             db.SaveChanges();
             this.AddNotification("Row Deleted successfully!!", NotificationType.SUCCESS);
 
@@ -2398,40 +2402,54 @@ namespace PurchaseWeb_2.Controllers
                 this.AddNotification("File fail to Upload.", NotificationType.ERROR);
             }
 
-            var VC = db.Set<PR_VendorComparison>();
-            VC.Add(new PR_VendorComparison
+            try
             {
-                PRDtId = PrDtlstId,
-                VDCode = pR_Vendor.VendorCode,
-                VCName = VendorName.Trim(),
-                CurPrice = pR_Vendor.CurPrice,
-                QuoteDate = pR_Vendor.QuoteDate,
-                LastPrice = pR_Vendor.LastPrice,
-                LastQuoteDate = pR_Vendor.LastQuoteDate,
-                PODate = pR_Vendor.PODate,
-                CostDown = pR_Vendor.CostDown,
-                FlagWin = pR_Vendor.FlagWin,
-                CreatedBy = (String)Session["Username"],
-                CreatedDate = DateTime.Now,
-                TotCostnoTax = pR_Vendor.TotCostnoTax,
-                Tax = pR_Vendor.Tax,
-                TotCostWitTax = pR_Vendor.TotCostWitTax,
-                TaxCode = pR_Vendor.TaxCode,
-                TaxClass = pR_Vendor.TaxClass,
-                Discount = pR_Vendor.Discount,
-                DiscType = pR_Vendor.DiscType,
-                CurRate = pR_Vendor.CurRate,
-                VdCurCode = pR_Vendor.VdCurCode,
-                TotCostnoTaxVendorCur = pR_Vendor.TotCostnoTaxVendorCur,
-                TotCostWitTaxVendorCur = pR_Vendor.TotCostWitTaxVendorCur,
-                CurPriceMYR = pR_Vendor.CurPriceMYR,
-                PayTerms = pR_Vendor.PayTerms.Trim(),
-                PayDesc = PayTerms.CODEDESC.Trim(),
-                QuoteNo = pR_Vendor.QuoteNo,
-                QuoteName = _FileName,
-                QuotePath = _path
-            });
-            db.SaveChanges();
+                var VC = db.Set<PR_VendorComparison>();
+                VC.Add(new PR_VendorComparison
+                {
+                    PRDtId = PrDtlstId,
+                    VDCode = pR_Vendor.VendorCode,
+                    VCName = VendorName.Trim(),
+                    CurPrice = pR_Vendor.CurPrice,
+                    QuoteDate = pR_Vendor.QuoteDate,
+                    LastPrice = pR_Vendor.LastPrice,
+                    LastQuoteDate = pR_Vendor.LastQuoteDate,
+                    PODate = pR_Vendor.PODate,
+                    CostDown = pR_Vendor.CostDown,
+                    FlagWin = pR_Vendor.FlagWin,
+                    CreatedBy = (String)Session["Username"],
+                    CreatedDate = DateTime.Now,
+                    TotCostnoTax = pR_Vendor.TotCostnoTax,
+                    Tax = pR_Vendor.Tax,
+                    TotCostWitTax = pR_Vendor.TotCostWitTax,
+                    TaxCode = pR_Vendor.TaxCode,
+                    TaxClass = pR_Vendor.TaxClass,
+                    Discount = pR_Vendor.Discount,
+                    DiscType = pR_Vendor.DiscType,
+                    CurRate = pR_Vendor.CurRate,
+                    VdCurCode = pR_Vendor.VdCurCode,
+                    TotCostnoTaxVendorCur = pR_Vendor.TotCostnoTaxVendorCur,
+                    TotCostWitTaxVendorCur = pR_Vendor.TotCostWitTaxVendorCur,
+                    CurPriceMYR = pR_Vendor.CurPriceMYR,
+                    PayTerms = pR_Vendor.PayTerms.Trim(),
+                    PayDesc = PayTerms.CODEDESC.Trim(),
+                    QuoteNo = pR_Vendor.QuoteNo,
+                    QuoteName = _FileName,
+                    QuotePath = _path
+                });
+                db.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in entityValidationErrors.ValidationErrors)
+                    {
+                        Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
+                    }
+                }
+            }
+
 
 
 
@@ -2914,14 +2932,21 @@ namespace PurchaseWeb_2.Controllers
             var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
 
             //send email to MD
-            var MDUser = db.Usr_mst.Where(x => x.Psn_id == 3).FirstOrDefault();
-            string MDEmail = MDUser.Email;
-            string MDsubject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
-            string MDbody = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD . <br/>" +
-                " PR Total Amount has exceed RM 30K and need MD Approval to continue for PO Processing. <br/>" +
-                " Kindly login to http://prs.dominant-semi.com/ for further action.";
 
-            SendEmail(MDEmail, MDsubject, MDbody,"");
+            var MDUser = db.Usr_mst.Where(x => x.Psn_id == 3).FirstOrDefault();
+            var ReportParam = new ReportParam()
+            {
+                PrMstId = PrMstId
+            };
+            ViewBag.MD = "MD";
+            string HTMLStringWithModel = RazorViewToStringHelper.RenderViewToString(this, "~/Views/Purchase/VendorReport.cshtml", ReportParam);
+
+            string Subject = PrMst.PRNo + " - " + PrMst.Purpose + " - MYR " + PrMst.PR_Details.Sum(x => x.TotCostWitTaxMYR);
+
+            string FilePath = ExportToExcel(PrMstId);
+
+            SendEmail(MDUser.Email, Subject, HTMLStringWithModel, FilePath);
+
 
             return RedirectToAction("MDApprovalList");
 
@@ -3414,6 +3439,66 @@ namespace PurchaseWeb_2.Controllers
             return RedirectToAction("PrMstPurchasingProses", "Purchase", new { PrMstId = PrMstId });
         }
 
+        public ActionResult editIONo(int PrMstId, string IOrderNo)
+        {
+            //save update IO No
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+
+            if (PrMst != null)
+            {
+                PrMst.IOrderNo = IOrderNo;
+                this.AddNotification("Internal Order No updated", NotificationType.SUCCESS);
+            }
+
+            //save in log
+            // add audit log for PR
+            var auditLog = db.Set<AuditPR_Log>();
+            auditLog.Add(new AuditPR_Log
+            {
+                ModifiedBy = Session["Username"].ToString(),
+                ModifiedOn = DateTime.Now,
+                ActionBtn = "UPDATE",
+                ColumnStr = "IOrderNo ",
+                ValueStr = IOrderNo,
+                PRId = PrMstId,
+                PRDtlsId = 0
+
+            });
+            db.SaveChanges();
+
+            return RedirectToAction("PrMstPurchasingProses", "Purchase", new { PrMstId = PrMstId });
+        }
+
+        public ActionResult editAssetNo(int PrMstId, string AssetNo)
+        {
+            //save update Asset No
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+
+            if (PrMst != null)
+            {
+                PrMst.AssetNo = AssetNo;
+                this.AddNotification("Asset No updated", NotificationType.SUCCESS);
+            }
+
+            //save in log
+            // add audit log for PR
+            var auditLog = db.Set<AuditPR_Log>();
+            auditLog.Add(new AuditPR_Log
+            {
+                ModifiedBy = Session["Username"].ToString(),
+                ModifiedOn = DateTime.Now,
+                ActionBtn = "UPDATE",
+                ColumnStr = "AssetNo ",
+                ValueStr = AssetNo,
+                PRId = PrMstId,
+                PRDtlsId = 0
+
+            });
+            db.SaveChanges();
+
+            return RedirectToAction("PrMstPurchasingProses", "Purchase", new { PrMstId = PrMstId });
+        }
+
         public ActionResult PurDtlsListPurchasingProses(int PrMstId)
         {
             var PrDtlsList = db.PR_Details
@@ -3706,11 +3791,6 @@ namespace PurchaseWeb_2.Controllers
             //delete DelPurList
             try
             {
-                PR_Details pR_ = new PR_Details() { PRDtId = PrDtlsId };
-                db.PR_Details.Attach(pR_);
-                db.PR_Details.Remove(pR_);
-                db.SaveChanges();
-
                 //save audit log PR
                 string Username = (string)Session["Username"];
                 // add audit log for PR
@@ -3736,6 +3816,14 @@ namespace PurchaseWeb_2.Controllers
                     PRDtlsId = PRDtls.PRDtId
                 });
                 db.SaveChanges();
+
+                //delete PR details
+                PR_Details pR_ = new PR_Details() { PRDtId = PrDtlsId };
+                //db.PR_Details.Attach(pR_);
+                db.PR_Details.Remove(PRDtls);
+                db.SaveChanges();
+
+                
 
                 this.AddNotification("The details Deleted successfully!!", NotificationType.SUCCESS);
                 return RedirectToAction("PurDtlsListPurchasingProses", "Purchase", new { PrMstId = DelPrMstId });

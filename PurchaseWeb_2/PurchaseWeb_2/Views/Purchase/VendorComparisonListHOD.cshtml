@@ -86,7 +86,7 @@
                 <td>
                     @*Html.DisplayFor(modelItem => item.CurPriceMYR)*@
                     @{
-                        string sCurPriceMYR = String.Format("{0:n}", item.CurPriceMYR);
+                        string sCurPriceMYR = String.Format("{0:n}", item.CurPriceMYR/item.PR_Details.Qty);
                     }
                     @sCurPriceMYR
                 </td>
@@ -137,7 +137,20 @@
 
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CostDown)
+                    @*Html.DisplayFor(modelItem => item.CostDown)*@
+                    @{ decimal CostDown = 0.00M;}
+                    @{ String sCostDown = "0.00";}
+                    @{ if (item.LastPrice > 0)
+                        {
+                            CostDown = (decimal)((item.LastPrice - (item.CurPriceMYR / item.PR_Details.Qty)) / item.LastPrice * 100);
+                            sCostDown = String.Format("{0:0.00}", CostDown);
+                        }
+                        else
+                        {
+                            sCostDown = "0.00";
+                        }
+                    }
+                    @sCostDown
                 </td>
 
                 <td>
@@ -227,18 +240,20 @@
                 <td>
                     @*Yearly Save*@
                     @{ decimal YSave = 0.00M;}
+                    @{ String sYSave = "0.00";}
                     @{ if (item.LastPrice > 0)
                         {
-                            YSave = (decimal)((item.LastPrice - TotAmtMYR) / item.LastPrice * 100);
+                            YSave = (decimal)((item.LastPrice - (TotAmtMYR/item.PR_Details.Qty)) / item.LastPrice * 100);
+                            sYSave = String.Format("{0:0.00}",YSave);
                         }
                         else
                         {
-                            YSave = 0;
+                            sYSave = "0.00";
                         }
                     }
                     @{ if (item.FlagWin == true)
                         {
-                            <a>@YSave</a>
+                            <a>@sYSave</a>
                         }
                     }
                     
@@ -251,7 +266,7 @@
                         string sCostSave = "0.00";
                         if (ViewBag.MaxPrice > 0)
                         {
-                            decimal CostSave = (MaxPrice - TotAmtMYR) / MaxPrice * 100;
+                            decimal CostSave = (MaxPrice - TotAmtMYR )/ MaxPrice * 100;
                             sCostSave = String.Format("{0:n}", CostSave);
                         }
                         else

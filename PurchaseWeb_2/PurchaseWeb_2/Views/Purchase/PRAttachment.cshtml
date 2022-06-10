@@ -21,7 +21,7 @@
     <thead>
         <tr>
             <th colspan="7">
-                <a style="color:blue;font-size:30px" >DOMINANT</a> <a style="color:red;font-size:30px">Opto Technologies</a> Sdn. Bhd. 
+                <a style="color:blue;font-size:30px">DOMINANT</a> <a style="color:red;font-size:30px">Opto Technologies</a> Sdn. Bhd.
             </th>
             <th colspan="6">
                 PURCHASE REQUISITION (NON-STOCKABLE ITEM)
@@ -60,7 +60,7 @@
                 else
                 {
                     <a>@Model.AccountCode</a>
-                }                
+                }
             </th>
             <th colspan="2">
                 @Model.AssetNo
@@ -348,5 +348,11 @@
         </td>
     </tr>
 </table>
+
+<br />
+<br />
+
+
+@{Html.RenderAction("VendorComparisonReport", "Purchase", new { PrMstId = Model.PRId });}
 
 

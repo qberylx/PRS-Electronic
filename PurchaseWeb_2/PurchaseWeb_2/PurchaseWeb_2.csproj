@@ -229,6 +229,9 @@
     <Compile Include="ModelData\ICUCOD.cs">
       <DependentUpon>SageDom1.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\LastNoMst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\Lgn_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>

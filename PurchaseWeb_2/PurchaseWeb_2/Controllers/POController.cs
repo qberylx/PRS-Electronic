@@ -209,11 +209,12 @@ namespace PurchaseWeb_2.Controllers
                     .Where(x => x.PRTypeId == Doctype)
                     .SingleOrDefault();
 
-                // get POid
-                string POnewNo = getNewPoNO((int)prType.PRTypeNo);
-
+                string POnewNo = "";
                 //get poFlag
                 bool PoFlag1 = false;
+
+                // get POid
+                POnewNo = getNewPoNO((int)prType.PRTypeNo);
 
                 // update prdetails PO 
                 foreach (PRdtlsViewModel pR_Detail in pR_Details)
@@ -225,6 +226,7 @@ namespace PurchaseWeb_2.Controllers
                     {
                         if (pR_Detail.PoFlag) // if poflag has been check
                         {
+                            
                             chkPrDetails.NoPo = POnewNo;
                             chkPrDetails.PoFlag = true;
                             db.SaveChanges();
@@ -275,6 +277,18 @@ namespace PurchaseWeb_2.Controllers
                     string body = @"PO No : " + POnewNo + " has been created from  PR " + prMst.PRNo + "  ";
 
                     SendEmail(userEmail, subject, body);
+                } else
+                {
+                    //if POFlag false
+                    // revert back po no generate
+
+                    var lastNo = db.LastNoMsts.Where(x => x.Initial == "PO" && x.DocType == (int)prType.PRTypeNo).FirstOrDefault();
+                    if (lastNo != null)
+                    {
+                        lastNo.LastNo = lastNo.LastNo - 1;
+                        db.SaveChanges();
+                    }
+
                 }
                 
 
@@ -596,6 +610,30 @@ namespace PurchaseWeb_2.Controllers
 
                     //Append new line character.
                     sb.Append("\r\n");
+
+                    var sDesc = pr.Description.ToString();
+                    string[] description = sDesc.Split(new string[] { Environment.NewLine },
+                        StringSplitOptions.None
+                    );
+
+                    int PORLREV3 = 0;
+                    foreach (var desc in description)
+                    {
+                        //3	66112531	10	3002	1	1.Show epoxy batch no on SMA Label Print Program
+                        PORLREV3 = PORLREV3 + 10;
+
+                        sb.Append("3" + ',');
+                        sb.Append(PORHSEQ.ToString() + ',');
+                        sb.Append(PORLREV3.ToString() + ',');
+                        sb.Append(PORLSEQ.ToString() + ',');
+                        sb.Append("1" + ',');
+                        sb.Append(desc.ToString().Replace(',', ' ') + ',');
+
+                        //Append new line character.
+                        sb.Append("\r\n");
+                    }
+
+
                 }                
 
 

@@ -55,6 +55,7 @@
         <EntityTypeShape EntityType="Domi_PurModel.AuditPR_Log" Width="1.5" PointX="0.75" PointY="14.75" />
         <EntityTypeShape EntityType="Domi_PurModel.PO_CSV_Header" Width="1.5" PointX="14.375" PointY="11.75" />
         <AssociationConnector Association="Domi_PurModel.FK_PO_Mst_PR_Mst" />
+        <EntityTypeShape EntityType="Domi_PurModel.LastNoMst" Width="1.5" PointX="14.375" PointY="3.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
