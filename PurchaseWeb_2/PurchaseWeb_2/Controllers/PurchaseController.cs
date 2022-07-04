@@ -85,6 +85,64 @@ namespace PurchaseWeb_2.Controllers
             return PartialView("DashBoardPrMstList",PrMst);
         }
 
+        public ActionResult SendToSourcing(int PrMstId)
+        {
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+
+            if (PrMst != null)
+            {
+                PrMst.StatId = 12;
+                db.SaveChanges();
+
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "PRid |" +
+                    "StatId |",
+
+                    ValueStr =
+                    PrMstId + "|" +
+                    PrMst.StatId + "|",
+
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "Send to Sourcing"
+
+                });
+                db.SaveChanges();
+
+                this.AddNotification("This PR has been sent back to processing", NotificationType.SUCCESS);
+            } else
+            {
+                this.AddNotification("This PR failed to send back to processing. Please contact your administrator", NotificationType.ERROR);
+            }
+
+            return View("PRDashBoard");
+        }
+
+        public ActionResult PRAuditLog(int PrMstId)
+        {
+            var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+            ViewBag.PrNo = prMst.PRNo;
+
+            var AuditLog = db.AuditPR_Log.Where(x => x.PRId == PrMstId).ToList();
+            
+            return View("PRAuditLog", AuditLog);
+        }
+
+        public ActionResult VendorView(int PrMstId)
+        {
+            var Prdt = db.PR_Details.Where(x => x.PRid == PrMstId).ToList();
+
+            return View("VendorView",Prdt);
+        }
+
         public void ExportPRtoExcel(int PrMstId)
         {
             var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
@@ -234,6 +292,31 @@ namespace PurchaseWeb_2.Controllers
                 });
                 db.SaveChanges();
 
+                var _prMst = db.PR_Mst.Where(x => x.PRNo == PRnewNo).FirstOrDefault();
+
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "INSERT",
+                    ColumnStr = "PRid |" +
+                    "PRNo |",
+
+                    ValueStr =
+                    _prMst.PRId + "|" +
+                    _prMst.PRNo + "|",
+
+                    PRId = _prMst.PRId,
+                    PRDtlsId = 0,
+                    Remarks = "Create New PR"
+
+                });
+                db.SaveChanges();
+
             }
             catch (RetryLimitExceededException)
             {
@@ -272,6 +355,29 @@ namespace PurchaseWeb_2.Controllers
             if (PrMst != null)
             {
                 PrMst.StatId = 3;
+                db.SaveChanges();
+
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "PRid |" +
+                    "StatId |",
+
+                    ValueStr =
+                    PrMstId + "|" +
+                    PrMst.StatId + "|",
+
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "Send to HOD"
+
+                });
                 db.SaveChanges();
             }
 
@@ -340,6 +446,31 @@ namespace PurchaseWeb_2.Controllers
                 PrMst.HODApprovalBy = Username;
                 PrMst.HODApprovalDate = DateTime.Now;
                 db.SaveChanges();
+
+                //audit log
+                //string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "PRid |" +
+                    "StatId |" +
+                    "HODApprovalBy |" ,
+
+                    ValueStr =
+                    PrMst.PRId + "|" +
+                    PrMst.StatId + "|" +
+                    PrMst.HODApprovalBy + "|" ,
+
+                    PRId = PrMst.PRId,
+                    PRDtlsId = 0,
+                    Remarks = "Approve by HOD"
+
+                });
+                db.SaveChanges();
             }
 
             ViewBag.Message = PrMst.PRNo + " is Approved !";
@@ -384,6 +515,33 @@ namespace PurchaseWeb_2.Controllers
                 PrMst.ModifiedDate = DateTime.Now;
                 PrMst.ModifiedBy = Username;
                 PrMst.HODComment = comment;
+                db.SaveChanges();
+
+                //audit log
+                //string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "PRid |" +
+                    "StatId |" +
+                    "ModifiedBy |" +
+                    "HODComment |",
+
+                    ValueStr =
+                    PrMst.PRId + "|" +
+                    2 + "|" +
+                    Username + "|" +
+                    comment + "|" ,
+
+                    PRId = PrMst.PRId,
+                    PRDtlsId = 0,
+                    Remarks = "PR Reject by HOD"
+
+                });
                 db.SaveChanges();
             }
 
@@ -596,6 +754,30 @@ namespace PurchaseWeb_2.Controllers
             var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
             PrMst.DeActiveFlag = true;
             db.SaveChanges();
+
+            //audit log
+            string Username = (string)Session["Username"];
+            // add audit log for PR
+            var auditLog = db.Set<AuditPR_Log>();
+            auditLog.Add(new AuditPR_Log
+            {
+                ModifiedBy = Username,
+                ModifiedOn = DateTime.Now,
+                ActionBtn = "Delete",
+                ColumnStr = "PRid |" +
+                "DeActiveFlag |",
+
+                ValueStr =
+                PrMstId + "|" +
+                "true" + "|" ,
+                
+                PRId = PrMstId,
+                PRDtlsId = 0,
+                Remarks = "Delete PR"
+
+            });
+            db.SaveChanges();
+
             this.AddNotification("Row Deleted successfully!!", NotificationType.SUCCESS);
 
             return View("PurRequest");
@@ -730,8 +912,8 @@ namespace PurchaseWeb_2.Controllers
                     pR_.AccGroup ,
                     
                     PRId = pR_.PRid,
-                    PRDtlsId = pR_.PRDtId
-
+                    PRDtlsId = pR_.PRDtId,
+                    Remarks = "Add PR details"
                 });
                 db.SaveChanges();
             }
@@ -823,11 +1005,6 @@ namespace PurchaseWeb_2.Controllers
             //delete DelPurList
             try
             {
-                PR_Details pR_ = new PR_Details() { PRDtId = PrDtlsId };
-                db.PR_Details.Attach(pR_);
-                db.PR_Details.Remove(pR_);
-                db.SaveChanges();
-
                 string Username = (string)Session["Username"];
                 // add audit log for PR
                 var auditLog = db.Set<AuditPR_Log>();
@@ -837,12 +1014,20 @@ namespace PurchaseWeb_2.Controllers
                     ModifiedOn = DateTime.Now,
                     ActionBtn = "DELETE",
                     ColumnStr = "PRDtlsID |",
-                    ValueStr = PrDtlsId +"|",
+                    ValueStr = PrDtlsId + "|",
                     PRId = DelPrMstId,
-                    PRDtlsId = PrDtlsId
+                    PRDtlsId = PrDtlsId,
+                    Remarks = "Delete PR dtails"
 
                 });
                 db.SaveChanges();
+
+                PR_Details pR_ = new PR_Details() { PRDtId = PrDtlsId };
+                db.PR_Details.Attach(pR_);
+                db.PR_Details.Remove(pR_);
+                db.SaveChanges();
+
+                
 
                 this.AddNotification("The details Deleted successfully!!", NotificationType.SUCCESS);
                 return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = DelPrMstId });
@@ -1025,7 +1210,8 @@ namespace PurchaseWeb_2.Controllers
                     itemno ,
                     
                     PRId = pR_Mst.PRId,
-                    PRDtlsId = 0
+                    PRDtlsId = 0,
+                    Remarks = "Update CPRF"
 
                 });
                 db.SaveChanges();
@@ -1063,6 +1249,36 @@ namespace PurchaseWeb_2.Controllers
                 {
                     PRMst.AssetFlag = 0;
                 }
+                db.SaveChanges();
+
+                //audit log
+                string Username = (string)Session["Username"];
+                var _prMst = db.PR_Mst.Where(x => x.PRId == AssetPrMStId).FirstOrDefault();
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "PRid |" +
+                    "Purpose |" +
+                    "Remarks |" +
+                    "AssetFlag |" +
+                    "CPRF |" ,
+
+                    ValueStr =
+                    _prMst.PRId + "|" +
+                    _prMst.Purpose + "|" +
+                    _prMst.Remarks + "|" +
+                    _prMst.AssetFlag + "|" +
+                    _prMst.CPRF + "|",
+
+                    PRId = _prMst.PRId,
+                    PRDtlsId = 0,
+                    Remarks = "Save PR Asset"
+
+                });
                 db.SaveChanges();
             }
 
@@ -1151,6 +1367,34 @@ namespace PurchaseWeb_2.Controllers
                 PRFile file = new PRFile() { FileId = Fileid };
                 db.PRFiles.Attach(file);
                 db.PRFiles.Remove(file);
+                db.SaveChanges();
+
+                //audit log
+                string Username = (string)Session["Username"];
+                var _prFile = db.PRFiles.Where(x=>x.PrMstId==PrMstId).FirstOrDefault();
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "DELETE",
+                    ColumnStr = "FileId |" +
+                    "PrMstId |" +
+                    "FileName |" +
+                    "FilePath |" ,
+
+                    ValueStr =
+                    _prFile.FileId + "|" +
+                    _prFile.PrMstId + "|" +
+                    _prFile.FileName + "|" +
+                    _prFile.FilePath + "|" ,
+
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "Delete PR File"
+
+                });
                 db.SaveChanges();
 
                 ViewBag.PurMasterID = PrMstId;
@@ -1298,7 +1542,8 @@ namespace PurchaseWeb_2.Controllers
                     pR_.AccGroup +"|",
                     
                     PRId = pR_.PRid,
-                    PRDtlsId = pR_.PRDtId
+                    PRDtlsId = pR_.PRDtId,
+                    Remarks = "Add PR Details"
 
                 });
                 db.SaveChanges();
@@ -1458,7 +1703,8 @@ namespace PurchaseWeb_2.Controllers
                     pR_.AccGroup + "|",
 
                     PRId = pR_.PRid,
-                    PRDtlsId = pR_.PRDtId
+                    PRDtlsId = pR_.PRDtId,
+                    Remarks = "Add PR Details"
 
                 });
                 db.SaveChanges();
@@ -1626,7 +1872,8 @@ namespace PurchaseWeb_2.Controllers
                      1 +"|",
 
                     PRId = pR_.PRid,
-                    PRDtlsId = pR_.PRDtId
+                    PRDtlsId = pR_.PRDtId,
+                    Remarks = "Add PR Details"
 
                 });
                 db.SaveChanges();
@@ -1981,7 +2228,8 @@ namespace PurchaseWeb_2.Controllers
                         AccTypeDepID + "|",
                         
                         PRId = PrMStId,
-                        PRDtlsId = 0
+                        PRDtlsId = 0,
+                        Remarks = "Update Account No"
 
                     });
                     db.SaveChanges();
@@ -2017,7 +2265,8 @@ namespace PurchaseWeb_2.Controllers
                             AccTypeDepID + "|",
 
                             PRId = PrMStId,
-                            PRDtlsId = 0
+                            PRDtlsId = 0,
+                            Remarks = "Update Account Code"
 
                         });
                         db.SaveChanges();
@@ -2058,7 +2307,8 @@ namespace PurchaseWeb_2.Controllers
                             AccTypeDepID + "|",
 
                             PRId = PrMStId,
-                            PRDtlsId = 0
+                            PRDtlsId = 0,
+                            Remarks = "Update Account Code"
 
                         });
                         db.SaveChanges();
@@ -2143,6 +2393,29 @@ namespace PurchaseWeb_2.Controllers
 
                     db.SaveChanges();
 
+                    //audit log
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "INSERT",
+                        ColumnStr = "PRid |" +
+                        "StatId |" ,
+
+                        ValueStr =
+                        PrMstId + "|" +
+                        8 + "|" ,
+
+                        PRId = PrMstId,
+                        PRDtlsId = 0,
+                        Remarks = "PR send for Purchasing HOD Approval"
+
+                    });
+                    db.SaveChanges();
+
                     // send email to HOD Purchasing
                     var usrmst = db.Usr_mst.Where(x => x.Psn_id == 5).SingleOrDefault();
                     if (usrmst != null)
@@ -2185,6 +2458,29 @@ namespace PurchaseWeb_2.Controllers
                     PrMst.PurchaserName = Convert.ToString(Session["Username"]);
                     PrMst.SendHODPurDate = DateTime.Now;
 
+                    db.SaveChanges();
+
+                    //audit log
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "INSERT",
+                        ColumnStr = "PRid |" +
+                        "StatId |",
+
+                        ValueStr =
+                        PrMstId + "|" +
+                        9 + "|",
+
+                        PRId = PrMstId,
+                        PRDtlsId = 0,
+                        Remarks = "PR send for PO Processing"
+
+                    });
                     db.SaveChanges();
 
                     // send email to Purchaser
@@ -2407,35 +2703,113 @@ namespace PurchaseWeb_2.Controllers
                 var VC = db.Set<PR_VendorComparison>();
                 VC.Add(new PR_VendorComparison
                 {
-                    PRDtId = PrDtlstId,
-                    VDCode = pR_Vendor.VendorCode,
-                    VCName = VendorName.Trim(),
-                    CurPrice = pR_Vendor.CurPrice,
-                    QuoteDate = pR_Vendor.QuoteDate,
-                    LastPrice = pR_Vendor.LastPrice,
-                    LastQuoteDate = pR_Vendor.LastQuoteDate,
-                    PODate = pR_Vendor.PODate,
-                    CostDown = pR_Vendor.CostDown,
-                    FlagWin = pR_Vendor.FlagWin,
-                    CreatedBy = (String)Session["Username"],
-                    CreatedDate = DateTime.Now,
-                    TotCostnoTax = pR_Vendor.TotCostnoTax,
-                    Tax = pR_Vendor.Tax,
-                    TotCostWitTax = pR_Vendor.TotCostWitTax,
-                    TaxCode = pR_Vendor.TaxCode,
-                    TaxClass = pR_Vendor.TaxClass,
-                    Discount = pR_Vendor.Discount,
-                    DiscType = pR_Vendor.DiscType,
-                    CurRate = pR_Vendor.CurRate,
-                    VdCurCode = pR_Vendor.VdCurCode,
-                    TotCostnoTaxVendorCur = pR_Vendor.TotCostnoTaxVendorCur,
-                    TotCostWitTaxVendorCur = pR_Vendor.TotCostWitTaxVendorCur,
-                    CurPriceMYR = pR_Vendor.CurPriceMYR,
-                    PayTerms = pR_Vendor.PayTerms.Trim(),
-                    PayDesc = PayTerms.CODEDESC.Trim(),
-                    QuoteNo = pR_Vendor.QuoteNo,
-                    QuoteName = _FileName,
-                    QuotePath = _path
+                    PRDtId          = PrDtlstId,
+                    VDCode          = pR_Vendor.VendorCode,
+                    VCName          = VendorName.Trim(),
+                    CurPrice        = pR_Vendor.CurPrice,
+                    QuoteDate       = pR_Vendor.QuoteDate,
+                    LastPrice       = pR_Vendor.LastPrice,
+                    LastQuoteDate   = pR_Vendor.LastQuoteDate,
+                    PODate          = pR_Vendor.PODate,
+                    CostDown        = pR_Vendor.CostDown,
+                    FlagWin         = pR_Vendor.FlagWin,
+                    CreatedBy       = (String)Session["Username"],
+                    CreatedDate     = DateTime.Now,
+                    TotCostnoTax    = pR_Vendor.TotCostnoTax,
+                    Tax             = pR_Vendor.Tax,
+                    TotCostWitTax   = pR_Vendor.TotCostWitTax,
+                    TaxCode         = pR_Vendor.TaxCode,
+                    TaxClass        = pR_Vendor.TaxClass,
+                    Discount        = pR_Vendor.Discount,
+                    DiscType        = pR_Vendor.DiscType,
+                    CurRate         = pR_Vendor.CurRate,
+                    VdCurCode       = pR_Vendor.VdCurCode,
+                    TotCostnoTaxVendorCur   = pR_Vendor.TotCostnoTaxVendorCur,
+                    TotCostWitTaxVendorCur  = pR_Vendor.TotCostWitTaxVendorCur,
+                    CurPriceMYR     = pR_Vendor.CurPriceMYR,
+                    PayTerms        = pR_Vendor.PayTerms.Trim(),
+                    PayDesc         = PayTerms.CODEDESC.Trim(),
+                    QuoteNo         = pR_Vendor.QuoteNo,
+                    QuoteName       = _FileName,
+                    QuotePath       = _path
+                });
+                db.SaveChanges();
+
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "INSERT",
+                    ColumnStr =
+                    "PRDtId         |" +
+                    "VDCode         |" +
+                    "VCName         |" +
+                    "CurPrice       |" +
+                    "QuoteDate      |" +
+                    "LastPrice      |" +
+                    "LastQuoteDate  |" +
+                    "PODate         |" +
+                    "CostDown       |" +
+                    "FlagWin        |" +
+                    "CreatedBy      |" +
+                    "CreatedDate    |" +
+                    "TotCostnoTax   |" +
+                    "Tax            |" +
+                    "TotCostWitTax  |" +
+                    "TaxCode        |" +
+                    "TaxClass       |" +
+                    "Discount       |" +
+                    "DiscType       |" +
+                    "CurRate        |" +
+                    "VdCurCode      |" +
+                    "TotCostnoTaxVendorCur  |" +
+                    "TotCostWitTaxVendorCur |" +
+                    "CurPriceMYR |" +
+                    "PayTerms    |" +
+                    "PayDesc     |" +
+                    "QuoteNo     |" +
+                    "QuoteName   |" +
+                    "QuotePath   |" ,
+
+                    ValueStr =
+                    PrDtlstId + "|" +
+                    pR_Vendor.VendorCode + "|" +
+                    VendorName.Trim() + "|" +
+                    pR_Vendor.CurPrice + "|" +
+                    pR_Vendor.QuoteDate + "|" +
+                    pR_Vendor.LastPrice + "|" +
+                    pR_Vendor.LastQuoteDate + "|" +
+                    pR_Vendor.PODate + "|" +
+                    pR_Vendor.CostDown + "|" +
+                    pR_Vendor.FlagWin + "|" +
+                    (String)Session["Username"] + "|" +
+                    DateTime.Now + "|" +
+                    pR_Vendor.TotCostnoTax + "|" +
+                    pR_Vendor.Tax + "|" +
+                    pR_Vendor.TotCostWitTax + "|" +
+                    pR_Vendor.TaxCode + "|" +
+                    pR_Vendor.TaxClass + "|" +
+                    pR_Vendor.Discount + "|" +
+                    pR_Vendor.DiscType + "|" +
+                    pR_Vendor.CurRate + "|" +
+                    pR_Vendor.VdCurCode + "|" +
+                    pR_Vendor.TotCostnoTaxVendorCur  + "|" +
+                    pR_Vendor.TotCostWitTaxVendorCur + "|" +
+                    pR_Vendor.CurPriceMYR + "|" +
+                    pR_Vendor.PayTerms.Trim() + "|" +
+                    PayTerms.CODEDESC.Trim() + "|" +
+                    pR_Vendor.QuoteNo + "|" +
+                    _FileName + "|" +
+                    _path,
+                    
+                    PRId = pR_Vendor.PR_Details.PRid,
+                    PRDtlsId = pR_Vendor.PRDtId,
+                    Remarks = "New PR Vendor Comparison"
+
                 });
                 db.SaveChanges();
             }
@@ -2497,6 +2871,29 @@ namespace PurchaseWeb_2.Controllers
             db.PR_VendorComparison.Remove(vcDel);
             db.SaveChanges();
 
+            //audit log
+            string Username = (string)Session["Username"];
+            // add audit log for PR
+            var auditLog = db.Set<AuditPR_Log>();
+            auditLog.Add(new AuditPR_Log
+            {
+                ModifiedBy = Username,
+                ModifiedOn = DateTime.Now,
+                ActionBtn = "DELETE",
+                ColumnStr = "VCId |" +
+                "VCName |",
+
+                ValueStr =
+                vcDel.VCId + "|" +
+                vcDel.VCName + "|",
+
+                PRId = PrDtls.PRid,
+                PRDtlsId = PrDtls.PRDtId,
+                Remarks = "Delete Vendor Comparison"
+
+            });
+            db.SaveChanges();
+
             return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = PrDtls.PRDtId });
         }
 
@@ -2545,6 +2942,7 @@ namespace PurchaseWeb_2.Controllers
                 PrDtls.PayTerms = vc.PayTerms;
                 PrDtls.PayDesc = vc.PayDesc;
                 db.SaveChanges();
+
             }
 
             // insert audit log
@@ -2560,7 +2958,8 @@ namespace PurchaseWeb_2.Controllers
                 ValueStr = vc.VCName +"|"+ vc.VDCode + "|" + vd.IDGRP + "|" + vc.CurPrice + "|" + vc.VdCurCode + "|" + vc.TotCostnoTaxVendorCur + "|" +
                         vc.Tax + "|" + vc.TotCostWitTaxVendorCur + "|" + vc.TaxCode + "|" + vc.TaxClass + "|" + vc.TotCostWitTax + "|" + vc.PayTerms + "|" +  vc.PayDesc,
                 PRId = PrDtls.PRid,
-                PRDtlsId = PrDtls.PRDtId
+                PRDtlsId = PrDtls.PRDtId,
+                Remarks = "Update Winner Vendor Details"
 
             });
             db.SaveChanges();
@@ -2800,13 +3199,47 @@ namespace PurchaseWeb_2.Controllers
                     var uptPrDtls = db.PR_Details.SingleOrDefault(x => x.PRDtId == Dtls.PRDtId);
                     if (uptPrDtls != null)
                     {
-                        uptPrDtls.VendorCode = Dtls.VendorCode;
-                        uptPrDtls.UnitPrice = Dtls.UnitPrice;
-                        uptPrDtls.TotCostnoTax = Dtls.TotCostnoTax;
-                        uptPrDtls.Tax = Dtls.Tax;
+                        uptPrDtls.VendorCode    = Dtls.VendorCode;
+                        uptPrDtls.UnitPrice     = Dtls.UnitPrice;
+                        uptPrDtls.TotCostnoTax  = Dtls.TotCostnoTax;
+                        uptPrDtls.Tax           = Dtls.Tax;
                         uptPrDtls.TotCostWitTax = Dtls.TotCostWitTax;
-                        uptPrDtls.TaxCode = Dtls.TaxCode;
-                        uptPrDtls.TaxClass = Dtls.TaxClass;
+                        uptPrDtls.TaxCode       = Dtls.TaxCode;
+                        uptPrDtls.TaxClass      = Dtls.TaxClass;
+                        db.SaveChanges();
+
+                        //audit log
+                        string Username = (string)Session["Username"];
+                        // add audit log for PR
+                        var auditLog = db.Set<AuditPR_Log>();
+                        auditLog.Add(new AuditPR_Log
+                        {
+                            ModifiedBy = Username,
+                            ModifiedOn = DateTime.Now,
+                            ActionBtn = "UPDATE",
+                            ColumnStr =
+                            "VendorCode     |" +
+                            "UnitPrice      |" +
+                            "TotCostnoTax   |" +
+                            "Tax            |" +
+                            "TotCostWitTax  |" +
+                            "TaxCode        |" +
+                            "TaxClass       |",
+                            
+                            ValueStr =
+                            Dtls.VendorCode + "|" + 
+                            Dtls.UnitPrice + "|" +
+                            Dtls.TotCostnoTax + "|" +
+                            Dtls.Tax + "|" +
+                            Dtls.TotCostWitTax + "|" +
+                            Dtls.TaxCode + "|" +
+                            Dtls.TaxClass + "|" ,
+                        
+                            PRId = Dtls.PRid,
+                            PRDtlsId = Dtls.PRDtId,
+                            Remarks = "Update PR Details"
+
+                        });
                         db.SaveChanges();
                     }
 
@@ -2877,13 +3310,47 @@ namespace PurchaseWeb_2.Controllers
             var prDtls = db.PR_Details.SingleOrDefault(x => x.PRDtId == PrDtlsId);
             if(prDtls != null)
             {
-                prDtls.CurrId = pR_Details.CurrId;
-                prDtls.UnitPrice = pR_Details.UnitPrice;
-                prDtls.TotCostnoTax = pR_Details.TotCostnoTax ?? 0.00M;
-                prDtls.Tax = pR_Details.Tax;
-                prDtls.TotCostWitTax = pR_Details.TotCostWitTax;
-                prDtls.TaxCode = pR_Details.TaxCode;
-                prDtls.TaxClass = pR_Details.TaxClass;
+                prDtls.CurrId           = pR_Details.CurrId;
+                prDtls.UnitPrice        = pR_Details.UnitPrice;
+                prDtls.TotCostnoTax     = pR_Details.TotCostnoTax ?? 0.00M;
+                prDtls.Tax              = pR_Details.Tax;
+                prDtls.TotCostWitTax    = pR_Details.TotCostWitTax;
+                prDtls.TaxCode          = pR_Details.TaxCode;
+                prDtls.TaxClass         = pR_Details.TaxClass;
+                db.SaveChanges();
+
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr =
+                    "CurrId         |" +
+                    "UnitPrice      |" +
+                    "TotCostnoTax   |" +
+                    "Tax            |" +
+                    "TotCostWitTax  |" +
+                    "TaxCode        |" +
+                    "TaxClass       |" ,
+
+                    ValueStr =
+                    pR_Details.CurrId + "|" +
+                    pR_Details.UnitPrice + "|" +
+                    pR_Details.TotCostnoTax ?? 0.00M + "|" +
+                    pR_Details.Tax + "|" +
+                    pR_Details.TotCostWitTax + "|" +
+                    pR_Details.TaxCode + "|" +
+                    pR_Details.TaxClass + "|" ,
+
+                    PRId = pR_Details.PRid,
+                    PRDtlsId = pR_Details.PRDtId,
+                    Remarks = "Update PR Details"
+
+                });
                 db.SaveChanges();
             }
 
@@ -3005,6 +3472,32 @@ namespace PurchaseWeb_2.Controllers
                 
                 db.SaveChanges();
 
+                //audit log
+                string Username = (string)Session["Username"];
+                var _prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "StatId |" +
+                    "HODPurDeptApprovalBy |" +
+                    "HODPurDeptApprovalDate |",
+
+                    ValueStr =
+                    _prMst.StatId + "|" +
+                    _prMst.HODPurDeptApprovalBy + "|" +
+                    _prMst.HODPurDeptApprovalDate + "|",
+
+                    PRId = _prMst.PRId,
+                    PRDtlsId = 0,
+                    Remarks = "Approved by HOD Purchasing"
+
+                });
+                db.SaveChanges();
+
                 //send email to user
                 string userEmail = PrMst.Usr_mst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
@@ -3045,6 +3538,29 @@ namespace PurchaseWeb_2.Controllers
             {
                 PrMst.StatId = 11;
                 PrMst.HODPurComment = comment;
+                db.SaveChanges();
+
+                //audit log
+                //string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "StatId |" +
+                    "HODPurComment |",
+
+                    ValueStr =
+                    11 + "|" +
+                    comment + "|",
+
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "Reject by HOD Purchasing"
+
+                });
                 db.SaveChanges();
 
                 //send email to purchaser
@@ -3143,6 +3659,29 @@ namespace PurchaseWeb_2.Controllers
                 PrMst.MDApprovalDate = DateTime.Now;
                 db.SaveChanges();
 
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "INSERT",
+                    ColumnStr = "StatId |" +
+                    "MDApprovalBy |",
+
+                    ValueStr =
+                    9 + "|" +
+                    Username + "|",
+
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "Approve by MD by PRS"
+
+                });
+                db.SaveChanges();
+
                 //send email to user
                 string userEmail = PrMst.Usr_mst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
@@ -3190,6 +3729,27 @@ namespace PurchaseWeb_2.Controllers
             if (PrMst != null)
             {
                 PrMst.StatId = 7;
+                db.SaveChanges();
+
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "StatId |" ,
+                    
+                    ValueStr =
+                    7 + "|" ,
+                    
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "Reject by MD"
+
+                });
                 db.SaveChanges();
 
                 //send email to purchaser
@@ -3345,6 +3905,27 @@ namespace PurchaseWeb_2.Controllers
                 PrMst.SendToProcessingDate = DateTime.Now;
 
                 db.SaveChanges();
+
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "StatId |" ,
+
+                    ValueStr =
+                    9 + "|" ,
+                    
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "Send PR to Sourcing"
+
+                });
+                db.SaveChanges();
             }
 
             return View("PurchasingProsesPR");
@@ -3431,7 +4012,8 @@ namespace PurchaseWeb_2.Controllers
                 ColumnStr = "AccountCode ",
                 ValueStr = AccountCode,
                 PRId = PrMstId,
-                PRDtlsId = 0
+                PRDtlsId = 0,
+                Remarks = "Edit PR Account Code "
 
             });
             db.SaveChanges();
@@ -3461,7 +4043,8 @@ namespace PurchaseWeb_2.Controllers
                 ColumnStr = "IOrderNo ",
                 ValueStr = IOrderNo,
                 PRId = PrMstId,
-                PRDtlsId = 0
+                PRDtlsId = 0,
+                Remarks = "Edit PR IO no"
 
             });
             db.SaveChanges();
@@ -3491,7 +4074,8 @@ namespace PurchaseWeb_2.Controllers
                 ColumnStr = "AssetNo ",
                 ValueStr = AssetNo,
                 PRId = PrMstId,
-                PRDtlsId = 0
+                PRDtlsId = 0,
+                Remarks = "Edit Asset No"
 
             });
             db.SaveChanges();
@@ -3647,7 +4231,8 @@ namespace PurchaseWeb_2.Controllers
                 proViewModel.LastVendorCode + " | " + proViewModel.LastVendorName + " | " + proViewModel.LastCur + " | " + proViewModel.LastCurExc + " | " + 
                 proViewModel.DomiPartNo,
                 PRId = proViewModel.PRid,
-                PRDtlsId = proViewModel.PRDtId
+                PRDtlsId = proViewModel.PRDtId,
+                Remarks = "Edit PR Details"
 
             });
             db.SaveChanges();
@@ -3744,7 +4329,8 @@ namespace PurchaseWeb_2.Controllers
                     viewModel.LastPrice + " | " + viewModel.LastQuoteDate + " | " + viewModel.PODate + " | " + viewModel.LastPONo + " | " + 
                     viewModel.PurchasingRemarks + " | " + viewModel.CostDown,
                     PRId = viewModel.PRid,
-                    PRDtlsId = viewModel.PRDtId
+                    PRDtlsId = viewModel.PRDtId,
+                    Remarks = "Add PR Details"
                 });
                 db.SaveChanges();
 
@@ -3813,7 +4399,8 @@ namespace PurchaseWeb_2.Controllers
                     PRDtls.LastPrice + " | " + PRDtls.LastQuoteDate + " | " + PRDtls.PODate + " | " + PRDtls.LastPONo + " | " +
                     PRDtls.PurchasingRemarks + " | " + PRDtls.CostDown,
                     PRId = PRDtls.PRid,
-                    PRDtlsId = PRDtls.PRDtId
+                    PRDtlsId = PRDtls.PRDtId,
+                    Remarks = "Delete PR Details"
                 });
                 db.SaveChanges();
 
@@ -3822,8 +4409,6 @@ namespace PurchaseWeb_2.Controllers
                 //db.PR_Details.Attach(pR_);
                 db.PR_Details.Remove(PRDtls);
                 db.SaveChanges();
-
-                
 
                 this.AddNotification("The details Deleted successfully!!", NotificationType.SUCCESS);
                 return RedirectToAction("PurDtlsListPurchasingProses", "Purchase", new { PrMstId = DelPrMstId });
@@ -4007,7 +4592,8 @@ namespace PurchaseWeb_2.Controllers
                 proViewModel.DomiPartNo + " | " + proViewModel.VendorPartNo + " | " + proViewModel.Qty + " | " + proViewModel.UOMName + " | " +
                 proViewModel.Remarks + " | " + proViewModel.Device + " | " + proViewModel.SalesOrder ,
                 PRId = proViewModel.PRid,
-                PRDtlsId = proViewModel.PRDtId
+                PRDtlsId = proViewModel.PRDtId,
+                Remarks = "update PR Details"
 
             });
             db.SaveChanges();
@@ -4129,7 +4715,8 @@ namespace PurchaseWeb_2.Controllers
                     pR_.CurCode + " | " +
                     pR_.AccGroup + " | " ,
                     PRId = pR_.PRid,
-                    PRDtlsId = pR_.PRDtId
+                    PRDtlsId = pR_.PRDtId,
+                    Remarks = "Add PR Details"
 
                 });
                 db.SaveChanges();
@@ -4175,11 +4762,7 @@ namespace PurchaseWeb_2.Controllers
             //delete DelPurList
             try
             {
-                PR_Details pR_ = new PR_Details() { PRDtId = PrDtlsId };
-                db.PR_Details.Attach(pR_);
-                db.PR_Details.Remove(pR_);
-                db.SaveChanges();
-
+                var _prDtls = db.PR_Details.Where(x => x.PRDtId == PrDtlsId).FirstOrDefault();
                 string Username = (string)Session["Username"];
                 // add audit log for PR
                 var auditLog = db.Set<AuditPR_Log>();
@@ -4189,14 +4772,20 @@ namespace PurchaseWeb_2.Controllers
                     ModifiedOn = DateTime.Now,
                     ActionBtn = "DELETE",
                     ColumnStr = "VendorCode | VendorName | Description | DomiPartNo | VendorPartNo | Qty | UOMName | Remarks | Device | SalesOrder |",
-                    ValueStr = pR_.VendorCode + " | " + pR_.VendorName + " | " + pR_.Description + " | " +
-                    pR_.DomiPartNo + " | " + pR_.VendorPartNo + " | " + pR_.Qty + " | " + pR_.UOMName + " | " +
-                    pR_.Remarks + " | " + pR_.Device + " | " + pR_.SalesOrder,
-                    PRId = pR_.PRid,
-                    PRDtlsId = pR_.PRDtId
+                    ValueStr = _prDtls.VendorCode + " | " + _prDtls.VendorName + " | " + _prDtls.Description + " | " +
+                    _prDtls.DomiPartNo + " | " + _prDtls.VendorPartNo + " | " + _prDtls.Qty + " | " + _prDtls.UOMName + " | " +
+                    _prDtls.Remarks + " | " + _prDtls.Device + " | " + _prDtls.SalesOrder,
+                    PRId = _prDtls.PRid,
+                    PRDtlsId = _prDtls.PRDtId,
+                    Remarks = "Delete PR Details"
 
                 });
                 db.SaveChanges();
+
+                PR_Details pR_ = new PR_Details() { PRDtId = PrDtlsId };
+                db.PR_Details.Attach(pR_);
+                db.PR_Details.Remove(pR_);
+                db.SaveChanges();                
 
                 this.AddNotification("The details Deleted successfully!!", NotificationType.SUCCESS);
                 return RedirectToAction("PRDtlsListPurchasingStockable","Purchase", new { PrMstId = DelPrMstId });
@@ -4220,6 +4809,27 @@ namespace PurchaseWeb_2.Controllers
                 PrMst.PurchaserName = Convert.ToString(Session["Username"]);
                 PrMst.SendToProcessingDate = DateTime.Now;
 
+                db.SaveChanges();
+
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "StatId |" ,
+                    
+                    ValueStr =
+                    12 + "|" ,
+
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "Send PR to Sourcing"
+
+                });
                 db.SaveChanges();
             }
 
@@ -4263,6 +4873,27 @@ namespace PurchaseWeb_2.Controllers
                     PrMst.ModifiedDate = DateTime.Now;
                     PrMst.PurchasingComment = pR_Mst.PurchasingComment;
 
+                    db.SaveChanges();
+
+                    //audit log
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "UPDATE",
+                        ColumnStr = "StatId |" ,
+
+                        ValueStr =
+                        13 + "|" ,
+                        
+                        PRId = PRId,
+                        PRDtlsId = 0,
+                        Remarks = "PR Reject by Purchasing"
+
+                    });
                     db.SaveChanges();
                 }
 

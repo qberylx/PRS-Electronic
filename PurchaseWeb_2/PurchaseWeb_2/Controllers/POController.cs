@@ -459,190 +459,730 @@ namespace PurchaseWeb_2.Controllers
             }
         }
 
-        public ActionResult ExportToCSV(List<PO_Mst> getPOListby)
+        public ActionResult ExportToCSV(List<PO_Mst> getPOListby, string Export )
         {
-            
-
-            List<PO_CSV_Header> POHeaders = db.PO_CSV_Header.ToList<PO_CSV_Header>();
-            // get CSV PO Header
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < POHeaders.Count; i++)
+            if (Export == "CSV")
             {
-                sb.Append(POHeaders[i].A.ToString() + ',');
-                sb.Append(POHeaders[i].B.ToString() + ',');
-                sb.Append(POHeaders[i].C.ToString() + ',');
-                sb.Append(POHeaders[i].D.ToString() + ',');
-                sb.Append(POHeaders[i].E.ToString() + ',');
-                sb.Append(POHeaders[i].F.ToString() + ',');
-                sb.Append(POHeaders[i].G.ToString() + ',');
-                sb.Append(POHeaders[i].H.ToString() + ',');
-                sb.Append(POHeaders[i].I.ToString() + ',');
-                sb.Append(POHeaders[i].J.ToString() + ',');
-                sb.Append(POHeaders[i].K.ToString() + ',');
-                sb.Append(POHeaders[i].L.ToString() + ',');
-                sb.Append(POHeaders[i].M.ToString() + ',');
-                sb.Append(POHeaders[i].N.ToString() + ',');
-                sb.Append(POHeaders[i].O.ToString() + ',');
-                sb.Append(POHeaders[i].P.ToString() + ',');
-                sb.Append(POHeaders[i].Q.ToString() + ',');
-                sb.Append(POHeaders[i].R.ToString() + ',');
-                sb.Append(POHeaders[i].S.ToString() + ',');
-                sb.Append(POHeaders[i].T.ToString() + ',');
-                sb.Append(POHeaders[i].U.ToString() + ',');
-                sb.Append(POHeaders[i].V.ToString() + ',');
-                sb.Append(POHeaders[i].W.ToString() + ',');
-                sb.Append(POHeaders[i].X.ToString() + ',');
-                sb.Append(POHeaders[i].Y.ToString() + ',');
-                sb.Append(POHeaders[i].Z.ToString() + ',');
-                sb.Append(POHeaders[i].AA.ToString() + ',');
-
-                //Append new line character.
-                sb.Append("\r\n");
-            }
-
-
-            int PORHSEQ;
-            //PO Master
-            foreach (PO_Mst getPO in getPOListby.Where(x=>x.ExportFlag == true).ToList() )
-            {
-                var prdt = db.PR_Details.Where(x => x.NoPo == getPO.NoPo).FirstOrDefault();
-                var currExch = dbDom1.CSCRDs.Where(x => x.HOMECUR == "MYR" && x.RATETYPE == "SP" && x.SOURCECUR == prdt.CurCode)
-                    .OrderByDescending(o => o.RATEDATE)
-                    .FirstOrDefault();
-
-                PORHSEQ = 3000 + getPO.POId;
-
-                //PO main
-                sb.Append("1" + ',');
-                sb.Append(PORHSEQ.ToString() + ',');
-                sb.Append(getPO.CreateDate?.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo) + ',');
-                sb.Append(getPO.NoPo.ToString() + ',');
-                sb.Append( ',');
-                sb.Append(prdt.VendorCode.ToString() + ',');
-                sb.Append(prdt.VendorName.ToString() + ',');
-                sb.Append("1" + ',');
-                sb.Append(getPO.CreateDate?.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo) + ',');
-                sb.Append(prdt.ReqDevDate?.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo) + ',');
-                if (prdt.PR_Mst.PRTypeId == 4 && prdt.PR_Mst.PrGroupType1.CPRFFlag == false)
+                List<PO_CSV_Header> POHeaders = db.PO_CSV_Header.ToList<PO_CSV_Header>();
+                // get CSV PO Header
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < POHeaders.Count; i++)
                 {
-                    sb.Append(prdt.Remarks.ToString().Replace(',', ' ') + '|' + prdt.PR_Mst.AccountCode.ToString() + ',');
-                }else
-                {
-                    sb.Append(prdt.Remarks.ToString().Replace(',', ' ') + ',');
+                    sb.Append(POHeaders[i].A.ToString() + ',');
+                    sb.Append(POHeaders[i].B.ToString() + ',');
+                    sb.Append(POHeaders[i].C.ToString() + ',');
+                    sb.Append(POHeaders[i].D.ToString() + ',');
+                    sb.Append(POHeaders[i].E.ToString() + ',');
+                    sb.Append(POHeaders[i].F.ToString() + ',');
+                    sb.Append(POHeaders[i].G.ToString() + ',');
+                    sb.Append(POHeaders[i].H.ToString() + ',');
+                    sb.Append(POHeaders[i].I.ToString() + ',');
+                    sb.Append(POHeaders[i].J.ToString() + ',');
+                    sb.Append(POHeaders[i].K.ToString() + ',');
+                    sb.Append(POHeaders[i].L.ToString() + ',');
+                    sb.Append(POHeaders[i].M.ToString() + ',');
+                    sb.Append(POHeaders[i].N.ToString() + ',');
+                    sb.Append(POHeaders[i].O.ToString() + ',');
+                    sb.Append(POHeaders[i].P.ToString() + ',');
+                    sb.Append(POHeaders[i].Q.ToString() + ',');
+                    sb.Append(POHeaders[i].R.ToString() + ',');
+                    sb.Append(POHeaders[i].S.ToString() + ',');
+                    sb.Append(POHeaders[i].T.ToString() + ',');
+                    sb.Append(POHeaders[i].U.ToString() + ',');
+                    sb.Append(POHeaders[i].V.ToString() + ',');
+                    sb.Append(POHeaders[i].W.ToString() + ',');
+                    sb.Append(POHeaders[i].X.ToString() + ',');
+                    sb.Append(POHeaders[i].Y.ToString() + ',');
+                    sb.Append(POHeaders[i].Z.ToString() + ',');
+                    sb.Append(POHeaders[i].AA.ToString() + ',');
+
+                    //Append new line character.
+                    sb.Append("\r\n");
                 }
-                
-                sb.Append(prdt.PRNo.ToString() + '/' + getPO.CreateBy + ',');
-                sb.Append( ',');
-                sb.Append( ',');
-                sb.Append( ',');
-                sb.Append(prdt.CurCode.ToString() + ',');
 
-                if (prdt.CurCode == "MYR")
+
+                int PORHSEQ;
+                //PO Master
+                foreach (PO_Mst getPO in getPOListby.Where(x => x.ExportFlag == true).ToList())
                 {
-                    sb.Append( "1" + ',');
-                    sb.Append( "SP" + ',');
-                    sb.Append( ',');
-                    sb.Append( "1" + ',');
-                }
-                else
-                {
-                    sb.Append(currExch.RATE.ToString() + ',');
-                    sb.Append(currExch.RATETYPE.ToString() + ',');
-                    sb.Append(currExch.RATEDATE.ToString() + ',');
-                    sb.Append(currExch.RATEOPER.ToString() + ',');
-                }
-                
-                sb.Append("SST" + ',');
-                sb.Append(prdt.TaxCode.ToString() + ',');
-                sb.Append(prdt.TaxClass.ToString() + ',');
-                sb.Append( ',');
-                sb.Append( ',');
-                sb.Append( ',');
-                sb.Append(',');
+                    var prdt = db.PR_Details.Where(x => x.NoPo == getPO.NoPo).FirstOrDefault();
+                    var currExch = dbDom1.CSCRDs.Where(x => x.HOMECUR == "MYR" && x.RATETYPE == "SP" && x.SOURCECUR == prdt.CurCode)
+                        .OrderByDescending(o => o.RATEDATE)
+                        .FirstOrDefault();
 
-                //Append new line character.
-                sb.Append("\r\n");
-
-                //PO Details
-                var prdtList = db.PR_Details.Where(x => x.NoPo == getPO.NoPo).ToList();
-
-                int PORLREV = 0;
-                int PORLSEQ = 3000;
-                int DETAILNUM = 0;
-                
-                foreach (var pr in prdtList)
-                {
-                    PORLREV = PORLREV + 1000;
-                    DETAILNUM = DETAILNUM + 1;
                     PORHSEQ = 3000 + getPO.POId;
 
-                    sb.Append("2" + ',');
+                    //PO main
+                    sb.Append("1" + ',');
                     sb.Append(PORHSEQ.ToString() + ',');
-                    sb.Append(PORLREV.ToString() + ',');
-
-                    PORLSEQ = PORLSEQ + 1;
-                    sb.Append(PORLSEQ.ToString() + ',');
-                    PORLSEQ = PORLSEQ + 1;
-                    sb.Append(PORLSEQ.ToString() + ',');
+                    sb.Append(getPO.CreateDate?.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo) + ',');
+                    sb.Append(getPO.NoPo.ToString() + ',');
                     sb.Append(',');
-                    sb.Append(pr.DomiPartNo.ToString() + ',');
-                    sb.Append("N1000S" + ',');
-                    sb.Append(pr.Description.ToString().Replace(',',' ').Replace("\n", "").Replace("\r", "") +  ',');
-                    sb.Append(pr.VendorPartNo.ToString() + ',');
-                    sb.Append("FALSE" + ',');
-                    sb.Append(pr.UOMName.ToString() + ',');
-                    sb.Append(pr.Qty.ToString() + ',');
-                    sb.Append(pr.UnitPrice.ToString() + ',');
-                    sb.Append(pr.TotCostWitTax.ToString() +  ',');
-                    sb.Append(pr.TotCostWitTax.ToString() + ',');
-                    sb.Append(pr.TaxClass.ToString() + ',');
-                    sb.Append(pr.Tax.ToString() + ',');
-                    sb.Append("FALSE" + ',');
-                    var discount = pr.TotCostWitTax - pr.TotCostnoTax;
-                    sb.Append(discount.ToString() + ',');
-                    sb.Append(discount.ToString() + ',');
-                    sb.Append("0" + ',');
-                    sb.Append("0" + ',');
-                    sb.Append(pr.TotCostWitTax.ToString() + ',');
-                    sb.Append("0" + ',');
-                    sb.Append("0" + ',');
-                    sb.Append(DETAILNUM.ToString() + ',');
+                    sb.Append(prdt.VendorCode.ToString() + ',');
+                    sb.Append(prdt.VendorName.ToString() + ',');
+                    sb.Append("1" + ',');
+                    sb.Append(getPO.CreateDate?.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo) + ',');
+                    sb.Append(prdt.ReqDevDate?.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo) + ',');
+                    if (prdt.PR_Mst.PRTypeId == 4 && prdt.PR_Mst.PrGroupType1.CPRFFlag == false)
+                    {
+                        sb.Append(prdt.Remarks.ToString().Replace(',', ' ') + '|' + prdt.PR_Mst.AccountCode.ToString() + ',');
+                    }
+                    else
+                    {
+                        sb.Append(prdt.Remarks.ToString().Replace(',', ' ') + ',');
+                    }
+
+                    sb.Append(prdt.PRNo.ToString() + '/' + getPO.CreateBy + ',');
+                    sb.Append(',');
+                    sb.Append(',');
+                    sb.Append(',');
+                    sb.Append(prdt.CurCode.ToString() + ',');
+
+                    if (prdt.CurCode == "MYR")
+                    {
+                        sb.Append("1" + ',');
+                        sb.Append("SP" + ',');
+                        sb.Append(',');
+                        sb.Append("1" + ',');
+                    }
+                    else
+                    {
+                        sb.Append(currExch.RATE.ToString() + ',');
+                        sb.Append(currExch.RATETYPE.ToString() + ',');
+                        sb.Append(currExch.RATEDATE.ToString() + ',');
+                        sb.Append(currExch.RATEOPER.ToString() + ',');
+                    }
+
+                    sb.Append("SST" + ',');
+                    sb.Append(prdt.TaxCode.ToString() + ',');
+                    sb.Append(prdt.TaxClass.ToString() + ',');
+                    sb.Append(',');
+                    sb.Append(',');
+                    sb.Append(',');
+                    sb.Append(',');
 
                     //Append new line character.
                     sb.Append("\r\n");
 
-                    var sDesc = pr.Description.ToString();
-                    string[] description = sDesc.Split(new string[] { Environment.NewLine },
-                        StringSplitOptions.None
-                    );
+                    //PO Details
+                    var prdtList = db.PR_Details.Where(x => x.NoPo == getPO.NoPo).ToList();
 
-                    int PORLREV3 = 0;
-                    foreach (var desc in description)
+                    int PORLREV = 0;
+                    int PORLSEQ = 3000;
+                    int DETAILNUM = 0;
+
+                    foreach (var pr in prdtList)
                     {
-                        //3	66112531	10	3002	1	1.Show epoxy batch no on SMA Label Print Program
-                        PORLREV3 = PORLREV3 + 10;
+                        PORLREV = PORLREV + 1000;
+                        DETAILNUM = DETAILNUM + 1;
+                        PORHSEQ = 3000 + getPO.POId;
 
-                        sb.Append("3" + ',');
+                        sb.Append("2" + ',');
                         sb.Append(PORHSEQ.ToString() + ',');
-                        sb.Append(PORLREV3.ToString() + ',');
+                        sb.Append(PORLREV.ToString() + ',');
+
+                        PORLSEQ = PORLSEQ + 1;
                         sb.Append(PORLSEQ.ToString() + ',');
-                        sb.Append("1" + ',');
-                        sb.Append(desc.ToString().Replace(',', ' ') + ',');
+                        PORLSEQ = PORLSEQ + 1;
+                        sb.Append(PORLSEQ.ToString() + ',');
+                        sb.Append(',');
+                        sb.Append(pr.DomiPartNo.ToString() + ',');
+                        sb.Append("N1000S" + ',');
+                        sb.Append(pr.Description.ToString().Replace(',', ' ').Replace("\n", "").Replace("\r", "") + ',');
+                        sb.Append(pr.VendorPartNo.ToString() + ',');
+                        sb.Append("FALSE" + ',');
+                        sb.Append(pr.UOMName.ToString() + ',');
+                        sb.Append(pr.Qty.ToString() + ',');
+                        sb.Append(pr.UnitPrice.ToString() + ',');
+                        sb.Append(pr.TotCostWitTax.ToString() + ',');
+                        sb.Append(pr.TotCostWitTax.ToString() + ',');
+                        sb.Append(pr.TaxClass.ToString() + ',');
+                        sb.Append(pr.Tax.ToString() + ',');
+                        sb.Append("FALSE" + ',');
+                        var discount = pr.TotCostWitTax - pr.TotCostnoTax;
+                        sb.Append(discount.ToString() + ',');
+                        sb.Append(discount.ToString() + ',');
+                        sb.Append("0" + ',');
+                        sb.Append("0" + ',');
+                        sb.Append(pr.TotCostWitTax.ToString() + ',');
+                        sb.Append("0" + ',');
+                        sb.Append("0" + ',');
+                        sb.Append(DETAILNUM.ToString() + ',');
 
                         //Append new line character.
                         sb.Append("\r\n");
+
+                        var sDesc = pr.Description.ToString();
+                        string[] description = sDesc.Split(new string[] { Environment.NewLine },
+                            StringSplitOptions.None
+                        );
+
+                        int PORLREV3 = 0;
+                        foreach (var desc in description)
+                        {
+                            //3	66112531	10	3002	1	1.Show epoxy batch no on SMA Label Print Program
+                            PORLREV3 = PORLREV3 + 10;
+
+                            sb.Append("3" + ',');
+                            sb.Append(PORHSEQ.ToString() + ',');
+                            sb.Append(PORLREV3.ToString() + ',');
+                            sb.Append(PORLSEQ.ToString() + ',');
+                            sb.Append("1" + ',');
+                            sb.Append(desc.ToString().Replace(',', ' ') + ',');
+
+                            //Append new line character.
+                            sb.Append("\r\n");
+                        }
+
+
                     }
 
 
-                }                
+                }
 
+
+                return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "PurchaseOrder.csv");
 
             }
 
+            else if(Export == "ExcelUpdate")
+            {
+                string ExportPath = "";
+                try
+                {
+                    string SamplePath = HttpContext.Server.MapPath("/ExcelFiles/PO.xlsx");
+                    ExportPath = HttpContext.Server.MapPath("/ExcelFiles/PO_Export.xlsx");
+                    //WorkBook wb = WorkBook.Load(SamplePath);
+                    XLWorkbook wb = new XLWorkbook(SamplePath);
+                    IXLWorksheet ws = wb.Worksheet("Purchase_Orders");
+                    IXLWorksheet ws2 = wb.Worksheet("Purchase_Order_Lines");
+                    IXLWorksheet ws3 = wb.Worksheet("Purchase_Order_Comments");
+                    //Purchase_Order_Hdr_Opt__Fields
+                    IXLWorksheet ws4 = wb.Worksheet("Purchase_Order_Hdr_Opt__Fields");
 
-            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "PurchaseOrder.csv");
-            
+                    DataTable dt = new DataTable();
+                    DataTable dt2 = new DataTable();
+                    DataTable dt3 = new DataTable();
+                    DataTable dt4 = new DataTable();
+                    DataTable dt5 = new DataTable();
+                    DataTable dt6 = new DataTable();
+
+                    //Purchase_Orders
+
+                    dt.Columns.Add("PORHSEQ");
+                    dt.Columns.Add("DATE");
+                    dt.Columns.Add("PONUMBER");
+                    dt.Columns.Add("FOBPOINT");
+                    dt.Columns.Add("VDCODE");
+                    dt.Columns.Add("VDNAME");
+                    dt.Columns.Add("PORTYPE");
+                    dt.Columns.Add("ORDEREDON");
+                    dt.Columns.Add("EXPARRIVAL");
+                    dt.Columns.Add("DESCRIPTIO");
+                    dt.Columns.Add("REFERENCE");
+                    dt.Columns.Add("COMMENT");
+                    dt.Columns.Add("VIACODE");
+                    dt.Columns.Add("VIANAME");
+                    dt.Columns.Add("CURRENCY");
+                    dt.Columns.Add("RATE");
+                    dt.Columns.Add("RATETYPE");
+                    dt.Columns.Add("RATEDATE");
+                    dt.Columns.Add("RATEOPER");
+                    //dt.Columns.Add("RATEOVER");
+                    dt.Columns.Add("TAXGROUP");
+                    dt.Columns.Add("TAXAUTH1");
+                    dt.Columns.Add("TAXCLASS1");
+
+                    //Purchase_Order_Lines
+                    dt2.Columns.Add("PORHSEQ");
+                    dt2.Columns.Add("PORLREV");
+                    dt2.Columns.Add("PORLSEQ");
+                    dt2.Columns.Add("PORCSEQ");
+                    dt2.Columns.Add("OEONUMBER");
+                    dt2.Columns.Add("ITEMNO");
+                    dt2.Columns.Add("LOCATION");
+                    dt2.Columns.Add("ITEMDESC");
+                    dt2.Columns.Add("VENDITEMNO");
+                    dt2.Columns.Add("HASCOMMENT");
+                    dt2.Columns.Add("ORDERUNIT");
+                    dt2.Columns.Add("OQORDERED");
+                    dt2.Columns.Add("UNITCOST");
+                    dt2.Columns.Add("EXTENDED");
+                    dt2.Columns.Add("TAXBASE1");
+                    dt2.Columns.Add("TAXCLASS1");
+                    dt2.Columns.Add("TAXRATE1");
+                    dt2.Columns.Add("TAXINCLUD1");
+                    dt2.Columns.Add("TAXAMOUNT1");
+                    dt2.Columns.Add("TXALLOAMT1");
+                    dt2.Columns.Add("TXRECVAMT1");
+                    dt2.Columns.Add("TXEXPSAMT1");
+                    dt2.Columns.Add("TXBASEALLO");
+                    dt2.Columns.Add("DISCPCT");
+                    dt2.Columns.Add("DISCOUNT");
+                    dt2.Columns.Add("DETAILNUM");
+
+                    //Purchase_Order_Comments
+                    dt3.Columns.Add("PORHSEQ");
+                    dt3.Columns.Add("PORCREV");
+                    dt3.Columns.Add("PORCSEQ");
+                    dt3.Columns.Add("COMMENTTYP");
+                    dt3.Columns.Add("COMMENT");
+
+                    //Purchase_Order_Requisitions
+                    dt4.Columns.Add("PORHSEQ");
+                    dt4.Columns.Add("PORRREV");
+                    dt4.Columns.Add("RQNNUMBER");
+                    dt4.Columns.Add("BLNKVDCODE");
+                    dt4.Columns.Add("USEVDTYPE");
+
+                    //Purchase_Order_Hdr_Opt__Fields
+                    dt5.Columns.Add("PORHSEQ");
+                    dt5.Columns.Add("OPTFIELD");
+                    dt5.Columns.Add("VALUE");
+                    dt5.Columns.Add("TYPE");
+                    dt5.Columns.Add("LENGTH");
+                    dt5.Columns.Add("DECIMALS");
+                    dt5.Columns.Add("ALLOWNULL");
+                    dt5.Columns.Add("VALIDATE");
+                    dt5.Columns.Add("SWSET");
+
+                    //Purchase_Order_Det__Opt__Fields
+                    dt6.Columns.Add("PORHSEQ");
+                    dt6.Columns.Add("PORLREV");
+                    dt6.Columns.Add("OPTFIELD");
+                    dt6.Columns.Add("VALUE");
+                    dt6.Columns.Add("SWSET");
+
+
+
+                    int PORHSEQ;
+                    //PO Master
+                    foreach (PO_Mst getPO in getPOListby.Where(x => x.ExportFlag == true).ToList())
+                    {
+                        var prdt = db.PR_Details.Where(x => x.NoPo == getPO.NoPo).FirstOrDefault();
+                        var currExch = dbDom1.CSCRDs.Where(x => x.HOMECUR == "MYR" && x.RATETYPE == "SP" && x.SOURCECUR == prdt.CurCode)
+                        .OrderByDescending(o => o.RATEDATE)
+                        .FirstOrDefault();
+
+                        PORHSEQ = 3000 + getPO.POId;
+                        string Remarks = "";
+                        string RATE = "";
+                        string RATETYPE = "";
+                        string RATEDATE = "";
+                        string RATEOPER = "";
+
+                        if (prdt.PR_Mst.PRTypeId == 4 && prdt.PR_Mst.PrGroupType1.CPRFFlag == false)
+                        {
+                            Remarks = prdt.Remarks.ToString() + '|' + prdt.PR_Mst.AccountCode.ToString();
+                        }
+                        else
+                        {
+                            Remarks = prdt.Remarks.ToString();
+                        }
+
+                        if (prdt.CurCode == "MYR")
+                        {
+                            RATE = "1";
+                            RATETYPE = "SP";
+                            RATEDATE = "";
+                            RATEOPER = "1";
+                        }
+                        else
+                        {
+                            RATE = currExch.RATE.ToString();
+                            RATETYPE = currExch.RATETYPE.ToString();
+                            RATEDATE = currExch.RATEDATE.ToString();
+                            RATEOPER = currExch.RATEOPER.ToString();
+                        }
+
+                        dt.Rows.Add(
+                        PORHSEQ.ToString(),
+                        getPO.CreateDate?.ToString("dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo),
+                        getPO.NoPo.ToString(),
+                        "",
+                        prdt.VendorCode.ToString(),
+                        prdt.VendorName.ToString(),
+                        "1",
+                        getPO.CreateDate?.ToString("dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo),
+                        prdt.ReqDevDate?.ToString("dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo),
+                        Remarks,
+                        prdt.PRNo.ToString() + '/' + getPO.CreateBy,
+                        "",
+                        "",
+                        "",
+                        prdt.CurCode.ToString(),
+                        RATE,
+                        RATETYPE,
+                        RATEDATE,
+                        RATEOPER,
+                        "SST",
+                        prdt.TaxCode.ToString(),
+                        prdt.TaxClass.ToString()
+
+                        );
+
+                        ws.Cell(2, 1).InsertData(dt.AsEnumerable());
+
+                        //Purchase_Order_Hdr_Opt__Fields
+                        var Apveno = dbDom1.APVENOes.Where(x => x.VENDORID == prdt.VendorCode && x.OPTFIELD == "FOBPOINT").FirstOrDefault();
+
+                        dt5.Rows.Add(
+                            PORHSEQ.ToString(),
+                            Apveno.OPTFIELD.ToString(),
+                            Apveno.VALUE.ToString(),
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            Apveno.SWSET.ToString()
+                        );
+                        ws4.Cell(2, 1).InsertData(dt5.AsEnumerable());
+
+                        //PO Details
+                        var prdtList = db.PR_Details.Where(x => x.NoPo == getPO.NoPo).ToList();
+
+                        int PORLREV = 0;
+                        int PORLSEQ = 3000;
+                        int DETAILNUM = 0;
+
+                        foreach (var pr in prdtList)
+                        {
+                            PORLREV = PORLREV + 1000;
+                            DETAILNUM = DETAILNUM + 1;
+                            PORHSEQ = 3000 + getPO.POId;
+                            PORLSEQ = PORLSEQ + 1;
+                            var discount = pr.TotCostWitTax - pr.TotCostnoTax;
+
+                            dt2.Rows.Add(
+                                PORHSEQ.ToString(),
+                                PORLREV.ToString(),
+                                PORLSEQ.ToString(),
+                                PORLSEQ.ToString(),
+                                "",
+                                pr.DomiPartNo.ToString(),
+                                "N1000S",
+                                pr.Description.ToString(),
+                                pr.VendorPartNo.ToString(),
+                                "FALSE",
+                                pr.UOMName.ToString(),
+                                pr.Qty.ToString(),
+                                pr.UnitPrice.ToString(),
+                                pr.TotCostWitTax.ToString(),
+                                pr.TotCostWitTax.ToString(),
+                                pr.TaxClass.ToString(),
+                                pr.Tax.ToString(),
+                                "FALSE",
+                                discount.ToString(),
+                                discount.ToString(),
+                                "0",
+                                "0",
+                                pr.TotCostWitTax.ToString(),
+                                "0",
+                                "0",
+                                DETAILNUM.ToString()
+                                );
+
+                            ws2.Cell(2, 1).InsertData(dt2.AsEnumerable());
+
+                            //COmments
+
+                            var sDesc = pr.Description.ToString();
+                            string[] description = sDesc.Split(new string[] { Environment.NewLine },
+                                StringSplitOptions.None
+                            );
+
+                            int PORLREV3 = 0;
+                            foreach (var desc in description)
+                            {
+
+                                PORLREV3 = PORLREV3 + 10;
+
+                                dt3.Rows.Add(
+                                    PORHSEQ.ToString(),
+                                    PORLREV3.ToString(),
+                                    PORLSEQ.ToString(),
+                                    "1",
+                                    desc.ToString()
+
+                                    );
+
+                                ws3.Cell(2, 1).InsertData(dt3.AsEnumerable());
+                            }
+
+                        }
+
+
+                    }
+
+                    wb.SaveAs(ExportPath);
+
+                }
+                catch (FileNotFoundException e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+
+                var namaFile = "PO_Exportby_" + Session["Username"] + "_"+ DateTime.Today.ToString("ddMMyyyy") + ".xlsx";
+
+                return File(ExportPath, "text/plain", namaFile);
+            }
+
+            else
+            {
+                DataTable dt = new DataTable("Purchase_Orders");
+                DataTable dt2 = new DataTable("Purchase_Order_Lines");
+                DataTable dt3 = new DataTable("Purchase_Order_Comments");
+                DataTable dt4 = new DataTable("Purchase_Order_Requisitions");
+                DataTable dt5 = new DataTable("Purchase_Order_Hdr_Opt__Fields");
+                DataTable dt6 = new DataTable("Purchase_Order_Det__Opt__Fields");
+
+                //Purchase_Orders
+
+                dt.Columns.Add("PORHSEQ");
+                dt.Columns.Add("DATE");
+                dt.Columns.Add("PONUMBER");
+                dt.Columns.Add("FOBPOINT");
+                dt.Columns.Add("VDCODE");
+                dt.Columns.Add("VDNAME");
+                dt.Columns.Add("PORTYPE");
+                dt.Columns.Add("ORDEREDON");
+                dt.Columns.Add("EXPARRIVAL");
+                dt.Columns.Add("DESCRIPTIO");
+                dt.Columns.Add("REFERENCE");
+                dt.Columns.Add("COMMENT");
+                dt.Columns.Add("VIACODE");
+                dt.Columns.Add("VIANAME");
+                dt.Columns.Add("CURRENCY");
+                dt.Columns.Add("RATE");
+                dt.Columns.Add("RATETYPE");
+                dt.Columns.Add("RATEDATE");
+                dt.Columns.Add("RATEOPER");
+                //dt.Columns.Add("RATEOVER");
+                dt.Columns.Add("TAXGROUP");
+                dt.Columns.Add("TAXAUTH1");
+                dt.Columns.Add("TAXCLASS1");
+
+                //Purchase_Order_Lines
+                dt2.Columns.Add("PORHSEQ");
+                dt2.Columns.Add("PORLREV");
+                dt2.Columns.Add("PORLSEQ");
+                dt2.Columns.Add("PORCSEQ");
+                dt2.Columns.Add("OEONUMBER");
+                dt2.Columns.Add("ITEMNO");
+                dt2.Columns.Add("LOCATION");
+                dt2.Columns.Add("ITEMDESC");
+                dt2.Columns.Add("VENDITEMNO");
+                dt2.Columns.Add("HASCOMMENT");
+                dt2.Columns.Add("ORDERUNIT");
+                dt2.Columns.Add("OQORDERED");
+                dt2.Columns.Add("UNITCOST");
+                dt2.Columns.Add("EXTENDED");
+                dt2.Columns.Add("TAXBASE1");
+                dt2.Columns.Add("TAXCLASS1");
+                dt2.Columns.Add("TAXRATE1");
+                dt2.Columns.Add("TAXINCLUD1");
+                dt2.Columns.Add("TAXAMOUNT1");
+                dt2.Columns.Add("TXALLOAMT1");
+                dt2.Columns.Add("TXRECVAMT1");
+                dt2.Columns.Add("TXEXPSAMT1");
+                dt2.Columns.Add("TXBASEALLO");
+                dt2.Columns.Add("DISCPCT");
+                dt2.Columns.Add("DISCOUNT");
+                dt2.Columns.Add("DETAILNUM");
+
+                //Purchase_Order_Comments
+                dt3.Columns.Add("PORHSEQ");
+                dt3.Columns.Add("PORCREV");
+                dt3.Columns.Add("PORCSEQ");
+                dt3.Columns.Add("COMMENTTYP");
+                dt3.Columns.Add("COMMENT");
+
+                //Purchase_Order_Requisitions
+                dt4.Columns.Add("PORHSEQ");
+                dt4.Columns.Add("PORRREV");
+                dt4.Columns.Add("RQNNUMBER");
+                dt4.Columns.Add("BLNKVDCODE");
+                dt4.Columns.Add("USEVDTYPE");
+
+                //Purchase_Order_Hdr_Opt__Fields
+                dt5.Columns.Add("PORHSEQ");
+                dt5.Columns.Add("OPTFIELD");
+                dt5.Columns.Add("VALUE");
+                dt5.Columns.Add("SWSET");
+
+                //Purchase_Order_Det__Opt__Fields
+                dt6.Columns.Add("PORHSEQ");
+                dt6.Columns.Add("PORLREV");
+                dt6.Columns.Add("OPTFIELD");
+                dt6.Columns.Add("VALUE");
+                dt6.Columns.Add("SWSET");
+
+                int PORHSEQ;
+                //PO Master
+                foreach (PO_Mst getPO in getPOListby.Where(x => x.ExportFlag == true).ToList())
+                {
+                    var prdt = db.PR_Details.Where(x => x.NoPo == getPO.NoPo).FirstOrDefault();
+                    var currExch = dbDom1.CSCRDs.Where(x => x.HOMECUR == "MYR" && x.RATETYPE == "SP" && x.SOURCECUR == prdt.CurCode)
+                        .OrderByDescending(o => o.RATEDATE)
+                        .FirstOrDefault();
+
+                    PORHSEQ = 3000 + getPO.POId;
+                    string Remarks = "";
+                    string RATE = "";
+                    string RATETYPE = "";
+                    string RATEDATE = "";
+                    string RATEOPER = "";
+
+                    if (prdt.PR_Mst.PRTypeId == 4 && prdt.PR_Mst.PrGroupType1.CPRFFlag == false)
+                    {
+                        Remarks = prdt.Remarks.ToString() + '|' + prdt.PR_Mst.AccountCode.ToString();
+                    }
+                    else
+                    {
+                        Remarks = prdt.Remarks.ToString();
+                    }
+
+                    if (prdt.CurCode == "MYR")
+                    {
+                        RATE = "1";
+                        RATETYPE = "SP";
+                        RATEDATE = "";
+                        RATEOPER = "1";
+                    }
+                    else
+                    {
+                        RATE = currExch.RATE.ToString();
+                        RATETYPE = currExch.RATETYPE.ToString();
+                        RATEDATE = currExch.RATEDATE.ToString();
+                        RATEOPER = currExch.RATEOPER.ToString();
+                    }
+
+                    dt.Rows.Add(
+                        PORHSEQ.ToString(),
+                        getPO.CreateDate?.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo),
+                        getPO.NoPo.ToString(),
+                        "",
+                        prdt.VendorCode.ToString(),
+                        prdt.VendorName.ToString(),
+                        "1",
+                        getPO.CreateDate?.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo),
+                        prdt.ReqDevDate?.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo),
+                        Remarks,
+                        prdt.PRNo.ToString() + '/' + getPO.CreateBy,
+                        "",
+                        "",
+                        "",
+                        prdt.CurCode.ToString(),
+                        RATE,
+                        RATETYPE,
+                        RATEDATE,
+                        RATEOPER,
+                        "SST",
+                        prdt.TaxCode.ToString(),
+                        prdt.TaxClass.ToString()
+
+                        );
+
+                    //PO Details
+                    var prdtList = db.PR_Details.Where(x => x.NoPo == getPO.NoPo).ToList();
+
+                    int PORLREV = 0;
+                    int PORLSEQ = 3000;
+                    int DETAILNUM = 0;
+
+                    foreach (var pr in prdtList)
+                    {
+                        PORLREV = PORLREV + 1000;
+                        DETAILNUM = DETAILNUM + 1;
+                        PORHSEQ = 3000 + getPO.POId;
+                        PORLSEQ = PORLSEQ + 1;
+                        var discount = pr.TotCostWitTax - pr.TotCostnoTax;
+
+                        dt2.Rows.Add(
+                            PORHSEQ.ToString(),
+                            PORLREV.ToString(),
+                            PORLSEQ.ToString(),
+                            PORLSEQ.ToString(),
+                            "",
+                            pr.DomiPartNo.ToString(),
+                            "N1000S",
+                            pr.Description.ToString(),
+                            pr.VendorPartNo.ToString(),
+                            "FALSE",
+                            pr.UOMName.ToString(),
+                            pr.Qty.ToString(),
+                            pr.UnitPrice.ToString(),
+                            pr.TotCostWitTax.ToString(),
+                            pr.TotCostWitTax.ToString(),
+                            pr.TaxClass.ToString(),
+                            pr.Tax.ToString(),
+                            "FALSE",
+                            discount.ToString(),
+                            discount.ToString(),
+                            "0",
+                            "0",
+                            pr.TotCostWitTax.ToString(),
+                            "0",
+                            "0",
+                            DETAILNUM.ToString()
+                            );
+
+                        //COmments
+
+                        var sDesc = pr.Description.ToString();
+                        string[] description = sDesc.Split(new string[] { Environment.NewLine },
+                            StringSplitOptions.None
+                        );
+
+                        int PORLREV3 = 0;
+                        foreach (var desc in description)
+                        {
+                            
+                            PORLREV3 = PORLREV3 + 10;
+
+                            dt3.Rows.Add(
+                                PORHSEQ.ToString() ,
+                                PORLREV3.ToString() ,
+                                PORLSEQ.ToString() ,
+                                "1" ,
+                                desc.ToString() 
+
+                                );                            
+                        }
+
+                    }
+                }
+
+                //Export the Excel file.
+                using (XLWorkbook wb = new XLWorkbook()) //Install ClosedXml from Nuget for XLWorkbook  
+                {
+                    using (MemoryStream MyMemoryStream = new MemoryStream())
+                    {
+                        var ws = wb.Worksheets.Add(dt);
+                        ws.Table(0).ShowAutoFilter = false; // Disable AutoFilter.
+                        ws.Table(0).Theme = XLTableTheme.None; // Remove Theme.
+                        ws.Columns().AdjustToContents();// Resize all columns.
+
+                        wb.Worksheets.Add(dt2);
+                        wb.Worksheets.Add(dt3);
+                        wb.Worksheets.Add(dt4);
+                        wb.Worksheets.Add(dt5);
+                        wb.Worksheets.Add(dt6);
+
+                        
+                        
+                        
+                        wb.SaveAs(MyMemoryStream);
+                        //MyMemoryStream.WriteTo(Response.OutputStream);
+                        return File(MyMemoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExcelFile.xlsx");
+
+                    }
+                }
+            }
+
         }
+
 
     }
 }

@@ -195,6 +195,25 @@
           <Property Name="IDCUST" Type="char" MaxLength="12" Nullable="false" />
           <Property Name="BRN" Type="char" MaxLength="30" Nullable="false" />
         </EntityType>
+        <EntityType Name="APVENO">
+          <Key>
+            <PropertyRef Name="VENDORID" />
+            <PropertyRef Name="OPTFIELD" />
+          </Key>
+          <Property Name="VENDORID" Type="char" MaxLength="12" Nullable="false" />
+          <Property Name="OPTFIELD" Type="char" MaxLength="12" Nullable="false" />
+          <Property Name="AUDTDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="AUDTTIME" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="AUDTUSER" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="AUDTORG" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="VALUE" Type="char" MaxLength="60" Nullable="false" />
+          <Property Name="TYPE" Type="smallint" Nullable="false" />
+          <Property Name="LENGTH" Type="smallint" Nullable="false" />
+          <Property Name="DECIMALS" Type="smallint" Nullable="false" />
+          <Property Name="ALLOWNULL" Type="smallint" Nullable="false" />
+          <Property Name="VALIDATE" Type="smallint" Nullable="false" />
+          <Property Name="SWSET" Type="smallint" Nullable="false" />
+        </EntityType>
         <EntityType Name="CSCCD">
           <Key>
             <PropertyRef Name="CURID" />
@@ -354,6 +373,7 @@
         <EntityContainer Name="dom1ModelStoreContainer">
           <EntitySet Name="APRTA" EntityType="Self.APRTA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="APVEN" EntityType="Self.APVEN" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="APVENO" EntityType="Self.APVENO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CSCCD" EntityType="Self.CSCCD" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CSCRD" EntityType="Self.CSCRD" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ICITMV" EntityType="Self.ICITMV" Schema="dbo" store:Type="Tables" />
@@ -660,6 +680,7 @@
           </AssociationSet>
           <EntitySet Name="CSCRDs" EntityType="dom1Model.CSCRD" />
           <EntitySet Name="APRTAs" EntityType="dom1Model.APRTA" />
+          <EntitySet Name="APVENOes" EntityType="dom1Model.APVENO" />
         </EntityContainer>
         <Association Name="APVENPOVUPR">
           <End Type="dom1Model.APVEN" Role="APVEN" Multiplicity="1" />
@@ -758,6 +779,25 @@
           <Property Name="DUEDAYUSE4" Type="Decimal" Nullable="false" Precision="3" Scale="0" />
           <Property Name="CNTENTERED" Type="Decimal" Nullable="false" Precision="7" Scale="0" />
           <Property Name="PCTDUETOT" Type="Decimal" Nullable="false" Precision="9" Scale="5" />
+        </EntityType>
+        <EntityType Name="APVENO">
+          <Key>
+            <PropertyRef Name="VENDORID" />
+            <PropertyRef Name="OPTFIELD" />
+          </Key>
+          <Property Name="VENDORID" Type="String" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" />
+          <Property Name="OPTFIELD" Type="String" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" />
+          <Property Name="AUDTDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="AUDTTIME" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="AUDTUSER" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="AUDTORG" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="VALUE" Type="String" Nullable="false" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="TYPE" Type="Int16" Nullable="false" />
+          <Property Name="LENGTH" Type="Int16" Nullable="false" />
+          <Property Name="DECIMALS" Type="Int16" Nullable="false" />
+          <Property Name="ALLOWNULL" Type="Int16" Nullable="false" />
+          <Property Name="VALIDATE" Type="Int16" Nullable="false" />
+          <Property Name="SWSET" Type="Int16" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1111,6 +1151,25 @@
                 <ScalarProperty Name="AUDTTIME" ColumnName="AUDTTIME" />
                 <ScalarProperty Name="AUDTDATE" ColumnName="AUDTDATE" />
                 <ScalarProperty Name="TERMSCODE" ColumnName="TERMSCODE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="APVENOes">
+            <EntityTypeMapping TypeName="dom1Model.APVENO">
+              <MappingFragment StoreEntitySet="APVENO">
+                <ScalarProperty Name="SWSET" ColumnName="SWSET" />
+                <ScalarProperty Name="VALIDATE" ColumnName="VALIDATE" />
+                <ScalarProperty Name="ALLOWNULL" ColumnName="ALLOWNULL" />
+                <ScalarProperty Name="DECIMALS" ColumnName="DECIMALS" />
+                <ScalarProperty Name="LENGTH" ColumnName="LENGTH" />
+                <ScalarProperty Name="TYPE" ColumnName="TYPE" />
+                <ScalarProperty Name="VALUE" ColumnName="VALUE" />
+                <ScalarProperty Name="AUDTORG" ColumnName="AUDTORG" />
+                <ScalarProperty Name="AUDTUSER" ColumnName="AUDTUSER" />
+                <ScalarProperty Name="AUDTTIME" ColumnName="AUDTTIME" />
+                <ScalarProperty Name="AUDTDATE" ColumnName="AUDTDATE" />
+                <ScalarProperty Name="OPTFIELD" ColumnName="OPTFIELD" />
+                <ScalarProperty Name="VENDORID" ColumnName="VENDORID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -1,0 +1,241 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Details>
+
+
+<table style="border:2px solid">
+    <tr>
+        <td rowspan="4">
+            Item
+        </td>
+        <td colspan="18">
+            Price Comparison
+        </td>
+        <td colspan="2">
+            Price Reference
+        </td>
+        <td rowspan="4">
+            Selected Vendor
+        </td>
+        <td rowspan="4" >
+            Selected Price
+        </td>
+        <td rowspan="4">
+            Cost Down %
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="6">
+            Vendor A
+        </td>
+        <td colspan="6">
+            Vendor B
+        </td>
+        <td colspan="6">
+            Vendor C
+        </td>
+        <td colspan="2">
+            Vendor 
+        </td>
+    </tr>
+
+    <tr>
+        @foreach (var item in Model.Take(1))
+        {
+            int V = 0;
+            foreach (var vendorDt in item.PR_VendorComparison.OrderBy(x=>x.VCId).ToList())
+            {
+                    V = V + 1;
+                <td colspan="6">
+                    @vendorDt.VCName
+                    <input type="hidden" name="VD_@V" value="@vendorDt.VDCode" />
+                </td>
+            }
+
+            if (item.PR_VendorComparison.Count() == 1)
+            {
+                <td colspan="6">
+                    &nbsp;
+                </td>
+                <td colspan="6">
+                    &nbsp;
+                </td>
+            }
+
+            if (item.PR_VendorComparison.Count() == 2)
+            {
+                <td colspan="6">
+                    &nbsp;
+                </td>
+            }
+        }
+        <td colspan="2">
+            &nbsp;
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Current Price
+        </td>
+        <td>
+            Quotation Date
+        </td>
+        <td>
+            Last Price
+        </td>
+        <td>
+            Quotation Date
+        </td>
+        <td>
+            PO Date
+        </td>
+        <td>
+            Cost Down %
+        </td>
+
+        <td>
+            Current Price
+        </td>
+        <td>
+            Quotation Date
+        </td>
+        <td>
+            Last Price
+        </td>
+        <td>
+            Quotation Date
+        </td>
+        <td>
+            PO Date
+        </td>
+        <td>
+            Cost Down %
+        </td>
+
+
+        <td>
+            Current Price
+        </td>
+        <td>
+            Quotation Date
+        </td>
+        <td>
+            Last Price
+        </td>
+        <td>
+            Quotation Date
+        </td>
+        <td>
+            PO Date
+        </td>
+        <td>
+            Cost Down %
+        </td>
+
+        <td>
+            Current Price
+        </td>
+        <td>
+            Quotation Date
+        </td>
+    </tr>
+
+
+    @{int i = 0 ;}
+    @foreach (var item in Model.OrderBy(x=>x.PRDtId))
+    {
+        i = i + 1;
+        <tr>
+            <!--Item Id-->
+            <td>@i</td>
+            @foreach (var vendorDt in item.PR_VendorComparison.OrderBy(x => x.VCId).ToList())
+            {
+
+                <td>@String.Format("{0:0.00}", (vendorDt.CurPriceMYR / vendorDt.PR_Details.Qty))</td>
+                DateTime QuoteDateStr = (DateTime)vendorDt.QuoteDate;
+                <td>@QuoteDateStr.ToString("dd/MM/yyyy")</td>
+                <td>@vendorDt.PR_Details.LastPrice</td>
+                if (vendorDt.LastQuoteDate is null)
+                {
+                    <td></td>
+                }
+                else
+                {
+                    DateTime LastQuoteDateStr = (DateTime)vendorDt.LastQuoteDate;
+                    <td>@(LastQuoteDateStr.ToString("dd/MM/yyyy") )</td>
+                }
+
+                <td>@vendorDt.PR_Details.LastPONo</td>
+                if (vendorDt.PR_Details.LastPrice == 0)
+                {
+                    <td>0</td>
+                }
+                else
+                {
+                    <td>@( (vendorDt.PR_Details.LastPrice - (vendorDt.CurPriceMYR / vendorDt.PR_Details.Qty) ) / vendorDt.PR_Details.LastPrice )</td>
+                }
+
+            }
+
+            @if (item.PR_VendorComparison.Count() == 1)
+            {
+                <td colspan="6">
+                    &nbsp;
+                </td>
+                <td colspan="6">
+                    &nbsp;
+                </td>
+            }
+
+            @if (item.PR_VendorComparison.Count() == 2)
+            {
+                <td colspan="6">
+                    &nbsp;
+                </td>
+            }
+
+            <td>
+                @String.Format("{0:0.00}", item.EstimateUnitPrice)
+            </td>
+            <td>
+                @if (item.LastQuoteDate is null)
+                {
+
+                }
+                else
+                {
+                    DateTime PrdtLastQuoteDateStr = (DateTime)item.LastQuoteDate;
+                    @PrdtLastQuoteDateStr.ToString("dd/MM/yyyy")
+                }
+
+
+            </td>
+
+            <td>
+                @item.PR_VendorComparison.Where(x => x.FlagWin == true).Select(x => x.VCName).FirstOrDefault()
+            </td>
+
+            <td>
+                @String.Format("{0:0.00}", (item.PR_VendorComparison.Where(x => x.FlagWin == true).Select(x => x.CurPriceMYR).FirstOrDefault() / item.Qty))
+            </td>
+
+            @if (item.LastPrice == 0)
+            {
+                <td>0</td>
+            }
+            else
+            {
+                <td>
+                    @( (item.LastPrice - (item.PR_VendorComparison.Where(x => x.FlagWin == true).Select(x => x.CurPriceMYR).FirstOrDefault() / item.Qty) ) / item.LastPrice  )
+                </td>
+
+            }
+
+
+        </tr>
+    }
+
+</table>
+
+
+

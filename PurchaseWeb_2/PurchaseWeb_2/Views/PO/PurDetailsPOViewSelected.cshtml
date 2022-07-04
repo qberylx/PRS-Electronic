@@ -86,8 +86,8 @@
                                 <th>
                                     No.
                                 </th>
-                                <th>Yes</th>
-                                <th>No</th>
+                                <th>Yes <br /> <input type="checkbox" id="chkAllYes" name="chkAllYes" /> </th>
+                                <th>No <br /> <input type="checkbox" id="chkAllNo" name="chkAllNo" /></th>
                                 <th>
                                     Description
                                 </th>
@@ -300,21 +300,21 @@
                                     <td>
                                         @if (Model[i].PoFlag)
                                         {
-                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag, new { @disabled = "disabled" })
+                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag, new { @disabled = "disabled" , @class = "chkYes" })
                                         }
                                         else
                                         {
-                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag)
+                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag, new { @class = "chkYes" })
                                         }
                                     </td>
                                     <td>
                                         @if (Model[i].NoPoFlag)
                                         {
-                                            @Html.CheckBoxFor(modeItem => Model[i].NoPoFlag, new { @disabled = "disabled" })
+                                            @Html.CheckBoxFor(modeItem => Model[i].NoPoFlag, new { @disabled = "disabled" , @class= "chkNo" })
                                         }
                                         else
                                         {
-                                            @Html.CheckBoxFor(modeItem => Model[i].NoPoFlag)
+                                            @Html.CheckBoxFor(modeItem => Model[i].NoPoFlag, new { @class = "chkNo" })
                                         }
                                     </td>
                                     <td>
@@ -534,5 +534,17 @@
 <script>
     $(document).ready(function () {
         $("#notification").delay(2000).fadeOut("slow");
+    });
+
+    $("#chkAllYes").click(function () {
+        //console.log($(".chkYes").attr('disabled') );
+        //if ($(".chkYes").attr('disabled') != 'disabled') {
+            $(".chkYes").attr('checked', this.checked);
+        //}
+            
+    });
+
+    $("#chkAllNo").click(function () {
+        $(".chkNo").attr('checked', this.checked);
     });
 </script>

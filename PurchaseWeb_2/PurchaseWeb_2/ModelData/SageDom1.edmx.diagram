@@ -15,6 +15,7 @@
         <AssociationConnector Association="dom1Model.POVUPRICITMV" />
         <EntityTypeShape EntityType="dom1Model.CSCRD" Width="1.5" PointX="0.875" PointY="0.625" />
         <EntityTypeShape EntityType="dom1Model.APRTA" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="dom1Model.APVENO" Width="1.5" PointX="3.375" PointY="11.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

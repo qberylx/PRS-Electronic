@@ -22,5 +22,6 @@ namespace PurchaseWeb_2.ModelData
         public string ValueStr { get; set; }
         public Nullable<int> PRId { get; set; }
         public Nullable<int> PRDtlsId { get; set; }
+        public string Remarks { get; set; }
     }
 }

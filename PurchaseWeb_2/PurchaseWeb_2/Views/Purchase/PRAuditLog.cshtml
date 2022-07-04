@@ -1,0 +1,65 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.AuditPR_Log>
+
+
+@{
+    ViewBag.Title = "PR System";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>
+    Log FIle for @ViewBag.PrNo
+</h2>
+
+<tr>
+    <td>
+        @Html.ActionLink("Back", "PRDashBoard", "Purchase", new { @class = "btn btn-primary" })
+    </td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+</tr>
+<br />
+<br />
+<table class="table table-sm table-bordered table-striped table-info">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ModifiedBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModifiedOn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ActionBtn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ColumnStr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ValueStr)
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model.OrderByDescending(x => x.ModifiedOn))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionBtn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ColumnStr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ValueStr)
+            </td>
+
+        </tr>
+    }
+
+</table>

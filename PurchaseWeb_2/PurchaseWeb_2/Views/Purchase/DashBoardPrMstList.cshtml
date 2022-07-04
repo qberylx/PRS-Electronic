@@ -82,49 +82,21 @@
                                 <td>
                                     @Html.ActionLink("View", "DashboardPrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
                                     @Html.ActionLink("Export To Excel", "ExportPRtoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
+                                    @if (item.StatId == 9)
+                                    {
+                                        @Html.ActionLink("Send Back PR to Sourcing", "SendToSourcing", "Purchase", new { PrMstId = item.PRId }
+                                           , new { @class = "btn btn-primary", onclick = "return confirm('Are you sure you wish to send this PR back to Sourcing?');" }
+                                           )
+                                    }
+                                    @Html.ActionLink("Audit Log", "PRAuditLog", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-secondary" })
                                 </td>
                             }
                             else
                             {
                                 <td>
-                                    @*
-                                        @switch (item.PRTypeId)
-                                        {
-                                            case 1:
-                                                <!--<button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>-->
-                                                <a class="btn btn-primary" href="@Url.Action("AddPurDtls","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-                                                break;
 
-                                            case 2:
-                                                <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType2","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-
-                                                break;
-
-                                            case 3:
-                                                <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-
-                                                break;
-
-                                            case 4:
-                                                <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType4","Purchase", new {PrMstId = item.PRId , PrGroup = item.PRGroupType})">Add Details</a>
-
-                                                break;
-                                            case 5:
-                                                <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-
-                                                break;
-
-
-                                        }
-                                    *@
-                                    @*
-                                        @Html.ActionLink("Send", "PRhod", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
-
-                                        @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
-                                    *@
                                     @Html.ActionLink("View", "DashboardPrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
                                     @Html.ActionLink("Export To Excel", "ExportPRtoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
-
 
                                 </td>
                             }
@@ -140,6 +112,7 @@
     </div>
 </div>
 
+
 <script type="text/javascript">
     $(function () {
         var $rows = $('#tableA tr');
@@ -152,6 +125,97 @@
             }).hide();
         });
     });
+
+    //$("#btnSend").click(function (event) {
+    //    console.log("btnSend Function");
+    //    var delhref = $(this).attr('href');
+    //    var isOk = false;
+    //    event.preventDefault();
+    //    $("#confirmMsg").text("Are you sure you wish to send to Sourcing?");
+    //    $('#sampleModel').modal({
+    //        backdrop: 'static',
+    //        keyboard: false
+    //    });
+
+    //    $("#sampleModel").off("click").on("click", "#btnOk", function (e) {
+    //        e.preventDefault();
+    //        $('#sampleModel').modal("hide");
+    //        $('#sampleModel').data("modal", null);
+    //        isOk = true;
+    //    });
+
+    //    $("#btnCancel").off("click").on("click", function (e) {
+    //        e.preventDefault();
+    //        $("#sampleModel").modal("hide");
+    //        $("#sampleModel").data("modal", null);
+    //        isOk = false;
+    //    });
+
+    //    $("#btnClose").off("click").on("click", function (e) {
+    //        e.preventDefault();
+    //        $("#sampleModel").modal("hide");
+    //        $('#sampleModel').data("modal", null);
+    //        isOk = false;
+    //    });
+
+    //    $("#sampleModel").off("hidden.bs.modal").on("hidden.bs.modal", function (e) {
+    //        e.preventDefault();
+    //        if (isOk) {
+    //            //here you require some customization in URl, change according to your requirement
+    //            window.location.href = window.location.href + delhref;
+    //        }
+    //    })
+    //    return isOk;
+    //});
+
+    //function confirmDialog() {
+    //    var url = $(this).attr('href');
+    //    $("#dialog-confirm").dialog({
+    //        autoOpen: false,
+    //        resizable: false,
+    //        height: 170,
+    //        width: 350,
+    //        show: { effect: 'drop', direction: "up" },
+    //        modal: true,
+    //        draggable: true,
+    //        buttons: {
+    //            "OK": function () {
+    //                $(this).dialog("close");
+    //                window.location = url;
+    //            }, "Cancel": function () {
+    //                $(this).dialog("close");
+    //            }
+    //        }
+    //    });
+    //    $("#dialog-confirm").dialog('open');
+    //    return false;
+    //}
+
+    //$(document).ready(function () {
+    //    $(".confirmDialog").on("click", function (e) {
+    //        // e.preventDefault(); use this or return false
+    //        var url = $(this).attr('href');
+    //        $("#dialog-confirm").dialog({
+    //            autoOpen: false,
+    //            resizable: false,
+    //            height: 170,
+    //            width: 350,
+    //            show: { effect: 'drop', direction: "up" },
+    //            modal: true,
+    //            draggable: true,
+    //            buttons: {
+    //                "OK": function () {
+    //                    $(this).dialog("close");
+    //                    window.location = url;
+    //                }, "Cancel": function () {
+    //                    $(this).dialog("close");
+    //                }
+    //            }
+    //        });
+    //        $("#dialog-confirm").dialog('open');
+    //        return false;
+    //    });
+    //});
 
 </script>
 

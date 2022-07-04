@@ -187,6 +187,9 @@
     <Compile Include="ModelData\APVEN.cs">
       <DependentUpon>SageDom1.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\APVENO.cs">
+      <DependentUpon>SageDom1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\AuditPR_Log.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -2509,9 +2512,12 @@
     <Content Include="Views\Purchase\PRAttachment.cshtml" />
     <Content Include="Views\Purchase\VendorReport.cshtml" />
     <Content Include="Views\Purchase\VendorComparisonReport.cshtml" />
+    <Content Include="Views\Purchase\VendorView.cshtml" />
+    <Content Include="Views\Purchase\PRAuditLog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ExcelExport\" />
     <Folder Include="ExcelFiles\" />
     <Folder Include="UploadedFile\Quotation\" />
     <Folder Include="Views\Admin\" />

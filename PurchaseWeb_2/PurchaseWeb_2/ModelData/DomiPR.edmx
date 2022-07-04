@@ -57,6 +57,7 @@
           <Property Name="ValueStr" Type="varchar(max)" />
           <Property Name="PRId" Type="int" />
           <Property Name="PRDtlsId" Type="int" />
+          <Property Name="Remarks" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="CPRFMst">
           <Key>
@@ -1688,6 +1689,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="ValueStr" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="PRId" Type="Int32" />
           <Property Name="PRDtlsId" Type="Int32" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="GetPOListbyDate_Result">
           <Property Type="Int64" Name="RN" Nullable="true" />
@@ -2211,6 +2213,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <EntitySetMapping Name="AuditPR_Log">
             <EntityTypeMapping TypeName="Domi_PurModel.AuditPR_Log">
               <MappingFragment StoreEntitySet="AuditPR_Log">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="PRDtlsId" ColumnName="PRDtlsId" />
                 <ScalarProperty Name="PRId" ColumnName="PRId" />
                 <ScalarProperty Name="ValueStr" ColumnName="ValueStr" />
