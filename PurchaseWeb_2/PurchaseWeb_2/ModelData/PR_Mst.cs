@@ -66,6 +66,7 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<int> BudgetDept { get; set; }
         public string SourcingName { get; set; }
         public Nullable<bool> DeActiveFlag { get; set; }
+        public string TeamId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }

@@ -417,6 +417,7 @@ namespace PurchaseWeb_2.Controllers
                 Dpt_id = x.Dpt_id,
                 DepartmentName = x.AccTypeDept.DeptName,
                 Psn_id = x.Psn_id,
+                Team_id = x.Team_id,
                 PositionName = x.Position_mst.Position_name,
                 Date_Create = x.Date_Create,
                 TelExt = x.TelExt
@@ -450,6 +451,7 @@ namespace PurchaseWeb_2.Controllers
             {
                 userUpdate.Dpt_id = usr_Mst.Dpt_id;
                 userUpdate.Psn_id = usr_Mst.Psn_id;
+                userUpdate.Team_id = usr_Mst.Team_id;
                 userUpdate.TelExt = usr_Mst.TelExt;
                 userUpdate.Flag_Aproval = usr_Mst.Flag_Aproval;
                 userUpdate.Date_modified = DateTime.Now;
@@ -516,7 +518,66 @@ namespace PurchaseWeb_2.Controllers
 
         }
 
-        
+        [HttpGet]
+        public ActionResult ContactAdmin()
+        {
+            string userId = Session["UserID"].ToString();
+            int intUserId = int.Parse(userId);
+            var userMst = db.Usr_mst.Where(x => x.usr_id == intUserId ).FirstOrDefault();
+
+            return View("ContactAdmin", userMst);
+        }
+
+        [HttpPost]
+        public ActionResult ContactAdmin(Usr_mst usr_Mst, string subject, string message)
+        {
+            var userMst = db.Usr_mst.Where(x => x.usr_id == usr_Mst.usr_id).FirstOrDefault();
+
+            var admEmail = db.Usr_mst.Where(x => x.Psn_id == 7).ToList();
+
+            // email admin
+
+            foreach (var item in admEmail)
+            {
+                String emailAdm = item.Email;
+                MailMessage mailAdm = new MailMessage();
+                mailAdm.To.Add(emailAdm);
+                mailAdm.From = new MailAddress("prs.system@dominant-semi.com", "prs.system");
+                mailAdm.Subject = subject;
+                string bodyAdm = message + " <br/>" + " From : " + userMst.Username + " <br/>" + " Email : " + userMst.Email + " <br/>" + " On : " + DateTime.Now;
+                mailAdm.Body = bodyAdm;
+                mailAdm.IsBodyHtml = true;
+                SmtpClient smtpAdm = new SmtpClient();
+                smtpAdm.Host = "mail1.dominant-semi.com";// mail1.dominant-semi.com smtp.gmail.com
+                smtpAdm.Port = 28; // 28 587
+                smtpAdm.UseDefaultCredentials = false;
+                smtpAdm.Credentials = new System.Net.NetworkCredential("prs.system@dominant-semi.com", "Prs1305");
+                smtpAdm.Send(mailAdm);
+            }
+
+            //Email back to user
+            String email = userMst.Email;
+            MailMessage mail = new MailMessage();
+            mail.To.Add(email);
+            mail.From = new MailAddress("prs.system@dominant-semi.com", "prs.system");
+            mail.Subject = @"Thank you for contacting us";
+            String body = @"Your email has been received. <br/>
+                            Our support personnel will get back to you ASAP. ";
+            mail.Body = body;
+            mail.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "mail1.dominant-semi.com";// mail1.dominant-semi.com smtp.gmail.com
+            smtp.Port = 28; // 28 587
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new System.Net.NetworkCredential("prs.system@dominant-semi.com", "Prs1305");
+            smtp.Send(mail);
+
+            this.AddNotification("Your message has been sent!!", NotificationType.SUCCESS);
+            
+
+            return View("ContactAdmin", userMst);
+        }
+
 
 
 

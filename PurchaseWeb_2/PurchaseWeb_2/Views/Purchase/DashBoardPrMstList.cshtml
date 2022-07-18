@@ -21,8 +21,12 @@
             <div class="col-md-12">
                 <table class="table table-head-fixed text-nowrap table-striped table-responsive table-sm" id="tableA">
                     <tr>
+
                         <th>
                             PR No
+                        </th>
+                        <th>
+                            PO No
                         </th>
                         <th>
                             Requestor
@@ -52,8 +56,17 @@
                     @foreach (var item in Model)
                     {
                         <tr>
+
                             <td>
                                 @Html.DisplayFor(modelItem => item.PRNo)
+                            </td>
+                            @{ var PoNoLst = item.PR_Details; }
+                            <td>
+                                @foreach (var PoNo in PoNoLst.Select(x => x.NoPo).Distinct())
+                                {
+                                    <a>@PoNo </a> <br />
+                                }
+
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Usr_mst.Username)

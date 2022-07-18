@@ -87,8 +87,11 @@
                     @*Html.DisplayFor(modelItem => item.CurPriceMYR)*@
                     @{
                         string sCurPriceMYR = String.Format("{0:n}", item.CurPriceMYR/item.PR_Details.Qty);
+                        var CurPriceMYR = item.CurPriceMYR / item.PR_Details.Qty;
+                        sCurPriceMYR = CurPriceMYR.ToString();
                     }
                     @sCurPriceMYR
+
                 </td>
                 <td>
                     @{

@@ -94,6 +94,14 @@ namespace PurchaseWeb_2.Controllers
                 PrMst.StatId = 12;
                 db.SaveChanges();
 
+                var Prdtls = db.PR_Details.Where(x => x.PRid == PrMstId).ToList();
+
+                foreach(var item in Prdtls)
+                {
+                    item.PoFlag = false;
+                    db.SaveChanges();
+                }
+                
                 //audit log
                 string Username = (string)Session["Username"];
                 // add audit log for PR
@@ -282,6 +290,7 @@ namespace PurchaseWeb_2.Controllers
                     PRNo = PRnewNo,
                     UserId = userdtls.usr_id,
                     DepartmentId = userdtls.Dpt_id,
+                    TeamId = userdtls.Team_id,
                     RequestDate = DateTime.Now,
                     CreateDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
@@ -381,10 +390,11 @@ namespace PurchaseWeb_2.Controllers
                 db.SaveChanges();
             }
 
+            //Email to User
             //subject
             string subject = @"PR "+PrMst.PRNo +" send for HOD Approval ";
             //body
-            string body = @"Login to http://prs.dominant-semi.com/ for PR " + PrMst.PRNo + " HOD Approval ";
+            string body = @"PR with no " + PrMst.PRNo + " has been sent for HOD Approval ";
             //user email
             String userEmail = PrMst.Usr_mst.Email;
 
@@ -392,7 +402,7 @@ namespace PurchaseWeb_2.Controllers
 
             //hod email
             var usrMst = db.Usr_mst
-                .Where(x => x.Dpt_id == PrMst.DepartmentId && x.Psn_id == 2)
+                .Where(x => x.Dpt_id == PrMst.DepartmentId && x.Psn_id == 2 && x.Team_id == PrMst.TeamId)
                 .ToList();
 
             
@@ -424,7 +434,7 @@ namespace PurchaseWeb_2.Controllers
                             .FirstOrDefault();
 
             var PrMst = db.PR_Mst
-                .Where(x => x.DepartmentId == userdtls.Dpt_id && x.StatId == 3)
+                .Where(x => x.DepartmentId == userdtls.Dpt_id && x.StatId == 3 && x.TeamId == userdtls.Team_id)
                 .ToList();
 
             return View("ApprovalHOD", PrMst);
@@ -627,7 +637,7 @@ namespace PurchaseWeb_2.Controllers
                             .FirstOrDefault();
 
             var PrMstList = db.PR_Mst
-                .Where(x => x.DepartmentId == userdtls.Dpt_id && x.DeActiveFlag != true )
+                .Where(x => x.DepartmentId == userdtls.Dpt_id && x.DeActiveFlag != true && x.TeamId == userdtls.Team_id )
                 .OrderByDescending(x=>x.PRId)
                 .ToList();
 
@@ -652,15 +662,48 @@ namespace PurchaseWeb_2.Controllers
 
             var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
 
-            string Subject = PrMst.PRNo + " - " + PrMst.Purpose  ;
+            var usrMst = db.Usr_mst
+                .Where(x => x.Dpt_id == PrMst.DepartmentId && x.Psn_id == 2 && x.Team_id == PrMst.TeamId)
+                .ToList();
 
-            string Body = "<br/>" +
-                "Hi , <br/><br/>" +
-                "Kindly review the attached PR. <br/><br/>";
-                
-            string FilePath = ExportToExcel(PrMstId);
+            foreach (var usr in usrMst)
+            {
+                string Subject = PrMst.PRNo + " - " + PrMst.Purpose;
 
-            SendEmail("mohd.qatadah@dominant-semi.com", Subject, Body, FilePath);
+                string Body = "<br/>" +
+                    "Hi , <br/><br/>" +
+                    "Kindly review the attached PR. <br/><br/>" +
+                    "Copy has been sent to " + usr.Username;
+
+
+                string FilePath = ExportToExcel(PrMstId);
+
+                SendEmail("mohd.qatadah@dominant-semi.com", Subject, Body, FilePath);
+            }
+
+            
+
+
+            //hod email
+            //var usrMst = db.Usr_mst
+            //    .Where(x => x.Dpt_id == PrMst.DepartmentId && x.Psn_id == 2 && x.Team_id == PrMst.TeamId)
+            //    .ToList();
+
+
+            foreach (var Usr in usrMst)
+            {
+                string SubjectHOD = PrMst.PRNo + " - " + PrMst.Purpose;
+
+                string BodyHOD = "<br/>" +
+                    "Hi " + Usr.Username + " , <br/><br/>" +
+                    "Kindly review attached PR and login to http://prs.dominant-semi.com/ to proceed. <br/>" +
+                    "Or kindly reply 'Ok'/'Approve' to give an approval or 'Reject' to send this PR back. <br/><br/>";
+
+                string FilePathHOD = ExportToExcel(PrMstId);
+
+                SendEmail(Usr.Email, SubjectHOD, BodyHOD, FilePathHOD);
+
+            };
 
 
             return View("PurRequest");
@@ -1344,11 +1387,11 @@ namespace PurchaseWeb_2.Controllers
                 ViewBag.Message = "File Uploaded Successfully!!";
                 return PartialView("UploadQuo", PurMasterID);
             }
-            catch
+            catch (Exception e)
             {
                 string _path = Path.Combine(Server.MapPath("~/UploadedFile/Quotation"));
                 ViewBag.PurMasterID = PurMasterID;
-                ViewBag.Message = "File fail to Upload. Check path : "+_path+" !!" ;
+                ViewBag.Message = "File fail to Upload. Check path : "+_path+" !! . "+e.Message+" " ;
                 return PartialView("UploadQuo", PurMasterID);
             }
         }
@@ -2031,7 +2074,7 @@ namespace PurchaseWeb_2.Controllers
             int sYear = ReqDate.Year;
 
             // get tot amount of PR
-            decimal TotAmt = (decimal)prMstSingle.PR_Details.Sum(x => x.TotCostWitTax);
+            decimal TotAmt = (decimal)prMstSingle.PR_Details.Sum(x => x.TotCostWitTaxMYR);
 
             var budgetSingle = db.MonthlyBudgets
                 .Where(x => x.DepId == prMstSingle.BudgetDept && x.Month == sMonth && x.Year == sYear)
@@ -2245,6 +2288,7 @@ namespace PurchaseWeb_2.Controllers
                     {
                         PrMst.AccountCode = AccCode;
                         PrMst.BudgetDept = int.Parse(AccTypeDepID);
+                        PrMst.AssetFlag = AssetFlag;
                         db.SaveChanges();
 
                         string Username = (string)Session["Username"];
@@ -2618,6 +2662,8 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.PRDtId == PrDtlstId)
                 .SingleOrDefault();
 
+            ViewBag.PrMstId = prdtls.PRid;
+
             ViewBag.Qty = prdtls.Qty;
             if (prdtls.LastPrice <= 0  || prdtls.LastPrice == null)
             {
@@ -2647,8 +2693,9 @@ namespace PurchaseWeb_2.Controllers
         }
 
         [HttpPost]
-        public ActionResult VendorComparison(VendorComparisonModel pR_Vendor, HttpPostedFileBase file, int PrDtlstId)
+        public ActionResult VendorComparison(VendorComparisonModel pR_Vendor,  int PrDtlstId)
         {
+            //HttpPostedFileBase file,
             // get vendor name
             String VendorName = "";
             if (pR_Vendor.VendorCode == "0")
@@ -2674,29 +2721,29 @@ namespace PurchaseWeb_2.Controllers
                 return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = PrDtlstId });
             }
 
-            if (pR_Vendor.QuoteNo == null)
-            {
-                this.AddNotification("Please key-in Quotation No", NotificationType.ERROR);
-                return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = PrDtlstId });
-            }
+            //if (pR_Vendor.QuoteNo == null)
+            //{
+            //    this.AddNotification("Please key-in Quotation No", NotificationType.ERROR);
+            //    return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = PrDtlstId });
+            //}
 
-            string _FileName = "";
-            string _path = "";
+            //string _FileName = "";
+            //string _path = "";
 
-            try
-            {
-                if (file.ContentLength > 0)
-                {
-                    _FileName = Path.GetFileName(file.FileName);
-                    _path = Path.Combine(Server.MapPath("~/UploadedFile/Quotation"), _FileName);
-                    file.SaveAs(_path);
-                }
+            //try
+            //{
+            //    if (file.ContentLength > 0)
+            //    {
+            //        _FileName = Path.GetFileName(file.FileName);
+            //        _path = Path.Combine(Server.MapPath("~/UploadedFile/Quotation"), _FileName);
+            //        file.SaveAs(_path);
+            //    }
                 
-            }
-            catch
-            {
-                this.AddNotification("File fail to Upload.", NotificationType.ERROR);
-            }
+            //}
+            //catch
+            //{
+            //    this.AddNotification("File fail to Upload.", NotificationType.ERROR);
+            //}
 
             try
             {
@@ -2730,13 +2777,15 @@ namespace PurchaseWeb_2.Controllers
                     PayTerms        = pR_Vendor.PayTerms.Trim(),
                     PayDesc         = PayTerms.CODEDESC.Trim(),
                     QuoteNo         = pR_Vendor.QuoteNo,
-                    QuoteName       = _FileName,
-                    QuotePath       = _path
+                    Remarks         = pR_Vendor.Remarks
+                    //QuoteName       = _FileName,
+                    //QuotePath       = _path
                 });
                 db.SaveChanges();
 
                 //audit log
                 string Username = (string)Session["Username"];
+                var PRMst = db.PR_Details.Where(x => x.PRDtId == PrDtlstId).FirstOrDefault();
                 // add audit log for PR
                 var auditLog = db.Set<AuditPR_Log>();
                 auditLog.Add(new AuditPR_Log
@@ -2772,7 +2821,7 @@ namespace PurchaseWeb_2.Controllers
                     "PayTerms    |" +
                     "PayDesc     |" +
                     "QuoteNo     |" +
-                    "QuoteName   |" +
+                    "Remarks     |" +
                     "QuotePath   |" ,
 
                     ValueStr =
@@ -2802,11 +2851,12 @@ namespace PurchaseWeb_2.Controllers
                     pR_Vendor.CurPriceMYR + "|" +
                     pR_Vendor.PayTerms.Trim() + "|" +
                     PayTerms.CODEDESC.Trim() + "|" +
-                    pR_Vendor.QuoteNo + "|" +
-                    _FileName + "|" +
-                    _path,
-                    
-                    PRId = pR_Vendor.PR_Details.PRid,
+                    pR_Vendor.QuoteNo + "|"  +
+                    pR_Vendor.Remarks + "|" ,
+                    //_FileName + "|" +
+                    //_path,
+
+                    PRId = PRMst.PRid,
                     PRDtlsId = pR_Vendor.PRDtId,
                     Remarks = "New PR Vendor Comparison"
 
@@ -2831,7 +2881,16 @@ namespace PurchaseWeb_2.Controllers
             return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = PrDtlstId });
         }
 
-        
+        public ActionResult SourcingRemarks(int PrMstId)
+        {
+            var remarksLst = db.vw_sourcingRemarksLst.Where(x => x.PRid == PrMstId).ToList();
+                        
+
+            return PartialView("SourcingRemarks", remarksLst);
+        }
+
+
+
         public ActionResult VendorComparisonList(int PrDtlstId)
         {
             var VCList = db.PR_VendorComparison

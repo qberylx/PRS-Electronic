@@ -38,9 +38,11 @@
             @{ Html.RenderAction("PrMstPurchasingProses", "Purchase", new { PrMstId = ViewBag.PrMstId });}
         </div>
         <div class="col-md-4">
-            @{ Html.RenderAction("UploadQuo", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+            @{ Html.RenderAction("UploadQuo", "Purchase", new { PrMstId = ViewBag.PrMstId });} <br />
+            <div id="divSourcingRemarks">
+                @{ Html.RenderAction("SourcingRemarks", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+            </div>
         </div>
-    </div>
 
 <div class="row">
     <div class="col-md-12">

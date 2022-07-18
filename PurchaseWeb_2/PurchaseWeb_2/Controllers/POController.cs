@@ -691,7 +691,9 @@ namespace PurchaseWeb_2.Controllers
                     //dt.Columns.Add("RATEOVER");
                     dt.Columns.Add("TAXGROUP");
                     dt.Columns.Add("TAXAUTH1");
+                    dt.Columns.Add("TAXAUTH2");
                     dt.Columns.Add("TAXCLASS1");
+                    dt.Columns.Add("TAXCLASS2");
 
                     //Purchase_Order_Lines
                     dt2.Columns.Add("PORHSEQ");
@@ -709,13 +711,21 @@ namespace PurchaseWeb_2.Controllers
                     dt2.Columns.Add("UNITCOST");
                     dt2.Columns.Add("EXTENDED");
                     dt2.Columns.Add("TAXBASE1");
+                    dt2.Columns.Add("TAXBASE2");
                     dt2.Columns.Add("TAXCLASS1");
+                    dt2.Columns.Add("TAXCLASS2");
                     dt2.Columns.Add("TAXRATE1");
+                    dt2.Columns.Add("TAXRATE2");
                     dt2.Columns.Add("TAXINCLUD1");
+                    dt2.Columns.Add("TAXINCLUD2");
                     dt2.Columns.Add("TAXAMOUNT1");
+                    dt2.Columns.Add("TAXAMOUNT2");
                     dt2.Columns.Add("TXALLOAMT1");
+                    dt2.Columns.Add("TXALLOAMT2");
                     dt2.Columns.Add("TXRECVAMT1");
+                    dt2.Columns.Add("TXRECVAMT2");
                     dt2.Columns.Add("TXEXPSAMT1");
+                    dt2.Columns.Add("TXEXPSAMT2");
                     dt2.Columns.Add("TXBASEALLO");
                     dt2.Columns.Add("DISCPCT");
                     dt2.Columns.Add("DISCOUNT");
@@ -791,7 +801,13 @@ namespace PurchaseWeb_2.Controllers
                         {
                             RATE = currExch.RATE.ToString();
                             RATETYPE = currExch.RATETYPE.ToString();
-                            RATEDATE = currExch.RATEDATE.ToString();
+                            string rateStr = currExch.RATEDATE.ToString();
+                            string rateYear = rateStr.Substring(0, 4);
+                            string rateMonth = rateStr.Substring(4, 2);
+                            string rateDay = rateStr.Substring(6, 2);
+                            string rateStrAft = rateYear + "-" + rateMonth + "-" + rateDay;
+                            DateTime rateDt = DateTime.Parse(rateStrAft);
+                            RATEDATE = rateDt.ToString("dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo);
                             RATEOPER = currExch.RATEOPER.ToString();
                         }
 
@@ -816,8 +832,12 @@ namespace PurchaseWeb_2.Controllers
                         RATEDATE,
                         RATEOPER,
                         "SST",
-                        prdt.TaxCode.ToString(),
-                        prdt.TaxClass.ToString()
+                        //prdt.TaxCode.ToString(),
+                        //prdt.TaxClass.ToString()
+                        "SSTG",
+                        "SSTS",
+                        "1",
+                        "1"
 
                         );
 
@@ -846,13 +866,50 @@ namespace PurchaseWeb_2.Controllers
                         int PORLSEQ = 3000;
                         int DETAILNUM = 0;
 
+                        
+
                         foreach (var pr in prdtList)
                         {
                             PORLREV = PORLREV + 1000;
                             DETAILNUM = DETAILNUM + 1;
                             PORHSEQ = 3000 + getPO.POId;
                             PORLSEQ = PORLSEQ + 1;
+
+                            var extend = pr.UnitPrice * pr.Qty;
+
                             var discount = pr.TotCostWitTax - pr.TotCostnoTax;
+                            var taxAmount1 = "0";
+                            var taxAmount2 = "0";
+                            if (pr.TaxCode.ToUpper() == "SSTS")
+                            {
+                                taxAmount2 = discount.ToString();
+                            }
+                            else
+                            {
+                                taxAmount1 = discount.ToString();
+                            }
+
+                            var taxclass2 = "1";
+                            var taxclass1 = "1";
+                            if (pr.TaxCode.ToUpper() == "SSTS")
+                            {
+                                taxclass2 = pr.TaxClass.ToString();
+                            } else
+                            {
+                                taxclass1 = pr.TaxClass.ToString();
+                            }
+
+                            var taxRate1 = "0";
+                            var taxRate2 = "0";
+                            if (pr.TaxCode.ToUpper() == "SSTS")
+                            {
+                                taxRate2 = pr.Tax.ToString();
+                            }
+                            else
+                            {
+                                taxRate1 = pr.Tax.ToString();
+                            }
+
 
                             dt2.Rows.Add(
                                 PORHSEQ.ToString(),
@@ -868,16 +925,26 @@ namespace PurchaseWeb_2.Controllers
                                 pr.UOMName.ToString(),
                                 pr.Qty.ToString(),
                                 pr.UnitPrice.ToString(),
-                                pr.TotCostWitTax.ToString(),
-                                pr.TotCostWitTax.ToString(),
-                                pr.TaxClass.ToString(),
-                                pr.Tax.ToString(),
+                                extend.ToString(),
+                                extend.ToString(),
+                                extend.ToString(),
+                                taxclass1,
+                                taxclass2,
+                                taxRate1,
+                                taxRate2,
                                 "FALSE",
-                                discount.ToString(),
-                                discount.ToString(),
+                                "FALSE",
+                                //discount.ToString(),
+                                taxAmount1,
+                                taxAmount2,
+                                //discount.ToString(),
+                                taxAmount1,
+                                taxAmount2,
                                 "0",
                                 "0",
-                                pr.TotCostWitTax.ToString(),
+                                "0",
+                                "0",
+                                extend.ToString(),
                                 "0",
                                 "0",
                                 DETAILNUM.ToString()

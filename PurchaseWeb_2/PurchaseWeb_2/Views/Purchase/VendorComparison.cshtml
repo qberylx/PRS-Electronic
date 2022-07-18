@@ -3,7 +3,7 @@
 
 @*using (Html.BeginForm("VendorComparison", "Purchase", FormMethod.Post)) *@
 @using (Ajax.BeginForm("VendorComparison", "Purchase", 
-    new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivVendorCompareList" + @ViewBag.PrDtlstId, OnSuccess = "OnSuccess(" + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + ")" }, 
+    new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivVendorCompareList" + @ViewBag.PrDtlstId, OnSuccess = "OnSuccess(" + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + ", "+ @ViewBag.PrMstId + ")" }, 
     new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
@@ -159,7 +159,7 @@
     </div>
 
     //quotation
-    <div class="row">
+    <div class="row" style="display:none">
         <div class="col-1">
             <b>Quotation No:</b>
         </div>
@@ -178,7 +178,17 @@
         
     </div>
 
-    
+    //remarks
+    <div class="row">
+        <div class="col-1">
+            <b>Remarks:</b>
+        </div>
+        <div class="col-3">
+            @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control" })
+            <!--<textarea id="Remarks" name="Remarks" rows="4"></textarea>-->
+        </div>
+    </div>
+
 
     <div class="container">
         <div class="row">
@@ -205,13 +215,30 @@
     })
 
 
-        function OnSuccess(PrDtlstId,Qty) {
-            console.log("OnSuccess prDtId=" + PrDtlstId);
-            console.log("OnSuccess Qty=" + Qty);
+    function OnSuccess(PrDtlstId, Qty, PrMstId) {
+        console.log("OnSuccess prDtId=" + PrDtlstId);
+        console.log("OnSuccess Qty=" + Qty);
 
-            $("[kiraCurP=" + PrDtlstId + "]").val(0);
+        $("[kiraCurP=" + PrDtlstId + "]").val(0);
 
-            UpdatePrice(0, PrDtlstId, Qty);
+        UpdatePrice(0, PrDtlstId, Qty);
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("SourcingRemarks", "Purchase")",
+            data: '{PrMstId: "' + PrMstId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#divSourcingRemarks").html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
 
 
     }

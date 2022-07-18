@@ -93,7 +93,22 @@ namespace PurchaseWeb_2.Controllers
                 Session["UserRoleId"] = dr.GetInt32(4).ToString();
                 String userID = Session["UserID"].ToString();
                 String userRoleId = Session["UserRoleId"].ToString();
+                
+                bool flagApproval;
+                if ( dr[8] == null || dr[8] == DBNull.Value )
+                {
+                    flagApproval = false;
+                } else
+                {
+                    flagApproval = (bool)dr[8];
+                }
+                
                 con.Close();
+                if (flagApproval != true)
+                {
+                    return RedirectToAction("ContactAdmin", "Main");
+                }
+
                 if (userRoleId == "7") // if admin go to admin dashboard
                 {
                     return RedirectToAction("Dashboard", "Main");

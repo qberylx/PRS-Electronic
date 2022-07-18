@@ -273,13 +273,15 @@
                                     @Html.DisplayFor(modelItem => item.CurCode)
                                 </td>
                                 <td>
-                                    @{String strEstimateUnitPrice = String.Format("{0:n}", item.EstimateUnitPrice);}
-                                    @strEstimateUnitPrice
-                                    
+                                    @*@{String strEstimateUnitPrice = String.Format("{0:n}", item.EstimateUnitPrice);}
+                                    @strEstimateUnitPrice*@
+                                    @item.EstimateUnitPrice.ToString()
+
                                 </td>
                                 <th>
-                                    @{String strUnitPrice = String.Format("{0:n}", item.UnitPrice);}
-                                    @strUnitPrice
+                                    @*@{String strUnitPrice = String.Format("{0:n}", item.UnitPrice);}
+                                    @strUnitPrice*@
+                                    @item.UnitPrice.ToString()
                                 </th>
                                 <th>
                                     @{String strTotCostnoTax = String.Format("{0:n}", item.TotCostnoTax);}

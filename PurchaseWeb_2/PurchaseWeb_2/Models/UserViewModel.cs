@@ -15,6 +15,9 @@ namespace PurchaseWeb_2.Models
         public string Email { get; set; }
         public Nullable<int> Dpt_id { get; set; }
         public Nullable<int> Psn_id { get; set; }
+
+        public string Team_id { get; set; }
+
         [Display(Name ="Request Date")]
         public Nullable<System.DateTime> Date_Create { get; set; }
         public Nullable<System.DateTime> Date_modified { get; set; }

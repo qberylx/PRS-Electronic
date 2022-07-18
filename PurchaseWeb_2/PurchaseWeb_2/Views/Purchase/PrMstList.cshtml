@@ -16,6 +16,9 @@
                             Department
                         </th>
                         <th>
+                            Team
+                        </th>
+                        <th>
                             Requisition Date
                         </th>
                         <th>
@@ -48,6 +51,9 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.AccTypeDept.DeptName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TeamId)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.RequestDate)

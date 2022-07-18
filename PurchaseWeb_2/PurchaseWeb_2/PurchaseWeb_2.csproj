@@ -319,6 +319,9 @@
     <Compile Include="ModelData\Usr_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\vw_sourcingRemarksLst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CPRFFormView.cs" />
     <Compile Include="Models\CPRFMstModel.cs" />
     <Compile Include="Models\DepartmentModel.cs" />
@@ -2514,6 +2517,8 @@
     <Content Include="Views\Purchase\VendorComparisonReport.cshtml" />
     <Content Include="Views\Purchase\VendorView.cshtml" />
     <Content Include="Views\Purchase\PRAuditLog.cshtml" />
+    <Content Include="Views\Purchase\SourcingRemarks.cshtml" />
+    <Content Include="Views\Main\ContactAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -248,7 +248,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="AccGroup" Type="varchar" MaxLength="10" />
           <Property Name="CurCode" Type="varchar" MaxLength="50" />
           <Property Name="ItemNo" Type="varchar" MaxLength="10" />
-          <Property Name="LastPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="LastPrice" Type="decimal" Precision="18" Scale="5" />
           <Property Name="LastQuoteDate" Type="date" />
           <Property Name="PODate" Type="date" />
           <Property Name="LastPONo" Type="varchar" MaxLength="50" />
@@ -260,8 +260,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="PayDesc" Type="varchar(max)" />
           <Property Name="LastVendorName" Type="varchar" MaxLength="150" />
           <Property Name="LastCur" Type="varchar" MaxLength="50" />
-          <Property Name="LastCurExc" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="LastPriceVendor" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="LastCurExc" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="LastPriceVendor" Type="decimal" Precision="18" Scale="5" />
           <Property Name="LastVendorCode" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PR_Mst">
@@ -273,6 +273,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="PRTypeId" Type="int" />
           <Property Name="UserId" Type="int" />
           <Property Name="DepartmentId" Type="int" />
+          <Property Name="TeamId" Type="varchar" MaxLength="10" />
           <Property Name="RequestDate" Type="datetime" />
           <Property Name="FIleName" Type="varchar" MaxLength="50" />
           <Property Name="FilePath" Type="varchar" MaxLength="50" />
@@ -321,9 +322,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="PRDtId" Type="int" />
           <Property Name="VDCode" Type="varchar" MaxLength="50" />
           <Property Name="VCName" Type="varchar" MaxLength="150" />
-          <Property Name="CurPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CurPrice" Type="decimal" Precision="18" Scale="5" />
           <Property Name="QuoteDate" Type="date" />
-          <Property Name="LastPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="LastPrice" Type="decimal" Precision="18" Scale="5" />
           <Property Name="LastQuoteDate" Type="date" />
           <Property Name="PODate" Type="date" />
           <Property Name="CostDown" Type="decimal" Precision="18" Scale="2" />
@@ -349,6 +350,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="QuoteName" Type="varchar" MaxLength="100" />
           <Property Name="QuotePath" Type="varchar" MaxLength="300" />
           <Property Name="QuoteNo" Type="varchar" MaxLength="50" />
+          <Property Name="Remarks" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="PRFile">
           <Key>
@@ -426,11 +428,23 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="Email" Type="varchar" MaxLength="50" />
           <Property Name="Dpt_id" Type="int" />
           <Property Name="Psn_id" Type="int" />
+          <Property Name="Team_id" Type="varchar" MaxLength="10" />
           <Property Name="Date_Create" Type="datetime" />
           <Property Name="Date_modified" Type="datetime" />
           <Property Name="Flag_Aproval" Type="bit" />
           <Property Name="TelExt" Type="varchar" MaxLength="10" />
           <Property Name="SourcingFlag" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_sourcingRemarksLst">
+          <Key>
+            <PropertyRef Name="VCId" />
+          </Key>
+          <Property Name="PRid" Type="int" />
+          <Property Name="Remarks" Type="varchar(max)" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="VCId" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_MonthlyBudget_AccTypeDept">
           <End Role="AccTypeDept" Type="Self.AccTypeDept" Multiplicity="0..1" />
@@ -534,18 +548,6 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <ReferentialConstraint>
             <Principal Role="AccTypeDept">
               <PropertyRef Name="AccTypeDepID" />
-            </Principal>
-            <Dependent Role="PR_Mst">
-              <PropertyRef Name="DepartmentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PR_Mst_Department_mst">
-          <End Role="Department_mst" Type="Self.Department_mst" Multiplicity="0..1" />
-          <End Role="PR_Mst" Type="Self.PR_Mst" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Department_mst">
-              <PropertyRef Name="Dpt_id" />
             </Principal>
             <Dependent Role="PR_Mst">
               <PropertyRef Name="DepartmentId" />
@@ -780,6 +782,14 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
     [PO_CSV_Header].[AA] AS [AA]
     FROM [dbo].[PO_CSV_Header] AS [PO_CSV_Header]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="vw_sourcingRemarksLst" EntityType="Self.vw_sourcingRemarksLst" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vw_sourcingRemarksLst].[PRid] AS [PRid], 
+    [vw_sourcingRemarksLst].[Remarks] AS [Remarks], 
+    [vw_sourcingRemarksLst].[Description] AS [Description], 
+    [vw_sourcingRemarksLst].[VCId] AS [VCId]
+    FROM [dbo].[vw_sourcingRemarksLst] AS [vw_sourcingRemarksLst]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_MonthlyBudget_AccTypeDept" Association="Self.FK_MonthlyBudget_AccTypeDept">
             <End Role="AccTypeDept" EntitySet="AccTypeDept" />
             <End Role="MonthlyBudget" EntitySet="MonthlyBudget" />
@@ -814,10 +824,6 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           </AssociationSet>
           <AssociationSet Name="FK_PR_Mst_AccTypeDept" Association="Self.FK_PR_Mst_AccTypeDept">
             <End Role="AccTypeDept" EntitySet="AccTypeDept" />
-            <End Role="PR_Mst" EntitySet="PR_Mst" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PR_Mst_Department_mst" Association="Self.FK_PR_Mst_Department_mst">
-            <End Role="Department_mst" EntitySet="Department_mst" />
             <End Role="PR_Mst" EntitySet="PR_Mst" />
           </AssociationSet>
           <AssociationSet Name="FK_PR_Mst_PrGroupType" Association="Self.FK_PR_Mst_PrGroupType">
@@ -1054,6 +1060,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Parameter Name="PrMstId" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="LastNoMsts" EntityType="Domi_PurModel.LastNoMst" />
+          <EntitySet Name="vw_sourcingRemarksLst" EntityType="Domi_PurModel.vw_sourcingRemarksLst" />
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -1080,6 +1087,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="TelExt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="AccTypeDept" Relationship="Domi_PurModel.FK_Usr_mst_AccTypeDept" FromRole="Usr_mst" ToRole="AccTypeDept" />
           <Property Name="SourcingFlag" Type="Boolean" />
+          <Property Name="Team_id" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -1202,7 +1210,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="CurCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="EstTotalPrice" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="ItemNo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LastPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="LastPrice" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="LastQuoteDate" Type="DateTime" Precision="0" />
           <Property Name="PODate" Type="DateTime" Precision="0" />
           <Property Name="LastPONo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -1214,8 +1222,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="PayDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="LastVendorName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="LastCur" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LastCurExc" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="LastPriceVendor" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="LastCurExc" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="LastPriceVendor" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="LastVendorCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PR_Mst">
@@ -1275,6 +1283,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="BudgetDept" Type="Int32" />
           <Property Name="SourcingName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="DeActiveFlag" Type="Boolean" />
+          <Property Name="TeamId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1471,9 +1480,9 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="VCId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PRDtId" Type="Int32" />
           <Property Name="VCName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="CurPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CurPrice" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="QuoteDate" Type="DateTime" Precision="0" />
-          <Property Name="LastPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="LastPrice" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="LastQuoteDate" Type="DateTime" Precision="0" />
           <Property Name="PODate" Type="DateTime" Precision="0" />
           <Property Name="CostDown" Type="Decimal" Precision="18" Scale="2" />
@@ -1501,6 +1510,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="QuoteName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="QuotePath" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="QuoteNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_PR_VendorComparison_PR_Details">
           <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="0..1" />
@@ -1780,6 +1790,15 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="DocYear" Type="Int32" />
           <Property Name="LastNo" Type="Int32" />
         </EntityType>
+        <EntityType Name="vw_sourcingRemarksLst">
+          <Key>
+            <PropertyRef Name="VCId" />
+          </Key>
+          <Property Name="PRid" Type="Int32" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="VCId" Type="Int32" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1844,6 +1863,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <EntitySetMapping Name="Usr_mst">
             <EntityTypeMapping TypeName="Domi_PurModel.Usr_mst">
               <MappingFragment StoreEntitySet="Usr_mst">
+                <ScalarProperty Name="Team_id" ColumnName="Team_id" />
                 <ScalarProperty Name="SourcingFlag" ColumnName="SourcingFlag" />
                 <ScalarProperty Name="TelExt" ColumnName="TelExt" />
                 <ScalarProperty Name="Flag_Aproval" ColumnName="Flag_Aproval" />
@@ -1945,6 +1965,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
                 <ScalarProperty Name="DeActiveFlag" ColumnName="DeActiveFlag" />
                 <ScalarProperty Name="SourcingName" ColumnName="SourcingName" />
                 <ScalarProperty Name="BudgetDept" ColumnName="BudgetDept" />
@@ -2078,6 +2099,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <EntitySetMapping Name="PR_VendorComparison">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_VendorComparison">
               <MappingFragment StoreEntitySet="PR_VendorComparison">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="QuoteNo" ColumnName="QuoteNo" />
                 <ScalarProperty Name="QuotePath" ColumnName="QuotePath" />
                 <ScalarProperty Name="QuoteName" ColumnName="QuoteName" />
@@ -2290,6 +2312,16 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
                 <ScalarProperty Name="DocType" ColumnName="DocType" />
                 <ScalarProperty Name="Initial" ColumnName="Initial" />
                 <ScalarProperty Name="LastNoId" ColumnName="LastNoId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_sourcingRemarksLst">
+            <EntityTypeMapping TypeName="Domi_PurModel.vw_sourcingRemarksLst">
+              <MappingFragment StoreEntitySet="vw_sourcingRemarksLst">
+                <ScalarProperty Name="VCId" ColumnName="VCId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="PRid" ColumnName="PRid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

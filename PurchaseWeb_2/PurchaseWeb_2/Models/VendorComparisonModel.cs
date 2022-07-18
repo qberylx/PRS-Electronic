@@ -66,6 +66,8 @@ namespace PurchaseWeb_2.Models
         [Required(ErrorMessage = "Please key in Quotation No")]
         public string QuoteNo { get; set; }
 
+        public string Remarks { get; set; }
+
         public virtual PR_Details PR_Details { get; set; }
     }
 }
