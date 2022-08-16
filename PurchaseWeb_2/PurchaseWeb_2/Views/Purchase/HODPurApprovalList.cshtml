@@ -63,6 +63,9 @@
                 <th>
                     PR Status
                 </th>
+                <th>
+                    Sourcing Remarks
+                </th>
                 <th></th>
             </tr>
 
@@ -120,6 +123,21 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Status_Mst.Name)
+                    </td>
+                    <td>
+                        @{ var prDtList = item.PR_Details.ToList();
+                            foreach (var prDt in prDtList)
+                            {
+                                var commList = prDt.PR_VendorComparison.ToList();
+                                foreach (var comm in commList)
+                                {
+                                    if (comm.Remarks != null)
+                                    {
+                                        <a>@comm.Remarks</a>
+                                    }
+                                }
+                            }
+                        }
                     </td>
                     <td>
                         @Html.ActionLink("View", "PrHODPuchasingView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })

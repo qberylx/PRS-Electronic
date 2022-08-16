@@ -163,9 +163,9 @@
                 Tax Class
             </td>
             <!--td style="display:none">
-                PO No.
-            </td>
-            -->
+            PO No.
+        </td>
+        -->
         </tr>
 
         @{ int i = 0;}
@@ -191,6 +191,28 @@
             </tr>
         }
 
+        @if (Model.Discount > 0)
+        {
+            i = i + 1;
+            <tr>
+                <td>@i</td>
+                <td>Discount</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>- @Model.Discount</td>
+                <td>- @Model.Discount</td>
+                <td>&nbsp;</td>
+                <td>- @Model.Discount</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                
+            </tr>
+        }
+
         <tr>
             <td colspan="7" style="text-align:right">
                 <b>Grand Total</b>
@@ -199,13 +221,36 @@
                 &nbsp;
             </td>
             <td>
-                <b>@Model.PR_Details.Sum(x => x.TotCostnoTax)</b>
+                @{ var intGtotalnTax = Model.PR_Details.Sum(x => x.TotCostnoTax);
+                    intGtotalnTax = intGtotalnTax - Model.Discount;
+                }
+                @if (Model.Discount > 0)
+                {
+
+                    <b>@intGtotalnTax</b>
+                }
+                else
+                {
+                    <b>@Model.PR_Details.Sum(x => x.TotCostnoTax)</b>
+                }
             </td>
             <td>
                 &nbsp;
             </td>
             <td>
-                <b>@Model.PR_Details.Sum(x => x.TotCostWitTax)</b>
+                @{ var intGtotalTax = Model.PR_Details.Sum(x => x.TotCostWitTax);
+                    intGtotalTax = intGtotalTax - Model.Discount;
+                }
+                @if (Model.Discount > 0)
+                {
+
+                    <b>@intGtotalTax</b>
+                }
+                else
+                {
+                    <b>@Model.PR_Details.Sum(x => x.TotCostWitTax)</b>
+                }
+
             </td>
         </tr>
 

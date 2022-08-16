@@ -48,7 +48,8 @@
                             {
                                 <div class="col-md-4">
                                     <!--PR Account-->
-                                    <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode)
+                                    <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode) <br />                                    
+                                    <strong>Account Name :</strong>@ViewBag.ExpenseName
                                     <br />
                                     @using (Ajax.BeginForm("editAccountCode","Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurChaseMasterSelected" }))
                                     {

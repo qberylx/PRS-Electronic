@@ -120,12 +120,29 @@
                     @item.Selected_vendor
                 </td>
                 <td>
-                    @{ String sp = String.Format("{0:n}", item.Selected_price); }
-                    RM @sp
+                    @{ String sp = String.Format("{0:n}", item.Selected_price);}
+                    @if (item.Selected_price < 0)
+                    {
+                        sp = sp.Replace("-", "");
+                        <a>(RM @sp)</a>
+                    } else
+                    {
+                        <a>RM @sp</a>
+                    }
+                    
                 </td>
                 <td>
                     @{ String ta = String.Format("{0:n}", item.total_amount); }
-                    RM @ta
+                    @if (item.total_amount < 0)
+                    {
+                        ta = ta.Replace("-", "");
+                        <a>(RM @ta)</a>
+                    }
+                    else
+                    {
+                        <a>RM @ta</a>
+                    }
+                    
                 </td>
                 <td>
                     @item.YearlySaving

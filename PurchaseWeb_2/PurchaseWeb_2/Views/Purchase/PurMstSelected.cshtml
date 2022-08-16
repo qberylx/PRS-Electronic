@@ -106,6 +106,10 @@
                         <br />
                         <div class="row">
                             <div class="col-3">
+                                @if (Model.AssetFlag == 2)
+                                {
+                                    <strong>Asset Status :</strong><a>Not an Asset </a>
+                                }
                                 @if (Model.AssetFlag == 1)
                                 {
                                     <strong>Asset Status :</strong><a>New Asset </a>

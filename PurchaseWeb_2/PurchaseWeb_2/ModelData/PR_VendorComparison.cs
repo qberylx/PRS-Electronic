@@ -11,15 +11,12 @@ namespace PurchaseWeb_2.ModelData
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+    
     public partial class PR_VendorComparison
     {
         public int VCId { get; set; }
         public Nullable<int> PRDtId { get; set; }
         public string VCName { get; set; }
-
-        [Column(TypeName = "decimal(18,5)")]
         public Nullable<decimal> CurPrice { get; set; }
         public Nullable<System.DateTime> QuoteDate { get; set; }
         public Nullable<decimal> LastPrice { get; set; }

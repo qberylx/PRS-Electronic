@@ -242,6 +242,7 @@
     <div class="row">
         <div class="col-centered">
             @Html.ActionLink("Return To Main PR", "PurRequest", "Purchase", null, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Submit To HOD", "PRhod", "Purchase", new { PrMstId = ViewBag.PrMstId }, new { @class = "btn btn-success" })
         </div>
     </div>
 </div>

@@ -253,7 +253,7 @@
                                         @Html.DisplayFor(modelItem => Model[i].CurCode)
                                     </th>
                                     <th>
-                                        @{String strUnitPrice = String.Format("{0:n}", Model[i].UnitPrice);}
+                                        @{String strUnitPrice = String.Format("{0:#.00000}", Model[i].UnitPrice);}
                                         @strUnitPrice
                                         @*
                                         @Html.DisplayFor(modelItem => Model[i].UnitPrice)*@
@@ -474,10 +474,11 @@
                             }
                             else
                             {
-                                <td colspan="10"></td>
+                                <td colspan="13"></td>
                             }
                             <th>Grand Total</th>
                             <td></td>
+                            
                             <th>
                                 <div class="row">
                                     <div class="col-3">
@@ -495,7 +496,14 @@
                                     <div class="col-5">
                                         @foreach (var item in Model.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                         {
-                                            @String.Format("{0:n}", item.Sum(s => s.TotCostWitTax)) <br />
+                                            if (ViewBag.PrDiscount > 0)
+                                            {
+                                                @String.Format("{0:n}", item.Sum(s => s.TotCostWitTax) - ViewBag.PrDiscount) <br />
+                                            }
+                                            else
+                                            {
+                                                @String.Format("{0:n}", item.Sum(s => s.TotCostWitTax)) <br />
+                                            }
                                         }
                                     </div>
                                 </div>

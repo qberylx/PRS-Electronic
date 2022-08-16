@@ -57,6 +57,7 @@
 
                 <div class="card-body">
                     <div class="row">
+                        
                         <div class="col-2">
                             <label class="control-label ">Vendor</label>
                             <br />
@@ -73,7 +74,7 @@
                         <div class="col-3">
                             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
                             <br />
-                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 3, @id="box" })
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 3, @id = "box" })
                             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                         </div>
 
@@ -124,21 +125,21 @@
                             </div>
                             @Html.ValidationMessageFor(model => model.EstimateUnitPrice, "", new { @class = "text-danger" })
                         </div>
-
+                        
                     </div>
                     <br />
                     <div class="row">
-                        <div class="col-1">
+                        <div class="col-md-1">
                             <b>Item No</b>
                             <br />
                             <select class="form-control form-control-border" id="DomiPartNo" name="DomiPartNo">
                                 <option value="NS">NS</option>
-                                <option value="CAPEX" >CAPEX</option>
+                                <option value="CAPEX">CAPEX</option>
                                 <option value="CAPEX02">CAPEX02</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.DomiPartNo, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-2">
+                        <div class="col-md-2">
                             <b>Last Vendor</b>
                             <br />
                             <select class="fstdropdown-select form-control-border" id="LastVendorCode" name="LastVendorCode" onchange="VendorChg(this.value)">
@@ -151,13 +152,13 @@
                             @Html.ValidationMessageFor(model => model.LastVendorCode, "", new { @class = "text-danger" })
                         </div>
 
-                        <div class="col-1">
+                        <div class="col-md-1">
                             <b>Last Price</b>
                             <br />
                             @Html.EditorFor(model => model.LastPriceVendor, new { htmlAttributes = new { @class = "form-control", @onfocusout = "LastPriceVendorChg(this.value)" } })
                         </div>
 
-                        <div id="divCurr" class="col-1">
+                        <div id="divCurr" class="col-md-1">
                             <div class="row">
                                 <div class="col-6">
                                     <b>Curr.</b>
@@ -175,46 +176,44 @@
                             </div>
                         </div>
 
-                        <div class="col-1">
+                        <div class="col-md-1">
                             <b>Last price (MYR)</b>
                             <br />
                             @Html.EditorFor(model => model.LastPrice, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
 
-                        <div class="col-1">
+                        <div class="col-md-1">
                             <b>Quotation Date</b>
                             <br />
                             @Html.EditorFor(model => model.LastQuoteDate, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
 
-                        <div class="col-1">
+                        <div class="col-md-1">
                             <b>PO Date</b>
                             <br />
                             @Html.EditorFor(model => model.PODate, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
 
-                        <div class="col-1">
+                        <div class="col-md-2">
                             <b>Last PO No</b>
                             <br />
                             @Html.EditorFor(model => model.LastPONo, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
 
-                        <div class="col-2">
+                        <div class="col-md-2">
                             <b>Remarks</b>
                             <br />
                             @Html.TextAreaFor(model => model.PurchasingRemarks, new { @class = "form-control", @rows = 3 })
                             @Html.ValidationMessageFor(model => model.PurchasingRemarks, "", new { @class = "text-danger" })
                         </div>
 
-                        <div class="col-1" style="display:none">
+                        <div class="col-md-1" style="display:none">
                             <b>Cost Down %</b>
                             <br />
                             @Html.EditorFor(model => model.CostDown, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
 
                     </div>
-
-
 
                 </div>
                 <div class="card-footer">

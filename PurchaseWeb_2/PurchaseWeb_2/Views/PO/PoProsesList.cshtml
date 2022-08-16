@@ -91,7 +91,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.PRType_mst.Name)
                     </td>
-                    <td>
+                    <td class="@item.PrGroupType1.GroupColor">
                         @Html.DisplayFor(modelItem => item.PrGroupType1.GroupName)
                     </td>
                     <td>
@@ -107,6 +107,13 @@
                                 @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                 {
                                     String strTotCostWitTax = String.Format("{0:n}", currency.Sum(s => s.TotCostWitTax));
+                                    decimal TotCost = (decimal)currency.Sum(s => s.TotCostWitTax);
+                                    decimal discount = 0.00M;
+                                    if (item.Discount > 0)
+                                    {
+                                        discount = (decimal)item.Discount;
+                                    }
+                                    strTotCostWitTax = String.Format("{0:n}", TotCost - discount);
                                     @strTotCostWitTax
                                     @*
                                         @currency.Sum(s => s.TotCostWitTax) *@

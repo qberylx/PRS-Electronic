@@ -10,6 +10,15 @@
             @{ Html.RenderAction("PurMstViewSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });}
         </div>
     </div>
+    <!--Add PR discount if any-->
+    @if (ViewBag.Discount > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                @{ Html.RenderAction("PRViewDiscount", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+            </div>
+        </div>
+    }
     <div class="row">
         <div class="col-md-12">
             <div id="DivPurDetailsPOViewSelected">
@@ -37,6 +46,8 @@
                     @Html.ActionLink("Return To Main PR", "PoProsesList", "PO", null, new { @class = "btn btn-primary" })
                     <a>&nbsp;</a>
                     @Html.ActionLink("Reject PR back to Purchasing", "POReject", "PO", new { PrMstId = ViewBag.PrMstId }, new { @class = "btn btn-danger" })
+                    <a>&nbsp;</a>
+                    @Html.ActionLink("Reject PR back to User", "PORejectToUser", "PO", new { PrMstId = ViewBag.PrMstId }, new { @class = "btn btn-danger" })
                 }
                 else
                 {
@@ -46,5 +57,5 @@
             </div>
         </div>
     </div>
-    
+
 </div>

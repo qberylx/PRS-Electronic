@@ -35,7 +35,10 @@
 
     <div class="row">
         <div class="col-md-8">
-            @{ Html.RenderAction("PrMstPurchasingProses", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+            @{ Html.RenderAction("PrMstPurchasingProses", "Purchase", new { PrMstId = ViewBag.PrMstId });} <br />
+            <div id="divPRdiscount">
+                @{ Html.RenderAction("PRdiscount", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+            </div>
         </div>
         <div class="col-md-4">
             @{ Html.RenderAction("UploadQuo", "Purchase", new { PrMstId = ViewBag.PrMstId });} <br />
@@ -77,6 +80,8 @@
         </div>
     </div>
 </div>
+        </div>
+    </div>
 
 <script type="text/javascript">
     //$(function () {
@@ -115,7 +120,7 @@
 
 
 
-</div>
+
 
 <script>
     document.onreadystatechange = function () {

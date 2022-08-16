@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Mst>
 
 <div class="card card-info">
-    <div class="card-header"">
+    <div class="card-header">
         <div class="card-title ">
             <h6>Purchase Request List</h6>
         </div>
@@ -38,6 +38,9 @@
                 </th>
                 <th>
                     PR Status
+                </th>
+                <th>
+                    Sourcing Remarks
                 </th>
                 <th></th>
             </tr>
@@ -112,6 +115,21 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Status_Mst.Name)
+                        </td>
+                        <td>
+                            @{ var prDtList = item.PR_Details.ToList();
+                                foreach (var prDt in prDtList)
+                                {
+                                    var commList = prDt.PR_VendorComparison.ToList();
+                                    foreach (var comm in commList)
+                                    {
+                                        if (comm.Remarks != null)
+                                        {
+                                            <a>@comm.Remarks</a>
+                                        }
+                                    }
+                                }
+                            }
                         </td>
                         <td>
                             @Html.ActionLink("Details", "PRDtlsForPurchaser", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })

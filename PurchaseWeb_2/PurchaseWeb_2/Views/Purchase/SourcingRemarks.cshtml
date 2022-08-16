@@ -13,13 +13,46 @@
         </div>
     </div>
     <div class="card-body">
-        @foreach (var item in Model)
-        {
+        <table class="table">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Remarks</td>
+                    <td class="text-right py-0 align-middle">
+                        <div class="btn-group btn-group-sm">
+                            <a class="btn btn-danger" id="deleteFile" name="deleteFile" onclick="deleteRemarks(@item.PRid,@item.VCId)" href="#">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                
+            }
+        </table>
             
-            <b>@item.Remarks</b> <br />
-            
-        }
     </div>
 </div>
 
+<script>
+    function deleteRemarks(prMstId, VCId) {
+        //alert(prMstId);
+        //alert(fileId);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("deleteSourcingRemarks", "Purchase")",
+            data: '{ PrMstId:"' + prMstId + '", VCid:"' + VCId + '"  }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#divSourcingRemarks").html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    };
+</script>
 

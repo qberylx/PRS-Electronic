@@ -86,9 +86,18 @@
                 <td>
                     @*Html.DisplayFor(modelItem => item.CurPriceMYR)*@
                     @{
-                        string sCurPriceMYR = String.Format("{0:n}", item.CurPriceMYR/item.PR_Details.Qty);
-                        var CurPriceMYR = item.CurPriceMYR / item.PR_Details.Qty;
-                        sCurPriceMYR = CurPriceMYR.ToString();
+                        string sCurPriceMYR = "0";
+                        if (item.VdCurCode != "MYR")
+                        {
+                            sCurPriceMYR = String.Format("{0:n}", item.CurPriceMYR / item.PR_Details.Qty);
+                            var CurPriceMYR = item.CurPriceMYR / item.PR_Details.Qty;
+                            sCurPriceMYR = CurPriceMYR.ToString();
+                        }
+                        else
+                        {
+                            sCurPriceMYR = item.CurPrice.ToString();
+                        }
+
                     }
                     @sCurPriceMYR
 

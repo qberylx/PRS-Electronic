@@ -53,7 +53,7 @@
                         Description
                     </th>
                     <th>
-                        CPRF
+                        CPRF & Account
                     </th>
                     <th>
                         PO Total Amount
@@ -146,6 +146,18 @@
 
                         </td>
                         <td>
+                            @foreach (var item in ViewBag.expList)
+                            {
+                                if (Model[i].PR_Mst.AccountCode != null)
+                                {
+                                    if (item.ExpCode == Model[i].PR_Mst.AccountCode.Substring(0, 5))
+                                    {
+                                        <b>Account Name :</b>@item.ExpName
+                                    }
+                                }
+
+                            }
+
                             @if (Model[i].PR_Mst.CPRF != null)
                             {
                                 <b>CPRF No : </b>@Model[i].PR_Mst.CPRF
@@ -155,7 +167,7 @@
                                 <b>IO Order No : </b>@Model[i].PR_Mst.IOrderNo
                                 <br />
                                 <b>Cost Centre No : </b>@Model[i].PR_Mst.CostCentreNo
-                                
+
                             }
                         </td>
                         <td>
@@ -172,7 +184,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-centered">
-                        <button class="btn btn-info" name="Export" value="CSV" type="submit">Export CSV</button>
+                        <button style="display:none" class="btn btn-info" name="Export" value="CSV" type="submit">Export CSV</button>
                         <button style="display:none" class="btn btn-info" name="Export" value="Excel" type="submit">Export Excel</button>
                         <button  class="btn btn-info" name="Export" value="ExcelUpdate" type="submit">Export Excel</button>
                     </div>

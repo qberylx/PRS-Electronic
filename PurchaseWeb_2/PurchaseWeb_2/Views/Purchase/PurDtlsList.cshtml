@@ -13,7 +13,9 @@
         -->
     </div>
     <div class="card-body table-responsive p-0" style="height: 300px;">
-
+        <div id="notification">
+            @Html.Partial("_Notifications")
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-head-fixed text-nowrap table-striped table-responsive table-md">
@@ -173,7 +175,7 @@
                                 </td>
                                 <td>
                                     @*
-                                        @Html.DisplayFor(modelItem => item.Description)
+                                    @Html.DisplayFor(modelItem => item.Description)
                                     *@
                                     @Html.Raw(item.Description.Replace(Environment.NewLine, "<br/>"))
                                 </td>
@@ -293,4 +295,8 @@
 
 </div>
 
-
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    });
+</script>

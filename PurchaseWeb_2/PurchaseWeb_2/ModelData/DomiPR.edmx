@@ -51,7 +51,7 @@
           </Key>
           <Property Name="AuditPrId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ModifiedBy" Type="varchar" MaxLength="20" />
-          <Property Name="ModifiedOn" Type="date" />
+          <Property Name="ModifiedOn" Type="datetime" />
           <Property Name="ActionBtn" Type="varchar" MaxLength="10" />
           <Property Name="ColumnStr" Type="varchar(max)" />
           <Property Name="ValueStr" Type="varchar(max)" />
@@ -303,16 +303,20 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="HODPurComment" Type="varchar" MaxLength="300" />
           <Property Name="PurchaserName" Type="varchar" MaxLength="100" />
           <Property Name="SendHODPurDate" Type="datetime" />
-          <Property Name="AssetNo" Type="varchar" MaxLength="15" />
-          <Property Name="IOrderNo" Type="varchar" MaxLength="15" />
-          <Property Name="CostCentreNo" Type="varchar" MaxLength="15" />
-          <Property Name="ItemNo" Type="varchar" MaxLength="15" />
-          <Property Name="VendorItemNo" Type="varchar" MaxLength="10" />
-          <Property Name="SendToProcessingDate" Type="date" />
+          <Property Name="AssetNo" Type="varchar" MaxLength="50" />
+          <Property Name="IOrderNo" Type="varchar" MaxLength="50" />
+          <Property Name="CostCentreNo" Type="varchar" MaxLength="50" />
+          <Property Name="ItemNo" Type="varchar" MaxLength="50" />
+          <Property Name="VendorItemNo" Type="varchar" MaxLength="50" />
+          <Property Name="SendToProcessingDate" Type="datetime" />
           <Property Name="PurchasingComment" Type="varchar(max)" />
           <Property Name="BudgetDept" Type="int" />
           <Property Name="SourcingName" Type="varchar" MaxLength="100" />
           <Property Name="DeActiveFlag" Type="bit" />
+          <Property Name="VendorCodeDiscount" Type="varchar" MaxLength="50" />
+          <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="VendorNameDiscount" Type="varchar" MaxLength="150" />
+          <Property Name="VendorCurrDiscount" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -368,6 +372,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="GroupId" Type="int" Nullable="false" />
           <Property Name="GroupName" Type="varchar" MaxLength="50" />
           <Property Name="CPRFFlag" Type="bit" />
+          <Property Name="GroupColor" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PRType_mst">
           <Key>
@@ -1272,18 +1277,22 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <NavigationProperty Name="PrGroupType1" Relationship="Domi_PurModel.FK_PR_Mst_PrGroupType" FromRole="PR_Mst" ToRole="PrGroupType" />
           <Property Name="PurchaserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="SendHODPurDate" Type="DateTime" Precision="3" />
-          <Property Name="AssetNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="IOrderNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="CostCentreNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="ItemNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="VendorItemNo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="SendToProcessingDate" Type="DateTime" Precision="0" />
+          <Property Name="AssetNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IOrderNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CostCentreNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ItemNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VendorItemNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SendToProcessingDate" Type="DateTime" Precision="3" />
           <Property Name="PurchasingComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="PO_Mst" Relationship="Domi_PurModel.FK_PO_Mst_PR_Mst" FromRole="PR_Mst" ToRole="PO_Mst" />
           <Property Name="BudgetDept" Type="Int32" />
           <Property Name="SourcingName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="DeActiveFlag" Type="Boolean" />
           <Property Name="TeamId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="VendorCodeDiscount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="VendorNameDiscount" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="VendorCurrDiscount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1644,6 +1653,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Mst_PrGroupType" FromRole="PrGroupType" ToRole="PR_Mst" />
           <NavigationProperty Name="PrTypeMaps" Relationship="Domi_PurModel.FK_PrTypeMap_PrGroupType" FromRole="PrGroupType" ToRole="PrTypeMap" />
           <Property Name="CPRFFlag" Type="Boolean" />
+          <Property Name="GroupColor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_PR_Mst_PrGroupType">
           <End Type="Domi_PurModel.PrGroupType" Role="PrGroupType" Multiplicity="0..1" />
@@ -1693,7 +1703,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           </Key>
           <Property Name="AuditPrId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ModifiedBy" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="ModifiedOn" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
           <Property Name="ActionBtn" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="ColumnStr" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ValueStr" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -1965,6 +1975,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="VendorCurrDiscount" ColumnName="VendorCurrDiscount" />
+                <ScalarProperty Name="VendorNameDiscount" ColumnName="VendorNameDiscount" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="VendorCodeDiscount" ColumnName="VendorCodeDiscount" />
                 <ScalarProperty Name="TeamId" ColumnName="TeamId" />
                 <ScalarProperty Name="DeActiveFlag" ColumnName="DeActiveFlag" />
                 <ScalarProperty Name="SourcingName" ColumnName="SourcingName" />
@@ -2207,6 +2221,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="PrGroupTypes">
             <EntityTypeMapping TypeName="Domi_PurModel.PrGroupType">
               <MappingFragment StoreEntitySet="PrGroupType">
+                <ScalarProperty Name="GroupColor" ColumnName="GroupColor" />
                 <ScalarProperty Name="CPRFFlag" ColumnName="CPRFFlag" />
                 <ScalarProperty Name="GroupName" ColumnName="GroupName" />
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />

@@ -80,7 +80,7 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult DashBoardPrMstList()
         {
-            var PrMst = db.PR_Mst.Where(x=>x.StatId != 1 && x.StatId != 2).OrderByDescending(x=>x.PRId).Take(100).ToList();
+            var PrMst = db.PR_Mst.Where(x=>x.StatId != 1 && x.StatId != 2).OrderByDescending(x=>x.PRId).Take(300).ToList();
 
             return PartialView("DashBoardPrMstList",PrMst);
         }
@@ -359,6 +359,12 @@ namespace PurchaseWeb_2.Controllers
                 return View("PurRequest");
             }
 
+            if (PrMst.PR_Details.Count() == 0)
+            {
+                this.AddNotification("Please dont leave PR Details empty", NotificationType.ERROR);
+                return View("PurRequest");
+            }
+
             //update statid = 3 (Pending Approval HOD)
 
             if (PrMst != null)
@@ -436,6 +442,11 @@ namespace PurchaseWeb_2.Controllers
             var PrMst = db.PR_Mst
                 .Where(x => x.DepartmentId == userdtls.Dpt_id && x.StatId == 3 && x.TeamId == userdtls.Team_id)
                 .ToList();
+
+            if (userdtls.Psn_id == 7)
+            {
+                PrMst = db.PR_Mst.Where(x=>x.StatId == 3).ToList();
+            }
 
             return View("ApprovalHOD", PrMst);
         }
@@ -600,11 +611,20 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.PRId == PrMstId)
                 .FirstOrDefault();
 
+            if (prMst.PrGroupType1.CPRFFlag == false)
+            {
+                var expenseCode = prMst.AccountCode.Substring(0, 5);
+                var typeExpense = db.AccTypeExpenses.Where(x => x.ExpCode == expenseCode).FirstOrDefault();
+                ViewBag.ExpenseName = typeExpense.ExpName;
+            }
+            else
+            {
+                ViewBag.ExpenseName = "";
+            }
+
             var files = db.PRFiles
                 .Where(x => x.PrMstId == PrMstId)
                 .ToList();
-
-
             ViewBag.Files = files;
             //ViewBag.Filename = files.FileName;
             //ViewBag.Filepath = files.FilePath + files.FileName;
@@ -1276,22 +1296,22 @@ namespace PurchaseWeb_2.Controllers
             {
                 PRMst.Purpose = Purpose;
                 PRMst.Remarks = Remarks;
-                if (CPRFflag == "1")
-                {
-                    if (chkNewAsset == "1")
-                    {
-                        PRMst.AssetFlag = 1;
-                    }
-                    else
-                    {
-                        PRMst.AssetFlag = 2;
-                    }
-                    PRMst.CPRF = CPRF;
-                }
-                else
-                {
-                    PRMst.AssetFlag = 0;
-                }
+                //if (CPRFflag == "1")
+                //{
+                //    if (chkNewAsset == "1")
+                //    {
+                //        PRMst.AssetFlag = 1;
+                //    }
+                //    else
+                //    {
+                //        PRMst.AssetFlag = 2;
+                //    }
+                //    PRMst.CPRF = CPRF;
+                //}
+                //else
+                //{
+                //    PRMst.AssetFlag = 0;
+                //}
                 db.SaveChanges();
 
                 //audit log
@@ -1391,7 +1411,8 @@ namespace PurchaseWeb_2.Controllers
             {
                 string _path = Path.Combine(Server.MapPath("~/UploadedFile/Quotation"));
                 ViewBag.PurMasterID = PurMasterID;
-                ViewBag.Message = "File fail to Upload. Check path : "+_path+" !! . "+e.Message+" " ;
+                ViewBag.Message = "File fail to Upload. <br/> Unable to upload filename with symbols ";
+                //"+e.Message+"
                 return PartialView("UploadQuo", PurMasterID);
             }
         }
@@ -1811,6 +1832,13 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.PRId == pR_.PRid)
                 .FirstOrDefault();
 
+            //if qty 0 not allowed
+            if (pR_.Qty == 0)
+            {
+                this.AddNotification("0 Quantity is not allowed !!", NotificationType.ERROR);
+                return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+            }
+
             // find vendor name
             string VendorName = "";
             if (pR_.VendorCode == "0")
@@ -2087,6 +2115,14 @@ namespace PurchaseWeb_2.Controllers
                 ViewBag.Budget = budgetSingle.Budget;
                 ViewBag.Balance = budgetSingle.Balance;
                 ViewBag.PrTotAmount = TotAmt;
+                if (prMstSingle.Discount > 0)
+                {
+                    ViewBag.PRDiscount = prMstSingle.Discount;
+                } else
+                {
+                    ViewBag.PRDiscount = 0;
+                }
+                
                 ViewBag.PrMstId = PrMstId;
                 ViewBag.FlagUpdateBudget = prMstSingle.FlagUpdateMonthlyBudget;
                 ViewBag.departName = accDept.DeptName;
@@ -2100,6 +2136,14 @@ namespace PurchaseWeb_2.Controllers
                 ViewBag.Budget = 0;
                 ViewBag.Balance = 0;
                 ViewBag.PrTotAmount = TotAmt;
+                if (prMstSingle.Discount > 0)
+                {
+                    ViewBag.PRDiscount = prMstSingle.Discount;
+                }
+                else
+                {
+                    ViewBag.PRDiscount = 0;
+                }
                 ViewBag.PrMstId = PrMstId;
                 ViewBag.FlagUpdateBudget = prMstSingle.FlagUpdateMonthlyBudget;
                 return PartialView("budgetMonthlynotSet", budgetSingle);
@@ -2373,6 +2417,8 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.StatId == 12 || x.StatId == 11) 
                 .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group )
                 .ToList();
+
+
             return PartialView("PRListForPurchaser", PrMstList);
         }
 
@@ -2889,6 +2935,21 @@ namespace PurchaseWeb_2.Controllers
             return PartialView("SourcingRemarks", remarksLst);
         }
 
+        public ActionResult deleteSourcingRemarks(int PrMstId, int VCid)
+        {
+            var VCmst = db.PR_VendorComparison.Where(x => x.VCId == VCid).FirstOrDefault();
+
+            if(VCmst != null)
+            {
+                VCmst.Remarks = null;
+                db.SaveChanges();
+            }
+            
+            var remarksLst = db.vw_sourcingRemarksLst.Where(x => x.PRid == PrMstId).ToList();
+
+            return PartialView("SourcingRemarks", remarksLst);
+        }
+
 
 
         public ActionResult VendorComparisonList(int PrDtlstId)
@@ -3023,9 +3084,11 @@ namespace PurchaseWeb_2.Controllers
             });
             db.SaveChanges();
 
+            this.AddNotification("Winner updated " + vc.VCName, NotificationType.SUCCESS);
 
-            return RedirectToAction("PRDtlsForPurchaser","Purchase", new { PrMstId = PrDtls.PRid });
+            //return RedirectToAction("PRDtlsForPurchaser","Purchase", new { PrMstId = PrDtls.PRid });
             //return RedirectToAction("PRDtlsListForPurchaserType4", "Purchase", new { PrMstId = PrDtls.PRid });
+            return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = PrDtls.PRDtId });
         }
 
         public ActionResult VDListPurchaser()
@@ -3662,6 +3725,7 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.StatusId = PrMst.StatId;
             ViewBag.PrMstId = PrMstId;
             ViewBag.StatusId = PrMst.StatId;
+            ViewBag.Discount = PrMst.Discount;
 
             //check if user is admin or Purchaser HOD
             // Convert.ToString(Session["Username"])
@@ -3673,6 +3737,14 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.PstId = userMst.Psn_id;
 
             return View("PrHODPuchasingView");
+        }
+
+        public ActionResult PRViewDiscount (int PrMstId)
+        {
+            var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+
+
+            return PartialView("PRViewDiscount", prMst);
         }
 
 
@@ -4023,6 +4095,16 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.PRId == PrMstId)
                 .FirstOrDefault();
 
+            if (purMstr.PrGroupType1.CPRFFlag == false)
+            {
+                var expenseCode = purMstr.AccountCode.Substring(0,5) ;
+                var typeExpense = db.AccTypeExpenses.Where(x => x.ExpCode == expenseCode).FirstOrDefault();
+                ViewBag.ExpenseName = typeExpense.ExpName;
+            } else
+            {
+                ViewBag.ExpenseName = "";
+            }
+
             //var AccExpList = db.AccTypeExpenses.ToList();
             //var DivList = db.AccTypeDivisions.ToList();
             //var DptList = db.AccTypeDepts.ToList();
@@ -4078,6 +4160,76 @@ namespace PurchaseWeb_2.Controllers
             db.SaveChanges();
 
             return RedirectToAction("PrMstPurchasingProses", "Purchase", new { PrMstId = PrMstId });
+        }
+
+        [HttpGet]
+        public ActionResult PRdiscount(int PrMstId)
+        {
+            var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+
+            //get Pr details
+            var prDetails = db.PR_Details.Where(x => x.PRid == PrMstId).FirstOrDefault();
+
+            //get vendorlist
+            var vendorLst = db.PR_VendorComparison.Where(x => x.PRDtId == prDetails.PRDtId).ToList();
+
+            ViewBag.vdLst = vendorLst;
+
+            // get vendor list
+            //var vdLst = dbDom1.APVENs
+            //    .Where(x => x.SWACTV == 1)
+            //    .ToList();
+
+
+
+            return PartialView("PRdiscount",prMst);
+        }
+
+        [HttpPost]
+        public ActionResult PRdiscount(PR_Mst pR_Mst )
+        {
+            var prMst = db.PR_Mst.Where(x => x.PRId == pR_Mst.PRId).FirstOrDefault();
+
+            var vendorMst = db.PR_VendorComparison.Where(x => x.VDCode == pR_Mst.VendorCodeDiscount).FirstOrDefault();
+
+            if (prMst != null)
+            {
+                prMst.VendorCodeDiscount = pR_Mst.VendorCodeDiscount;
+                prMst.Discount = pR_Mst.Discount;
+                prMst.VendorNameDiscount = vendorMst.VCName;
+                prMst.VendorCurrDiscount = vendorMst.VdCurCode;
+            }
+            db.SaveChanges();
+
+            //get Pr details
+            var prDetails = db.PR_Details.Where(x => x.PRid == pR_Mst.PRId).FirstOrDefault();
+
+            //get vendorlist
+            var vendorLst = db.PR_VendorComparison.Where(x => x.PRDtId == prDetails.PRDtId).ToList();
+
+            ViewBag.vdLst = vendorLst;
+
+            //save in log
+            // add audit log for PR
+            var auditLog = db.Set<AuditPR_Log>();
+            auditLog.Add(new AuditPR_Log
+            {
+                ModifiedBy = Session["Username"].ToString(),
+                ModifiedOn = DateTime.Now,
+                ActionBtn = "UPDATE",
+                ColumnStr = "VendorCodeDiscount | Discount | VendorNameDiscount | VendorCurrDiscount ",
+                ValueStr = pR_Mst.VendorCodeDiscount + "|" + pR_Mst.Discount + "|" + vendorMst.VCName + "|" + vendorMst.VdCurCode,
+                PRId = pR_Mst.PRId,
+                PRDtlsId = 0,
+                Remarks = "Update discount amount for whole PR"
+
+            });
+            db.SaveChanges();
+
+            this.AddNotification("Update discount amount succesfull!!", NotificationType.SUCCESS);
+
+
+            return PartialView("PRdiscount", prMst);
         }
 
         public ActionResult editIONo(int PrMstId, string IOrderNo)
@@ -4453,7 +4605,7 @@ namespace PurchaseWeb_2.Controllers
                     "| PODate | LastPONo | PurchasingRemarks | CostDown",
                     ValueStr = PRDtls.PRid + " | " + PRDtls.PRNo + " | " + PRDtls.TypePRId + " | " + PRDtls.UserId + " | " + PRDtls.UserName + " | " +
                     PRDtls.DepartmentName + " | " + PRDtls.Description + " | " + PRDtls.VendorPartNo + " | " + PRDtls.Qty + " | " + PRDtls.ReqDevDate + " | " +
-                    PRDtls.Remarks + " | " + PRDtls.UOMName + " | " + PRDtls.VendorCode.Trim() + " | " + PRDtls.VendorName.Trim() + " | " +
+                    PRDtls.Remarks + " | " + PRDtls.UOMName + " | " + PRDtls.VendorCode + " | " + PRDtls.VendorName + " | " +
                     PRDtls.CurCode + " | " + PRDtls.EstimateUnitPrice + " | " + PRDtls.EstimateUnitPrice * PRDtls.Qty + " | " +
                     PRDtls.LastPrice + " | " + PRDtls.LastQuoteDate + " | " + PRDtls.PODate + " | " + PRDtls.LastPONo + " | " +
                     PRDtls.PurchasingRemarks + " | " + PRDtls.CostDown,
@@ -4464,6 +4616,11 @@ namespace PurchaseWeb_2.Controllers
                 db.SaveChanges();
 
                 //delete PR details
+                //// need to check vendor comparison first
+                //PR_VendorComparison pR_Vendor = new PR_VendorComparison() { PRDtId = PrDtlsId };
+                //db.PR_VendorComparison.Remove(pR_Vendor);
+                //db.SaveChanges();
+
                 PR_Details pR_ = new PR_Details() { PRDtId = PrDtlsId };
                 //db.PR_Details.Attach(pR_);
                 db.PR_Details.Remove(PRDtls);

@@ -10,6 +10,16 @@
             @{ Html.RenderAction("PurMstViewSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });}
         </div>
     </div>
+    <!--Add PR discount if any-->
+    @if (ViewBag.Discount > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                @{ Html.RenderAction("PRViewDiscount", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+            </div>
+        </div>
+    }
+
     <div class="row">
         <div class="col-md-12">
             @{ Html.RenderAction("PurDetailsPurchasingViewSelected", "Purchase", new { PrMstId = ViewBag.PrMstId });}
@@ -103,7 +113,7 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 
 <script>

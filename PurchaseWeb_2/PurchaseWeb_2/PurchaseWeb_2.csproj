@@ -157,6 +157,7 @@
     <Compile Include="Controllers\POController.cs" />
     <Compile Include="Controllers\PurchaseController.cs" />
     <Compile Include="Controllers\RazorViewToStringHelper.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SessionCheck.cs" />
     <Compile Include="CustomAttribute\CustomAttribute.cs" />
     <Compile Include="Data\MenuDT.cs" />
@@ -2519,6 +2520,9 @@
     <Content Include="Views\Purchase\PRAuditLog.cshtml" />
     <Content Include="Views\Purchase\SourcingRemarks.cshtml" />
     <Content Include="Views\Main\ContactAdmin.cshtml" />
+    <Content Include="Views\Purchase\PRdiscount.cshtml" />
+    <Content Include="Views\Purchase\PRViewDiscount.cshtml" />
+    <Content Include="Views\Report\PRProcessTime.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -52,10 +52,12 @@
 
                         <th></th>
                     </tr>
+                    @{ String status = "false";}
 
                     @foreach (var item in Model)
                     {
-                        <tr>
+                        if (item.PurchasingComment != null ) { status = "true"; } else { status = "false"; }
+                        <tr data-widget="expandable-table" aria-expanded="@status">
 
                             <td>
                                 @Html.DisplayFor(modelItem => item.PRNo)
@@ -116,7 +118,13 @@
 
                         </tr>
 
-
+                        <tr class="expandable-body ">
+                            <td colspan="10">
+                                <p style="color:indianred; padding-left:2em">
+                                  @item.PurchasingComment
+                                </p>
+                            </td>
+                        </tr>
                     }
 
                 </table>

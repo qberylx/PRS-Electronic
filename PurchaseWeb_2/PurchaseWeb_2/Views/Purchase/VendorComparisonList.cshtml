@@ -186,8 +186,8 @@
                 </td>
 
                 <td>
-                    @*@using (Ajax.BeginForm("VendorComparisonWinner", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPRDtlsForPurchaser" }))*@
-                    @using (Html.BeginForm("VendorComparisonWinner", "Purchase", FormMethod.Post, new { @class = "winform" }))
+                    @*@using (Html.BeginForm("VendorComparisonWinner", "Purchase", FormMethod.Post, new {  UpdateTargetId = "divVDCompareLst_" + item.PRDtId + "" }))*@
+                    @using (Ajax.BeginForm("VendorComparisonWinner", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divVDCompareLst_" + item.PRDtId + "" }))
                     {
                         <button class="btn btn-success"><i class="fa fa-check-circle"></i></button>
                         <input type="hidden" value="@item.VCId" id="VCIdw" name="VCIdw" />

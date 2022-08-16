@@ -43,7 +43,9 @@
                         {
                             <div class="col-md-4">
                                 <!--PR Account-->
-                                <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode)
+                                <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode) <br />
+                                <strong>Account Name :</strong>@ViewBag.ExpenseName
+                                
                             </div>
                         }
                         if (Model.PrGroupType1.CPRFFlag == true)
@@ -126,7 +128,8 @@
                     </div>
                     <div class="col-md-3">
                         <strong>Requestor</strong> <br />
-                        @Html.DisplayFor(model => model.Usr_mst.Username)
+                        @Html.DisplayFor(model => model.Usr_mst.Username)<br />
+                        @Html.DisplayFor(model => model.Usr_mst.Email)
                     </div>
                     <div class="col-md-3">
                         <strong>Department</strong> <br />

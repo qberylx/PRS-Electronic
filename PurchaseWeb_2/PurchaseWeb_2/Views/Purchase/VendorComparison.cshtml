@@ -57,6 +57,7 @@
             Current Price (MYR) <br />
             @Html.EditorFor(model => model.CurPriceMYR, new { htmlAttributes = new { @class = "form-control", @onchange = "UpdatePrice(this.value, " + @ViewBag.PrDtlstId + ", " + @ViewBag.Qty + " )", @Value = "0.00", @kiraCurPMYR = ViewBag.PrDtlstId } }) <br />
             @Html.ValidationMessageFor(model => model.CurPriceMYR, "", new { @class = "text-danger" })
+            <input type="hidden" name="unitCurrPriceMYR" id="unitCurrPriceMYR" kiraUnitCurPMYR ="@ViewBag.PrDtlstId" value=""/>
         </div>
 
         <div class="col-md-2">
@@ -68,6 +69,7 @@
             Last Price (MYR)<br />
             @Html.EditorFor(model => model.LastPrice, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.lastPrice, @kiraLastP = ViewBag.PrDtlstId, @onfocusout = "UpdateCostDown(this.value , " + @ViewBag.PrDtlstId + " )" } }) <br />
             @Html.ValidationMessageFor(model => model.LastPrice, "", new { @class = "text-danger" })
+            
         </div>
         <div class="col-md-2" style="display:none">
             Quote. Date <br />
@@ -249,7 +251,15 @@
 
         var curRate = $("[curRate=" + PrDtlstId + "]").val();
         var totamtVd = Qty * Price;
-        var totamt = Qty * Price * curRate ;
+        var totamt = Qty * Price * curRate;
+
+        // update cost unit MYR
+        var unitCurPriceMYR = Price * curRate;
+        $("[kiraUnitCurPMYR=" + PrDtlstId + "]").val(unitCurPriceMYR);
+        $("[kiraUnitCurPMYR=" + PrDtlstId + "]").attr("value", unitCurPriceMYR);
+        //$("[kiraCurP=" + PrDtlstId + "]").val(unitCurPriceMYR);
+        //$("[kiraCurP=" + PrDtlstId + "]").attr("value", unitCurPriceMYR);
+        console.log ( unitCurPriceMYR) ;
 
         // update cost MYR
         $("[kiraCurPMYR=" + PrDtlstId + "]").val(totamt.toFixed(2));
@@ -272,12 +282,16 @@
 
         // calc Costdown
         var lastPrice = $("[kiraLastP=" + PrDtlstId + "]").val();
+        console.log("lastPrice =" + lastPrice);
         if (lastPrice <= 0) {
             $("[kiraCostD=" + PrDtlstId + "]").val(0);
         } else {
-            var curPrice = $("[kiraCurPMYR=" + PrDtlstId + "]").val();
-            var costDown = (lastPrice - curPrice) / lastPrice * 100;
+            var curPrice = $("[kiraCurP=" + PrDtlstId + "]").val();
+            var currRate = $("[curRate=" + PrDtlstId + "]").val();
+            console.log("CurP MYR =" + curPrice);
+            var costDown = (lastPrice - (curPrice * currRate )) / lastPrice * 100;
             $("[kiraCostD=" + PrDtlstId + "]").val(costDown.toFixed(2));
+            console.log("Cost Down = " + $("[kiraCostD=" + PrDtlstId + "]").val());
         }
     }
 
@@ -288,14 +302,18 @@
             $("[kiraCostD=" + PrDtlstId + "]").val(0);
         } else {
             var curPrice = $("[kiraCurP=" + PrDtlstId + "]").val();
-            var costDown = (lastPrice - curPrice) / lastPrice * 100;
+            var currRate = $("[curRate=" + PrDtlstId + "]").val();
+            var costDown = (lastPrice - (curPrice * currRate)) / lastPrice * 100;
             $("[kiraCostD=" + PrDtlstId + "]").val(costDown.toFixed(2));
         }
     }
 
     function UpdateTax(tax, PrDtlstId, Qty) {
         var curPrice = $("[kiraCurPMYR=" + PrDtlstId + "]").val();
-        var totamt = Qty * curPrice;
+        // sebab kiraCurPMYR da kira sekali Qty
+        //var totamt = Qty * curPrice;
+        console.log(curPrice);
+        var totamt = curPrice * 1.00;
 
         var curPriceVd = $("[kiraCurP=" + PrDtlstId + "]").val();
         var totamtVd = Qty * curPriceVd;
@@ -323,7 +341,7 @@
             var DiscAmtVd = $("#amountDisc_" + PrDtlstId + "").val();
             totamtVd = totamtVd - DiscAmt;
         }
-
+        console.log("totamt="+ totamt);
         //update tot no tax
         $("[kiraTAE=" + PrDtlstId + "]").val(totamt.toFixed(2));
         $("[kiraTAE=" + PrDtlstId + "]").attr("value", totamt.toFixed(2));

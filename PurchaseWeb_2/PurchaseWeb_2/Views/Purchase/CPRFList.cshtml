@@ -5,7 +5,17 @@
     <div class="col-12">
         <div class="card card-info">
             <div class="card-header">
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search">
 
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div id="notification">
@@ -13,7 +23,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table class="table table-sm ">
+                        <table class="table table-sm " id="tableA">
                             <tr>
                                 <th>
                                     No.
@@ -72,6 +82,18 @@
 <script>
     $(document).ready(function () {
         $("#notification").delay(2000).fadeOut("slow");
+    });
+
+    $(function () {
+        var $rows = $('#tableA tr');
+        $('#search').keyup(function () {
+            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+            $rows.show().filter(function () {
+                var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                return !~text.indexOf(val);
+            }).hide();
+        });
     });
 </script>
 

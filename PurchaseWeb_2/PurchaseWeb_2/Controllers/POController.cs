@@ -80,6 +80,7 @@ namespace PurchaseWeb_2.Controllers
 
             ViewBag.StatusId = PrMst.StatId;
             ViewBag.PrMstId = PrMstId;
+            ViewBag.Discount = PrMst.Discount;
 
             return View("POProsesView");
         }
@@ -100,6 +101,30 @@ namespace PurchaseWeb_2.Controllers
                 string userEmail = usrmst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List  ";
                 string body = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List and has been sent back to purchasing. " +
+                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                SendEmail(userEmail, subject, body);
+            }
+
+            return RedirectToAction("PoProsesList", "PO");
+        }
+
+        public ActionResult PORejectToUser(int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+            if (PrMst != null)
+            {
+                PrMst.StatId = 13;
+                db.SaveChanges();
+                this.AddNotification("PR " + PrMst.PRNo + " has been rejected back to User", NotificationType.SUCCESS);
+
+                //send email to purchaser
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.Usr_mst.Username).SingleOrDefault();
+                string userEmail = usrmst.Email;
+                string subject = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List  ";
+                string body = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List and has been sent back to you. <br/> " +
                     "Kindly login to http://prs.dominant-semi.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body);
@@ -166,6 +191,7 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.PRId == PrMstId)
                 .FirstOrDefault();
 
+            ViewBag.PrDiscount = PrMst.Discount;
             ViewBag.PrTypeId = PrMst.PRTypeId;
             ViewBag.GrandTotal = GrandTotal;
             ViewBag.PrMstId = PrMstId;
@@ -348,10 +374,15 @@ namespace PurchaseWeb_2.Controllers
             var startdate = start.Date;
             var enddate = end.Date.AddDays(1);
 
-            var POlist = db.PO_Mst 
-                .Where(x => x.CreateDate >= startdate && x.CreateDate <= enddate  )
+            var POlist = db.PO_Mst
+                .Where(x => x.CreateDate >= startdate && x.CreateDate <= enddate)
                 .ToList();
 
+            
+            List<AccTypeExpens> expLst = db.AccTypeExpenses.ToList();
+            ViewBag.expList = expLst;
+
+            
             return PartialView("POListByDate", POlist);
         }
 
@@ -386,7 +417,10 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.CreateDate >= start && x.CreateDate <= end && (x.PR_Mst.PRTypeId != 2 && x.PR_Mst.PRTypeId != 5) )
                 .ToList();
             }
-            
+
+            List<AccTypeExpens> expLst = db.AccTypeExpenses.ToList();
+            ViewBag.expList = expLst;
+
 
             return PartialView("POListByDate", POlist);
         }
@@ -694,6 +728,7 @@ namespace PurchaseWeb_2.Controllers
                     dt.Columns.Add("TAXAUTH2");
                     dt.Columns.Add("TAXCLASS1");
                     dt.Columns.Add("TAXCLASS2");
+                    dt.Columns.Add("DISCOUNT");
 
                     //Purchase_Order_Lines
                     dt2.Columns.Add("PORHSEQ");
@@ -811,6 +846,42 @@ namespace PurchaseWeb_2.Controllers
                             RATEOPER = currExch.RATEOPER.ToString();
                         }
 
+                        //check discount by line item
+                        var prDtlsLst = db.PR_Details.Where(x => x.NoPo == getPO.NoPo).ToList();
+
+                        var DiscVendorSum = 0.00M;
+                        foreach (var pr in prDtlsLst)
+                        {
+                            var prVC = pr.PR_VendorComparison.Where(x => x.FlagWin == true).FirstOrDefault();
+                            if (prVC.Discount > 0)
+                            {
+                                DiscVendorSum = DiscVendorSum + (decimal)prVC.Discount;
+                            }                            
+                        }
+                            
+                        //var strDiscVendorSum = "0";
+
+                        //if (DiscVendorSum > 0.00M)
+                        //{
+                        //    strDiscVendorSum = DiscVendorSum.ToString();
+                        //}
+                        //else
+                        //{
+                        //    strDiscVendorSum = "0";
+                        //}
+
+                        //check if there are whole PR discount
+                        var discountPR = prdt.PR_Mst.Discount;
+                        if (discountPR > 0)
+                        {
+                            discountPR = prdt.PR_Mst.Discount;
+                        } else
+                        {
+                            discountPR = DiscVendorSum;
+                        }
+
+
+                        
                         dt.Rows.Add(
                         PORHSEQ.ToString(),
                         getPO.CreateDate?.ToString("dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo),
@@ -837,7 +908,8 @@ namespace PurchaseWeb_2.Controllers
                         "SSTG",
                         "SSTS",
                         "1",
-                        "1"
+                        "1",
+                        discountPR
 
                         );
 
@@ -846,7 +918,9 @@ namespace PurchaseWeb_2.Controllers
                         //Purchase_Order_Hdr_Opt__Fields
                         var Apveno = dbDom1.APVENOes.Where(x => x.VENDORID == prdt.VendorCode && x.OPTFIELD == "FOBPOINT").FirstOrDefault();
 
-                        dt5.Rows.Add(
+                        if (Apveno != null)
+                        {
+                            dt5.Rows.Add(
                             PORHSEQ.ToString(),
                             Apveno.OPTFIELD.ToString(),
                             Apveno.VALUE.ToString(),
@@ -856,8 +930,10 @@ namespace PurchaseWeb_2.Controllers
                             "",
                             "",
                             Apveno.SWSET.ToString()
-                        );
-                        ws4.Cell(2, 1).InsertData(dt5.AsEnumerable());
+                            );
+                            ws4.Cell(2, 1).InsertData(dt5.AsEnumerable());
+                        }
+                        
 
                         //PO Details
                         var prdtList = db.PR_Details.Where(x => x.NoPo == getPO.NoPo).ToList();
@@ -876,17 +952,38 @@ namespace PurchaseWeb_2.Controllers
                             PORLSEQ = PORLSEQ + 1;
 
                             var extend = pr.UnitPrice * pr.Qty;
+                            string strExtend = string.Format("{0:n}", extend);
+
+                            //check discount by line item
+                            var discountVendor = pr.PR_VendorComparison.Where(x => x.FlagWin == true && x.PRDtId == pr.PRDtId).FirstOrDefault();
+                            var strDiscVendor = "0";
+                            var decDiscVendor = 0.00M;
+                            
+                            if (discountVendor.Discount > 0)
+                            {
+                                strDiscVendor = discountVendor.Discount.ToString();
+                                decDiscVendor = (decimal)discountVendor.Discount ;
+                            }
+                            else
+                            {
+                                strDiscVendor = "0";
+                            }
+
+                            var taxBase = 0.00M;
+                            taxBase = (decimal)extend - decDiscVendor;
+                            var strTaxBase = string.Format("{0:n}", taxBase);
+
 
                             var discount = pr.TotCostWitTax - pr.TotCostnoTax;
                             var taxAmount1 = "0";
                             var taxAmount2 = "0";
                             if (pr.TaxCode.ToUpper() == "SSTS")
                             {
-                                taxAmount2 = discount.ToString();
+                                taxAmount2 = string.Format("{0:n}", discount);
                             }
                             else
                             {
-                                taxAmount1 = discount.ToString();
+                                taxAmount1 = string.Format("{0:n}", discount);
                             }
 
                             var taxclass2 = "1";
@@ -910,6 +1007,9 @@ namespace PurchaseWeb_2.Controllers
                                 taxRate1 = pr.Tax.ToString();
                             }
 
+                            var VendorPartNo = pr.VendorPartNo?.ToString() ?? "";
+
+
 
                             dt2.Rows.Add(
                                 PORHSEQ.ToString(),
@@ -920,14 +1020,14 @@ namespace PurchaseWeb_2.Controllers
                                 pr.DomiPartNo.ToString(),
                                 "N1000S",
                                 pr.Description.ToString(),
-                                pr.VendorPartNo.ToString(),
+                                VendorPartNo,
                                 "FALSE",
                                 pr.UOMName.ToString(),
                                 pr.Qty.ToString(),
                                 pr.UnitPrice.ToString(),
-                                extend.ToString(),
-                                extend.ToString(),
-                                extend.ToString(),
+                                strExtend,
+                                strTaxBase,
+                                strTaxBase,
                                 taxclass1,
                                 taxclass2,
                                 taxRate1,
@@ -944,9 +1044,9 @@ namespace PurchaseWeb_2.Controllers
                                 "0",
                                 "0",
                                 "0",
-                                extend.ToString(),
+                                strTaxBase,
                                 "0",
-                                "0",
+                                strDiscVendor,
                                 DETAILNUM.ToString()
                                 );
 

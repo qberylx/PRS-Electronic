@@ -35,7 +35,7 @@
                     <strong>PR Amount </strong>
                 </div>
                 <div class="col-md-6">
-                    @{String strTotCostWitTax = String.Format("{0:n2}", ViewBag.PrTotAmount); }
+                    @{String strTotCostWitTax = String.Format("{0:n2}", ViewBag.PrTotAmount - ViewBag.PRDiscount); }
                     <strong>: </strong> MYR @strTotCostWitTax
                 </div>
             </div>
@@ -85,7 +85,7 @@
                         <strong>B/O After Update </strong>
                     </div>
                     <div class="col-md-9">
-                        @{ decimal NewBal = Model.Balance - ViewBag.PrTotAmount;}
+                        @{ decimal NewBal = Model.Balance - ViewBag.PrTotAmount + ViewBag.PRDiscount ;}
                         <input type="text" id="Balance" name="Balance" value="@NewBal" class="form-control" />
                     </div>
                 </div>

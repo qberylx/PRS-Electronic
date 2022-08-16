@@ -24,6 +24,7 @@ namespace PurchaseWeb_2.ModelData
         public int GroupId { get; set; }
         public string GroupName { get; set; }
         public Nullable<bool> CPRFFlag { get; set; }
+        public string GroupColor { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Mst> PR_Mst { get; set; }
