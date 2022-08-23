@@ -390,6 +390,16 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="PRType" Type="int" />
           <Property Name="GroupId" Type="int" />
         </EntityType>
+        <EntityType Name="PublicHoliday_mst">
+          <Key>
+            <PropertyRef Name="HolidayId" />
+          </Key>
+          <Property Name="HolidayId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HolidayDate" Type="date" />
+          <Property Name="HolidayName" Type="varchar" MaxLength="100" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="RoleMenuMapping_mst">
           <Key>
             <PropertyRef Name="RoleMap_Id" />
@@ -743,6 +753,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySet Name="PrGroupType" EntityType="Self.PrGroupType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRType_mst" EntityType="Self.PRType_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrTypeMap" EntityType="Self.PrTypeMap" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PublicHoliday_mst" EntityType="Self.PublicHoliday_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenuMapping_mst" EntityType="Self.RoleMenuMapping_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status_Mst" EntityType="Self.Status_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -1066,6 +1077,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           </FunctionImport>
           <EntitySet Name="LastNoMsts" EntityType="Domi_PurModel.LastNoMst" />
           <EntitySet Name="vw_sourcingRemarksLst" EntityType="Domi_PurModel.vw_sourcingRemarksLst" />
+          <EntitySet Name="PublicHoliday_mst" EntityType="Domi_PurModel.PublicHoliday_mst" />
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -1809,6 +1821,16 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="VCId" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="PublicHoliday_mst">
+          <Key>
+            <PropertyRef Name="HolidayId" />
+          </Key>
+          <Property Name="HolidayId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HolidayDate" Type="DateTime" Precision="0" />
+          <Property Name="HolidayName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2337,6 +2359,17 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="PRid" ColumnName="PRid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PublicHoliday_mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.PublicHoliday_mst">
+              <MappingFragment StoreEntitySet="PublicHoliday_mst">
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="HolidayName" ColumnName="HolidayName" />
+                <ScalarProperty Name="HolidayDate" ColumnName="HolidayDate" />
+                <ScalarProperty Name="HolidayId" ColumnName="HolidayId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

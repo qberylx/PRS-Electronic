@@ -12,6 +12,7 @@ using System.Web.Security;
 
 namespace PurchaseWeb_2.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         SqlConnection con = new SqlConnection();
@@ -19,6 +20,7 @@ namespace PurchaseWeb_2.Controllers
         SqlDataReader dr;
 
         // GET: Account
+        [AllowAnonymous]
         public ActionResult LogOn()
         {
             return View();
@@ -31,6 +33,7 @@ namespace PurchaseWeb_2.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
 
         {
@@ -76,7 +79,7 @@ namespace PurchaseWeb_2.Controllers
             Session.Abandon();
             FormsAuthentication.SignOut();
 
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("LogOn", "Account");
         }
 
         public ActionResult CheckUser()
@@ -157,6 +160,7 @@ namespace PurchaseWeb_2.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult ProcessCreate()
         {
             UserDT userDT = new UserDT();
@@ -169,6 +173,7 @@ namespace PurchaseWeb_2.Controllers
 
 
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult ProcessCreate(string Username , String Email , int Dpt_id , int Psn_id)
         {
             //save to Db

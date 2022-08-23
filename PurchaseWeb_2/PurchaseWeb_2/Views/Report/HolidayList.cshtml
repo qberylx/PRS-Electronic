@@ -1,0 +1,78 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.PublicHoliday_mst>
+
+<div class="card card-secondary">
+    <div class="card-header">
+        <div class="card-title">
+            <h7>Public Holiday List</h7>
+        </div>
+    </div>
+    <div class="card-body">
+        <div id="notification">
+            @Html.Partial("_Notifications")
+        </div>
+        <div class="row">
+            <div class="col-md-8 text-center">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td>
+                                No
+                            </td>
+                            <td>
+                                Holiday Date
+                            </td>
+                            <td>
+                                Holiday Name
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int i = 0;}
+                        @foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @item.HolidayDate
+                                </td>
+                                <td>
+                                    @item.HolidayName
+                                </td>
+                                <td>
+                                    @using (Ajax.BeginForm("DeleteHoliday", "Report", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divHolidayList", OnSuccess = "OnSuccess", Confirm="Are you sure to delete this holiday? " }))
+                                    {
+                                        <input type="hidden" name="id" id="HolidayId" value="@item.HolidayId" />
+                                        <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    });
+
+    $(function () {
+        var $rows = $('#tableA tr');
+        $('#search').keyup(function () {
+            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+            $rows.show().filter(function () {
+                var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                return !~text.indexOf(val);
+            }).hide();
+        });
+    });
+</script>

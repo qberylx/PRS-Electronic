@@ -4,17 +4,18 @@
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 
-<h2>PR Process Time Report</h2>
+<h2>PR Process Analysis Report</h2>
+
 
 <br />
 <br />
 
-<a href="http://reportmanager/ReportServer/Pages/ReportViewer.aspx?%2fPRS%2fPRProcessingTime&rs:Command=Render" target="_blank">PR Processing Time</a>
+<a href="http://reportmanager/ReportServer/Pages/ReportViewer.aspx?%2fPRS%2fPRTimeAnalysis&rs:Command=Render" target="_blank">PR Processing Time Analysis</a>
 
 @*<iframe src="http://reportmanager/ReportServer/Pages/ReportViewer.aspx?%2fPRS%2fPRProcessingTime&rs:Command=Render" style="width: 100%" class="myIframe">
-</iframe>*@
+    </iframe>*@
 
-<iframe src="~/ReportView/PRProcessTime.aspx" style="width: 100%" class="myIframe">
+<iframe src="~/ReportView/PRTimeAnalysis.aspx" style="width: 100%" class="myIframe">
 </iframe>
 
 
@@ -22,3 +23,4 @@
 
     $('.myIframe').css('height', $(window).height() + 'px');
 </script>
+

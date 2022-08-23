@@ -57,6 +57,7 @@
         <AssociationConnector Association="Domi_PurModel.FK_PO_Mst_PR_Mst" />
         <EntityTypeShape EntityType="Domi_PurModel.LastNoMst" Width="1.5" PointX="14.375" PointY="3.75" />
         <EntityTypeShape EntityType="Domi_PurModel.vw_sourcingRemarksLst" Width="1.5" PointX="15.375" PointY="6.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.PublicHoliday_mst" Width="1.5" PointX="16.375" PointY="0.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
