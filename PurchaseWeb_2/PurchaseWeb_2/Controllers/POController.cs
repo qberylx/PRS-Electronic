@@ -92,7 +92,7 @@ namespace PurchaseWeb_2.Controllers
                 .SingleOrDefault();
             if(PrMst != null)
             {
-                PrMst.StatId = 12;
+                PrMst.StatId = 14;
                 db.SaveChanges();
                 this.AddNotification("PR " + PrMst.PRNo + " has been rejected back to Sourcing", NotificationType.SUCCESS);
 
@@ -107,6 +107,72 @@ namespace PurchaseWeb_2.Controllers
             }
 
             return RedirectToAction("PoProsesList", "PO");
+        }
+
+        public ActionResult RejectPOForm (int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+
+            return PartialView("RejectPOForm", PrMst);
+        }
+
+        public ActionResult RejectPOClerk (PR_Mst pR_Mst, int PRId, String submit)
+        {
+            if (submit == "save")
+            {
+                var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PRId)
+                .SingleOrDefault();
+                if (PrMst != null)
+                {
+                    PrMst.StatId = 14;
+                    PrMst.ModifiedBy = Convert.ToString(Session["Username"]);
+                    PrMst.ModifiedDate = DateTime.Now;
+                    PrMst.RejectCommentClerk = pR_Mst.RejectCommentClerk;
+
+                    db.SaveChanges();
+
+                    //audit log
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "UPDATE",
+                        ColumnStr = "StatId |",
+
+                        ValueStr =
+                        14 + "|",
+
+                        PRId = PRId,
+                        PRDtlsId = 0,
+                        Remarks = "PR Reject by Clerk"
+
+                    });
+                    db.SaveChanges();
+                }
+
+                this.AddNotification("PR " + PrMst.PRNo + " has been rejected back to Sourcing", NotificationType.SUCCESS);
+
+                //send email to purchaser
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                string userEmail = usrmst.Email;
+                string subject = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List  ";
+                string body = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List and has been sent back to purchasing. " +
+                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                SendEmail(userEmail, subject, body);
+
+                return View();
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public ActionResult PORejectToUser(int PrMstId)

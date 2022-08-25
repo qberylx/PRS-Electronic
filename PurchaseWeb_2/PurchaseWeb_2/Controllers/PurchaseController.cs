@@ -2414,7 +2414,7 @@ namespace PurchaseWeb_2.Controllers
         {
 
             var PrMstList = db.PR_Mst
-                .Where(x => x.StatId == 12 || x.StatId == 11) 
+                .Where(x => x.StatId == 12 || x.StatId == 11 || x.StatId == 14 ) 
                 .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group )
                 .ToList();
 
@@ -3021,6 +3021,14 @@ namespace PurchaseWeb_2.Controllers
         {
             var vc = db.PR_VendorComparison.Where(x => x.VCId == VCIdw).SingleOrDefault();
 
+            //get Vd accgroup
+            var vd = dbDom1.APVENs.Where(x => x.VENDORID == vc.VDCode).SingleOrDefault();
+            if (vd == null)
+            {
+                this.AddNotification("This Vendor is not registered in sage " + vc.VCName, NotificationType.ERROR);
+                return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = vc.PRDtId });
+            }
+
             // vc by prdt
             var vcByPrdt = db.PR_VendorComparison.Where(x => x.PRDtId == vc.PRDtId).ToList();
             if (vcByPrdt != null)
@@ -3038,8 +3046,7 @@ namespace PurchaseWeb_2.Controllers
                 db.SaveChanges();
             }
 
-            //get Vd accgroup
-            var vd = dbDom1.APVENs.Where(x => x.VENDORID == vc.VDCode).SingleOrDefault();
+            
 
 
             // update pr details
@@ -4016,11 +4023,43 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult PRListForPurchasingProses(int Doctype, int group)
         {
-            var PrMstList = db.PR_Mst
-                .Where(x => x.StatId == 7 || x.StatId == 11 || x.StatId == 12)
-                .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
-                .ToList();
-            return PartialView("PRListForPurchasingProses", PrMstList);
+            string usrName = Session["Username"].ToString();
+            var usrMst = db.Usr_mst.Where(x => x.Username == usrName && x.Flag_Aproval == true).FirstOrDefault();
+            if (usrMst != null)
+            {
+                if(usrMst.SourcingFlag == true)
+                {
+                    var PrMstList = db.PR_Mst
+                    .Where(x => x.StatId == 11 || x.StatId == 12)
+                    .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
+                    .ToList();
+                    return PartialView("PRListForPurchasingProses", PrMstList);
+                } else
+                {
+                    if (usrMst.Psn_id == 7)
+                    {
+                        var PrMstList = db.PR_Mst
+                        .Where(x => x.StatId == 7 || x.StatId == 11 || x.StatId == 12)
+                        .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
+                        .ToList();
+                        return PartialView("PRListForPurchasingProses", PrMstList);
+                    } else
+                    {
+                        var PrMstList = db.PR_Mst
+                        .Where(x => x.StatId == 7 || x.StatId == 11)
+                        .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
+                        .ToList();
+                        return PartialView("PRListForPurchasingProses", PrMstList);
+                    }                    
+                }
+            } else
+            {
+                var PrMstList = db.PR_Mst
+                    .Where(x => x.StatId == 7 || x.StatId == 11)
+                    .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
+                    .ToList();
+                return PartialView("PRListForPurchasingProses", PrMstList);
+            }
 
         }
 

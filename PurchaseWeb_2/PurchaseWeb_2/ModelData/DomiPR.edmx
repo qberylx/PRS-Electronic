@@ -317,6 +317,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="VendorNameDiscount" Type="varchar" MaxLength="150" />
           <Property Name="VendorCurrDiscount" Type="varchar" MaxLength="50" />
+          <Property Name="RejectCommentClerk" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -1305,6 +1306,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="VendorNameDiscount" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="VendorCurrDiscount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RejectCommentClerk" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1997,6 +1999,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="RejectCommentClerk" ColumnName="RejectCommentClerk" />
                 <ScalarProperty Name="VendorCurrDiscount" ColumnName="VendorCurrDiscount" />
                 <ScalarProperty Name="VendorNameDiscount" ColumnName="VendorNameDiscount" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />

@@ -2581,6 +2581,7 @@
     <Content Include="Views\Report\PRProcessAnalysis.cshtml" />
     <Content Include="Views\Report\PublicHoliday.cshtml" />
     <Content Include="Views\Report\HolidayList.cshtml" />
+    <Content Include="Views\PO\RejectPOForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -31,11 +31,14 @@
         <th>
             @Html.DisplayNameFor(model => model.ActionBtn)
         </th>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.ColumnStr)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ValueStr)
+        </th>*@
+        <th>
+            Remarks
         </th>
 
     </tr>
@@ -52,11 +55,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ActionBtn)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.ColumnStr)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ValueStr)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
             </td>
 
         </tr>
