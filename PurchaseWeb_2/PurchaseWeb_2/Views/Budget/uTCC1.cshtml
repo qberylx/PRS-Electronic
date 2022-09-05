@@ -1,0 +1,57 @@
+﻿@model PurchaseWeb_2.ModelData.AccCCLvl1
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <div class="card-title">
+                    Account CC (Lvl 1) Type
+                </div>
+            </div>
+            <div class="card-body">
+                @using (Ajax.BeginForm("UTCCLvl1Save", "Budget", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divUTCCLvl1Lst", OnSuccess="OnSuccess" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label">Account CC (Lvl 1) Name</label>
+                            @Html.EditorFor(model => model.CCLvl1Name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CCLvl1Name, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Account CC (Lvl 1) Code</label>
+                            @Html.EditorFor(model => model.CCLvl1Code, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CCLvl1Code, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                            <input type="hidden" name="AccCCLvl1ID" id="AccCCLvl1ID" value="0" />
+                            <input class="btn btn-primary" type="submit" value="Save" name="save" />
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="divUTCCLvl1Lst">
+            @{ Html.RenderAction("divUTCCLvl1Lst", "Budget");}
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    function OnSuccess() {
+        this.reset();
+        console.log("reset value");
+    }
+</script>
+

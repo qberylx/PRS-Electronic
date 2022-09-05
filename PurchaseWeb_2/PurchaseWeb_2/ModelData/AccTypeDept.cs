@@ -25,6 +25,7 @@ namespace PurchaseWeb_2.ModelData
         public int AccTypeDepID { get; set; }
         public string DeptName { get; set; }
         public string DeptCode { get; set; }
+        public Nullable<bool> DeleteFlag { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Usr_mst> Usr_mst { get; set; }

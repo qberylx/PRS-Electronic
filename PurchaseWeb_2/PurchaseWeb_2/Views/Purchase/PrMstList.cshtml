@@ -138,7 +138,9 @@
                             @if (item.StatId == 2)
                             { @item.HODComment }
                             else if (item.StatId == 13)
-                            { @item.PurchasingComment }</p>
+                            { if (@item.PurchasingComment != null ) { @item.PurchasingComment }
+                              if (@item.RejectCommentClerktoUser != null) { @item.RejectCommentClerktoUser }
+                            }</p>
                         </td>
                     </tr>
                 }

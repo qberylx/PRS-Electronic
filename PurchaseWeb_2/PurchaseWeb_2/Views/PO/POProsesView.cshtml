@@ -48,12 +48,16 @@
                     @Html.ActionLink("Return To Main PR", "PoProsesList", "PO", null, new { @class = "btn btn-primary" })
                     <a>&nbsp;</a>
                     @*@Html.ActionLink("Reject PR back to Purchasing", "POReject", "PO", new { PrMstId = ViewBag.PrMstId }, new { @class = "btn btn-danger" })
-                    <a>&nbsp;</a>*@
+                        <a>&nbsp;</a>*@
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectPR">
                         Reject PR back to Sourcing
                     </button>
                     <a>&nbsp;</a>
-                    @Html.ActionLink("Reject PR back to User", "PORejectToUser", "PO", new { PrMstId = ViewBag.PrMstId }, new { @class = "btn btn-danger" })
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectPRuser">
+                        Reject PR back to User
+                    </button>
+                    @*<a>&nbsp;</a>
+                    @Html.ActionLink("Reject PR back to User", "PORejectToUser", "PO", new { PrMstId = ViewBag.PrMstId }, new { @class = "btn btn-danger" })*@
                 }
                 else
                 {
@@ -77,6 +81,22 @@
                 </button>
             </div>
             @{Html.RenderAction("RejectPOForm", "PO", new { PrMstId = ViewBag.PrMstId });}
+
+        </div>
+    </div>
+</div>
+
+<!--Modal to reject-->
+<div class="modal fade" id="rejectPRuser" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reject PR</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @{Html.RenderAction("RejectPOUserForm", "PO", new { PrMstId = ViewBag.PrMstId });}
 
         </div>
     </div>

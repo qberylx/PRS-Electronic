@@ -17,5 +17,6 @@ namespace PurchaseWeb_2.ModelData
         public int AccCCLvl1ID { get; set; }
         public string CCLvl1Name { get; set; }
         public string CCLvl1Code { get; set; }
+        public Nullable<bool> DeleteFlag { get; set; }
     }
 }

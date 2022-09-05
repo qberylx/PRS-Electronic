@@ -12,6 +12,7 @@
           <Property Name="AccCCLvl1ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CCLvl1Name" Type="varchar" MaxLength="50" />
           <Property Name="CCLvl1Code" Type="varchar" MaxLength="10" />
+          <Property Name="DeleteFlag" Type="bit" />
         </EntityType>
         <EntityType Name="AccCCLvl2">
           <Key>
@@ -20,6 +21,7 @@
           <Property Name="AccCCLvl2ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CCLvl2Name" Type="varchar" MaxLength="50" />
           <Property Name="CCLvl2Code" Type="varchar" MaxLength="10" />
+          <Property Name="DeleteFlag" Type="bit" />
         </EntityType>
         <EntityType Name="AccTypeDept">
           <Key>
@@ -28,6 +30,7 @@
           <Property Name="AccTypeDepID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DeptName" Type="varchar" MaxLength="50" />
           <Property Name="DeptCode" Type="varchar" MaxLength="10" />
+          <Property Name="DeleteFlag" Type="bit" />
         </EntityType>
         <EntityType Name="AccTypeDivision">
           <Key>
@@ -36,6 +39,7 @@
           <Property Name="AccTypeDivId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DivName" Type="varchar" MaxLength="50" />
           <Property Name="DivCode" Type="varchar" MaxLength="10" />
+          <Property Name="DeleteFlag" Type="bit" />
         </EntityType>
         <EntityType Name="AccTypeExpenses">
           <Key>
@@ -44,6 +48,7 @@
           <Property Name="AccTypeExpensesID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ExpName" Type="varchar" MaxLength="100" />
           <Property Name="ExpCode" Type="varchar" MaxLength="10" />
+          <Property Name="DeleteFlag" Type="bit" />
         </EntityType>
         <EntityType Name="AuditPR_Log">
           <Key>
@@ -85,6 +90,15 @@
           <Property Name="Department_name" Type="varchar" MaxLength="50" />
           <Property Name="Create_date" Type="datetime" />
           <Property Name="Modified_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ICCategory_Mst">
+          <Key>
+            <PropertyRef Name="IC_id" />
+          </Key>
+          <Property Name="IC_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IC_CategoryCode" Type="varchar" MaxLength="50" />
+          <Property Name="IC_Desc" Type="varchar" MaxLength="300" />
+          <Property Name="DeleteFlag" Type="bit" />
         </EntityType>
         <EntityType Name="LastNoMst">
           <Key>
@@ -318,6 +332,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="VendorNameDiscount" Type="varchar" MaxLength="150" />
           <Property Name="VendorCurrDiscount" Type="varchar" MaxLength="50" />
           <Property Name="RejectCommentClerk" Type="varchar(max)" />
+          <Property Name="RejectCommentClerktoUser" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -741,6 +756,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySet Name="CPRFMst" EntityType="Self.CPRFMst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency_Mst" EntityType="Self.Currency_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department_mst" EntityType="Self.Department_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ICCategory_Mst" EntityType="Self.ICCategory_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LastNoMst" EntityType="Self.LastNoMst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MonthlyBudget" EntityType="Self.MonthlyBudget" Schema="dbo" store:Type="Tables" />
@@ -1079,6 +1095,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySet Name="LastNoMsts" EntityType="Domi_PurModel.LastNoMst" />
           <EntitySet Name="vw_sourcingRemarksLst" EntityType="Domi_PurModel.vw_sourcingRemarksLst" />
           <EntitySet Name="PublicHoliday_mst" EntityType="Domi_PurModel.PublicHoliday_mst" />
+          <EntitySet Name="ICCategory_Mst" EntityType="Domi_PurModel.ICCategory_Mst" />
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -1307,6 +1324,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="VendorNameDiscount" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="VendorCurrDiscount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="RejectCommentClerk" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RejectCommentClerktoUser" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1460,6 +1478,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="AccCCLvl1ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CCLvl1Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CCLvl1Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteFlag" Type="Boolean" />
         </EntityType>
         <EntityType Name="AccCCLvl2">
           <Key>
@@ -1468,6 +1487,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="AccCCLvl2ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CCLvl2Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CCLvl2Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteFlag" Type="Boolean" />
         </EntityType>
         <EntityType Name="AccTypeDept">
           <Key>
@@ -1479,6 +1499,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_Usr_mst_AccTypeDept" FromRole="AccTypeDept" ToRole="Usr_mst" />
           <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Mst_AccTypeDept" FromRole="AccTypeDept" ToRole="PR_Mst" />
           <NavigationProperty Name="MonthlyBudgets" Relationship="Domi_PurModel.FK_MonthlyBudget_AccTypeDept" FromRole="AccTypeDept" ToRole="MonthlyBudget" />
+          <Property Name="DeleteFlag" Type="Boolean" />
         </EntityType>
         <EntityType Name="AccTypeDivision">
           <Key>
@@ -1487,6 +1508,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="AccTypeDivId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DivName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="DivCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteFlag" Type="Boolean" />
         </EntityType>
         <EntityType Name="AccTypeExpens">
           <Key>
@@ -1495,6 +1517,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="AccTypeExpensesID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ExpName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ExpCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteFlag" Type="Boolean" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -1833,6 +1856,15 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="CreateBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="ICCategory_Mst">
+          <Key>
+            <PropertyRef Name="IC_id" />
+          </Key>
+          <Property Name="IC_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IC_CategoryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IC_Desc" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteFlag" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1999,6 +2031,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="RejectCommentClerktoUser" ColumnName="RejectCommentClerktoUser" />
                 <ScalarProperty Name="RejectCommentClerk" ColumnName="RejectCommentClerk" />
                 <ScalarProperty Name="VendorCurrDiscount" ColumnName="VendorCurrDiscount" />
                 <ScalarProperty Name="VendorNameDiscount" ColumnName="VendorNameDiscount" />
@@ -2093,6 +2126,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="AccCCLvl1">
             <EntityTypeMapping TypeName="Domi_PurModel.AccCCLvl1">
               <MappingFragment StoreEntitySet="AccCCLvl1">
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
                 <ScalarProperty Name="CCLvl1Code" ColumnName="CCLvl1Code" />
                 <ScalarProperty Name="CCLvl1Name" ColumnName="CCLvl1Name" />
                 <ScalarProperty Name="AccCCLvl1ID" ColumnName="AccCCLvl1ID" />
@@ -2102,6 +2136,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="AccCCLvl2">
             <EntityTypeMapping TypeName="Domi_PurModel.AccCCLvl2">
               <MappingFragment StoreEntitySet="AccCCLvl2">
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
                 <ScalarProperty Name="CCLvl2Code" ColumnName="CCLvl2Code" />
                 <ScalarProperty Name="CCLvl2Name" ColumnName="CCLvl2Name" />
                 <ScalarProperty Name="AccCCLvl2ID" ColumnName="AccCCLvl2ID" />
@@ -2111,6 +2146,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="AccTypeDepts">
             <EntityTypeMapping TypeName="Domi_PurModel.AccTypeDept">
               <MappingFragment StoreEntitySet="AccTypeDept">
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
                 <ScalarProperty Name="DeptCode" ColumnName="DeptCode" />
                 <ScalarProperty Name="DeptName" ColumnName="DeptName" />
                 <ScalarProperty Name="AccTypeDepID" ColumnName="AccTypeDepID" />
@@ -2120,6 +2156,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="AccTypeDivisions">
             <EntityTypeMapping TypeName="Domi_PurModel.AccTypeDivision">
               <MappingFragment StoreEntitySet="AccTypeDivision">
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
                 <ScalarProperty Name="DivCode" ColumnName="DivCode" />
                 <ScalarProperty Name="DivName" ColumnName="DivName" />
                 <ScalarProperty Name="AccTypeDivId" ColumnName="AccTypeDivId" />
@@ -2129,6 +2166,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="AccTypeExpenses">
             <EntityTypeMapping TypeName="Domi_PurModel.AccTypeExpens">
               <MappingFragment StoreEntitySet="AccTypeExpenses">
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
                 <ScalarProperty Name="ExpCode" ColumnName="ExpCode" />
                 <ScalarProperty Name="ExpName" ColumnName="ExpName" />
                 <ScalarProperty Name="AccTypeExpensesID" ColumnName="AccTypeExpensesID" />
@@ -2373,6 +2411,16 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
                 <ScalarProperty Name="HolidayName" ColumnName="HolidayName" />
                 <ScalarProperty Name="HolidayDate" ColumnName="HolidayDate" />
                 <ScalarProperty Name="HolidayId" ColumnName="HolidayId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ICCategory_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.ICCategory_Mst">
+              <MappingFragment StoreEntitySet="ICCategory_Mst">
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="IC_Desc" ColumnName="IC_Desc" />
+                <ScalarProperty Name="IC_CategoryCode" ColumnName="IC_CategoryCode" />
+                <ScalarProperty Name="IC_id" ColumnName="IC_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -58,6 +58,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<LastNoMst> LastNoMsts { get; set; }
         public virtual DbSet<vw_sourcingRemarksLst> vw_sourcingRemarksLst { get; set; }
         public virtual DbSet<PublicHoliday_mst> PublicHoliday_mst { get; set; }
+        public virtual DbSet<ICCategory_Mst> ICCategory_Mst { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {

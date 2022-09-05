@@ -4027,31 +4027,45 @@ namespace PurchaseWeb_2.Controllers
             var usrMst = db.Usr_mst.Where(x => x.Username == usrName && x.Flag_Aproval == true).FirstOrDefault();
             if (usrMst != null)
             {
-                if(usrMst.SourcingFlag == true)
+                //if doctype = 4
+                if(Doctype == 4)
                 {
-                    var PrMstList = db.PR_Mst
-                    .Where(x => x.StatId == 11 || x.StatId == 12)
-                    .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
-                    .ToList();
-                    return PartialView("PRListForPurchasingProses", PrMstList);
+                    if (usrMst.SourcingFlag == true)
+                    {
+                        var PrMstList = db.PR_Mst
+                        .Where(x => x.StatId == 11 || x.StatId == 12 || x.StatId == 7)
+                        .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
+                        .ToList();
+                        return PartialView("PRListForPurchasingProses", PrMstList);
+                    }
+                    else
+                    {
+                        if (usrMst.Psn_id == 7)
+                        {
+                            var PrMstList = db.PR_Mst
+                            .Where(x => x.StatId == 7 || x.StatId == 11 || x.StatId == 12)
+                            .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
+                            .ToList();
+                            return PartialView("PRListForPurchasingProses", PrMstList);
+                        }
+                        else
+                        {
+                            var PrMstList = db.PR_Mst
+                            .Where(x => x.StatId == 7 || x.StatId == 11)
+                            .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
+                            .ToList();
+                            return PartialView("PRListForPurchasingProses", PrMstList);
+                        }
+                    }
                 } else
                 {
-                    if (usrMst.Psn_id == 7)
-                    {
-                        var PrMstList = db.PR_Mst
-                        .Where(x => x.StatId == 7 || x.StatId == 11 || x.StatId == 12)
+                    var PrMstList = db.PR_Mst
+                        .Where(x => x.StatId == 11 || x.StatId == 12 || x.StatId == 7)
                         .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                         .ToList();
-                        return PartialView("PRListForPurchasingProses", PrMstList);
-                    } else
-                    {
-                        var PrMstList = db.PR_Mst
-                        .Where(x => x.StatId == 7 || x.StatId == 11)
-                        .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
-                        .ToList();
-                        return PartialView("PRListForPurchasingProses", PrMstList);
-                    }                    
+                    return PartialView("PRListForPurchasingProses", PrMstList);
                 }
+                
             } else
             {
                 var PrMstList = db.PR_Mst

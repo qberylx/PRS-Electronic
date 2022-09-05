@@ -96,6 +96,27 @@ namespace PurchaseWeb_2.Controllers
                 db.SaveChanges();
                 this.AddNotification("PR " + PrMst.PRNo + " has been rejected back to Sourcing", NotificationType.SUCCESS);
 
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "StatId |",
+
+                    ValueStr =
+                    14 + "|",
+
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "PR Reject by Clerk to Sourcing"
+
+                });
+                db.SaveChanges();
+
                 //send email to purchaser
                 var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
                 string userEmail = usrmst.Email;
@@ -116,6 +137,15 @@ namespace PurchaseWeb_2.Controllers
                 .SingleOrDefault();
 
             return PartialView("RejectPOForm", PrMst);
+        }
+
+        public ActionResult RejectPOUserForm(int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .SingleOrDefault();
+
+            return PartialView("RejectPOUserForm", PrMst);
         }
 
         public ActionResult RejectPOClerk (PR_Mst pR_Mst, int PRId, String submit)
@@ -167,7 +197,7 @@ namespace PurchaseWeb_2.Controllers
 
                 SendEmail(userEmail, subject, body);
 
-                return View();
+                return RedirectToAction("PoProsesList","PO");
             }
             else
             {
@@ -175,28 +205,60 @@ namespace PurchaseWeb_2.Controllers
             }
         }
 
-        public ActionResult PORejectToUser(int PrMstId)
+        public ActionResult PORejectToUser(PR_Mst pR_Mst, int PRId, String submit)
         {
-            var PrMst = db.PR_Mst
-                .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
-            if (PrMst != null)
+            if (submit == "save")
             {
-                PrMst.StatId = 13;
-                db.SaveChanges();
-                this.AddNotification("PR " + PrMst.PRNo + " has been rejected back to User", NotificationType.SUCCESS);
+                var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PRId)
+                .SingleOrDefault();
+                if (PrMst != null)
+                {
+                    PrMst.StatId = 13;
+                    PrMst.ModifiedBy = Convert.ToString(Session["Username"]);
+                    PrMst.ModifiedDate = DateTime.Now;
+                    PrMst.RejectCommentClerktoUser = pR_Mst.RejectCommentClerktoUser;
+                    db.SaveChanges();
 
-                //send email to purchaser
-                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.Usr_mst.Username).SingleOrDefault();
-                string userEmail = usrmst.Email;
-                string subject = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List  ";
-                string body = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List and has been sent back to you. <br/> " +
-                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                    //audit log
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "UPDATE",
+                        ColumnStr = "StatId | RejectCommentClerktoUser",
 
-                SendEmail(userEmail, subject, body);
+                        ValueStr =
+                        13 + "|" + pR_Mst.RejectCommentClerktoUser + "|",
+
+                        PRId = PRId,
+                        PRDtlsId = 0,
+                        Remarks = "PR Reject by Clerk to User"
+
+                    });
+                    db.SaveChanges();
+
+                    this.AddNotification("PR " + PrMst.PRNo + " has been rejected back to User", NotificationType.SUCCESS);
+
+                    //send email to purchaser
+                    var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.Usr_mst.Username).SingleOrDefault();
+                    string userEmail = usrmst.Email;
+                    string subject = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List  ";
+                    string body = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List and has been sent back to you. <br/> " +
+                        "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                    SendEmail(userEmail, subject, body);
+                }
+
+                return RedirectToAction("PoProsesList", "PO");
+            } else
+            {
+                return View();
             }
-
-            return RedirectToAction("PoProsesList", "PO");
+            
         }
 
         public ActionResult PurDetailsPOViewSelected(int PrMstId)
@@ -321,6 +383,27 @@ namespace PurchaseWeb_2.Controllers
                             
                             chkPrDetails.NoPo = POnewNo;
                             chkPrDetails.PoFlag = true;
+                            db.SaveChanges();
+
+                            //audit log
+                            string Username = (string)Session["Username"];
+                            // add audit log for PR
+                            var auditLog = db.Set<AuditPR_Log>();
+                            auditLog.Add(new AuditPR_Log
+                            {
+                                ModifiedBy = Username,
+                                ModifiedOn = DateTime.Now,
+                                ActionBtn = "UPDATE",
+                                ColumnStr = "NoPo | PoFlag ",
+
+                                ValueStr =
+                                POnewNo + "|" + true + "|",
+
+                                PRId = PrMstId,
+                                PRDtlsId = 0,
+                                Remarks = "Create PO with PO Number : "+ POnewNo
+
+                            });
                             db.SaveChanges();
 
                             PoFlag1 = true;
@@ -916,14 +999,20 @@ namespace PurchaseWeb_2.Controllers
                         var prDtlsLst = db.PR_Details.Where(x => x.NoPo == getPO.NoPo).ToList();
 
                         var DiscVendorSum = 0.00M;
-                        foreach (var pr in prDtlsLst)
+
+                        //only check discount in vendor comparison if pr type 4
+                        if (prdt.PR_Mst.PRTypeId == 4)
                         {
-                            var prVC = pr.PR_VendorComparison.Where(x => x.FlagWin == true).FirstOrDefault();
-                            if (prVC.Discount > 0)
+                            foreach (var pr in prDtlsLst)
                             {
-                                DiscVendorSum = DiscVendorSum + (decimal)prVC.Discount;
-                            }                            
+                                var prVC = pr.PR_VendorComparison.Where(x => x.FlagWin == true).FirstOrDefault();
+                                if (prVC.Discount > 0)
+                                {
+                                    DiscVendorSum = DiscVendorSum + (decimal)prVC.Discount;
+                                }
+                            }
                         }
+                        
                             
                         //var strDiscVendorSum = "0";
 
@@ -1025,15 +1114,22 @@ namespace PurchaseWeb_2.Controllers
                             var strDiscVendor = "0";
                             var decDiscVendor = 0.00M;
                             
-                            if (discountVendor.Discount > 0)
+                            if (discountVendor != null)
                             {
-                                strDiscVendor = discountVendor.Discount.ToString();
-                                decDiscVendor = (decimal)discountVendor.Discount ;
-                            }
-                            else
+                                if (discountVendor.Discount > 0)
+                                {
+                                    strDiscVendor = discountVendor.Discount.ToString();
+                                    decDiscVendor = (decimal)discountVendor.Discount;
+                                }
+                                else
+                                {
+                                    strDiscVendor = "0";
+                                }
+                            } else
                             {
                                 strDiscVendor = "0";
                             }
+                            
 
                             var taxBase = 0.00M;
                             taxBase = (decimal)extend - decDiscVendor;

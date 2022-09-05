@@ -17,5 +17,6 @@ namespace PurchaseWeb_2.ModelData
         public int AccTypeDivId { get; set; }
         public string DivName { get; set; }
         public string DivCode { get; set; }
+        public Nullable<bool> DeleteFlag { get; set; }
     }
 }

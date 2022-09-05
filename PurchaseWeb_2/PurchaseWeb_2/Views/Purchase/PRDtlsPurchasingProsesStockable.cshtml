@@ -110,11 +110,12 @@
 <div class="row">
     <div class="container">
         <div class="row">
-            <div class="col-4 col-centered">
+            <div class="col-6 col-centered">
                 @Html.ActionLink("Return To Main PR", "PurchasingProsesPR", "Purchase", null, new { @class = "btn btn-primary" })
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectPR">
                     Reject PR
                 </button>
+                @Html.ActionLink("Send To HOD Purchasing", "PurHODApproval", "Purchase", new { PrMstId = @ViewBag.PrMstId }, new { @class = "btn btn-success" })
             </div>
         </div>
     </div>

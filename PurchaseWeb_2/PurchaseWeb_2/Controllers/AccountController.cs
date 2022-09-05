@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -84,6 +85,9 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult CheckUser()
         {
+            // clear temp msg once login
+            TempData.Remove("msg") ;
+
             connectionstring();
             con.Open();
             cmd.Connection = con;
@@ -183,7 +187,17 @@ namespace PurchaseWeb_2.Controllers
              {
                  string resp = userDT.CreateUser(Username, Email, Dpt_id , Psn_id);
                  TempData["msg"] = resp;
-             }
+
+                //Email to Admin
+                //subject
+                string subject = @"User : "+ Username + " register into the system ";
+                //body
+                string body = @"User : "+ Username +" <br/> Email : "+Email+" <br/> need an activation ";
+                //user email
+                String userEmail = @"mohd.qatadah@dominant-semi.com";
+
+                SendEmail(userEmail, subject, body, "");
+            }
              catch (Exception ex)
              {
                  TempData["msg"] = ex.Message;
@@ -258,6 +272,49 @@ namespace PurchaseWeb_2.Controllers
             }
             
             return PartialView("_SlidebarMenu", Menu);
+        }
+
+        //EMail
+        public string SendEmail(string userEmail, string Subject, string body, string FilePath)
+        {
+            try
+            {
+                String email = userEmail;
+                MailMessage mail = new MailMessage();
+                mail.To.Add(email);
+                //mail.From = new MailAddress("itsupport@dominant-semi.com", "prs.system@dominant-semi.com");
+                mail.From = new MailAddress("prs.system@dominant-semi.com", "prs.system");
+                mail.Subject = Subject;
+                mail.Body = body;
+
+                if (FilePath != "")
+                {
+                    System.Net.Mail.Attachment attachment;
+                    attachment = new System.Net.Mail.Attachment(FilePath);
+                    mail.Attachments.Add(attachment);
+                }
+
+                mail.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "mail1.dominant-semi.com";// mail1.dominant-semi.com smtp.gmail.com
+                smtp.Port = 28; // 28 587
+                smtp.UseDefaultCredentials = false;
+
+                smtp.Credentials = new System.Net.NetworkCredential("prs.system@dominant-semi.com", "Prs1305");
+
+                //smtp.Credentials = new System.Net.NetworkCredential("itsupport@dominant-semi.com", "Domi$dm1n"); // Enter seders User name and password       
+                //smtp.EnableSsl = true;
+                smtp.Send(mail);
+
+                return ("Email Sent");
+            }
+            catch (SmtpException ex)
+            {
+                string msg = "Mail cannot be sent because of the server problem:";
+                msg += ex.Message;
+                return (msg);
+            }
+
         }
 
     }

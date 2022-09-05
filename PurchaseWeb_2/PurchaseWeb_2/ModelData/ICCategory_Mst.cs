@@ -12,11 +12,11 @@ namespace PurchaseWeb_2.ModelData
     using System;
     using System.Collections.Generic;
     
-    public partial class AccCCLvl2
+    public partial class ICCategory_Mst
     {
-        public int AccCCLvl2ID { get; set; }
-        public string CCLvl2Name { get; set; }
-        public string CCLvl2Code { get; set; }
+        public int IC_id { get; set; }
+        public string IC_CategoryCode { get; set; }
+        public string IC_Desc { get; set; }
         public Nullable<bool> DeleteFlag { get; set; }
     }
 }

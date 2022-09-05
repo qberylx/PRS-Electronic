@@ -17,5 +17,6 @@ namespace PurchaseWeb_2.ModelData
         public int AccTypeExpensesID { get; set; }
         public string ExpName { get; set; }
         public string ExpCode { get; set; }
+        public Nullable<bool> DeleteFlag { get; set; }
     }
 }

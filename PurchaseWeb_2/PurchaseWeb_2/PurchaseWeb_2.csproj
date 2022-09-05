@@ -173,6 +173,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\POController.cs" />
@@ -246,6 +247,9 @@
       <DependentUpon>DomiPR.edmx</DependentUpon>
     </Compile>
     <Compile Include="ModelData\GetPOListbyDate_Result.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\ICCategory_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\ICITMV.cs">
@@ -2582,6 +2586,20 @@
     <Content Include="Views\Report\PublicHoliday.cshtml" />
     <Content Include="Views\Report\HolidayList.cshtml" />
     <Content Include="Views\PO\RejectPOForm.cshtml" />
+    <Content Include="Views\Budget\UtilityBudget.cshtml" />
+    <Content Include="Views\Budget\uTExpenses.cshtml" />
+    <Content Include="Views\Budget\UTExpensesList.cshtml" />
+    <Content Include="Views\Budget\uTDivision.cshtml" />
+    <Content Include="Views\Budget\UTDivisionList.cshtml" />
+    <Content Include="Views\Budget\uTDepartment.cshtml" />
+    <Content Include="Views\Budget\UTDepartmentList.cshtml" />
+    <Content Include="Views\Budget\uTCC1.cshtml" />
+    <Content Include="Views\Budget\divUTCCLvl1Lst.cshtml" />
+    <Content Include="Views\Budget\uTCC2.cshtml" />
+    <Content Include="Views\Budget\divUTCCLvl2Lst.cshtml" />
+    <Content Include="Views\Budget\uTICCategory.cshtml" />
+    <Content Include="Views\Budget\UTICCategoryLst.cshtml" />
+    <Content Include="Views\PO\RejectPOUserForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

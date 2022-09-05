@@ -27,15 +27,28 @@
     <div class="row align-items-center justify-content-center">
         <div class="col-2"></div>
         <div class="col-8">
-            <font style="font-family: 'Times New Roman', Times, serif; color: whitesmoke; font-size: 50px; ">PURCHASE REQUEST SYSTEM</font>
+            <font style="font-family: 'Times New Roman', Times, serif; color: whitesmoke; font-size: 50px; " class="text-center ">PURCHASE REQUEST SYSTEM</font>
         </div>
         <div class="col-2"></div>
     </div>
 </div>
 <div class="container">
+    @if (TempData["msg"] != null)
+    {
+        <div class="row ">
+            <div class="col-8 mx-auto">
+                <div class="alert ">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong>Success!</strong> Your UserId has been registered. Please proceed to Log In.
+                </div>
+            </div>
+        </div>       
+        
+    }
     <div class="row align-content-center justify-content-center">
         <div class="col-12">
             <div class="w3ls-login box box--big">
+
                 <!-- form starts here -->
                 @*using (Html.BeginForm("LogOn", "Account", FormMethod.Post)) *@
                 <form action="~/Account/LogOn" method="post">
@@ -62,16 +75,16 @@
                             <!--<label class="check" for="check3">Show password</label>-->
                         </div>
                         <!--<div class="agile-right">
-                    <a href="#">forgot password?</a>
-                </div>-->
+                            <a href="#">forgot password?</a>
+                        </div>-->
                     </div>
 
                     <input type="submit" value="LOGIN">
                 </form>
             </div>
         </div>
-    </div> 
-    
+    </div>
+
 </div>
 
 <br />
