@@ -59,6 +59,15 @@
         <EntityTypeShape EntityType="Domi_PurModel.vw_sourcingRemarksLst" Width="1.5" PointX="15.375" PointY="6.75" />
         <EntityTypeShape EntityType="Domi_PurModel.PublicHoliday_mst" Width="1.5" PointX="16.375" PointY="0.75" />
         <EntityTypeShape EntityType="Domi_PurModel.ICCategory_Mst" Width="1.5" PointX="16.375" PointY="3.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.MonthlyBudget_Expense" Width="1.5" PointX="18.625" PointY="4.625" />
+        <EntityTypeShape EntityType="Domi_PurModel.MonthlyBudget_Mst" Width="1.5" PointX="16.375" PointY="19.25" />
+        <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_Expense_AccCCLvl1" />
+        <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_Expense_AccCCLvl2" />
+        <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeDept" />
+        <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeDivision" />
+        <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeExpenses" />
+        <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_Expense_ICCategory_Mst" />
+        <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_Expense_MonthlyBudget_Mst" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

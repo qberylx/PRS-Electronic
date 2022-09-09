@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "MonthlyBudget";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<nav class="navbar navbar-expand navbar-gray navbar-light  ">
+    <ul class="navbar-nav">
+        <li class="nav-item d-none d-sm-inline-block ">
+            @using (Ajax.BeginForm("utBudgetMonthlyTab", "Budget", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divBudgetMonthlyTab" }))
+            {
+                <button type="submit" class="nav-link text-light btn-secondary">Create New Budget</button>
+                <input type="hidden" name="utTabid" id="utTabid" value="1" />
+            }
+
+        </li>
+        
+        
+    </ul>
+</nav>
+
+<div id="divBudgetMonthlyTab">
+    @{Html.RenderAction("utBudgetMonthlyTab", "Budget", new { utTabid = 1 }); }
+</div>
+

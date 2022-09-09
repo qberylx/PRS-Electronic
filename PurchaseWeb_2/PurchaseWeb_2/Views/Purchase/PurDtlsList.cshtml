@@ -137,7 +137,7 @@
                                     @Html.DisplayFor(modelItem => item.VendorName)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Qty)
+                                    @String.Format("{0:N4}", item.Qty)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.UOMName)
@@ -183,7 +183,8 @@
                                     @Html.DisplayFor(modelItem => item.VendorPartNo)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Qty)
+                                    @*@Html.DisplayFor(modelItem => item.Qty)*@
+                                    @String.Format("{0:N4}", item.Qty)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.UOMName)
@@ -226,7 +227,8 @@
                                     @Html.DisplayFor(modelItem => item.VendorPartNo)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Qty)
+                                    @*@Html.DisplayFor(modelItem => item.Qty)*@
+                                    @String.Format("{0:N4}", item.Qty)
                                 </td>
                                 <td>
                                     @{ DateTime reqDevDate = (DateTime)item.ReqDevDate; }

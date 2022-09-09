@@ -273,6 +273,12 @@
     <Compile Include="ModelData\MonthlyBudget.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\MonthlyBudget_Expense.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\MonthlyBudget_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\Position_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -359,6 +365,7 @@
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\MenuCheckboxViewModel.cs" />
     <Compile Include="Models\MenuModel.cs" />
+    <Compile Include="Models\MonthlyBudget_MstView.cs" />
     <Compile Include="Models\PRDtlsPurchaser.cs" />
     <Compile Include="Models\PRDtlsPurProViewModel.cs" />
     <Compile Include="Models\PRdtlsViewModel.cs" />
@@ -460,6 +467,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="images\bg.jpg" />
     <Content Include="images\dominantLogo.png" />
+    <Content Include="images\loader1.gif" />
     <Content Include="ModelData\DomiPR.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DomiPR.Context.cs</LastGenOutput>
@@ -2600,6 +2608,12 @@
     <Content Include="Views\Budget\uTICCategory.cshtml" />
     <Content Include="Views\Budget\UTICCategoryLst.cshtml" />
     <Content Include="Views\PO\RejectPOUserForm.cshtml" />
+    <Content Include="Views\Budget\MonthlyBudget.cshtml" />
+    <Content Include="Views\Budget\NewMonthlyBudget.cshtml" />
+    <Content Include="Views\Budget\EditMonthlyBudget.cshtml" />
+    <Content Include="Views\Budget\AddExpensesCodeForm.cshtml" />
+    <Content Include="Views\Budget\MonthlyBudgetList.cshtml" />
+    <Content Include="Views\Budget\ExpensesList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

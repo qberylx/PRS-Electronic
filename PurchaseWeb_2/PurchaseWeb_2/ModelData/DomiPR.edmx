@@ -147,6 +147,45 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="Month" Type="int" />
           <Property Name="Year" Type="int" />
         </EntityType>
+        <EntityType Name="MonthlyBudget_Expense">
+          <Key>
+            <PropertyRef Name="ExpenseID" />
+          </Key>
+          <Property Name="ExpenseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BudgetId" Type="int" />
+          <Property Name="AccTypeExpensesID" Type="int" />
+          <Property Name="AccTypeDivId" Type="int" />
+          <Property Name="AccTypeDepID" Type="int" />
+          <Property Name="AccCCLvl1ID" Type="int" />
+          <Property Name="AccCCLvl2ID" Type="int" />
+          <Property Name="ICCategoryID" Type="int" />
+          <Property Name="AccountDesc" Type="varchar" MaxLength="300" />
+          <Property Name="ExpenseString" Type="varchar" MaxLength="300" />
+          <Property Name="DeleteFlag" Type="bit" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="100" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="varchar" MaxLength="100" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MonthlyBudget_Mst">
+          <Key>
+            <PropertyRef Name="BudgetId" />
+          </Key>
+          <Property Name="BudgetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BudgetCode" Type="varchar" MaxLength="10" />
+          <Property Name="Section" Type="varchar" MaxLength="100" />
+          <Property Name="Area" Type="varchar" MaxLength="100" />
+          <Property Name="Expenses" Type="varchar" MaxLength="100" />
+          <Property Name="StockFlag" Type="bit" />
+          <Property Name="StockInitial" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="NonStockFlag" Type="bit" />
+          <Property Name="NonStockInitial" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="100" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="varchar" MaxLength="100" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="DeleteFlag" Type="bit" />
+        </EntityType>
         <EntityType Name="Months">
           <Key>
             <PropertyRef Name="Month" />
@@ -231,7 +270,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="DomiPartNo" Type="varchar" MaxLength="50" />
           <Property Name="VendorPartNo" Type="varchar" MaxLength="50" />
-          <Property Name="Qty" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Qty" Type="decimal" Precision="18" Scale="4" />
           <Property Name="UOMId" Type="int" />
           <Property Name="ReqDevDate" Type="date" />
           <Property Name="Remarks" Type="varchar(max)" />
@@ -486,6 +525,90 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
             </Principal>
             <Dependent Role="MonthlyBudget">
               <PropertyRef Name="DepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_AccCCLvl1">
+          <End Role="AccCCLvl1" Type="Self.AccCCLvl1" Multiplicity="0..1" />
+          <End Role="MonthlyBudget_Expense" Type="Self.MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccCCLvl1">
+              <PropertyRef Name="AccCCLvl1ID" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="AccCCLvl1ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_AccCCLvl2">
+          <End Role="AccCCLvl2" Type="Self.AccCCLvl2" Multiplicity="0..1" />
+          <End Role="MonthlyBudget_Expense" Type="Self.MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccCCLvl2">
+              <PropertyRef Name="AccCCLvl2ID" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="AccCCLvl2ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_AccTypeDept">
+          <End Role="AccTypeDept" Type="Self.AccTypeDept" Multiplicity="0..1" />
+          <End Role="MonthlyBudget_Expense" Type="Self.MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDept">
+              <PropertyRef Name="AccTypeDepID" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="AccTypeDepID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_AccTypeDivision">
+          <End Role="AccTypeDivision" Type="Self.AccTypeDivision" Multiplicity="0..1" />
+          <End Role="MonthlyBudget_Expense" Type="Self.MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDivision">
+              <PropertyRef Name="AccTypeDivId" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="AccTypeDivId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_AccTypeExpenses">
+          <End Role="AccTypeExpenses" Type="Self.AccTypeExpenses" Multiplicity="0..1" />
+          <End Role="MonthlyBudget_Expense" Type="Self.MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeExpenses">
+              <PropertyRef Name="AccTypeExpensesID" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="AccTypeExpensesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_ICCategory_Mst">
+          <End Role="ICCategory_Mst" Type="Self.ICCategory_Mst" Multiplicity="0..1" />
+          <End Role="MonthlyBudget_Expense" Type="Self.MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ICCategory_Mst">
+              <PropertyRef Name="IC_id" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="ICCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_MonthlyBudget_Mst">
+          <End Role="MonthlyBudget_Mst" Type="Self.MonthlyBudget_Mst" Multiplicity="0..1" />
+          <End Role="MonthlyBudget_Expense" Type="Self.MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MonthlyBudget_Mst">
+              <PropertyRef Name="BudgetId" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="BudgetId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -760,6 +883,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySet Name="LastNoMst" EntityType="Self.LastNoMst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MonthlyBudget" EntityType="Self.MonthlyBudget" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MonthlyBudget_Expense" EntityType="Self.MonthlyBudget_Expense" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MonthlyBudget_Mst" EntityType="Self.MonthlyBudget_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Months" EntityType="Self.Months" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PO_Mst" EntityType="Self.PO_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Position_mst" EntityType="Self.Position_mst" Schema="dbo" store:Type="Tables" />
@@ -826,6 +951,34 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <AssociationSet Name="FK_MonthlyBudget_AccTypeDept" Association="Self.FK_MonthlyBudget_AccTypeDept">
             <End Role="AccTypeDept" EntitySet="AccTypeDept" />
             <End Role="MonthlyBudget" EntitySet="MonthlyBudget" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_AccCCLvl1" Association="Self.FK_MonthlyBudget_Expense_AccCCLvl1">
+            <End Role="AccCCLvl1" EntitySet="AccCCLvl1" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_AccCCLvl2" Association="Self.FK_MonthlyBudget_Expense_AccCCLvl2">
+            <End Role="AccCCLvl2" EntitySet="AccCCLvl2" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_AccTypeDept" Association="Self.FK_MonthlyBudget_Expense_AccTypeDept">
+            <End Role="AccTypeDept" EntitySet="AccTypeDept" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_AccTypeDivision" Association="Self.FK_MonthlyBudget_Expense_AccTypeDivision">
+            <End Role="AccTypeDivision" EntitySet="AccTypeDivision" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_AccTypeExpenses" Association="Self.FK_MonthlyBudget_Expense_AccTypeExpenses">
+            <End Role="AccTypeExpenses" EntitySet="AccTypeExpenses" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_ICCategory_Mst" Association="Self.FK_MonthlyBudget_Expense_ICCategory_Mst">
+            <End Role="ICCategory_Mst" EntitySet="ICCategory_Mst" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_MonthlyBudget_Mst" Association="Self.FK_MonthlyBudget_Expense_MonthlyBudget_Mst">
+            <End Role="MonthlyBudget_Mst" EntitySet="MonthlyBudget_Mst" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
           </AssociationSet>
           <AssociationSet Name="FK_MonthlyBudget_Months" Association="Self.FK_MonthlyBudget_Months">
             <End Role="Months" EntitySet="Months" />
@@ -1096,6 +1249,36 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySet Name="vw_sourcingRemarksLst" EntityType="Domi_PurModel.vw_sourcingRemarksLst" />
           <EntitySet Name="PublicHoliday_mst" EntityType="Domi_PurModel.PublicHoliday_mst" />
           <EntitySet Name="ICCategory_Mst" EntityType="Domi_PurModel.ICCategory_Mst" />
+          <EntitySet Name="MonthlyBudget_Expense" EntityType="Domi_PurModel.MonthlyBudget_Expense" />
+          <EntitySet Name="MonthlyBudget_Mst" EntityType="Domi_PurModel.MonthlyBudget_Mst" />
+          <AssociationSet Name="FK_MonthlyBudget_Expense_AccCCLvl1" Association="Domi_PurModel.FK_MonthlyBudget_Expense_AccCCLvl1">
+            <End Role="AccCCLvl1" EntitySet="AccCCLvl1" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_AccCCLvl2" Association="Domi_PurModel.FK_MonthlyBudget_Expense_AccCCLvl2">
+            <End Role="AccCCLvl2" EntitySet="AccCCLvl2" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_AccTypeDept" Association="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeDept">
+            <End Role="AccTypeDept" EntitySet="AccTypeDepts" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_AccTypeDivision" Association="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeDivision">
+            <End Role="AccTypeDivision" EntitySet="AccTypeDivisions" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_AccTypeExpenses" Association="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeExpenses">
+            <End Role="AccTypeExpens" EntitySet="AccTypeExpenses" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_ICCategory_Mst" Association="Domi_PurModel.FK_MonthlyBudget_Expense_ICCategory_Mst">
+            <End Role="ICCategory_Mst" EntitySet="ICCategory_Mst" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyBudget_Expense_MonthlyBudget_Mst" Association="Domi_PurModel.FK_MonthlyBudget_Expense_MonthlyBudget_Mst">
+            <End Role="MonthlyBudget_Mst" EntitySet="MonthlyBudget_Mst" />
+            <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -1208,7 +1391,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DomiPartNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="VendorPartNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Qty" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Qty" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="UOMId" Type="Int32" />
           <Property Name="ReqDevDate" Type="DateTime" Precision="0" />
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -1479,6 +1662,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="CCLvl1Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CCLvl1Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="DeleteFlag" Type="Boolean" />
+          <NavigationProperty Name="MonthlyBudget_Expense" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_AccCCLvl1" FromRole="AccCCLvl1" ToRole="MonthlyBudget_Expense" />
         </EntityType>
         <EntityType Name="AccCCLvl2">
           <Key>
@@ -1488,6 +1672,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="CCLvl2Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CCLvl2Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="DeleteFlag" Type="Boolean" />
+          <NavigationProperty Name="MonthlyBudget_Expense" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_AccCCLvl2" FromRole="AccCCLvl2" ToRole="MonthlyBudget_Expense" />
         </EntityType>
         <EntityType Name="AccTypeDept">
           <Key>
@@ -1500,6 +1685,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <NavigationProperty Name="PR_Mst" Relationship="Domi_PurModel.FK_PR_Mst_AccTypeDept" FromRole="AccTypeDept" ToRole="PR_Mst" />
           <NavigationProperty Name="MonthlyBudgets" Relationship="Domi_PurModel.FK_MonthlyBudget_AccTypeDept" FromRole="AccTypeDept" ToRole="MonthlyBudget" />
           <Property Name="DeleteFlag" Type="Boolean" />
+          <NavigationProperty Name="MonthlyBudget_Expense" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeDept" FromRole="AccTypeDept" ToRole="MonthlyBudget_Expense" />
         </EntityType>
         <EntityType Name="AccTypeDivision">
           <Key>
@@ -1509,6 +1695,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="DivName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="DivCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="DeleteFlag" Type="Boolean" />
+          <NavigationProperty Name="MonthlyBudget_Expense" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeDivision" FromRole="AccTypeDivision" ToRole="MonthlyBudget_Expense" />
         </EntityType>
         <EntityType Name="AccTypeExpens">
           <Key>
@@ -1518,6 +1705,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="ExpName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ExpCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="DeleteFlag" Type="Boolean" />
+          <NavigationProperty Name="MonthlyBudget_Expense" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeExpenses" FromRole="AccTypeExpens" ToRole="MonthlyBudget_Expense" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -1864,7 +2052,139 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="IC_CategoryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IC_Desc" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="DeleteFlag" Type="Boolean" />
+          <NavigationProperty Name="MonthlyBudget_Expense" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_ICCategory_Mst" FromRole="ICCategory_Mst" ToRole="MonthlyBudget_Expense" />
         </EntityType>
+        <EntityType Name="MonthlyBudget_Expense">
+          <Key>
+            <PropertyRef Name="ExpenseID" />
+          </Key>
+          <Property Name="ExpenseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BudgetId" Type="Int32" />
+          <Property Name="AccTypeExpensesID" Type="Int32" />
+          <Property Name="AccTypeDivId" Type="Int32" />
+          <Property Name="AccTypeDepID" Type="Int32" />
+          <Property Name="AccCCLvl1ID" Type="Int32" />
+          <Property Name="AccCCLvl2ID" Type="Int32" />
+          <Property Name="ICCategoryID" Type="Int32" />
+          <Property Name="AccountDesc" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="ExpenseString" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteFlag" Type="Boolean" />
+          <Property Name="CreateBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AccCCLvl1" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_AccCCLvl1" FromRole="MonthlyBudget_Expense" ToRole="AccCCLvl1" />
+          <NavigationProperty Name="AccCCLvl2" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_AccCCLvl2" FromRole="MonthlyBudget_Expense" ToRole="AccCCLvl2" />
+          <NavigationProperty Name="AccTypeDept" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeDept" FromRole="MonthlyBudget_Expense" ToRole="AccTypeDept" />
+          <NavigationProperty Name="AccTypeDivision" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeDivision" FromRole="MonthlyBudget_Expense" ToRole="AccTypeDivision" />
+          <NavigationProperty Name="AccTypeExpens" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeExpenses" FromRole="MonthlyBudget_Expense" ToRole="AccTypeExpens" />
+          <NavigationProperty Name="ICCategory_Mst" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_ICCategory_Mst" FromRole="MonthlyBudget_Expense" ToRole="ICCategory_Mst" />
+          <NavigationProperty Name="MonthlyBudget_Mst" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_MonthlyBudget_Mst" FromRole="MonthlyBudget_Expense" ToRole="MonthlyBudget_Mst" />
+        </EntityType>
+        <EntityType Name="MonthlyBudget_Mst">
+          <Key>
+            <PropertyRef Name="BudgetId" />
+          </Key>
+          <Property Name="BudgetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BudgetCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Section" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Area" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Expenses" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StockFlag" Type="Boolean" />
+          <Property Name="StockInitial" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NonStockFlag" Type="Boolean" />
+          <Property Name="NonStockInitial" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="DeleteFlag" Type="Boolean" />
+          <NavigationProperty Name="MonthlyBudget_Expense" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_MonthlyBudget_Mst" FromRole="MonthlyBudget_Mst" ToRole="MonthlyBudget_Expense" />
+        </EntityType>
+        <Association Name="FK_MonthlyBudget_Expense_AccCCLvl1">
+          <End Type="Domi_PurModel.AccCCLvl1" Role="AccCCLvl1" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.MonthlyBudget_Expense" Role="MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccCCLvl1">
+              <PropertyRef Name="AccCCLvl1ID" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="AccCCLvl1ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_AccCCLvl2">
+          <End Type="Domi_PurModel.AccCCLvl2" Role="AccCCLvl2" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.MonthlyBudget_Expense" Role="MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccCCLvl2">
+              <PropertyRef Name="AccCCLvl2ID" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="AccCCLvl2ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_AccTypeDept">
+          <End Type="Domi_PurModel.AccTypeDept" Role="AccTypeDept" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.MonthlyBudget_Expense" Role="MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDept">
+              <PropertyRef Name="AccTypeDepID" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="AccTypeDepID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_AccTypeDivision">
+          <End Type="Domi_PurModel.AccTypeDivision" Role="AccTypeDivision" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.MonthlyBudget_Expense" Role="MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDivision">
+              <PropertyRef Name="AccTypeDivId" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="AccTypeDivId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_AccTypeExpenses">
+          <End Type="Domi_PurModel.AccTypeExpens" Role="AccTypeExpens" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.MonthlyBudget_Expense" Role="MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeExpens">
+              <PropertyRef Name="AccTypeExpensesID" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="AccTypeExpensesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_ICCategory_Mst">
+          <End Type="Domi_PurModel.ICCategory_Mst" Role="ICCategory_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.MonthlyBudget_Expense" Role="MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ICCategory_Mst">
+              <PropertyRef Name="IC_id" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="ICCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyBudget_Expense_MonthlyBudget_Mst">
+          <End Type="Domi_PurModel.MonthlyBudget_Mst" Role="MonthlyBudget_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.MonthlyBudget_Expense" Role="MonthlyBudget_Expense" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MonthlyBudget_Mst">
+              <PropertyRef Name="BudgetId" />
+            </Principal>
+            <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="BudgetId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2421,6 +2741,47 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
                 <ScalarProperty Name="IC_Desc" ColumnName="IC_Desc" />
                 <ScalarProperty Name="IC_CategoryCode" ColumnName="IC_CategoryCode" />
                 <ScalarProperty Name="IC_id" ColumnName="IC_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MonthlyBudget_Expense">
+            <EntityTypeMapping TypeName="Domi_PurModel.MonthlyBudget_Expense">
+              <MappingFragment StoreEntitySet="MonthlyBudget_Expense">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="ExpenseString" ColumnName="ExpenseString" />
+                <ScalarProperty Name="AccountDesc" ColumnName="AccountDesc" />
+                <ScalarProperty Name="ICCategoryID" ColumnName="ICCategoryID" />
+                <ScalarProperty Name="AccCCLvl2ID" ColumnName="AccCCLvl2ID" />
+                <ScalarProperty Name="AccCCLvl1ID" ColumnName="AccCCLvl1ID" />
+                <ScalarProperty Name="AccTypeDepID" ColumnName="AccTypeDepID" />
+                <ScalarProperty Name="AccTypeDivId" ColumnName="AccTypeDivId" />
+                <ScalarProperty Name="AccTypeExpensesID" ColumnName="AccTypeExpensesID" />
+                <ScalarProperty Name="BudgetId" ColumnName="BudgetId" />
+                <ScalarProperty Name="ExpenseID" ColumnName="ExpenseID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MonthlyBudget_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.MonthlyBudget_Mst">
+              <MappingFragment StoreEntitySet="MonthlyBudget_Mst">
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="NonStockInitial" ColumnName="NonStockInitial" />
+                <ScalarProperty Name="NonStockFlag" ColumnName="NonStockFlag" />
+                <ScalarProperty Name="StockInitial" ColumnName="StockInitial" />
+                <ScalarProperty Name="StockFlag" ColumnName="StockFlag" />
+                <ScalarProperty Name="Expenses" ColumnName="Expenses" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="BudgetCode" ColumnName="BudgetCode" />
+                <ScalarProperty Name="BudgetId" ColumnName="BudgetId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

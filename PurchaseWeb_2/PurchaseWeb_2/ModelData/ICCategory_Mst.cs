@@ -14,9 +14,18 @@ namespace PurchaseWeb_2.ModelData
     
     public partial class ICCategory_Mst
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ICCategory_Mst()
+        {
+            this.MonthlyBudget_Expense = new HashSet<MonthlyBudget_Expense>();
+        }
+    
         public int IC_id { get; set; }
         public string IC_CategoryCode { get; set; }
         public string IC_Desc { get; set; }
         public Nullable<bool> DeleteFlag { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MonthlyBudget_Expense> MonthlyBudget_Expense { get; set; }
     }
 }

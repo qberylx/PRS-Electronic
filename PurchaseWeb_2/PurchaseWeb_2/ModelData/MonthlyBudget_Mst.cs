@@ -12,28 +12,29 @@ namespace PurchaseWeb_2.ModelData
     using System;
     using System.Collections.Generic;
     
-    public partial class AccTypeDept
+    public partial class MonthlyBudget_Mst
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public AccTypeDept()
+        public MonthlyBudget_Mst()
         {
-            this.Usr_mst = new HashSet<Usr_mst>();
-            this.PR_Mst = new HashSet<PR_Mst>();
-            this.MonthlyBudgets = new HashSet<MonthlyBudget>();
             this.MonthlyBudget_Expense = new HashSet<MonthlyBudget_Expense>();
         }
     
-        public int AccTypeDepID { get; set; }
-        public string DeptName { get; set; }
-        public string DeptCode { get; set; }
+        public int BudgetId { get; set; }
+        public string BudgetCode { get; set; }
+        public string Section { get; set; }
+        public string Area { get; set; }
+        public string Expenses { get; set; }
+        public Nullable<bool> StockFlag { get; set; }
+        public Nullable<decimal> StockInitial { get; set; }
+        public Nullable<bool> NonStockFlag { get; set; }
+        public Nullable<decimal> NonStockInitial { get; set; }
+        public string CreateBy { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public string ModifiedBy { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<bool> DeleteFlag { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Usr_mst> Usr_mst { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PR_Mst> PR_Mst { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MonthlyBudget> MonthlyBudgets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MonthlyBudget_Expense> MonthlyBudget_Expense { get; set; }
     }

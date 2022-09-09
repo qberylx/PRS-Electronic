@@ -32,6 +32,7 @@ namespace PurchaseWeb_2.Controllers
                 mail.To.Add(email);
                 //mail.From = new MailAddress("itsupport@dominant-semi.com", "prs.system@dominant-semi.com");
                 mail.From = new MailAddress("prs.system@dominant-semi.com", "prs.system");
+                Subject = Subject.Replace('\r', ' ').Replace('\n', ' ');
                 mail.Subject = Subject;
                 mail.Body = body;
                 mail.IsBodyHtml = true;
@@ -971,7 +972,14 @@ namespace PurchaseWeb_2.Controllers
                         }
                         else
                         {
-                            Remarks = prdt.Remarks.ToString();
+                            if (prdt.Remarks != null)
+                            {
+                                Remarks = prdt.Remarks.ToString();
+                            } else
+                            {
+                                Remarks = "";
+                            }
+                            
                         }
 
                         if (prdt.CurCode == "MYR")

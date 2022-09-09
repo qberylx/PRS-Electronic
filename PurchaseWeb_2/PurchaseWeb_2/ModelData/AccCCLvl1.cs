@@ -14,9 +14,18 @@ namespace PurchaseWeb_2.ModelData
     
     public partial class AccCCLvl1
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public AccCCLvl1()
+        {
+            this.MonthlyBudget_Expense = new HashSet<MonthlyBudget_Expense>();
+        }
+    
         public int AccCCLvl1ID { get; set; }
         public string CCLvl1Name { get; set; }
         public string CCLvl1Code { get; set; }
         public Nullable<bool> DeleteFlag { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MonthlyBudget_Expense> MonthlyBudget_Expense { get; set; }
     }
 }

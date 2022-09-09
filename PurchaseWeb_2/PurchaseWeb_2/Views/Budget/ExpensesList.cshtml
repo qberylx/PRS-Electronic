@@ -1,0 +1,60 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.MonthlyBudget_Expense>
+
+<div id="notification">
+    @Html.Partial("_Notifications")
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>
+                Expenses Code
+            </td>
+            <td>
+                Account Description
+            </td>
+            <td>
+                IC Category (Stockable)
+            </td>
+            <td>
+
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.ExpenseString
+                </td>
+                <td>
+                    @item.AccountDesc
+                </td>
+                <td>
+                    @if (item.ICCategoryID != null)
+                    {
+                        @item.ICCategory_Mst.IC_CategoryCode
+                    }
+                </td>
+                
+                <td>
+                    @*@using (Ajax.BeginForm("DeleteExpenses", "Budget",
+                            new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divExpensesList", LoadingElementId = "loader" }))
+                    {*@
+                        <input type="hidden" name="ExpenseID" id="ExpenseID" value="@item.ExpenseID" />
+                        <button type="submit" name="submit" value="delExpense" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                    @*}*@
+                </td>
+                
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    });
+</script>

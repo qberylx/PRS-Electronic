@@ -59,6 +59,8 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<vw_sourcingRemarksLst> vw_sourcingRemarksLst { get; set; }
         public virtual DbSet<PublicHoliday_mst> PublicHoliday_mst { get; set; }
         public virtual DbSet<ICCategory_Mst> ICCategory_Mst { get; set; }
+        public virtual DbSet<MonthlyBudget_Expense> MonthlyBudget_Expense { get; set; }
+        public virtual DbSet<MonthlyBudget_Mst> MonthlyBudget_Mst { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {

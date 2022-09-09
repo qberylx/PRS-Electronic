@@ -14,9 +14,18 @@ namespace PurchaseWeb_2.ModelData
     
     public partial class AccTypeExpens
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public AccTypeExpens()
+        {
+            this.MonthlyBudget_Expense = new HashSet<MonthlyBudget_Expense>();
+        }
+    
         public int AccTypeExpensesID { get; set; }
         public string ExpName { get; set; }
         public string ExpCode { get; set; }
         public Nullable<bool> DeleteFlag { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MonthlyBudget_Expense> MonthlyBudget_Expense { get; set; }
     }
 }

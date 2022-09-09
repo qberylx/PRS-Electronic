@@ -1,0 +1,247 @@
+﻿@model PurchaseWeb_2.ModelData.MonthlyBudget_Mst
+
+<style>
+    .col-centered {
+        float: none;
+        margin: 0 auto;
+    }
+</style>
+
+@using (Ajax.BeginForm("SaveMonthlyBudget", "Budget", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divMonthlyBudgetList", OnSuccess = "OnSuccessSave", LoadingElementId = "loader" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div id="loader" class="modal">
+        <div class="center">
+            <img src="~/images/loader1.gif" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1">
+            <label class="form-label">Budget ID</label>
+            <input type="text" class="form-control" value="@Model.BudgetId" disabled />
+        </div>
+        <div class="col-md-1">
+            <label class="form-label">Budget Code</label>
+            @Html.EditorFor(item => item.BudgetCode, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.BudgetCode, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Section</label>
+            @Html.EditorFor(item => item.Section, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Section, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Area</label>
+            @Html.EditorFor(item => item.Area, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Area, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Expenses</label>
+            @Html.EditorFor(item => item.Expenses, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Expenses, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-md-2">
+            <label class="form-label">Stock (Initial Budget)</label>
+            <div class="custom-control custom-switch">
+
+                @{
+                    bool bStock;
+                    if (Model.StockFlag == null) { bStock = false; } else { bStock = (bool)Model.StockFlag; }
+                    if (bStock != true) { bStock = false; }
+                }
+                @if (bStock == true)
+                {
+                    <input class="custom-control-input" type="checkbox" id="swc1" onchange="swcStkFlag()" checked>
+                    <input type="hidden" value="true" name="StockFlag" id="StockFlag" />
+                }
+                else
+                {
+                    <input class="custom-control-input" type="checkbox" id="swc1" onchange="swcStkFlag()" >
+                    <input type="hidden" value="false" name="StockFlag" id="StockFlag" />
+                }
+
+
+                <label class="custom-control-label" for="swc1">No Budget ? </label>
+
+                @Html.EditorFor(item => item.StockInitial, new { htmlAttributes = new { @id = "StockInitial", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StockInitial, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*<div class="col-md-1">
+                <label class="form-label">Initial Budget</label>
+                @Html.EditorFor(item => item.StockInitial, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StockInitial, "", new { @class = "text-danger" })
+            </div>*@
+
+        <div class="col-md-2">
+            <label class="form-label">Non Stock (Initial Budget)</label>
+            <div class="custom-control custom-switch">
+
+                @{
+                    bool bNonStock;
+                    if (Model.NonStockFlag == null) { bNonStock = false; } else { bNonStock = (bool)Model.NonStockFlag; }
+                    if (bNonStock != true) { bNonStock = false; }
+                }
+                @if (bNonStock == true)
+                {
+                    <input class="custom-control-input" type="checkbox" id="swc2" onchange="swcNonStkFlag()" checked>
+                    <input type="hidden" value="true" name="NonStockFlag" id="NonStockFlag" />
+                }
+                else
+                {
+                    <input class="custom-control-input" type="checkbox" id="swc2" onchange="swcNonStkFlag()">
+                    <input type="hidden" value="false" name="NonStockFlag" id="NonStockFlag" />
+                }
+
+                <label class="custom-control-label" for="swc2">No Budget ? </label>
+
+                @Html.EditorFor(item => item.NonStockInitial, new { htmlAttributes = new { @id = "NonStockInitial", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NonStockInitial, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-md-8">
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#addExpenses">
+                Add Expenses Code
+            </button>
+            <div id="divExpensesList">
+                @{Html.RenderAction("ExpensesList", "Budget", new { Id = ViewBag.BudgetId });}
+                <!--<table class="table">
+
+                    <thead>
+                        <tr>
+                            <td>
+                                Expenses Code
+                            </td>
+                            <td>
+                                Account Description
+                            </td>
+                            <td>
+                                IC Category (Stockable)
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>-->
+
+
+                        @*@foreach (var item in Model.MonthlyBudget_Expense.Where(x=>x.DeleteFlag != true).ToList() )
+                {
+                    <tr>
+                        <td>
+                            @item.ExpenseString
+                        </td>
+                        <td>
+                            @item.AccountDesc
+                        </td>
+                        <td>
+                            @if (item.ICCategoryID != null)
+                            {
+                                @item.ICCategory_Mst.IC_CategoryCode
+                            }
+
+                        </td>
+                        <td>
+                            @using (Ajax.BeginForm("DeleteExpenses", "Budget",
+                                    new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divExpensesList", LoadingElementId = "loader" }))
+                            {
+                                <input type="hidden" name="id" id="ExpenseID" value="@item.ExpenseID" />
+                                <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                            }
+                        </td>
+                    </tr>
+                }*@
+
+                    <!--</tbody>
+                </table>-->
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row ">
+        <div class="col-md-8  col-centered">
+            <input type="hidden" name="BudgetId" id="BudgetId" value="@Model.BudgetId" />
+            <button type="submit" name="submit" class="btn btn-primary" value="save">Submit</button>
+        </div>
+    </div>
+
+}
+
+<!--Modal Expenses Code-->
+<div class="modal fade" id="addExpenses" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">Add Expenses Code</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @{Html.RenderAction("AddExpensesCodeForm", "Budget", new { Id = ViewBag.BudgetId });}
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    function swcStkFlag() {
+        if ($("#swc1").is(":checked")) {
+            $("#StockFlag").val("true");
+            $("#StockInitial").prop('disabled', true);
+        } else {
+            $("#StockFlag").val("false");
+            $("#StockInitial").prop('disabled', false);
+        }
+    }
+
+    function swcNonStkFlag() {
+        if ($("#swc2").is(":checked")) {
+            $("#NonStockFlag").val("true");
+            $("#NonStockInitial").prop('disabled', true);
+        } else {
+            $("#NonStockFlag").val("false");
+            $("#NonStockInitial").prop('disabled', false);
+        }
+    }
+
+</script>
+
+<script>
+    function OnSuccessSave() {
+        var BudgetId = $("#BudgetId").val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("EditMonthlyBudget", "Budget")",
+            data: '{id: "' + BudgetId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divMonthlyBudgetForm').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
+

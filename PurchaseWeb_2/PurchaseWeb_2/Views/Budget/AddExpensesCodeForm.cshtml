@@ -1,0 +1,133 @@
+﻿@model PurchaseWeb_2.ModelData.MonthlyBudget_Expense
+
+@using (Ajax.BeginForm("AddExpensesCode", "Budget", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divExpensesList", OnSuccess="OnSuccess" }))
+{
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="accType1" class="col-form-label">Expenses Type</label>
+                <select class="form-select form-control" id="accType1" name="AccTypeExpensesID" required>
+                    <option selected disabled value="">Choose...</option>
+                    @foreach (var item in ViewBag.expenseLst)
+                    {
+                        <option value="@item.AccTypeExpensesID">
+                            @item.ExpName
+                        </option>
+                    }
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="accType2" class="col-form-label">Division</label>
+                <select class="form-select form-control" id="accType2" name="AccTypeDivId" required>
+                    <option selected disabled value="">Choose...</option>
+                    @foreach (var item in ViewBag.divLst)
+                    {
+                        <option value="@item.AccTypeDivId">
+                            @item.DivName
+                        </option>
+                    }
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="accType3" class="col-form-label">Department</label>
+                <select class="form-select form-control" id="accType3" name="AccTypeDepID" required>
+                    <option selected disabled value="">Choose...</option>
+                    @foreach (var item in ViewBag.depLst)
+                    {
+                        <option value="@item.AccTypeDepID">
+                            @item.DeptName
+                        </option>
+                    }
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label for="accType4" class="col-form-label">CC Lvl 1</label>
+                <select class="form-select form-control" id="accType4" name="AccCCLvl1ID" required>
+                    <option selected disabled value="">Choose...</option>
+                    @foreach (var item in ViewBag.cc1Lst)
+                    {
+                        <option value="@item.AccCCLvl1ID">
+                            @item.CCLvl1Name
+                        </option>
+                    }
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="accType5" class="col-form-label">CC Lvl 2</label>
+                <select class="form-select form-control" id="accType5" name="AccCCLvl2ID" required>
+                    <option selected disabled value="">Choose...</option>
+                    @foreach (var item in ViewBag.cc2Lst)
+                    {
+                        <option value="@item.AccCCLvl2ID">
+                            @item.CCLvl2Name
+                        </option>
+                    }
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="accType6" class="col-form-label">IC Category</label>
+                <select class="form-select form-control" id="accType6" name="ICCategoryID" >
+                    <option selected disabled value="">Choose...</option>
+                    
+                    @foreach (var item in ViewBag.ICCatLst)
+                    {
+                        <option value="@item.IC_id">
+                            @item.IC_CategoryCode
+                        </option>
+                    }
+                    
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="BudgetId" id="BudgetId" value="@ViewBag.BudgetId" />
+        <button type="button" name="submit" class="btn btn-secondary" data-dismiss="modal" value="close">Close</button>
+        <button type="submit" name="submit" class="btn btn-primary" value="save">Submit</button>
+    </div>
+    
+}
+
+<script>
+    function OnSuccess() {
+        this.reset();
+        $('#addExpenses').modal('toggle');
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("MonthlyBudgetList", "Budget")",
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divMonthlyBudgetList').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>

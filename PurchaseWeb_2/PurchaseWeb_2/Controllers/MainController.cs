@@ -420,7 +420,8 @@ namespace PurchaseWeb_2.Controllers
                 Team_id = x.Team_id,
                 PositionName = x.Position_mst.Position_name,
                 Date_Create = x.Date_Create,
-                TelExt = x.TelExt
+                TelExt = x.TelExt,
+                Flag_Aproval = x.Flag_Aproval
             }).ToList();
 
             return PartialView("_userList", userVMList);
@@ -489,8 +490,8 @@ namespace PurchaseWeb_2.Controllers
                 //mail.From = new MailAddress("itsupport@dominant-semi.com","prs.system@dominant-semi.com");
                 mail.From = new MailAddress("prs.system@dominant-semi.com", "prs.system");
                 mail.Subject = @"Web Approval";
-                string Body = @"Hey , your User Id has been approve. 
-                                You may login to Dominant Purchase Order System";
+                string Body = @"Hi , your User Id has been approved. <br/>
+                                You may login to Dominant Purchase Order System at http://prs.dominant-semi.com/ ";
                 mail.Body = Body;
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient();

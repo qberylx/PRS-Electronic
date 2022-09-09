@@ -1,0 +1,59 @@
+﻿<style>
+    .center {
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        position: fixed;
+        /*z-index: 1000;*/
+        padding: 10px;
+        width: 130px;
+        background-color: transparent;
+        border-radius: 10px;
+        opacity: 1;
+    }
+</style>
+
+<div class="card card-primary">
+    <div id="loader" class="modal">
+        <div class="center">
+            <img src="~/images/loader1.gif" />
+        </div>
+    </div>
+    <div class="card card-header">
+        <div class="card-title">
+            <h4>New Department Budget</h4>
+        </div>
+    </div>
+    <div class="card card-body">
+        <div id="divMonthlyBudgetForm">
+            @using (Ajax.BeginForm("getMonthlyBudgetId", "Budget",
+                new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divMonthlyBudgetForm", LoadingElementId = "loader" }))
+            {
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="form-label">Budget ID</label>
+                        <input type="text" class="form-control" disabled />
+                        <input class="btn btn-primary form-control" type="submit" value="Get Budget ID" name="save" />
+
+                    </div>
+
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+
+<div id="divMonthlyBudgetList">
+    @{Html.RenderAction("MonthlyBudgetList", "Budget");}
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    });
+</script>

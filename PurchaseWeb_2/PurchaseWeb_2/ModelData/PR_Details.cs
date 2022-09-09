@@ -11,7 +11,8 @@ namespace PurchaseWeb_2.ModelData
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class PR_Details
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -31,6 +32,7 @@ namespace PurchaseWeb_2.ModelData
         public string Description { get; set; }
         public string DomiPartNo { get; set; }
         public string VendorPartNo { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         public Nullable<decimal> Qty { get; set; }
         public Nullable<int> UOMId { get; set; }
         public Nullable<System.DateTime> ReqDevDate { get; set; }

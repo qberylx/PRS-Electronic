@@ -20,7 +20,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body   ">
-                <table class="table table-hover text-nowrap table-responsive table-sm" id="tableA">
+                <table class="table table-hover text-nowrap table-responsive table-sm" style="height:500px" id="tableA">
                     <thead>
                         <tr>
                             <th>
@@ -74,10 +74,14 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Date_Create)
                                 </td>
-                                
-                                <td>
-                                    <button class="btn btn-block btn-success" onclick="window.location.href='/Main/Approve/@item.usr_id'">Approve</button>
-                                </td>
+
+                                @if (item.Flag_Aproval != true)
+                                {
+                                    <td>
+                                        <button class="btn btn-block btn-success" onclick="window.location.href='/Main/Approve/@item.usr_id'">Approve</button>
+                                    </td>
+                                }
+
                                 <td>
                                     <button class="btn btn-block btn-primary" onclick="window.location.href='/Main/EditUser?UserId=@item.usr_id'">Update</button>
                                 </td>

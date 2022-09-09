@@ -1,0 +1,132 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.MonthlyBudget_Mst>
+
+<div class="card card-secondary">
+    <div class="card-header">
+        <h6 class="card-title">Department Budget List</h6>
+    </div>
+    <div class="card-body p-0" style="height: 500px;">
+        <div id="notification">
+            @Html.Partial("_Notifications")
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class=" table table-head-fixed table-striped">
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                        <th>
+                            Budget Code
+                        </th>
+                        <th>
+                            Section
+                        </th>
+                        <th>
+                            Area
+                        </th>
+                        <th>
+                            Expenses
+                        </th>
+                        <th>
+                            Expenses Code | Account Desciption | IC Code 
+                        </th>
+                        <th>
+                            Initial Stock Budget
+                        </th>
+                        <th>
+                            Initial Non Stock Budget
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+                    @{ int i = 0;}
+                    @foreach (var item in Model)
+                    {
+                        i++;
+                        <tr>
+                            <td>
+                                @i
+                            </td>
+                            <td>
+                                @item.BudgetCode
+                            </td>
+                            <td>
+                                @item.Section
+                            </td>
+                            <td>
+                                @item.Area
+                            </td>
+                            <td>
+                                @item.Expenses
+                            </td>
+                            <td>
+                                @foreach(var a in item.MonthlyBudget_Expense.Where(x=>x.DeleteFlag != true).ToList() )
+                                {
+                                    <table >
+                                        <tr>
+                                            <td>
+                                                @a.ExpenseString
+                                            </td>
+                                            <td>
+                                                @a.AccountDesc
+                                            </td>
+                                            <td>
+                                                @if (a.ICCategoryID != null)
+                                                {
+                                                    @a.ICCategory_Mst.IC_CategoryCode
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                }
+                            </td>
+                            <td>
+                                @if (item.StockFlag == true)
+                                {
+                                    <span>No Budget</span>
+                                }
+                                else
+                                {
+                                    @String.Format("{0:N}", item.StockInitial)
+                                }
+                            </td>
+                            <td>
+                                @if (item.NonStockFlag == true)
+                                {
+                                    <span>No Budget</span>
+                                }
+                                else
+                                {
+                                    @String.Format("{0:N}", item.NonStockInitial)
+                                }
+                            </td>
+                            <td>
+                                <div class="row">
+                                    <div class="col">
+                                        @using (Ajax.BeginForm("EditMonthlyBudget", "Budget",
+                                            new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divMonthlyBudgetForm", LoadingElementId = "loader" }))
+                                        {
+                                            <input type="hidden" name="id" id="BudgetId" value="@item.BudgetId" />
+                                            <button type="submit" class="btn btn-primary"><i class="fa fa-pen"> </i></button>
+                                        }
+                                    </div>
+                                    <div class="col">
+                                        @using (Ajax.BeginForm("DeleteMonthlyBudget", "Budget",
+                                            new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divMonthlyBudgetList", LoadingElementId = "loader" }))
+                                        {
+                                            <input type="hidden" name="id" id="BudgetId" value="@item.BudgetId" />
+                                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

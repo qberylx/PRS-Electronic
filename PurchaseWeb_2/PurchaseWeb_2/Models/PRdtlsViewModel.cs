@@ -27,9 +27,9 @@ namespace PurchaseWeb_2.Models
         public string DomiPartNo { get; set; }
         [Required(ErrorMessage = "Please enter Vendor Part No.")]
         public string VendorPartNo { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
+        [Column(TypeName = "decimal(18,4)")]
         [Required(ErrorMessage = "Please enter Quantity")]
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Valid Decimal number with maximum 2 decimal places.")]
+        [RegularExpression(@"^\d+(\.\d{1,4})?$", ErrorMessage = "Valid Decimal number with maximum 4 decimal places.")]
         public decimal Qty { get; set; }
         [Required(ErrorMessage = "Please choose the UOM ")]
         public int UOMId { get; set; }
