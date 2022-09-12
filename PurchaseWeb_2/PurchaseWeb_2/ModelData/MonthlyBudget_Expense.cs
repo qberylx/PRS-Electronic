@@ -29,6 +29,10 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public string IC_CategoryCode { get; set; }
+        public string Section { get; set; }
+        public string Area { get; set; }
+        public string Expenses { get; set; }
     
         public virtual AccCCLvl1 AccCCLvl1 { get; set; }
         public virtual AccCCLvl2 AccCCLvl2 { get; set; }

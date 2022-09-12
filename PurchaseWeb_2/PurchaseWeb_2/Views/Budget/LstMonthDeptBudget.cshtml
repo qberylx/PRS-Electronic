@@ -1,0 +1,235 @@
+﻿<div id="divLstMonthDeptBudget">
+    @model IEnumerable<PurchaseWeb_2.ModelData.SP_MonthlyDeptBudget_Result>
+
+    <script type="text/javascript">
+
+        function ShowAddBudget(BudgetId) {
+            console.log("ShowAddBudget =" + BudgetId);
+            let height = 500;
+            let width = 400;
+            // set the horizontal center of the popup window the center of the screen.
+            var left = (screen.width - width) / 2;
+            // set thevertical center of the popup window the center of the screen.
+            var top = (screen.height - height) / 2;
+
+            window.open("/Budget/AddBudgetForm/" + BudgetId + "?NoOrder=0", "PopupWindow", 'width=400px,height=500px,toolbar=no,menubar=no,resizable=yes,top=' + top + ',left=' + left + '');
+
+        }
+    </script>
+
+    <div class="card card-secondary">
+        <div class="card-header">
+            <h6 class="card-title">Monthly Department Budget Listing <br /> Month of :  @ViewBag.MonthOf    Year Of : @ViewBag.YearOf </h6>
+        </div>
+        <div class="card-body  p-0">
+            <table class="table  table-head-fixed table-responsive-md " style="height: 500px;">
+                <tr>
+                    <th>
+                        No
+                    </th>
+                    <th>
+                        Budget Code
+                    </th>
+                    <th>
+                        Department
+                    </th>
+                    <th>
+                        Stock Initial
+                    </th>
+                    <th>
+                        NonStock Initial
+                    </th>
+                    <th>
+                        Stock Addition
+                    </th>
+                    <th>
+                        NonStock Addition
+                    </th>
+                    <th>
+                        Stock Consumption
+                    </th>
+                    <th>
+                        NonStock Consumption
+                    </th>
+                    <th>
+                        Stock Balance
+                    </th>
+                    <th>
+                        NonStock Balance
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+                @{ int i = 0;}
+                @foreach (var item in Model)
+                {
+                    i++;
+                    <tr @*data-widget="expandable-table" aria-expanded="false"*@>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @item.BudgetCode
+                        </td>
+                        <td>
+                            @item.department
+                        </td>
+                        <td>
+                            @if (item.StockFlag == true)
+                            {
+                                <span>No Budget</span>
+                            }
+                            else
+                            {
+                                @String.Format("{0:N4}", item.StockInitial)
+                            }
+                        </td>
+                        <td>
+                            @if (item.NonStockFlag == true)
+                            {
+                                <span>No Budget</span>
+                            }
+                            else
+                            {
+                                @String.Format("{0:N4}", item.NonStockInitial)
+                            }
+                        </td>
+                        <td>
+                            @if (item.AdditionStock != null)
+                            {
+                                @item.AdditionStock
+                            }
+                            else
+                            {
+                                <span>0.00</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.AdditionNonStock != null)
+                            {
+                                @item.AdditionNonStock
+                            }
+                            else
+                            {
+                                <span>0.00</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.ConsumptionStock != null)
+                            {
+                                @item.ConsumptionStock
+                            }
+                            else
+                            {
+                                <span>0.00</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.ConsumptionNonStock != null)
+                            {
+                                @item.ConsumptionNonStock
+                            }
+                            else
+                            {
+                                <span>0.00</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.BalanceStock != null)
+                            {
+                                @item.BalanceStock
+                            }
+                            else
+                            {
+                                <span>0.00</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.BalanceNonStock != null)
+                            {
+                                @item.BalanceNonStock
+                            }
+                            else
+                            {
+                                <span>0.00</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @*<button type="button" class="btn btn-success" data-toggle="modal" data-target="#addBudget_@i" data-id="@item.MDB_Id">
+                                            <i class="fa fa-plus-circle"></i>
+                                        </button>*@
+                                    <button type="button" class="btn btn-success" id="@item.MDB_Id" value="@item.MDB_Id" onclick="ShowAddBudget(@item.MDB_Id )">
+                                        <i class="fa fa-plus-circle"></i>
+                                    </button>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#minusBudget">
+                                        <i class="fa fa-minus-circle"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!--<tr class="expandable-body">
+                        <td colspan="12">-->
+                    <!--Modal add Budget-->
+                    <!--<div class="modal fade" id="addBudget_@i" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-success">
+                                            <h5 class="modal-title">Add Budget</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        @*@{Html.RenderAction("AddBudgetForm", "Budget", new { Id = item.MDB_Id , NoOrder = i  });}*@
+
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>-->
+
+                }
+            </table>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+    window.updateWithNewData = function () {
+        @*$.ajax({
+            url: "/Budget/LstMonthDeptBudget?seltMonth=" + @ViewBag.MonthInt + "&seltYear=" + @ViewBag.YearOf +"",
+                url: "@Url.Action("LstMonthDeptBudget", "Budget", new { seltMonth = ViewBag.MonthInt,seltYear = ViewBag.YearOf })",
+                success: function (data) {
+                    $("#divLstMonthDeptBudget").append($("<div></div>").html(data));
+                }
+        });*@
+
+        $.ajax({
+            type: "POST",
+            url: "/Budget/LstMonthDeptBudget?seltMonth=" + @ViewBag.MonthInt + "&seltYear=" + @ViewBag.YearOf +"",
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divLstMonthDeptBudget').html(response);
+                /*window.opener.$('#divLstMonthDeptBudget').html(response);*/
+                w/*indow.opener.document.getElementbyId("divLstMonthDeptBudget").innerHTML = response;*/
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        }
+    </script>
+
+</div>
+

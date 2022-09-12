@@ -5,6 +5,54 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-md-4">
+                <label for="Section" class="col-form-label">Section</label>
+                <select class="form-select form-control" id="Section" name="Section" required>
+                    <option selected disabled value="">Choose...</option>
+                    @foreach (var item in ViewBag.Section)
+                    {
+                        <option value="@item.Name">
+                            @item.Name
+                        </option>
+                    }
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="Area" class="col-form-label">Area</label>
+                <select class="form-select form-control" id="Area" name="Area" required>
+                    <option selected disabled value="">Choose...</option>
+                    @foreach (var item in ViewBag.Area)
+                    {
+                        <option value="@item.Name">
+                            @item.Name
+                        </option>
+                    }
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="Expenses" class="col-form-label">Expenses</label>
+                <select class="form-select form-control" id="Expenses" name="Expenses" required>
+                    <option selected disabled value="">Choose...</option>
+                    @foreach (var item in ViewBag.ExpensesMst)
+                    {
+                        <option value="@item.Name">
+                            @item.Name
+                        </option>
+                    }
+                </select>
+                <div class="invalid-feedback">
+                    Please select a valid state.
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
                 <label for="accType1" class="col-form-label">Expenses Type</label>
                 <select class="form-select form-control" id="accType1" name="AccTypeExpensesID" required>
                     <option selected disabled value="">Choose...</option>
@@ -84,7 +132,7 @@
             <div class="col-md-4">
                 <label for="accType6" class="col-form-label">IC Category</label>
                 <select class="form-select form-control" id="accType6" name="ICCategoryID" >
-                    <option selected disabled value="">Choose...</option>
+                    <option selected disabled value=" ">Choose...</option>
                     
                     @foreach (var item in ViewBag.ICCatLst)
                     {

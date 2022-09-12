@@ -9,13 +9,21 @@
         <li class="nav-item d-none d-sm-inline-block ">
             @using (Ajax.BeginForm("utBudgetMonthlyTab", "Budget", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divBudgetMonthlyTab" }))
             {
-                <button type="submit" class="nav-link text-light btn-secondary">Create New Budget</button>
+                <button type="submit" class="nav-link text-light btn-secondary">Create New Department Budget</button>
                 <input type="hidden" name="utTabid" id="utTabid" value="1" />
             }
 
         </li>
-        
-        
+        <li class="nav-item d-none d-sm-inline-block ">
+            @using (Ajax.BeginForm("utBudgetMonthlyTab", "Budget", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divBudgetMonthlyTab" }))
+            {
+                <button type="submit" class="nav-link text-light btn-secondary">Create Monthly Department Budget</button>
+                <input type="hidden" name="utTabid" id="utTabid" value="2" />
+            }
+
+        </li>
+
+
     </ul>
 </nav>
 

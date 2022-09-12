@@ -52,7 +52,31 @@
                 <button type="submit" class="nav-link text-light btn-secondary">IC Category</button>
                 <input type="hidden" name="utTabid" id="utTabid" value="6" />
             }
-            
+
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            @using (Ajax.BeginForm("utBudgetTab", "Budget", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divBudgetTab" }))
+            {
+                <button type="submit" class="nav-link text-light btn-secondary">Section</button>
+                <input type="hidden" name="utTabid" id="utTabid" value="7" />
+            }
+
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            @using (Ajax.BeginForm("utBudgetTab", "Budget", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divBudgetTab" }))
+            {
+                <button type="submit" class="nav-link text-light btn-secondary">Area</button>
+                <input type="hidden" name="utTabid" id="utTabid" value="8" />
+            }
+
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            @using (Ajax.BeginForm("utBudgetTab", "Budget", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divBudgetTab" }))
+            {
+                <button type="submit" class="nav-link text-light btn-secondary">Expenses</button>
+                <input type="hidden" name="utTabid" id="utTabid" value="9" />
+            }
+
         </li>
         @*<li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

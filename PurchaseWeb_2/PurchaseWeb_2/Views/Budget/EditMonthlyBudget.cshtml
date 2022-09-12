@@ -29,20 +29,25 @@
             @Html.ValidationMessageFor(model => model.BudgetCode, "", new { @class = "text-danger" })
         </div>
         <div class="col-md-2">
+            <label class="form-label">Department</label>
+            @Html.EditorFor(item => item.Department, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+        </div>
+        @*<div class="col-md-2">
             <label class="form-label">Section</label>
             @Html.EditorFor(item => item.Section, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Section, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-2">
+        </div>*@
+        @*<div class="col-md-1">
             <label class="form-label">Area</label>
             @Html.EditorFor(item => item.Area, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Area, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-2">
+        </div>*@
+        @*<div class="col-md-2">
             <label class="form-label">Expenses</label>
             @Html.EditorFor(item => item.Expenses, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Expenses, "", new { @class = "text-danger" })
-        </div>
+        </div>*@
     </div>
     <br />
 
@@ -117,55 +122,7 @@
             </button>
             <div id="divExpensesList">
                 @{Html.RenderAction("ExpensesList", "Budget", new { Id = ViewBag.BudgetId });}
-                <!--<table class="table">
-
-                    <thead>
-                        <tr>
-                            <td>
-                                Expenses Code
-                            </td>
-                            <td>
-                                Account Description
-                            </td>
-                            <td>
-                                IC Category (Stockable)
-                            </td>
-                            <td>
-                            </td>
-                        </tr>
-                    </thead>
-                    <tbody>-->
-
-
-                        @*@foreach (var item in Model.MonthlyBudget_Expense.Where(x=>x.DeleteFlag != true).ToList() )
-                {
-                    <tr>
-                        <td>
-                            @item.ExpenseString
-                        </td>
-                        <td>
-                            @item.AccountDesc
-                        </td>
-                        <td>
-                            @if (item.ICCategoryID != null)
-                            {
-                                @item.ICCategory_Mst.IC_CategoryCode
-                            }
-
-                        </td>
-                        <td>
-                            @using (Ajax.BeginForm("DeleteExpenses", "Budget",
-                                    new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divExpensesList", LoadingElementId = "loader" }))
-                            {
-                                <input type="hidden" name="id" id="ExpenseID" value="@item.ExpenseID" />
-                                <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                            }
-                        </td>
-                    </tr>
-                }*@
-
-                    <!--</tbody>
-                </table>-->
+                
             </div>
 
         </div>
@@ -182,7 +139,7 @@
 
 <!--Modal Expenses Code-->
 <div class="modal fade" id="addExpenses" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning">
                 <h5 class="modal-title">Add Expenses Code</h5>

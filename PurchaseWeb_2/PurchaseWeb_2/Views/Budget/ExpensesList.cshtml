@@ -8,6 +8,15 @@
     <thead>
         <tr>
             <td>
+                Section
+            </td>
+            <td>
+                Area
+            </td>
+            <td>
+                Expenses
+            </td>
+            <td>
                 Expenses Code
             </td>
             <td>
@@ -26,16 +35,22 @@
         {
             <tr>
                 <td>
+                    @item.Section
+                </td>
+                <td>
+                    @item.Area
+                </td>
+                <td>
+                    @item.Expenses
+                </td>
+                <td>
                     @item.ExpenseString
                 </td>
                 <td>
                     @item.AccountDesc
                 </td>
                 <td>
-                    @if (item.ICCategoryID != null)
-                    {
-                        @item.ICCategory_Mst.IC_CategoryCode
-                    }
+                    @item.IC_CategoryCode
                 </td>
                 
                 <td>
@@ -43,7 +58,7 @@
                             new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divExpensesList", LoadingElementId = "loader" }))
                     {*@
                         <input type="hidden" name="ExpenseID" id="ExpenseID" value="@item.ExpenseID" />
-                        <button type="submit" name="submit" value="delExpense" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                        <button type="submit" name="submitdelExpense" value="@item.ExpenseID" class="btn btn-danger"><i class="fa fa-trash"></i></button>
                     @*}*@
                 </td>
                 

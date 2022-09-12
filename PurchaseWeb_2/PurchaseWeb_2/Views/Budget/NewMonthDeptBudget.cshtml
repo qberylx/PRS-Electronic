@@ -1,0 +1,65 @@
+﻿<style>
+    .center {
+        position: fixed;
+        left: 50%;
+        top: 35%;
+        /*z-index: 1000;*/
+        height: 31px;
+        width: 31px;
+    }
+   
+</style>
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">
+            New Monthly Department Budget
+        </h3>
+    </div>
+    <div class="card-body">
+        @using (Ajax.BeginForm("LstMonthDeptBudget", "Budget",
+            new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divLstMonthDeptBudget" /*LoadingElementId = "loader",*/ /*OnSuccess = "OnSuccess"*/ }))
+        {
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="form-label">Month</label>
+                    <select class="form-select form-control" name="seltMonth" id="seltMonth" required>
+                        <option selected disabled value="">Choose..</option>
+                        @foreach (var item in ViewBag.Monthly)
+                        {
+                            <option value="@item.Month1">@item.MonthName</option>
+                        }
+                    </select>
+                    <div class="invalid-feedback">
+                        Please select a valid state.
+                    </div>
+
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Year</label>
+                    <input type="number" class="form-control" data-bv-integer-message="The value is not an integer" name="seltYear" id="seltYear" value="@DateTime.Now.Year" required />
+                    <div  class="invalid-feedback">
+                        Please key-in year.
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    <button type="submit" name="submit" class="btn btn-primary" value="save">Submit</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@*<div id="loader" class="modal">
+    <div class="center">
+        <img src="~/images/loader1.gif" />
+    </div>
+</div>*@
+
+<div id="divLstMonthDeptBudget">
+    @*@{Html.RenderAction("LstMonthDeptBudget", "Budget");}*@
+</div>
+
+

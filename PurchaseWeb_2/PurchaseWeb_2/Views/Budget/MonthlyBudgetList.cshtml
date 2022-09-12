@@ -4,13 +4,13 @@
     <div class="card-header">
         <h6 class="card-title">Department Budget List</h6>
     </div>
-    <div class="card-body p-0" style="height: 500px;">
+    <div class="card-body p-0" >
         <div id="notification">
             @Html.Partial("_Notifications")
         </div>
         <div class="row">
             <div class="col-md-12">
-                <table class=" table table-head-fixed table-striped">
+                <table class=" table table-head-fixed table-striped table-responsive" style="height: 500px;">
                     <tr>
                         <th>
                             No
@@ -19,16 +19,10 @@
                             Budget Code
                         </th>
                         <th>
-                            Section
+                            Department
                         </th>
                         <th>
-                            Area
-                        </th>
-                        <th>
-                            Expenses
-                        </th>
-                        <th>
-                            Expenses Code | Account Desciption | IC Code 
+                            Section | Area | Expenses | Expenses Code | Account Desciption | IC Code 
                         </th>
                         <th>
                             Initial Stock Budget
@@ -52,19 +46,22 @@
                                 @item.BudgetCode
                             </td>
                             <td>
-                                @item.Section
-                            </td>
-                            <td>
-                                @item.Area
-                            </td>
-                            <td>
-                                @item.Expenses
+                                @item.Department
                             </td>
                             <td>
                                 @foreach(var a in item.MonthlyBudget_Expense.Where(x=>x.DeleteFlag != true).ToList() )
                                 {
-                                    <table >
+                                    <table class="table table-sm" >
                                         <tr>
+                                            <td>
+                                                @a.Section
+                                            </td>
+                                            <td>
+                                                @a.Area
+                                            </td>
+                                            <td>
+                                                @a.Expenses
+                                            </td>
                                             <td>
                                                 @a.ExpenseString
                                             </td>
@@ -72,11 +69,7 @@
                                                 @a.AccountDesc
                                             </td>
                                             <td>
-                                                @if (a.ICCategoryID != null)
-                                                {
-                                                    @a.ICCategory_Mst.IC_CategoryCode
-                                                }
-
+                                                @a.IC_CategoryCode
                                             </td>
                                         </tr>
                                     </table>
@@ -130,3 +123,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    });
+</script>

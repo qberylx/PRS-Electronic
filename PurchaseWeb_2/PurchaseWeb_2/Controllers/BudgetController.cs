@@ -50,10 +50,214 @@ namespace PurchaseWeb_2.Controllers
             {
                 return PartialView("uTICCategory");
             }
+            else if (utTabid == 7)
+            {
+                return PartialView("uTSection");
+            }
+            else if (utTabid == 8)
+            {
+                return PartialView("uTArea");
+            }
+            else if (utTabid == 9)
+            {
+                return PartialView("uTExpensesMst");
+            }
             else
             {
                 return RedirectToAction("uTExpenses");
             }
+        }
+
+        public ActionResult uTExpensesMst()
+        {
+            return PartialView("uTExpensesMst");
+        }
+
+        public ActionResult UTExpensesMstSave(Expenses_Mst Expenses_)
+        {
+            if (Expenses_.ExpensesId == 0)
+            {
+                var checkCode = db.Expenses_Mst.Where(x => x.Name == Expenses_.Name && x.DeleteFlag != true).ToList();
+                if (checkCode != null && checkCode.Count != 0)
+                {
+                    this.AddNotification("This name already exist", NotificationType.ERROR);
+                    return RedirectToAction("UTExpensesMstLst", "Budget");
+                }
+                Expenses_Mst NewExpenses_ = new Expenses_Mst
+                {
+                    Name = Expenses_.Name,
+                };
+                db.Expenses_Mst.Add(NewExpenses_);
+                db.SaveChanges();
+
+                this.AddNotification("New Expenses Type Added", NotificationType.SUCCESS);
+            }
+            else
+            {
+                var editExpenses_ = db.Expenses_Mst.Where(x => x.ExpensesId == Expenses_.ExpensesId).FirstOrDefault();
+                if (editExpenses_ != null)
+                {
+                    editExpenses_.Name = Expenses_.Name; ;
+                    db.SaveChanges();
+                }
+
+                this.AddNotification("Expenses Name Edited", NotificationType.SUCCESS);
+            }
+
+            return RedirectToAction("UTExpensesMstLst", "Budget");
+        }
+
+        public ActionResult UTExpensesMstLst()
+        {
+            var ExpensesLst = db.Expenses_Mst.Where(x => x.DeleteFlag != true).ToList();
+
+            return PartialView("UTExpensesMstLst", ExpensesLst);
+        }
+
+        public ActionResult UTExpensesMstDelete(int ExpensesId)
+        {
+            var delExpenses = db.Expenses_Mst.Where(x => x.ExpensesId == ExpensesId).FirstOrDefault();
+            if (delExpenses != null)
+            {
+                delExpenses.DeleteFlag = true;
+                db.SaveChanges();
+
+                this.AddNotification("Expenses has been deleted", NotificationType.SUCCESS);
+            }
+            else
+            {
+                this.AddNotification("Expenses has failed to be deleted", NotificationType.ERROR);
+            }
+
+            return RedirectToAction("UTExpensesMstLst", "Budget");
+        }
+
+        public ActionResult uTArea()
+        {
+            return PartialView("uTArea");
+        }
+
+        public ActionResult UTAreaSave(Area_Mst area_)
+        {
+            if (area_.AreaId == 0)
+            {
+                var checkCode = db.Area_Mst.Where(x => x.Name == area_.Name && x.DeleteFlag != true).ToList();
+                if (checkCode != null && checkCode.Count != 0)
+                {
+                    this.AddNotification("This name already exist", NotificationType.ERROR);
+                    return RedirectToAction("UTAreaLst", "Budget");
+                }
+                Area_Mst Newarea_ = new Area_Mst
+                {
+                    Name = area_.Name,
+                };
+                db.Area_Mst.Add(Newarea_);
+                db.SaveChanges();
+
+                this.AddNotification("New Area Type Added", NotificationType.SUCCESS);
+            }
+            else
+            {
+                var editarea_ = db.Area_Mst.Where(x => x.AreaId == area_.AreaId).FirstOrDefault();
+                if (editarea_ != null)
+                {
+                    editarea_.Name = area_.Name; ;
+                    db.SaveChanges();
+                }
+
+                this.AddNotification("Area Name Edited", NotificationType.SUCCESS);
+            }
+
+            return RedirectToAction("UTAreaLst", "Budget");
+        }
+
+        public ActionResult UTAreaLst()
+        {
+            var AreaLst = db.Area_Mst.Where(x => x.DeleteFlag != true).ToList();
+
+            return PartialView("UTAreaLst", AreaLst);
+        }
+
+        public ActionResult UTAreaDelete (int AreaId)
+        {
+            var delArea = db.Area_Mst.Where(x => x.AreaId == AreaId).FirstOrDefault();
+            if (delArea != null)
+            {
+                delArea.DeleteFlag = true;
+                db.SaveChanges();
+
+                this.AddNotification("Area has been deleted", NotificationType.SUCCESS);
+            }
+            else
+            {
+                this.AddNotification("Area has failed to be deleted", NotificationType.ERROR);
+            }
+
+            return RedirectToAction("UTAreaLst", "Budget");
+        }
+
+        public ActionResult uTSection()
+        {
+            return PartialView("uTSection");
+        }
+
+        public ActionResult UTSectionSave(Section_Mst section_)
+        {
+            if (section_.SectionId == 0)
+            {
+                var checkCode = db.Section_Mst.Where(x => x.Name == section_.Name && x.DeleteFlag != true).ToList();
+                if (checkCode != null && checkCode.Count != 0)
+                {
+                    this.AddNotification("This name already exist", NotificationType.ERROR);
+                    return RedirectToAction("UTSectionLst", "Budget");
+                }
+                Section_Mst Newsection_ = new Section_Mst
+                {
+                    Name = section_.Name,
+                };
+                db.Section_Mst.Add(Newsection_);
+                db.SaveChanges();
+
+                this.AddNotification("New Section Added", NotificationType.SUCCESS);
+            }
+            else
+            {
+                var editsection_ = db.Section_Mst.Where(x => x.SectionId == section_.SectionId).FirstOrDefault();
+                if (editsection_ != null)
+                {
+                    editsection_.Name = section_.Name; ;
+                    db.SaveChanges();
+                }
+
+                this.AddNotification("Section Name Edited", NotificationType.SUCCESS);
+            }
+
+            return RedirectToAction("UTSectionLst", "Budget");
+        }
+
+        public ActionResult UTSectionLst()
+        {
+            var SectionLst = db.Section_Mst.Where(x => x.DeleteFlag != true).ToList();
+
+            return PartialView("UTSectionLst", SectionLst);
+        }
+
+        public ActionResult UTSectionDelete(int SectionId)
+        {
+            var delSection = db.Section_Mst.Where(x => x.SectionId == SectionId).FirstOrDefault();
+            if (delSection != null)
+            {
+                delSection.DeleteFlag = true;
+                db.SaveChanges();
+
+                this.AddNotification("Section has been deleted", NotificationType.SUCCESS);
+            }
+            else
+            {
+                this.AddNotification("Section has failed to be deleted", NotificationType.ERROR);
+            }
+
+            return RedirectToAction("UTSectionLst", "Budget");
         }
 
         public ActionResult uTICCategory()
@@ -452,6 +656,11 @@ namespace PurchaseWeb_2.Controllers
             {
                 return PartialView("NewMonthlyBudget");
             }
+            if (utTabid == 2)
+            {
+                ViewBag.Monthly = db.Months.ToList();
+                return PartialView("NewMonthDeptBudget");
+            }
             else
             {
                 return PartialView("NewMonthlyBudget");
@@ -512,11 +721,12 @@ namespace PurchaseWeb_2.Controllers
             return PartialView("EditMonthlyBudget", edtMonthlyBudget);
         }
 
-        public ActionResult SaveMonthlyBudget(MonthlyBudget_Mst monthlyBudget_, String submit, int ExpenseID)
+        public ActionResult SaveMonthlyBudget(MonthlyBudget_Mst monthlyBudget_, String submitdelExpense)
         {
-            if (submit == "delExpense")
+            if (submitdelExpense != null)
             {
-                var delExpenses = db.MonthlyBudget_Expense.Where(x => x.ExpenseID == ExpenseID).FirstOrDefault();
+                var intExpenseID = int.Parse(submitdelExpense);
+                var delExpenses = db.MonthlyBudget_Expense.Where(x => x.ExpenseID == intExpenseID).FirstOrDefault();
                 if (delExpenses != null)
                 {
                     delExpenses.DeleteFlag = true;
@@ -557,9 +767,10 @@ namespace PurchaseWeb_2.Controllers
                 }
 
                 edtBudgetMst.BudgetCode = monthlyBudget_.BudgetCode;
-                edtBudgetMst.Section = monthlyBudget_.Section;
-                edtBudgetMst.Area = monthlyBudget_.Area;
-                edtBudgetMst.Expenses = monthlyBudget_.Expenses;
+                edtBudgetMst.Department = monthlyBudget_.Department;
+                //edtBudgetMst.Section = monthlyBudget_.Section;
+                //edtBudgetMst.Area = monthlyBudget_.Area;
+                //edtBudgetMst.Expenses = monthlyBudget_.Expenses;
                 edtBudgetMst.StockFlag = bStockFlag;
                 edtBudgetMst.StockInitial = dStockInitial;
                 edtBudgetMst.NonStockFlag = bNonStockFlag;
@@ -591,6 +802,9 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.cc1Lst = db.AccCCLvl1.Where(x => x.DeleteFlag != true).ToList();
             ViewBag.cc2Lst = db.AccCCLvl2.Where(x => x.DeleteFlag != true).ToList();
             ViewBag.ICCatLst = db.ICCategory_Mst.Where(x => x.DeleteFlag != true).ToList();
+            ViewBag.Section = db.Section_Mst.Where(x => x.DeleteFlag != true).ToList();
+            ViewBag.Area = db.Area_Mst.Where(x => x.DeleteFlag != true).ToList();
+            ViewBag.ExpensesMst = db.Expenses_Mst.Where(x => x.DeleteFlag != true).ToList();
 
             return PartialView("AddExpensesCodeForm");
         }
@@ -611,6 +825,13 @@ namespace PurchaseWeb_2.Controllers
                 string strAccDesc = lnExpense.ExpName + "-" + lnDivision.DivName + "-" +
                     lnDept.DeptName + "-" + lnCCLvl1.CCLvl1Name + "-" + lnCCLvl2.CCLvl2Name;
 
+                string strIC_CategoryCode = "";
+                if (budget_Expense.ICCategoryID != null)
+                {
+                    var IcCode = db.ICCategory_Mst.Where(x => x.IC_id == budget_Expense.ICCategoryID).FirstOrDefault();
+                    strIC_CategoryCode = IcCode.IC_CategoryCode;
+                }
+
                 //check if the ExpenseString is exist
                 var chkExpense = db.MonthlyBudget_Expense.Where(x => x.ExpenseString == strExpCode && x.DeleteFlag != true).FirstOrDefault();
                 if (chkExpense == null)
@@ -624,6 +845,10 @@ namespace PurchaseWeb_2.Controllers
                         AccCCLvl1ID = budget_Expense.AccCCLvl1ID,
                         AccCCLvl2ID = budget_Expense.AccCCLvl2ID,
                         ICCategoryID = budget_Expense.ICCategoryID,
+                        IC_CategoryCode = strIC_CategoryCode,
+                        Section = budget_Expense.Section,
+                        Area = budget_Expense.Area,
+                        Expenses = budget_Expense.Expenses,
                         AccountDesc = strAccDesc,
                         ExpenseString = strExpCode,
                         CreateBy = Session["Username"].ToString(),
@@ -636,6 +861,9 @@ namespace PurchaseWeb_2.Controllers
                 } else
                 {
                     chkExpense.ICCategoryID = budget_Expense.ICCategoryID;
+                    chkExpense.Section = budget_Expense.Section;
+                    chkExpense.Area = budget_Expense.Area;
+                    chkExpense.Expenses = budget_Expense.Expenses;
                     chkExpense.DeleteFlag = false;
                     chkExpense.ModifiedBy = Session["Username"].ToString();
                     chkExpense.ModifiedDate = DateTime.Now;
@@ -693,6 +921,125 @@ namespace PurchaseWeb_2.Controllers
             }
 
             return RedirectToAction("ExpensesList", "Budget", new { Id = delExpenses.BudgetId });
+        }
+
+        public ActionResult NewMonthDeptBudget()
+        {
+            ViewBag.Monthly = db.Months.ToList();
+
+            return PartialView("NewMonthDeptBudget");
+        }
+
+        public ActionResult LstMonthDeptBudget(int seltMonth ,int seltYear)
+        {
+            var LstMonthDeptBudget = db.SP_MonthlyDeptBudget(seltMonth, seltYear).ToList();
+            var monthName = db.Months.Where(x => x.Month1 == seltMonth).FirstOrDefault();
+            ViewBag.MonthOf = monthName.MonthName;
+            ViewBag.YearOf = seltYear;
+            ViewBag.MonthInt = seltMonth;
+
+            return PartialView("LstMonthDeptBudget", LstMonthDeptBudget);
+        }
+
+        public ActionResult AddBudgetForm (int Id, int NoOrder)
+        {
+            var budget = db.MonthlyDeptBudgets.Where(x => x.MDB_Id == Id).FirstOrDefault();
+            ViewBag.NoOrder = NoOrder;
+
+            return PartialView("AddBudgetForm", budget);
+        }
+
+        public ActionResult AddBudget (MonthlyDeptBudget monthlyDept , string Remarks)
+        {
+            //edit the MonthlyDeptBudget
+            var budget = db.MonthlyDeptBudgets.Where(x => x.MDB_Id == monthlyDept.MDB_Id).FirstOrDefault();
+            // case if stock null
+            decimal dStock = 0.00M;
+            if (monthlyDept.AdditionStock != null)
+            {
+                dStock = (decimal)monthlyDept.AdditionStock;
+            }
+            decimal dNonStock = 0.00M;
+            if (monthlyDept.AdditionNonStock != null)
+            {
+                dNonStock = (decimal)monthlyDept.AdditionNonStock;
+            }
+
+            decimal dAdditionStock = 0.00M;
+            decimal dAdditionNonStock = 0.00M;
+            decimal dConsumptionStock = 0.00M;
+            decimal dConsumptionNonStock = 0.00M;
+            decimal dBalanceStock = 0.00M;
+            decimal dBalanceNonStock = 0.00M;
+
+
+            if (budget != null)
+            {
+                
+
+                if (budget.AdditionStock != null)
+                {
+                    dAdditionStock = (decimal)budget.AdditionStock + dStock;
+                    budget.AdditionStock = dStock + budget.AdditionStock;
+                } else
+                {
+                    budget.AdditionStock = dStock;
+                }
+
+                if (budget.AdditionNonStock != null)
+                {
+                    dAdditionNonStock = (decimal)budget.AdditionNonStock + dNonStock;
+                    budget.AdditionNonStock = dNonStock + budget.AdditionNonStock;
+                }
+                else
+                {
+                    budget.AdditionNonStock = dNonStock;
+                }
+
+                if (budget.ConsumptionStock != null)
+                {
+                    dConsumptionStock = (decimal)budget.ConsumptionStock;
+                }
+
+                if (budget.ConsumptionNonStock != null)
+                {
+                    dConsumptionNonStock = (decimal)budget.ConsumptionNonStock;
+                }
+
+                if (budget.BalanceStock != null)
+                {
+                    dBalanceStock = (decimal)budget.BalanceStock;
+                }
+
+                if (budget.BalanceNonStock != null)
+                {
+                    dBalanceNonStock = (decimal)budget.BalanceNonStock;
+                }
+
+                dBalanceStock = (decimal)budget.StockInitial + dAdditionStock - dConsumptionStock;
+                dBalanceNonStock = (decimal)budget.NonStockInitial + dAdditionNonStock - dConsumptionNonStock;
+
+                budget.BalanceStock = budget.StockInitial + dAdditionStock - dConsumptionStock;
+                budget.BalanceNonStock = budget.NonStockInitial + dAdditionNonStock - dConsumptionNonStock;
+                db.SaveChanges();
+            }
+
+            //add to audit log
+            AuditBudget_log auditBudget_ = new AuditBudget_log
+            {
+                ModifiedBy = Session["Username"].ToString(),
+                ModifiedOn = DateTime.Now,
+                ActionBtn = "Additional ",
+                ColumnStr = "AdditionStock | AdditionNonStock | BalanceStock | BalanceNonStock ",
+                ValueStr  = dAdditionStock +"|"+ dAdditionNonStock + "|" + dBalanceStock + "|" + dBalanceNonStock,
+                MDB_Id    = monthlyDept.MDB_Id,
+                BudgetId  = monthlyDept.BudgetId,
+                Remarks   = Remarks
+             };
+            db.SaveChanges();
+
+            //return RedirectToAction("LstMonthDeptBudget", "Budget", new { seltMonth = monthlyDept.MonthOf , seltYear = monthlyDept.YearOf });
+            return null;
         }
 
     }

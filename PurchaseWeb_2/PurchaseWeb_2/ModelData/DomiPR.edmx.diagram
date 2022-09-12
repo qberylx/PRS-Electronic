@@ -68,6 +68,12 @@
         <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeExpenses" />
         <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_Expense_ICCategory_Mst" />
         <AssociationConnector Association="Domi_PurModel.FK_MonthlyBudget_Expense_MonthlyBudget_Mst" />
+        <EntityTypeShape EntityType="Domi_PurModel.Area_Mst" Width="1.5" PointX="16.375" PointY="10.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.Expenses_Mst" Width="1.5" PointX="10.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.Section_Mst" Width="1.5" PointX="16.375" PointY="14.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.AuditBudget_log" Width="1.5" PointX="18.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.MonthlyDeptBudget" Width="1.5" PointX="0.75" PointY="18.75" />
+        <AssociationConnector Association="Domi_PurModel.FK_MonthlyDeptBudget_MonthlyBudget_Mst" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

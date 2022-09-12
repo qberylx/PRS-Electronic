@@ -50,6 +50,32 @@
           <Property Name="ExpCode" Type="varchar" MaxLength="10" />
           <Property Name="DeleteFlag" Type="bit" />
         </EntityType>
+        <EntityType Name="Area_Mst">
+          <Key>
+            <PropertyRef Name="AreaId" />
+          </Key>
+          <Property Name="AreaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
+          <Property Name="DeleteFlag" Type="bit" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="100" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="varchar" MaxLength="100" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="AuditBudget_log">
+          <Key>
+            <PropertyRef Name="AuditBudget_id" />
+          </Key>
+          <Property Name="AuditBudget_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ModifiedBy" Type="varchar" MaxLength="100" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ActionBtn" Type="varchar" MaxLength="100" />
+          <Property Name="ColumnStr" Type="varchar(max)" />
+          <Property Name="ValueStr" Type="varchar(max)" />
+          <Property Name="MDB_Id" Type="int" />
+          <Property Name="BudgetId" Type="int" />
+          <Property Name="Remarks" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="AuditPR_Log">
           <Key>
             <PropertyRef Name="AuditPrId" />
@@ -90,6 +116,18 @@
           <Property Name="Department_name" Type="varchar" MaxLength="50" />
           <Property Name="Create_date" Type="datetime" />
           <Property Name="Modified_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Expenses_Mst">
+          <Key>
+            <PropertyRef Name="ExpensesId" />
+          </Key>
+          <Property Name="ExpensesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
+          <Property Name="DeleteFlag" Type="bit" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="100" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="varchar" MaxLength="100" />
+          <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="ICCategory_Mst">
           <Key>
@@ -159,6 +197,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="AccCCLvl1ID" Type="int" />
           <Property Name="AccCCLvl2ID" Type="int" />
           <Property Name="ICCategoryID" Type="int" />
+          <Property Name="IC_CategoryCode" Type="varchar" MaxLength="100" />
+          <Property Name="Section" Type="varchar" MaxLength="100" />
+          <Property Name="Area" Type="varchar" MaxLength="100" />
+          <Property Name="Expenses" Type="varchar" MaxLength="100" />
           <Property Name="AccountDesc" Type="varchar" MaxLength="300" />
           <Property Name="ExpenseString" Type="varchar" MaxLength="300" />
           <Property Name="DeleteFlag" Type="bit" />
@@ -173,6 +215,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           </Key>
           <Property Name="BudgetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BudgetCode" Type="varchar" MaxLength="10" />
+          <Property Name="Department" Type="varchar" MaxLength="100" />
           <Property Name="Section" Type="varchar" MaxLength="100" />
           <Property Name="Area" Type="varchar" MaxLength="100" />
           <Property Name="Expenses" Type="varchar" MaxLength="100" />
@@ -185,6 +228,25 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="ModifiedBy" Type="varchar" MaxLength="100" />
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="DeleteFlag" Type="bit" />
+        </EntityType>
+        <EntityType Name="MonthlyDeptBudget">
+          <Key>
+            <PropertyRef Name="MDB_Id" />
+          </Key>
+          <Property Name="MDB_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BudgetId" Type="int" />
+          <Property Name="StockFlag" Type="bit" />
+          <Property Name="StockInitial" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="NonStockFlag" Type="bit" />
+          <Property Name="NonStockInitial" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AdditionStock" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AdditionNonStock" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ConsumptionStock" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ConsumptionNonStock" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="BalanceStock" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="BalanceNonStock" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="MonthOf" Type="int" />
+          <Property Name="YearOf" Type="int" />
         </EntityType>
         <EntityType Name="Months">
           <Key>
@@ -464,6 +526,18 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="MenuId" Type="int" />
           <Property Name="Active" Type="bit" />
         </EntityType>
+        <EntityType Name="Section_Mst">
+          <Key>
+            <PropertyRef Name="SectionId" />
+          </Key>
+          <Property Name="SectionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
+          <Property Name="DeleteFlag" Type="bit" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="100" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="varchar" MaxLength="100" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="Status_Mst">
           <Key>
             <PropertyRef Name="StatId" />
@@ -621,6 +695,18 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
             </Principal>
             <Dependent Role="MonthlyBudget">
               <PropertyRef Name="Month" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlyDeptBudget_MonthlyBudget_Mst">
+          <End Role="MonthlyBudget_Mst" Type="Self.MonthlyBudget_Mst" Multiplicity="0..1" />
+          <End Role="MonthlyDeptBudget" Type="Self.MonthlyDeptBudget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MonthlyBudget_Mst">
+              <PropertyRef Name="BudgetId" />
+            </Principal>
+            <Dependent Role="MonthlyDeptBudget">
+              <PropertyRef Name="BudgetId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -866,6 +952,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
         <Function Name="SP_Comparison_Report" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PrMstId" Type="int" Mode="In" />
         </Function>
+        <Function Name="SP_MonthlyDeptBudget" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="monthOf" Type="int" Mode="In" />
+          <Parameter Name="yearOf" Type="int" Mode="In" />
+        </Function>
         <Function Name="usp_GetMenuData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserId" Type="varchar" Mode="In" />
         </Function>
@@ -875,16 +965,20 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySet Name="AccTypeDept" EntityType="Self.AccTypeDept" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccTypeDivision" EntityType="Self.AccTypeDivision" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccTypeExpenses" EntityType="Self.AccTypeExpenses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Area_Mst" EntityType="Self.Area_Mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AuditBudget_log" EntityType="Self.AuditBudget_log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AuditPR_Log" EntityType="Self.AuditPR_Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CPRFMst" EntityType="Self.CPRFMst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency_Mst" EntityType="Self.Currency_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department_mst" EntityType="Self.Department_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Expenses_Mst" EntityType="Self.Expenses_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ICCategory_Mst" EntityType="Self.ICCategory_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LastNoMst" EntityType="Self.LastNoMst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MonthlyBudget" EntityType="Self.MonthlyBudget" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MonthlyBudget_Expense" EntityType="Self.MonthlyBudget_Expense" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MonthlyBudget_Mst" EntityType="Self.MonthlyBudget_Mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MonthlyDeptBudget" EntityType="Self.MonthlyDeptBudget" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Months" EntityType="Self.Months" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PO_Mst" EntityType="Self.PO_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Position_mst" EntityType="Self.Position_mst" Schema="dbo" store:Type="Tables" />
@@ -897,6 +991,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySet Name="PrTypeMap" EntityType="Self.PrTypeMap" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PublicHoliday_mst" EntityType="Self.PublicHoliday_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMenuMapping_mst" EntityType="Self.RoleMenuMapping_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Section_Mst" EntityType="Self.Section_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status_Mst" EntityType="Self.Status_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UOM_mst" EntityType="Self.UOM_mst" Schema="dbo" store:Type="Tables" />
@@ -983,6 +1078,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <AssociationSet Name="FK_MonthlyBudget_Months" Association="Self.FK_MonthlyBudget_Months">
             <End Role="Months" EntitySet="Months" />
             <End Role="MonthlyBudget" EntitySet="MonthlyBudget" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlyDeptBudget_MonthlyBudget_Mst" Association="Self.FK_MonthlyDeptBudget_MonthlyBudget_Mst">
+            <End Role="MonthlyBudget_Mst" EntitySet="MonthlyBudget_Mst" />
+            <End Role="MonthlyDeptBudget" EntitySet="MonthlyDeptBudget" />
           </AssociationSet>
           <AssociationSet Name="FK_PO_Mst_PR_Mst" Association="Self.FK_PO_Mst_PR_Mst">
             <End Role="PR_Mst" EntitySet="PR_Mst" />
@@ -1278,6 +1377,19 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <AssociationSet Name="FK_MonthlyBudget_Expense_MonthlyBudget_Mst" Association="Domi_PurModel.FK_MonthlyBudget_Expense_MonthlyBudget_Mst">
             <End Role="MonthlyBudget_Mst" EntitySet="MonthlyBudget_Mst" />
             <End Role="MonthlyBudget_Expense" EntitySet="MonthlyBudget_Expense" />
+          </AssociationSet>
+          <EntitySet Name="Area_Mst" EntityType="Domi_PurModel.Area_Mst" />
+          <EntitySet Name="Expenses_Mst" EntityType="Domi_PurModel.Expenses_Mst" />
+          <EntitySet Name="Section_Mst" EntityType="Domi_PurModel.Section_Mst" />
+          <EntitySet Name="AuditBudget_log" EntityType="Domi_PurModel.AuditBudget_log" />
+          <EntitySet Name="MonthlyDeptBudgets" EntityType="Domi_PurModel.MonthlyDeptBudget" />
+          <FunctionImport Name="SP_MonthlyDeptBudget" ReturnType="Collection(Domi_PurModel.SP_MonthlyDeptBudget_Result)">
+            <Parameter Name="monthOf" Mode="In" Type="Int32" />
+            <Parameter Name="yearOf" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <AssociationSet Name="FK_MonthlyDeptBudget_MonthlyBudget_Mst" Association="Domi_PurModel.FK_MonthlyDeptBudget_MonthlyBudget_Mst">
+            <End Role="MonthlyBudget_Mst" EntitySet="MonthlyBudget_Mst" />
+            <End Role="MonthlyDeptBudget" EntitySet="MonthlyDeptBudgets" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
@@ -2080,6 +2192,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <NavigationProperty Name="AccTypeExpens" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeExpenses" FromRole="MonthlyBudget_Expense" ToRole="AccTypeExpens" />
           <NavigationProperty Name="ICCategory_Mst" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_ICCategory_Mst" FromRole="MonthlyBudget_Expense" ToRole="ICCategory_Mst" />
           <NavigationProperty Name="MonthlyBudget_Mst" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_MonthlyBudget_Mst" FromRole="MonthlyBudget_Expense" ToRole="MonthlyBudget_Mst" />
+          <Property Name="IC_CategoryCode" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Section" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Area" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Expenses" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="MonthlyBudget_Mst">
           <Key>
@@ -2100,6 +2216,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="DeleteFlag" Type="Boolean" />
           <NavigationProperty Name="MonthlyBudget_Expense" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_MonthlyBudget_Mst" FromRole="MonthlyBudget_Mst" ToRole="MonthlyBudget_Expense" />
+          <Property Name="Department" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="MonthlyDeptBudgets" Relationship="Domi_PurModel.FK_MonthlyDeptBudget_MonthlyBudget_Mst" FromRole="MonthlyBudget_Mst" ToRole="MonthlyDeptBudget" />
         </EntityType>
         <Association Name="FK_MonthlyBudget_Expense_AccCCLvl1">
           <End Type="Domi_PurModel.AccCCLvl1" Role="AccCCLvl1" Multiplicity="0..1" />
@@ -2181,6 +2299,106 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
               <PropertyRef Name="BudgetId" />
             </Principal>
             <Dependent Role="MonthlyBudget_Expense">
+              <PropertyRef Name="BudgetId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Area_Mst">
+          <Key>
+            <PropertyRef Name="AreaId" />
+          </Key>
+          <Property Name="AreaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteFlag" Type="Boolean" />
+          <Property Name="CreateBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Expenses_Mst">
+          <Key>
+            <PropertyRef Name="ExpensesId" />
+          </Key>
+          <Property Name="ExpensesId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteFlag" Type="Boolean" />
+          <Property Name="CreateBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Section_Mst">
+          <Key>
+            <PropertyRef Name="SectionId" />
+          </Key>
+          <Property Name="SectionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteFlag" Type="Boolean" />
+          <Property Name="CreateBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="AuditBudget_log">
+          <Key>
+            <PropertyRef Name="AuditBudget_id" />
+          </Key>
+          <Property Name="AuditBudget_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ActionBtn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ColumnStr" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ValueStr" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MDB_Id" Type="Int32" />
+          <Property Name="BudgetId" Type="Int32" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="MonthlyDeptBudget">
+          <Key>
+            <PropertyRef Name="MDB_Id" />
+          </Key>
+          <Property Name="MDB_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BudgetId" Type="Int32" />
+          <Property Name="StockFlag" Type="Boolean" />
+          <Property Name="StockInitial" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NonStockFlag" Type="Boolean" />
+          <Property Name="NonStockInitial" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AdditionStock" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AdditionNonStock" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ConsumptionStock" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ConsumptionNonStock" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="BalanceStock" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="BalanceNonStock" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="MonthOf" Type="Int32" />
+          <Property Name="YearOf" Type="Int32" />
+          <NavigationProperty Name="MonthlyBudget_Mst" Relationship="Domi_PurModel.FK_MonthlyDeptBudget_MonthlyBudget_Mst" FromRole="MonthlyDeptBudget" ToRole="MonthlyBudget_Mst" />
+        </EntityType>
+        <ComplexType Name="SP_MonthlyDeptBudget_Result">
+          <Property Type="Int32" Name="MDB_Id" Nullable="false" />
+          <Property Type="Int32" Name="BudgetId" Nullable="true" />
+          <Property Type="Boolean" Name="StockFlag" Nullable="true" />
+          <Property Type="Decimal" Name="StockInitial" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Boolean" Name="NonStockFlag" Nullable="true" />
+          <Property Type="Decimal" Name="NonStockInitial" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="AdditionStock" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="AdditionNonStock" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="ConsumptionStock" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="ConsumptionNonStock" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="BalanceStock" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="BalanceNonStock" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="MonthOf" Nullable="true" />
+          <Property Type="Int32" Name="YearOf" Nullable="true" />
+          <Property Type="String" Name="BudgetCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="department" Nullable="true" MaxLength="100" />
+          </ComplexType>
+        <Association Name="FK_MonthlyDeptBudget_MonthlyBudget_Mst">
+          <End Type="Domi_PurModel.MonthlyBudget_Mst" Role="MonthlyBudget_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.MonthlyDeptBudget" Role="MonthlyDeptBudget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MonthlyBudget_Mst">
+              <PropertyRef Name="BudgetId" />
+            </Principal>
+            <Dependent Role="MonthlyDeptBudget">
               <PropertyRef Name="BudgetId" />
             </Dependent>
           </ReferentialConstraint>
@@ -2747,6 +2965,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="MonthlyBudget_Expense">
             <EntityTypeMapping TypeName="Domi_PurModel.MonthlyBudget_Expense">
               <MappingFragment StoreEntitySet="MonthlyBudget_Expense">
+                <ScalarProperty Name="Expenses" ColumnName="Expenses" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Section" ColumnName="Section" />
+                <ScalarProperty Name="IC_CategoryCode" ColumnName="IC_CategoryCode" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
@@ -2768,6 +2990,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="MonthlyBudget_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.MonthlyBudget_Mst">
               <MappingFragment StoreEntitySet="MonthlyBudget_Mst">
+                <ScalarProperty Name="Department" ColumnName="Department" />
                 <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
@@ -2785,6 +3008,102 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Area_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Area_Mst">
+              <MappingFragment StoreEntitySet="Area_Mst">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Expenses_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Expenses_Mst">
+              <MappingFragment StoreEntitySet="Expenses_Mst">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ExpensesId" ColumnName="ExpensesId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Section_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Section_Mst">
+              <MappingFragment StoreEntitySet="Section_Mst">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SectionId" ColumnName="SectionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuditBudget_log">
+            <EntityTypeMapping TypeName="Domi_PurModel.AuditBudget_log">
+              <MappingFragment StoreEntitySet="AuditBudget_log">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="BudgetId" ColumnName="BudgetId" />
+                <ScalarProperty Name="MDB_Id" ColumnName="MDB_Id" />
+                <ScalarProperty Name="ValueStr" ColumnName="ValueStr" />
+                <ScalarProperty Name="ColumnStr" ColumnName="ColumnStr" />
+                <ScalarProperty Name="ActionBtn" ColumnName="ActionBtn" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="AuditBudget_id" ColumnName="AuditBudget_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MonthlyDeptBudgets">
+            <EntityTypeMapping TypeName="Domi_PurModel.MonthlyDeptBudget">
+              <MappingFragment StoreEntitySet="MonthlyDeptBudget">
+                <ScalarProperty Name="YearOf" ColumnName="YearOf" />
+                <ScalarProperty Name="MonthOf" ColumnName="MonthOf" />
+                <ScalarProperty Name="BalanceNonStock" ColumnName="BalanceNonStock" />
+                <ScalarProperty Name="BalanceStock" ColumnName="BalanceStock" />
+                <ScalarProperty Name="ConsumptionNonStock" ColumnName="ConsumptionNonStock" />
+                <ScalarProperty Name="ConsumptionStock" ColumnName="ConsumptionStock" />
+                <ScalarProperty Name="AdditionNonStock" ColumnName="AdditionNonStock" />
+                <ScalarProperty Name="AdditionStock" ColumnName="AdditionStock" />
+                <ScalarProperty Name="NonStockInitial" ColumnName="NonStockInitial" />
+                <ScalarProperty Name="NonStockFlag" ColumnName="NonStockFlag" />
+                <ScalarProperty Name="StockInitial" ColumnName="StockInitial" />
+                <ScalarProperty Name="StockFlag" ColumnName="StockFlag" />
+                <ScalarProperty Name="BudgetId" ColumnName="BudgetId" />
+                <ScalarProperty Name="MDB_Id" ColumnName="MDB_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_MonthlyDeptBudget" FunctionName="Domi_PurModel.Store.SP_MonthlyDeptBudget">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Domi_PurModel.SP_MonthlyDeptBudget_Result">
+                <ScalarProperty Name="MDB_Id" ColumnName="MDB_Id" />
+                <ScalarProperty Name="BudgetId" ColumnName="BudgetId" />
+                <ScalarProperty Name="StockFlag" ColumnName="StockFlag" />
+                <ScalarProperty Name="StockInitial" ColumnName="StockInitial" />
+                <ScalarProperty Name="NonStockFlag" ColumnName="NonStockFlag" />
+                <ScalarProperty Name="NonStockInitial" ColumnName="NonStockInitial" />
+                <ScalarProperty Name="AdditionStock" ColumnName="AdditionStock" />
+                <ScalarProperty Name="AdditionNonStock" ColumnName="AdditionNonStock" />
+                <ScalarProperty Name="ConsumptionStock" ColumnName="ConsumptionStock" />
+                <ScalarProperty Name="ConsumptionNonStock" ColumnName="ConsumptionNonStock" />
+                <ScalarProperty Name="BalanceStock" ColumnName="BalanceStock" />
+                <ScalarProperty Name="BalanceNonStock" ColumnName="BalanceNonStock" />
+                <ScalarProperty Name="MonthOf" ColumnName="MonthOf" />
+                <ScalarProperty Name="YearOf" ColumnName="YearOf" />
+                <ScalarProperty Name="BudgetCode" ColumnName="BudgetCode" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

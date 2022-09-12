@@ -2269,6 +2269,8 @@ namespace PurchaseWeb_2.Controllers
             string AccCCLvl2ID, int NonProductflag, int AssetFlag, string AssetNo, int PrGroup)
         {
             var AccCode = AccTypeExpensesID + "-" + AccTypeDivId + "-" + AccTypeDepID + "-" + AccCCLvl1ID + "-" + AccCCLvl2ID;
+            var ATDepID = db.AccTypeDepts.Where(x => x.DeptCode == AccTypeDepID).FirstOrDefault();
+
             var PrMst = db.PR_Mst.Where(x => x.PRId == PrMStId).FirstOrDefault();
             TempData["alertAssetNo"] = "";
 
@@ -2288,7 +2290,7 @@ namespace PurchaseWeb_2.Controllers
                         PrMst.ItemNo        = "CAPEX"; 
                         PrMst.AssetFlag     = AssetFlag;
                         PrMst.AssetNo       = AssetNo;
-                        PrMst.BudgetDept    = int.Parse(AccTypeDepID);
+                        PrMst.BudgetDept    = ATDepID.AccTypeDepID;
                         db.SaveChanges();
                     }
 
@@ -2315,7 +2317,7 @@ namespace PurchaseWeb_2.Controllers
                         "CAPEX" +"|"+
                         AssetFlag +"|"+
                         AssetNo +"|"+
-                        AccTypeDepID + "|",
+                        ATDepID.AccTypeDepID + "|",
                         
                         PRId = PrMStId,
                         PRDtlsId = 0,
@@ -2334,7 +2336,7 @@ namespace PurchaseWeb_2.Controllers
                     if (PrMst != null)
                     {
                         PrMst.AccountCode = AccCode;
-                        PrMst.BudgetDept = int.Parse(AccTypeDepID);
+                        PrMst.BudgetDept = ATDepID.AccTypeDepID;
                         PrMst.AssetFlag = AssetFlag;
                         db.SaveChanges();
 
@@ -2353,7 +2355,7 @@ namespace PurchaseWeb_2.Controllers
 
                             ValueStr =
                             AccCode + "|" +
-                            AccTypeDepID + "|",
+                            ATDepID.AccTypeDepID + "|",
 
                             PRId = PrMStId,
                             PRDtlsId = 0,
@@ -2371,7 +2373,7 @@ namespace PurchaseWeb_2.Controllers
                         PrMst.ItemNo = "CAPEX";
                         PrMst.AssetFlag = AssetFlag;
                         PrMst.AssetNo = AssetNo;
-                        PrMst.BudgetDept = int.Parse(AccTypeDepID);
+                        PrMst.BudgetDept = ATDepID.AccTypeDepID;
                         db.SaveChanges();
 
                         string Username = (string)Session["Username"];
@@ -2395,7 +2397,7 @@ namespace PurchaseWeb_2.Controllers
                             "CAPEX" + "|" +
                             AssetFlag + "|" +
                             AssetNo + "|" +
-                            AccTypeDepID + "|",
+                            ATDepID.AccTypeDepID + "|",
 
                             PRId = PrMStId,
                             PRDtlsId = 0,

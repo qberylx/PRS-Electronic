@@ -18,6 +18,7 @@ namespace PurchaseWeb_2.ModelData
         public MonthlyBudget_Mst()
         {
             this.MonthlyBudget_Expense = new HashSet<MonthlyBudget_Expense>();
+            this.MonthlyDeptBudgets = new HashSet<MonthlyDeptBudget>();
         }
     
         public int BudgetId { get; set; }
@@ -34,8 +35,11 @@ namespace PurchaseWeb_2.ModelData
         public string ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<bool> DeleteFlag { get; set; }
+        public string Department { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MonthlyBudget_Expense> MonthlyBudget_Expense { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MonthlyDeptBudget> MonthlyDeptBudgets { get; set; }
     }
 }

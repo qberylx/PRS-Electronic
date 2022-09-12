@@ -213,6 +213,12 @@
     <Compile Include="ModelData\APVENO.cs">
       <DependentUpon>SageDom1.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\Area_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\AuditBudget_log.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\AuditPR_Log.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -246,6 +252,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DomiPR.edmx</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\Expenses_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\GetPOListbyDate_Result.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -277,6 +286,9 @@
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\MonthlyBudget_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\MonthlyDeptBudget.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\Position_mst.cs">
@@ -336,7 +348,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SageDom1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\Section_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\SP_Comparison_Report_Result.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\SP_MonthlyDeptBudget_Result.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\Status_Mst.cs">
@@ -2614,6 +2632,17 @@
     <Content Include="Views\Budget\AddExpensesCodeForm.cshtml" />
     <Content Include="Views\Budget\MonthlyBudgetList.cshtml" />
     <Content Include="Views\Budget\ExpensesList.cshtml" />
+    <Content Include="Views\Budget\uTSection.cshtml" />
+    <Content Include="Views\Budget\UTSectionLst.cshtml" />
+    <Content Include="Views\Budget\uTArea.cshtml" />
+    <Content Include="Views\Budget\UTAreaLst.cshtml" />
+    <Content Include="Views\Budget\uTExpensesMst.cshtml" />
+    <Content Include="Views\Budget\UTExpensesMstLst.cshtml" />
+    <Content Include="Views\Budget\NewMonthDeptBudget.cshtml" />
+    <Content Include="Views\Budget\MonthDeptBudget.cshtml" />
+    <Content Include="Views\Budget\LstMonthDeptBudget.cshtml" />
+    <Content Include="Views\Budget\AddBudgetForm.cshtml" />
+    <Content Include="Views\Shared\_LayoutPopup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

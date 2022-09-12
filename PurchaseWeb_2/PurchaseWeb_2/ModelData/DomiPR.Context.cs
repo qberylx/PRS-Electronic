@@ -61,6 +61,11 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<ICCategory_Mst> ICCategory_Mst { get; set; }
         public virtual DbSet<MonthlyBudget_Expense> MonthlyBudget_Expense { get; set; }
         public virtual DbSet<MonthlyBudget_Mst> MonthlyBudget_Mst { get; set; }
+        public virtual DbSet<Area_Mst> Area_Mst { get; set; }
+        public virtual DbSet<Expenses_Mst> Expenses_Mst { get; set; }
+        public virtual DbSet<Section_Mst> Section_Mst { get; set; }
+        public virtual DbSet<AuditBudget_log> AuditBudget_log { get; set; }
+        public virtual DbSet<MonthlyDeptBudget> MonthlyDeptBudgets { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {
@@ -113,6 +118,19 @@ namespace PurchaseWeb_2.ModelData
                 new ObjectParameter("PrMstId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Comparison_Report_Result>("SP_Comparison_Report", prMstIdParameter);
+        }
+    
+        public virtual ObjectResult<SP_MonthlyDeptBudget_Result> SP_MonthlyDeptBudget(Nullable<int> monthOf, Nullable<int> yearOf)
+        {
+            var monthOfParameter = monthOf.HasValue ?
+                new ObjectParameter("monthOf", monthOf) :
+                new ObjectParameter("monthOf", typeof(int));
+    
+            var yearOfParameter = yearOf.HasValue ?
+                new ObjectParameter("yearOf", yearOf) :
+                new ObjectParameter("yearOf", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MonthlyDeptBudget_Result>("SP_MonthlyDeptBudget", monthOfParameter, yearOfParameter);
         }
     }
 }
