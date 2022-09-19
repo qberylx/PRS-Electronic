@@ -1031,15 +1031,126 @@ namespace PurchaseWeb_2.Controllers
                 ModifiedOn = DateTime.Now,
                 ActionBtn = "Additional ",
                 ColumnStr = "AdditionStock | AdditionNonStock | BalanceStock | BalanceNonStock ",
-                ValueStr  = dAdditionStock +"|"+ dAdditionNonStock + "|" + dBalanceStock + "|" + dBalanceNonStock,
+                ValueStr  = dStock +"|"+ dNonStock + "|" + dBalanceStock + "|" + dBalanceNonStock,
                 MDB_Id    = monthlyDept.MDB_Id,
                 BudgetId  = monthlyDept.BudgetId,
                 Remarks   = Remarks
              };
+            db.AuditBudget_log.Add(auditBudget_);
             db.SaveChanges();
 
             //return RedirectToAction("LstMonthDeptBudget", "Budget", new { seltMonth = monthlyDept.MonthOf , seltYear = monthlyDept.YearOf });
             return null;
+        }
+
+        public ActionResult MinusBudgetForm(int Id, int NoOrder)
+        {
+            var budget = db.MonthlyDeptBudgets.Where(x => x.MDB_Id == Id).FirstOrDefault();
+            ViewBag.NoOrder = NoOrder;
+
+            return PartialView("MinusBudgetForm", budget);
+        }
+
+        public ActionResult MinusBudget(MonthlyDeptBudget monthlyDept, string Remarks)
+        {
+            //edit the MonthlyDeptBudget
+            var budget = db.MonthlyDeptBudgets.Where(x => x.MDB_Id == monthlyDept.MDB_Id).FirstOrDefault();
+            // case if stock null
+            decimal dStock = 0.00M;
+            if (monthlyDept.ConsumptionStock != null)
+            {
+                dStock = (decimal)monthlyDept.ConsumptionStock;
+            }
+            decimal dNonStock = 0.00M;
+            if (monthlyDept.ConsumptionNonStock != null)
+            {
+                dNonStock = (decimal)monthlyDept.ConsumptionNonStock;
+            }
+
+            decimal dAdditionStock = 0.00M;
+            decimal dAdditionNonStock = 0.00M;
+            decimal dConsumptionStock = 0.00M;
+            decimal dConsumptionNonStock = 0.00M;
+            decimal dBalanceStock = 0.00M;
+            decimal dBalanceNonStock = 0.00M;
+
+
+            if (budget != null)
+            {
+
+
+                if (budget.AdditionStock != null)
+                {
+                    dAdditionStock = (decimal)budget.AdditionStock ;
+                }
+                
+
+                if (budget.AdditionNonStock != null)
+                {
+                    dAdditionNonStock = (decimal)budget.AdditionNonStock ;
+                }
+                
+
+                if (budget.ConsumptionStock != null)
+                {
+                    dConsumptionStock = (decimal)budget.ConsumptionStock + dStock;
+                    budget.ConsumptionStock = dConsumptionStock;
+                } else
+                {
+                    budget.ConsumptionStock = dStock;
+                }
+                
+
+                if (budget.ConsumptionNonStock != null)
+                {
+                    dConsumptionNonStock = (decimal)budget.ConsumptionNonStock + dNonStock;
+                    budget.ConsumptionNonStock = dConsumptionNonStock;
+                } else
+                {
+                    budget.ConsumptionNonStock = dNonStock;
+                }
+
+                if (budget.BalanceStock != null)
+                {
+                    dBalanceStock = (decimal)budget.BalanceStock;
+                }
+
+                if (budget.BalanceNonStock != null)
+                {
+                    dBalanceNonStock = (decimal)budget.BalanceNonStock;
+                }
+
+                dBalanceStock = (decimal)budget.StockInitial + dAdditionStock - dConsumptionStock;
+                dBalanceNonStock = (decimal)budget.NonStockInitial + dAdditionNonStock - dConsumptionNonStock;
+
+                budget.BalanceStock = budget.StockInitial + dAdditionStock - dConsumptionStock;
+                budget.BalanceNonStock = budget.NonStockInitial + dAdditionNonStock - dConsumptionNonStock;
+                db.SaveChanges();
+            }
+
+            //add to audit log
+            AuditBudget_log auditBudget_ = new AuditBudget_log
+            {
+                ModifiedBy = Session["Username"].ToString(),
+                ModifiedOn = DateTime.Now,
+                ActionBtn = "Additional ",
+                ColumnStr = "ConsumptionStock | ConsumptionNonStock | BalanceStock | BalanceNonStock ",
+                ValueStr = dStock + "|" + dNonStock + "|" + dBalanceStock + "|" + dBalanceNonStock,
+                MDB_Id = monthlyDept.MDB_Id,
+                BudgetId = monthlyDept.BudgetId,
+                Remarks = Remarks
+            };
+            db.AuditBudget_log.Add(auditBudget_);
+            db.SaveChanges();
+
+            //return RedirectToAction("LstMonthDeptBudget", "Budget", new { seltMonth = monthlyDept.MonthOf , seltYear = monthlyDept.YearOf });
+            return null;
+        }
+
+
+        public ActionResult MonthlyDeptBudgetRpt()
+        {
+            return View("MonthlyDeptBudgetRpt");
         }
 
     }

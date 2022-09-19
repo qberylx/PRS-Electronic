@@ -351,6 +351,9 @@
     <Compile Include="ModelData\Section_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\SP_ChkDeptBudgetSendToPurHOD_Result.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\SP_Comparison_Report_Result.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -400,6 +403,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportView\MonthlyDeptBudget.aspx.cs">
+      <DependentUpon>MonthlyDeptBudget.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportView\MonthlyDeptBudget.aspx.designer.cs">
+      <DependentUpon>MonthlyDeptBudget.aspx</DependentUpon>
     </Compile>
     <Compile Include="ReportView\PRProcessTime.aspx.cs">
       <DependentUpon>PRProcessTime.aspx</DependentUpon>
@@ -2343,6 +2353,7 @@
     <Content Include="plugins\uplot\uPlot.iife.js" />
     <Content Include="plugins\uplot\uPlot.iife.min.js" />
     <Content Include="plugins\uplot\uPlot.min.css" />
+    <Content Include="ReportView\MonthlyDeptBudget.aspx" />
     <Content Include="ReportView\PRProcessTime.aspx" />
     <Content Include="ReportView\PRTimeAnalysis.aspx" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -2643,6 +2654,8 @@
     <Content Include="Views\Budget\LstMonthDeptBudget.cshtml" />
     <Content Include="Views\Budget\AddBudgetForm.cshtml" />
     <Content Include="Views\Shared\_LayoutPopup.cshtml" />
+    <Content Include="Views\Budget\MinusBudgetForm.cshtml" />
+    <Content Include="Views\Budget\MonthlyDeptBudgetRpt.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

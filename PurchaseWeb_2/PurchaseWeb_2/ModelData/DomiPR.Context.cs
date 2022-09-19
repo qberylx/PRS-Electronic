@@ -132,5 +132,69 @@ namespace PurchaseWeb_2.ModelData
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MonthlyDeptBudget_Result>("SP_MonthlyDeptBudget", monthOfParameter, yearOfParameter);
         }
+    
+        public virtual ObjectResult<string> SP_ChkDeptBudgetBalance(Nullable<int> monthOf, Nullable<int> yearOf, string accCode, ObjectParameter deptBudgetBalance)
+        {
+            var monthOfParameter = monthOf.HasValue ?
+                new ObjectParameter("monthOf", monthOf) :
+                new ObjectParameter("monthOf", typeof(int));
+    
+            var yearOfParameter = yearOf.HasValue ?
+                new ObjectParameter("yearOf", yearOf) :
+                new ObjectParameter("yearOf", typeof(int));
+    
+            var accCodeParameter = accCode != null ?
+                new ObjectParameter("accCode", accCode) :
+                new ObjectParameter("accCode", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("SP_ChkDeptBudgetBalance", monthOfParameter, yearOfParameter, accCodeParameter, deptBudgetBalance);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> SP_ChkDeptBudgetSendToHOD(Nullable<int> monthOf, Nullable<int> yearOf, string accCode, Nullable<decimal> totalPR, ObjectParameter passFlag)
+        {
+            var monthOfParameter = monthOf.HasValue ?
+                new ObjectParameter("monthOf", monthOf) :
+                new ObjectParameter("monthOf", typeof(int));
+    
+            var yearOfParameter = yearOf.HasValue ?
+                new ObjectParameter("yearOf", yearOf) :
+                new ObjectParameter("yearOf", typeof(int));
+    
+            var accCodeParameter = accCode != null ?
+                new ObjectParameter("accCode", accCode) :
+                new ObjectParameter("accCode", typeof(string));
+    
+            var totalPRParameter = totalPR.HasValue ?
+                new ObjectParameter("TotalPR", totalPR) :
+                new ObjectParameter("TotalPR", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_ChkDeptBudgetSendToHOD", monthOfParameter, yearOfParameter, accCodeParameter, totalPRParameter, passFlag);
+        }
+    
+        public virtual ObjectResult<SP_ChkDeptBudgetSendToPurHOD_Result> SP_ChkDeptBudgetSendToPurHOD(Nullable<int> prId, string sourcingName)
+        {
+            var prIdParameter = prId.HasValue ?
+                new ObjectParameter("PrId", prId) :
+                new ObjectParameter("PrId", typeof(int));
+    
+            var sourcingNameParameter = sourcingName != null ?
+                new ObjectParameter("SourcingName", sourcingName) :
+                new ObjectParameter("SourcingName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ChkDeptBudgetSendToPurHOD_Result>("SP_ChkDeptBudgetSendToPurHOD", prIdParameter, sourcingNameParameter);
+        }
+    
+        public virtual int SP_ChkDeptBudgetReject(Nullable<int> prId, string sourcingName)
+        {
+            var prIdParameter = prId.HasValue ?
+                new ObjectParameter("PrId", prId) :
+                new ObjectParameter("PrId", typeof(int));
+    
+            var sourcingNameParameter = sourcingName != null ?
+                new ObjectParameter("SourcingName", sourcingName) :
+                new ObjectParameter("SourcingName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_ChkDeptBudgetReject", prIdParameter, sourcingNameParameter);
+        }
     }
 }

@@ -67,6 +67,14 @@
                                     {
                                         <i class="fa fa-th nav-icon"></i>
                                     }
+                                    @if (m.MenuName == "Report")
+                                    {
+                                        <i class="fa fa-chart-pie nav-icon"></i>
+                                    }
+                                    @if (m.MenuName == "Budget")
+                                    {
+                                        <i class="fa fa-dollar-sign nav-icon"></i>
+                                    }
                                     <p>
                                         @m.MenuName
                                         <i class="right fas fa-angle-left"></i>

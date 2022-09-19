@@ -378,6 +378,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="LastCurExc" Type="decimal" Precision="18" Scale="5" />
           <Property Name="LastPriceVendor" Type="decimal" Precision="18" Scale="5" />
           <Property Name="LastVendorCode" Type="varchar" MaxLength="50" />
+          <Property Name="EstCurExch" Type="decimal" Precision="18" Scale="5" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -949,6 +950,27 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Parameter Name="FromDate" Type="date" Mode="In" />
           <Parameter Name="ToDate" Type="date" Mode="In" />
         </Function>
+        <Function Name="SP_ChkDeptBudgetBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="monthOf" Type="int" Mode="In" />
+          <Parameter Name="yearOf" Type="int" Mode="In" />
+          <Parameter Name="accCode" Type="varchar" Mode="In" />
+          <Parameter Name="DeptBudgetBalance" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="SP_ChkDeptBudgetReject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PrId" Type="int" Mode="In" />
+          <Parameter Name="SourcingName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_ChkDeptBudgetSendToHOD" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="monthOf" Type="int" Mode="In" />
+          <Parameter Name="yearOf" Type="int" Mode="In" />
+          <Parameter Name="accCode" Type="varchar" Mode="In" />
+          <Parameter Name="TotalPR" Type="decimal" Mode="In" />
+          <Parameter Name="PassFlag" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="SP_ChkDeptBudgetSendToPurHOD" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PrId" Type="int" Mode="In" />
+          <Parameter Name="SourcingName" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="SP_Comparison_Report" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PrMstId" Type="int" Mode="In" />
         </Function>
@@ -1391,6 +1413,27 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
             <End Role="MonthlyBudget_Mst" EntitySet="MonthlyBudget_Mst" />
             <End Role="MonthlyDeptBudget" EntitySet="MonthlyDeptBudgets" />
           </AssociationSet>
+          <FunctionImport Name="SP_ChkDeptBudgetBalance" ReturnType="Collection(String)">
+            <Parameter Name="monthOf" Mode="In" Type="Int32" />
+            <Parameter Name="yearOf" Mode="In" Type="Int32" />
+            <Parameter Name="accCode" Mode="In" Type="String" />
+            <Parameter Name="DeptBudgetBalance" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ChkDeptBudgetSendToHOD" ReturnType="Collection(Int32)">
+            <Parameter Name="monthOf" Mode="In" Type="Int32" />
+            <Parameter Name="yearOf" Mode="In" Type="Int32" />
+            <Parameter Name="accCode" Mode="In" Type="String" />
+            <Parameter Name="TotalPR" Mode="In" Type="Decimal" />
+            <Parameter Name="PassFlag" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ChkDeptBudgetSendToPurHOD" ReturnType="Collection(Domi_PurModel.SP_ChkDeptBudgetSendToPurHOD_Result)">
+            <Parameter Name="PrId" Mode="In" Type="Int32" />
+            <Parameter Name="SourcingName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ChkDeptBudgetReject">
+            <Parameter Name="PrId" Mode="In" Type="Int32" />
+            <Parameter Name="SourcingName" Mode="In" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -1555,6 +1598,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="LastCurExc" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="LastPriceVendor" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="LastVendorCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EstCurExch" Type="Decimal" Precision="18" Scale="5" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -2403,6 +2447,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="SP_ChkDeptBudgetSendToPurHOD_Result">
+          <Property Type="Int32" Name="PassFlag" Nullable="false" />
+          <Property Type="String" Name="Remarks" Nullable="true" MaxLength="359" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2506,6 +2554,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="PR_Details">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Details">
               <MappingFragment StoreEntitySet="PR_Details">
+                <ScalarProperty Name="EstCurExch" ColumnName="EstCurExch" />
                 <ScalarProperty Name="LastVendorCode" ColumnName="LastVendorCode" />
                 <ScalarProperty Name="LastPriceVendor" ColumnName="LastPriceVendor" />
                 <ScalarProperty Name="LastCurExc" ColumnName="LastCurExc" />
@@ -3104,6 +3153,17 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
                 </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ChkDeptBudgetBalance" FunctionName="Domi_PurModel.Store.SP_ChkDeptBudgetBalance" />
+          <FunctionImportMapping FunctionImportName="SP_ChkDeptBudgetSendToHOD" FunctionName="Domi_PurModel.Store.SP_ChkDeptBudgetSendToHOD" />
+          <FunctionImportMapping FunctionImportName="SP_ChkDeptBudgetSendToPurHOD" FunctionName="Domi_PurModel.Store.SP_ChkDeptBudgetSendToPurHOD">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Domi_PurModel.SP_ChkDeptBudgetSendToPurHOD_Result">
+                <ScalarProperty Name="PassFlag" ColumnName="PassFlag" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ChkDeptBudgetReject" FunctionName="Domi_PurModel.Store.SP_ChkDeptBudgetReject" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

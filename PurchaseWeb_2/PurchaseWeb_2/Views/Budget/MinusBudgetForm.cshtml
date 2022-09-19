@@ -1,0 +1,93 @@
+﻿@model PurchaseWeb_2.ModelData.MonthlyDeptBudget
+
+@{
+    Layout = "~/Views/Shared/_LayoutPopup.cshtml";
+}
+
+@using (Ajax.BeginForm("MinusBudget", "Budget", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divLstMonthDeptBudget", OnSuccess = "OnSuccessModal" }))
+{
+    <div class="modal-body">
+        @*<input type="text" name="NoOrder" id="NoOrder" value="@ViewBag.NoOrder" class="form-control" />*@
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label">Budget Code</label>
+                <input type="text" value="@Model.MonthlyBudget_Mst.BudgetCode" disabled />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Department</label>
+                <input type="text" value="@Model.MonthlyBudget_Mst.Department" disabled />
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-8">
+                <label class="form-label">Additional Budget </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label">Stock</label>
+                @Html.EditorFor(model => model.ConsumptionStock, new { htmlAttributes = new { @Value = 0.00, @id = "ConsumptionStock", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ConsumptionStock, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Non Stock</label>
+                @Html.EditorFor(model => model.ConsumptionNonStock, new { htmlAttributes = new { @Value = 0.00, @id = "ConsumptionNonStock", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ConsumptionNonStock, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label class="form-label">Remarks</label>
+                <textarea type="text" name="Remarks" id="Remarks" class="form-control" placeholder="Remark.."></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="MDB_Id" id="MDB_Id" value="@Model.MDB_Id" />
+        <input type="hidden" name="BudgetId" id="BudgetId" value="@Model.BudgetId" />
+        <input type="hidden" name="MonthOf" id="MonthOf" value="@Model.MonthOf" />
+        <input type="hidden" name="YearOf" id="YearOf" value="@Model.YearOf" />
+        <button type="button" name="submit" class="btn btn-secondary" data-dismiss="modal" value="close" onclick="window.close();">Close</button>
+        <button type="submit" name="submit" class="btn btn-primary" value="save">Submit</button>
+    </div>
+}
+
+
+<script>
+
+
+    function OnSuccessModal() {
+
+
+        /*this.reset();*/
+
+        @*$('#addBudget_@ViewBag.NoOrder').modal('hide');*@
+
+        /*alert(window.opener.location.href);*/
+
+        @*$.ajax({
+            type: "POST",
+            url: "@Url.Action("LstMonthDeptBudget", "Budget", new { seltMonth = Model.MonthOf, seltYear = Model.YearOf })",
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                /*$('#divLstMonthDeptBudget').html(response);*/
+                /*window.opener.$('#divLstMonthDeptBudget').html(response);*/
+                window.opener.document.getElementbyId("divLstMonthDeptBudget").innerHTML = response;
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });*@
+
+
+
+        window.opener.updateWithNewData();
+        window.close();
+    }
+</script>

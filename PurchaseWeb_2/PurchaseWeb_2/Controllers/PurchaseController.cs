@@ -209,7 +209,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             ViewBag.StatusId = PrMst.StatId;
             ViewBag.PrMstId = PrMstId;
@@ -219,7 +219,7 @@ namespace PurchaseWeb_2.Controllers
             String username = Convert.ToString(Session["Username"]);
             var userMst = db.Usr_mst
                 .Where(x => x.Username == username)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             ViewBag.PstId = userMst.Psn_id;
 
@@ -275,7 +275,7 @@ namespace PurchaseWeb_2.Controllers
             //get PrtypeNo
             var prType = db.PRType_mst
                 .Where(x=>x.PRTypeId == Doctype)
-                .SingleOrDefault();
+                .FirstOrDefault();
             
             string PRnewNo = getNewPrNO((int)prType.PRTypeNo);
             string username = Convert.ToString(Session["Username"]);
@@ -292,7 +292,7 @@ namespace PurchaseWeb_2.Controllers
                     UserId = userdtls.usr_id,
                     DepartmentId = userdtls.Dpt_id,
                     TeamId = userdtls.Team_id,
-                    RequestDate = DateTime.Now,
+                    //RequestDate = DateTime.Now,
                     CreateDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
                     StatId = 1,
@@ -352,7 +352,7 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult PRhod(int PrMstId)
         {
-            var PrMst = db.PR_Mst.SingleOrDefault(pr => pr.PRId == PrMstId);
+            var PrMst = db.PR_Mst.FirstOrDefault(pr => pr.PRId == PrMstId);
             // check if account is empty
             if (PrMst.AccountCode == null && PrMst.PrGroupType1.CPRFFlag == false && PrMst.PRTypeId == 4)
             {
@@ -366,11 +366,31 @@ namespace PurchaseWeb_2.Controllers
                 return View("PurRequest");
             }
 
+            //check if PR using budget dept 
+            if (PrMst.PrGroupType1.CPRFFlag == false && PrMst.PRTypeId == 4)
+            {
+                //check account code budget for accountcode not null
+                var TotalPr = PrMst.PR_Details.Sum(x => x.EstTotalPrice * (x.EstCurExch ?? 1));
+                //check if pr request date is there , if not use current month and year
+                if (PrMst.RequestDate == null)
+                {
+                    ObjectParameter PassFlag = new ObjectParameter("PassFlag", typeof(int));
+                    var chkPassBudget = db.SP_ChkDeptBudgetSendToHOD(DateTime.Now.Month, DateTime.Now.Year, PrMst.AccountCode, TotalPr, PassFlag).FirstOrDefault();
+                    
+                    if (chkPassBudget == 0)
+                    {
+                        this.AddNotification("Please note that your department budget is not enough . <br/> Please contact Purchasing Department .", NotificationType.ERROR);
+                        return View("PurRequest");
+                    }
+                }
+            }
+
             //update statid = 3 (Pending Approval HOD)
 
             if (PrMst != null)
             {
                 PrMst.StatId = 3;
+                PrMst.RequestDate = DateTime.Now;
                 db.SaveChanges();
 
                 //audit log
@@ -383,11 +403,12 @@ namespace PurchaseWeb_2.Controllers
                     ModifiedOn = DateTime.Now,
                     ActionBtn = "UPDATE",
                     ColumnStr = "PRid |" +
-                    "StatId |",
+                    "StatId | RequestDate |",
 
                     ValueStr =
                     PrMstId + "|" +
-                    PrMst.StatId + "|",
+                    PrMst.StatId + "|" +
+                    DateTime.Now + "|",
 
                     PRId = PrMstId,
                     PRDtlsId = 0,
@@ -507,7 +528,7 @@ namespace PurchaseWeb_2.Controllers
             SendEmail(userEmail, subject, body,"");
 
             // send email to HOD
-            var usrmst = db.Usr_mst.Where(x => x.Username == Username).SingleOrDefault();
+            var usrmst = db.Usr_mst.Where(x => x.Username == Username).FirstOrDefault();
             userEmail = usrmst.Email;
             subject = @"PR " + PrMst.PRNo + " has been approved ";
             body = @"PR " + PrMst.PRNo + " has been approved and has been sent to purchasing for processing. ";
@@ -580,7 +601,7 @@ namespace PurchaseWeb_2.Controllers
             SendEmail(userEmail, subject, body,"");
 
             // send email to HOD
-            var usrmst = db.Usr_mst.Where(x => x.Username == Username).SingleOrDefault();
+            var usrmst = db.Usr_mst.Where(x => x.Username == Username).FirstOrDefault();
             userEmail = usrmst.Email;
             subject = @"PR " + PrMst.PRNo + " has been Rejected ";
             body = @"PR " + PrMst.PRNo + " has been rejected and sent back to "+PrMst.Usr_mst.Username+". ";
@@ -1158,6 +1179,31 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.DptList = DptList;
             ViewBag.CCLvl1 = CCLvl1;
             ViewBag.CCLvl2 = CCLvl2;
+
+            //check budget balance from AccountCode saved
+            ViewBag.chkBudgetBal = "";
+            if (purMstr.AccountCode != null)
+            {
+                //check if pr request date is there , if not use current month and year
+                if (purMstr.RequestDate == null)
+                {
+                    ObjectParameter DeptBudgetBalance = new ObjectParameter("DeptBudgetBalance", typeof(string));
+                    var chkBudgetBal = db.SP_ChkDeptBudgetBalance(DateTime.Now.Month , DateTime.Now.Year, purMstr.AccountCode, DeptBudgetBalance).FirstOrDefault();
+                    ViewBag.chkBudgetBal = Convert.ToString(chkBudgetBal);
+                } else
+                {
+                    DateTime RequestDate = (DateTime)purMstr.RequestDate;
+
+                    string strMonthOf = RequestDate.ToString("MM");
+                    string strYearOf = RequestDate.ToString("yyyy");
+
+                    ObjectParameter DeptBudgetBalance = new ObjectParameter("DeptBudgetBalance", typeof(string));
+                    var chkBudgetBal = db.SP_ChkDeptBudgetBalance(int.Parse(strMonthOf), int.Parse(strYearOf), purMstr.AccountCode, DeptBudgetBalance).FirstOrDefault();
+                    ViewBag.chkBudgetBal = Convert.ToString(chkBudgetBal);
+
+                }
+                
+            }
             
             //check prgroup is cprf or not
             var cprfFlag = db.PrGroupTypes
@@ -1853,6 +1899,19 @@ namespace PurchaseWeb_2.Controllers
                 var vendor = dbDom1.APVENs.Where(x => x.VENDORID == pR_.VendorCode).FirstOrDefault();
                 VendorName = vendor.VENDNAME.Trim();
             }
+
+            decimal curExh = 1.00M;
+
+            if (pR_.EstCurCode != null)
+            {
+                var EstCurExc = dbDom1.CSCRDs.Where(x => x.HOMECUR == "MYR" && x.RATETYPE == "SP" && x.SOURCECUR == pR_.EstCurCode)
+                    .OrderByDescending(o => o.RATEDATE)
+                    .FirstOrDefault();
+                if(EstCurExc != null)
+                {
+                    curExh = EstCurExc.RATE;
+                }                
+            }
             
 
             try
@@ -1882,8 +1941,10 @@ namespace PurchaseWeb_2.Controllers
                     EstCurCode          = pR_.EstCurCode,
                     Tax                 = 0,
                     TaxCode             = "SSTG",
-                    TaxClass            = 1
-                }) ;
+                    TaxClass            = 1,
+                    EstCurExch          = curExh
+                    
+                });
                 db.SaveChanges();
 
                 string Username = (string)Session["Username"];
@@ -2109,7 +2170,7 @@ namespace PurchaseWeb_2.Controllers
 
             var budgetSingle = db.MonthlyBudgets
                 .Where(x => x.DepId == prMstSingle.BudgetDept && x.Month == sMonth && x.Year == sYear)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             var accDept = db.AccTypeDepts.Where(x => x.AccTypeDepID == prMstSingle.BudgetDept).FirstOrDefault();
 
@@ -2472,12 +2533,36 @@ namespace PurchaseWeb_2.Controllers
                 // if pr type 4
                 if (PrMst.PRTypeId == 4)
                 {
+                    // check and update budget
+                    // if budget not enuf , error notification
+                    if ( PrMst.PrGroupType1.CPRFFlag == false)
+                    {
+                        if(PrMst.AccountCode == null)
+                        {
+                            this.AddNotification("AccountCode is null please check Account Code for budget deduction", NotificationType.ERROR);
+                            Session["groupType"] = PrMst.PrGroupType1.GroupId;
+                            return View("PRProsesList");
+                        }
+                        else
+                        {
+                            var chkDepBudget = db.SP_ChkDeptBudgetSendToPurHOD(PrMst.PRId, Convert.ToString(Session["Username"])).FirstOrDefault();
+                            
+                            if(chkDepBudget.PassFlag == 0)
+                            {
+                                this.AddNotification(chkDepBudget.Remarks, NotificationType.ERROR);
+                                Session["groupType"] = PrMst.PrGroupType1.GroupId;
+                                return View("PRProsesList");
+                            }
+                        }
+                    }
+
                     //check if all item in pr dtls have winner reject if there are
                     foreach(var prdt in PrMst.PR_Details.ToList())
                     {
                         if (prdt.TotCostWitTax == null)
                         {
                             this.AddNotification("There are still item left in the PR without Winner Vendor", NotificationType.ERROR);
+                            Session["groupType"] = PrMst.PrGroupType1.GroupId;
                             return View("PRProsesList");
                         }
                     }
@@ -2546,6 +2631,8 @@ namespace PurchaseWeb_2.Controllers
 
                         SendEmail(userEmail, subject, body,"");
                     }
+
+                    this.AddNotification("PR " + PrMst.PRNo + " has been sent for Purchasing HOD Approval", NotificationType.SUCCESS);
                 }
                 else
                 {
@@ -2589,16 +2676,20 @@ namespace PurchaseWeb_2.Controllers
 
                         SendEmail(userEmail, subject, body,"");
                     }
+
+                    this.AddNotification("PR " + PrMst.PRNo + " has been sent for PO Processing", NotificationType.SUCCESS);
                 }
 
                 
             }
-            return View("PurchasingProsesPR");
+            //return View("PurchasingProsesPR");
+            Session["groupType"] = PrMst.PrGroupType1.GroupId;
+            return View("PRProsesList");
         }
 
         public ActionResult PRDtlsForPurchaser(int PrMstId)
         {
-            var Prmst = db.PR_Mst.Where(x => x.PRId == PrMstId).SingleOrDefault();
+            var Prmst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
 
             Session["groupType"] = Prmst.PRGroupType;
             ViewBag.PrTypeID = Prmst.PRTypeId;
@@ -2653,7 +2744,7 @@ namespace PurchaseWeb_2.Controllers
 
             //ViewBag.PrMstId = PrMstId;
 
-            //var PrMst = db.PR_Mst.SingleOrDefault(x => x.PRId == PrMstId);
+            //var PrMst = db.PR_Mst.FirstOrDefault(x => x.PRId == PrMstId);
             //ViewBag.PrTypeId = PrMst.PRTypeId;
 
             return PartialView("PRDtlsListForPurchaserType4", PRDtlsPList);
@@ -2711,7 +2802,7 @@ namespace PurchaseWeb_2.Controllers
             //get kuantiti
             var prdtls = db.PR_Details
                 .Where(x => x.PRDtId == PrDtlstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             ViewBag.PrMstId = prdtls.PRid;
 
@@ -2756,7 +2847,7 @@ namespace PurchaseWeb_2.Controllers
             {
                 var vd = dbDom1.APVENs
                 .Where(x => x.VENDORID == pR_Vendor.VendorCode)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
                 VendorName = vd.VENDNAME;
             }
@@ -2764,7 +2855,7 @@ namespace PurchaseWeb_2.Controllers
 
             var PayTerms = dbDom1.APRTAs
                 .Where(x => x.TERMSCODE == pR_Vendor.PayTerms)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             if (pR_Vendor.PayTerms == null)
             {
@@ -2984,11 +3075,11 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult VendorComparisonDelete(int VCIdDel)
         {
-            var vcDel = db.PR_VendorComparison.Where(x => x.VCId == VCIdDel).SingleOrDefault();
+            var vcDel = db.PR_VendorComparison.Where(x => x.VCId == VCIdDel).FirstOrDefault();
 
             var PrDtls = db.PR_Details
                 .Where(x => x.PRDtId == vcDel.PRDtId)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
 
             PR_VendorComparison VC = new PR_VendorComparison() { VCId = VCIdDel };
@@ -3024,10 +3115,10 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult VendorComparisonWinner(int VCIdw)
         {
-            var vc = db.PR_VendorComparison.Where(x => x.VCId == VCIdw).SingleOrDefault();
+            var vc = db.PR_VendorComparison.Where(x => x.VCId == VCIdw).FirstOrDefault();
 
             //get Vd accgroup
-            var vd = dbDom1.APVENs.Where(x => x.VENDORID == vc.VDCode).SingleOrDefault();
+            var vd = dbDom1.APVENs.Where(x => x.VENDORID == vc.VDCode).FirstOrDefault();
             if (vd == null)
             {
                 this.AddNotification("This Vendor is not registered in sage " + vc.VCName, NotificationType.ERROR);
@@ -3057,7 +3148,7 @@ namespace PurchaseWeb_2.Controllers
             // update pr details
             var PrDtls = db.PR_Details
                 .Where(x => x.PRDtId == vc.PRDtId)
-                .SingleOrDefault();
+                .FirstOrDefault();
             if (PrDtls != null)
             {
                 PrDtls.VendorName = vc.VCName;
@@ -3118,7 +3209,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var vendorCode = dbDom1.APVENs
                 .Where(x => x.VENDORID == vdCode)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             ViewBag.payTerms = vendorCode.TERMSCODE;
 
@@ -3138,11 +3229,11 @@ namespace PurchaseWeb_2.Controllers
             {
                 var vendorCode = dbDom1.APVENs
                 .Where(x => x.VENDORID == vdCode)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
                 var PrDtls = db.PR_Details
                     .Where(x => x.PRDtId == PrDtlstId)
-                    .SingleOrDefault();
+                    .FirstOrDefault();
 
                 ViewBag.Qty = PrDtls.Qty;
                 ViewBag.vdCode = vendorCode.CURNCODE;
@@ -3164,7 +3255,7 @@ namespace PurchaseWeb_2.Controllers
             {
                 var PrDtls = db.PR_Details
                     .Where(x => x.PRDtId == PrDtlstId)
-                    .SingleOrDefault();
+                    .FirstOrDefault();
 
                 ViewBag.Qty = PrDtls.Qty;
                 ViewBag.vdCode = "MYR";
@@ -3185,7 +3276,7 @@ namespace PurchaseWeb_2.Controllers
             //get qty
             var PrDtls = db.PR_Details
                     .Where(x => x.PRDtId == PrDtlstId)
-                    .SingleOrDefault();
+                    .FirstOrDefault();
 
             ViewBag.Qty = PrDtls.Qty;
 
@@ -3234,7 +3325,7 @@ namespace PurchaseWeb_2.Controllers
 
             ViewBag.PrMstId = PrMstId;
 
-            var PrMst = db.PR_Mst.SingleOrDefault(x => x.PRId == PrMstId);
+            var PrMst = db.PR_Mst.FirstOrDefault(x => x.PRId == PrMstId);
             ViewBag.PrTypeId = PrMst.PRTypeId;
 
 
@@ -3322,7 +3413,7 @@ namespace PurchaseWeb_2.Controllers
         {
             if (submit == "Back")
             {
-                var prMst = db.PR_Mst.Where(x => x.PRId == PrMstIdsvPr).SingleOrDefault();
+                var prMst = db.PR_Mst.Where(x => x.PRId == PrMstIdsvPr).FirstOrDefault();
 
                 return RedirectToAction("PRListForPurchaser","Purchase", new { Doctype = prMst.PRTypeId, group = prMst.PRGroupType });
             } 
@@ -3330,7 +3421,7 @@ namespace PurchaseWeb_2.Controllers
             {
                 foreach (PRDtlsPurchaser Dtls in pRDtls)
                 {
-                    var uptPrDtls = db.PR_Details.SingleOrDefault(x => x.PRDtId == Dtls.PRDtId);
+                    var uptPrDtls = db.PR_Details.FirstOrDefault(x => x.PRDtId == Dtls.PRDtId);
                     if (uptPrDtls != null)
                     {
                         uptPrDtls.VendorCode    = Dtls.VendorCode;
@@ -3405,7 +3496,7 @@ namespace PurchaseWeb_2.Controllers
 
             var PrDtls = db.PR_Details
                 .Where(x => x.PRDtId == PrDtlsId)
-                .SingleOrDefault();
+                .FirstOrDefault();
             if( PrDtls != null)
             {
                 if (PrDtls.NoPo == null)
@@ -3427,7 +3518,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrDtls = db.PR_Details
                 .Where(x => x.PRDtId == PrDtlsId)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             var CurList = db.Currency_Mst.ToList();
             ViewBag.CurList = CurList;
@@ -3441,7 +3532,7 @@ namespace PurchaseWeb_2.Controllers
         [HttpPost]
         public ActionResult UpdatePrDtlsPurchaser(PR_Details pR_Details, int PrDtlsId, int PrMstId)
         {
-            var prDtls = db.PR_Details.SingleOrDefault(x => x.PRDtId == PrDtlsId);
+            var prDtls = db.PR_Details.FirstOrDefault(x => x.PRDtId == PrDtlsId);
             if(prDtls != null)
             {
                 prDtls.CurrId           = pR_Details.CurrId;
@@ -3495,7 +3586,7 @@ namespace PurchaseWeb_2.Controllers
 
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
             if (PrMst != null)
             {
                 PrMst.GrandAmt = GrandTotal;
@@ -3557,7 +3648,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
             if (PrMst != null)
             {
                 if (PrMst.PRTypeId == 4)
@@ -3640,7 +3731,7 @@ namespace PurchaseWeb_2.Controllers
                 SendEmail(userEmail, subject, body,"");
 
                 //send email to purchaser ( request from Fong to stop send notification )
-                //var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                //var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
                 //userEmail = usrmst.Email;
                 //subject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
                 //body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. <br/> " +
@@ -3649,7 +3740,7 @@ namespace PurchaseWeb_2.Controllers
                 //SendEmail(userEmail, subject, body,"");
 
                 //send email to purchasing HOD 
-                var usrmstHOD = db.Usr_mst.Where(x => x.Username == PrMst.HODPurDeptApprovalBy).SingleOrDefault();
+                var usrmstHOD = db.Usr_mst.Where(x => x.Username == PrMst.HODPurDeptApprovalBy).FirstOrDefault();
                 userEmail = usrmstHOD.Email;
                 subject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
                 body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. <br/>";
@@ -3667,9 +3758,14 @@ namespace PurchaseWeb_2.Controllers
 
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
             if (PrMst != null)
             {
+                if (PrMst.PrGroupType1.CPRFFlag == false)
+                {
+                    var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
+                }
+                
                 PrMst.StatId = 11;
                 PrMst.HODPurComment = comment;
                 db.SaveChanges();
@@ -3698,7 +3794,7 @@ namespace PurchaseWeb_2.Controllers
                 db.SaveChanges();
 
                 //send email to purchaser
-                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
                 string userEmail = usrmst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been reject by Purchasing HOD  ";
                 string body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to " + PrMst.PurchaserName + " . <br/> " +
@@ -3707,7 +3803,7 @@ namespace PurchaseWeb_2.Controllers
                 SendEmail(userEmail, subject, body,"");
 
                 //send email to purchasing HOD
-                var usrmstHOD = db.Usr_mst.Where(x => x.Username == Username).SingleOrDefault();
+                var usrmstHOD = db.Usr_mst.Where(x => x.Username == Username).FirstOrDefault();
                 userEmail = usrmstHOD.Email;
                 subject = @"PR " + PrMst.PRNo + " has been rejected by Purchasing HOD  ";
                 body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to "+ PrMst.PurchaserName + " .<br/> " +
@@ -3722,7 +3818,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
 
             return View("PrHODPuchasingViewSummary", PrMst);
@@ -3732,7 +3828,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             ViewBag.StatusId = PrMst.StatId;
             ViewBag.PrMstId = PrMstId;
@@ -3744,7 +3840,7 @@ namespace PurchaseWeb_2.Controllers
             String username = Convert.ToString(Session["Username"]);
             var userMst = db.Usr_mst
                 .Where(x => x.Username == username )
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             ViewBag.PstId = userMst.Psn_id;
 
@@ -3794,7 +3890,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
             if (PrMst != null)
             {
                 PrMst.StatId = 9;
@@ -3833,7 +3929,7 @@ namespace PurchaseWeb_2.Controllers
                 SendEmail(userEmail, subject, body,"");
 
                 //send email to purchaser
-                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
                 userEmail = usrmst.Email;
                 subject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
                 body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. <br/> " +
@@ -3842,7 +3938,7 @@ namespace PurchaseWeb_2.Controllers
                 SendEmail(userEmail, subject, body,"");
 
                 //send email to purchasing HOD
-                var usrmstHOD = db.Usr_mst.Where(x => x.Username == PrMst.HODPurDeptApprovalBy).SingleOrDefault();
+                var usrmstHOD = db.Usr_mst.Where(x => x.Username == PrMst.HODPurDeptApprovalBy).FirstOrDefault();
                 userEmail = usrmstHOD.Email;
                 subject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
                 body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. ";
@@ -3868,9 +3964,14 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
             if (PrMst != null)
             {
+                if (PrMst.PrGroupType1.CPRFFlag == false)
+                {
+                    var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
+                }
+
                 PrMst.StatId = 7;
                 db.SaveChanges();
 
@@ -3896,7 +3997,7 @@ namespace PurchaseWeb_2.Controllers
                 db.SaveChanges();
 
                 //send email to purchaser
-                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
                 string userEmail = usrmst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been reject by MD  ";
                 string body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to " + PrMst.PurchaserName + " . <br/> " +
@@ -3905,7 +4006,7 @@ namespace PurchaseWeb_2.Controllers
                 SendEmail(userEmail, subject, body,"");
 
                 //send email to purchasing HOD
-                var usrmstHOD = db.Usr_mst.Where(x => x.Username == PrMst.HODPurDeptApprovalBy).SingleOrDefault();
+                var usrmstHOD = db.Usr_mst.Where(x => x.Username == PrMst.HODPurDeptApprovalBy).FirstOrDefault();
                 userEmail = usrmstHOD.Email;
                 subject = @"PR " + PrMst.PRNo + " has been rejected by MD  ";
                 body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to " + PrMst.PurchaserName + " . ";
@@ -3940,7 +4041,7 @@ namespace PurchaseWeb_2.Controllers
             //add CPRF
             try
             {
-                var chkCPRF = db.CPRFMsts.Where(x => x.CPRFNo == cPRFMst.CPRFNo).SingleOrDefault();
+                var chkCPRF = db.CPRFMsts.Where(x => x.CPRFNo == cPRFMst.CPRFNo).FirstOrDefault();
                 if (chkCPRF == null)
                 {
                     var addCPRF = db.Set<CPRFMst>();
@@ -4086,7 +4187,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
             if (PrMst != null)
             {
                 PrMst.StatId = 9;
@@ -4178,7 +4279,7 @@ namespace PurchaseWeb_2.Controllers
             //check prgroup is cprf or not
             var cprfFlag = db.PrGroupTypes
                 .Where(x => x.GroupId == purMstr.PRGroupType)
-                .SingleOrDefault();
+                .FirstOrDefault();
             ViewBag.CPRFFlag = cprfFlag.CPRFFlag;
             ViewBag.PrGroup = purMstr.PRGroupType;
 
@@ -4436,7 +4537,7 @@ namespace PurchaseWeb_2.Controllers
 
             }).ToList();
 
-            var PRDtlsView = PRDtlsViewList.Where(x => x.PRDtId == PrDtlsId).SingleOrDefault();
+            var PRDtlsView = PRDtlsViewList.Where(x => x.PRDtId == PrDtlsId).FirstOrDefault();
 
             // get from sage the vendorlist
             var vendorlist = dbDom1.APVENs
@@ -4459,7 +4560,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var prDtls = db.PR_Details
                 .Where(x => x.PRDtId == proViewModel.PRDtId)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             if (prDtls != null)
             {
@@ -4517,7 +4618,7 @@ namespace PurchaseWeb_2.Controllers
                 .FirstOrDefault();
 
             // find vendor name
-            var vendor = dbDom1.APVENs.Where(x => x.VENDORID == viewModel.VendorCode).SingleOrDefault();
+            var vendor = dbDom1.APVENs.Where(x => x.VENDORID == viewModel.VendorCode).FirstOrDefault();
 
             //find last vendor name LastVendorName
             string sLastVendorName = "";
@@ -4527,7 +4628,7 @@ namespace PurchaseWeb_2.Controllers
             }
             else
             {
-                var lastVendor = dbDom1.APVENs.Where(x => x.VENDORID == viewModel.LastVendorCode).SingleOrDefault();
+                var lastVendor = dbDom1.APVENs.Where(x => x.VENDORID == viewModel.LastVendorCode).FirstOrDefault();
                 sLastVendorName = lastVendor.VENDNAME.Trim();
             }
             
@@ -4802,7 +4903,7 @@ namespace PurchaseWeb_2.Controllers
 
             }).ToList();
 
-            var PRDtlsView = PRDtlsViewList.Where(x => x.PRDtId == PrDtlsId).SingleOrDefault();
+            var PRDtlsView = PRDtlsViewList.Where(x => x.PRDtId == PrDtlsId).FirstOrDefault();
 
             // get from sage the vendorlist exist for item
             var vendorlist = dbDom1.APVENs
@@ -4822,7 +4923,7 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.CurrList = CurrList;
 
             //find the item description
-            var itemDesc = dbDom1.POVUPRs.Where(x => x.ITEMNO == PRDtlsView.DomiPartNo).SingleOrDefault();
+            var itemDesc = dbDom1.POVUPRs.Where(x => x.ITEMNO == PRDtlsView.DomiPartNo).FirstOrDefault();
             ViewBag.itemDesc = itemDesc.VCPDESC;
 
             return PartialView("EditPRDtlsPurchasingProsesStockable", PRDtlsView);
@@ -4832,9 +4933,9 @@ namespace PurchaseWeb_2.Controllers
         {
             var prDtls = db.PR_Details
                 .Where(x => x.PRDtId == proViewModel.PRDtId)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
-            var vendor = dbDom1.APVENs.Where(x => x.VENDORID == proViewModel.VendorCode).SingleOrDefault();
+            var vendor = dbDom1.APVENs.Where(x => x.VENDORID == proViewModel.VendorCode).FirstOrDefault();
 
             if (prDtls != null)
             {
@@ -5019,7 +5120,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var Vendor = dbDom1.APVENs
                 .Where(x => x.VENDORID == vendorCode)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             if (Vendor != null)
             {
@@ -5076,7 +5177,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
             if (PrMst != null)
             {
                 PrMst.StatId = 12;
@@ -5128,7 +5229,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             return PartialView("RejectPRPurchasingForm", PrMst);
         }
@@ -5139,7 +5240,7 @@ namespace PurchaseWeb_2.Controllers
             {
                 var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PRId)
-                .SingleOrDefault();
+                .FirstOrDefault();
                 if (PrMst != null)
                 {
                     PrMst.StatId = 13;
@@ -5179,7 +5280,7 @@ namespace PurchaseWeb_2.Controllers
                 SendEmail(userEmail, subject, body,"");
 
                 // send email to purchaser
-                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
                 userEmail = usrmst.Email;
                 subject = @"PR " + PrMst.PRNo + " has been reject by purchasing. ";
                 body = @"Kindly login to http://prs.dominant-semi.com/ for further action. ";

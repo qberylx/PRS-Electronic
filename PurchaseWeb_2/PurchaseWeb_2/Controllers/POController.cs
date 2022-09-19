@@ -93,6 +93,11 @@ namespace PurchaseWeb_2.Controllers
                 .SingleOrDefault();
             if(PrMst != null)
             {
+                if (PrMst.PrGroupType1.CPRFFlag == false)
+                {
+                    var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
+                }
+
                 PrMst.StatId = 14;
                 db.SaveChanges();
                 this.AddNotification("PR " + PrMst.PRNo + " has been rejected back to Sourcing", NotificationType.SUCCESS);
@@ -158,6 +163,11 @@ namespace PurchaseWeb_2.Controllers
                 .SingleOrDefault();
                 if (PrMst != null)
                 {
+                    if (PrMst.PrGroupType1.CPRFFlag == false)
+                    {
+                        var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
+                    }
+
                     PrMst.StatId = 14;
                     PrMst.ModifiedBy = Convert.ToString(Session["Username"]);
                     PrMst.ModifiedDate = DateTime.Now;
@@ -215,6 +225,11 @@ namespace PurchaseWeb_2.Controllers
                 .SingleOrDefault();
                 if (PrMst != null)
                 {
+                    if (PrMst.PrGroupType1.CPRFFlag == false)
+                    {
+                        var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
+                    }
+
                     PrMst.StatId = 13;
                     PrMst.ModifiedBy = Convert.ToString(Session["Username"]);
                     PrMst.ModifiedDate = DateTime.Now;
@@ -959,6 +974,9 @@ namespace PurchaseWeb_2.Controllers
                         .OrderByDescending(o => o.RATEDATE)
                         .FirstOrDefault();
 
+                        var SageVendor = dbDom1.APVENs.Where(x => x.VENDORID == prdt.VendorCode).FirstOrDefault();
+
+
                         PORHSEQ = 3000 + getPO.POId;
                         string Remarks = "";
                         string RATE = "";
@@ -1051,7 +1069,7 @@ namespace PurchaseWeb_2.Controllers
                         getPO.NoPo.ToString(),
                         "",
                         prdt.VendorCode.ToString(),
-                        prdt.VendorName.ToString(),
+                        SageVendor.VENDNAME.ToString(),
                         "1",
                         getPO.CreateDate?.ToString("dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo),
                         prdt.ReqDevDate?.ToString("dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo),

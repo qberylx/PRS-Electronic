@@ -48,7 +48,18 @@
                             {
                                 <div class="col-md-4">
                                     <!--PR Account-->
-                                    <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode)
+                                    <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode) <br />
+                                    
+                                    @if (ViewBag.chkBudgetBal == "99.00")
+                                    {
+                                        <span>Budget Balance : No Budget </span>
+                                    } else
+                                    {
+                                        <span>Budget Balance : RM @ViewBag.chkBudgetBal</span>
+                                    }
+                                    
+                                    
+                                    
                                 </div>
                             }
                             if (ViewBag.CPRFFlag == true)

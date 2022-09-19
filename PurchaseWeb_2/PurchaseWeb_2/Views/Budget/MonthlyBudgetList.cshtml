@@ -49,9 +49,10 @@
                                 @item.Department
                             </td>
                             <td>
-                                @foreach(var a in item.MonthlyBudget_Expense.Where(x=>x.DeleteFlag != true).ToList() )
-                                {
-                                    <table class="table table-sm" >
+                                <table class="table table-sm table-borderless">
+                                    @foreach (var a in item.MonthlyBudget_Expense.Where(x => x.DeleteFlag != true).ToList())
+                                    {
+
                                         <tr>
                                             <td>
                                                 @a.Section
@@ -72,9 +73,10 @@
                                                 @a.IC_CategoryCode
                                             </td>
                                         </tr>
-                                    </table>
-                                }
-                            </td>
+
+                                    }
+                                </table>
+                                </td>
                             <td>
                                 @if (item.StockFlag == true)
                                 {

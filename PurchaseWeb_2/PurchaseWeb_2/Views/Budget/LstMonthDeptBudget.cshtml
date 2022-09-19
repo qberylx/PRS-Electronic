@@ -15,6 +15,18 @@
             window.open("/Budget/AddBudgetForm/" + BudgetId + "?NoOrder=0", "PopupWindow", 'width=400px,height=500px,toolbar=no,menubar=no,resizable=yes,top=' + top + ',left=' + left + '');
 
         }
+
+        function ShowMinusBudget(BudgetId) {
+            console.log("ShowMinusBudget =" + BudgetId);
+            let height = 500;
+            let width = 400;
+            // set the horizontal center of the popup window the center of the screen.
+            var left = (screen.width - width) / 2;
+            // set thevertical center of the popup window the center of the screen.
+            var top = (screen.height - height) / 2;
+
+            window.open("/Budget/MinusBudgetForm/" + BudgetId + "?NoOrder=0", "PopupWindow", 'width=400px,height=500px,toolbar=no,menubar=no,resizable=yes,top=' + top + ',left=' + left + '');
+        }
     </script>
 
     <div class="card card-secondary">
@@ -65,7 +77,7 @@
                 @foreach (var item in Model)
                 {
                     i++;
-                    <tr @*data-widget="expandable-table" aria-expanded="false"*@>
+                    <tr >
                         <td>
                             @i
                         </td>
@@ -158,41 +170,21 @@
                         <td>
                             <div class="row">
                                 <div class="col-md-6">
-                                    @*<button type="button" class="btn btn-success" data-toggle="modal" data-target="#addBudget_@i" data-id="@item.MDB_Id">
-                                            <i class="fa fa-plus-circle"></i>
-                                        </button>*@
                                     <button type="button" class="btn btn-success" id="@item.MDB_Id" value="@item.MDB_Id" onclick="ShowAddBudget(@item.MDB_Id )">
                                         <i class="fa fa-plus-circle"></i>
                                     </button>
 
                                 </div>
                                 <div class="col-md-6">
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#minusBudget">
+                                    <button type="button" class="btn btn-danger" id="@item.MDB_Id" value="@item.MDB_Id" onclick="ShowMinusBudget(@item.MDB_Id )">
                                         <i class="fa fa-minus-circle"></i>
                                     </button>
                                 </div>
+                                
                             </div>
                         </td>
                     </tr>
-                    <!--<tr class="expandable-body">
-                        <td colspan="12">-->
-                    <!--Modal add Budget-->
-                    <!--<div class="modal fade" id="addBudget_@i" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-success">
-                                            <h5 class="modal-title">Add Budget</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        @*@{Html.RenderAction("AddBudgetForm", "Budget", new { Id = item.MDB_Id , NoOrder = i  });}*@
-
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>-->
+                    
 
                 }
             </table>
@@ -201,14 +193,7 @@
 
     <script type="text/javascript">
     window.updateWithNewData = function () {
-        @*$.ajax({
-            url: "/Budget/LstMonthDeptBudget?seltMonth=" + @ViewBag.MonthInt + "&seltYear=" + @ViewBag.YearOf +"",
-                url: "@Url.Action("LstMonthDeptBudget", "Budget", new { seltMonth = ViewBag.MonthInt,seltYear = ViewBag.YearOf })",
-                success: function (data) {
-                    $("#divLstMonthDeptBudget").append($("<div></div>").html(data));
-                }
-        });*@
-
+        
         $.ajax({
             type: "POST",
             url: "/Budget/LstMonthDeptBudget?seltMonth=" + @ViewBag.MonthInt + "&seltYear=" + @ViewBag.YearOf +"",
@@ -217,8 +202,7 @@
             dataType: "html",
             success: function (response) {
                 $('#divLstMonthDeptBudget').html(response);
-                /*window.opener.$('#divLstMonthDeptBudget').html(response);*/
-                w/*indow.opener.document.getElementbyId("divLstMonthDeptBudget").innerHTML = response;*/
+                
             },
             failure: function (response) {
                 alert(response.responseText);

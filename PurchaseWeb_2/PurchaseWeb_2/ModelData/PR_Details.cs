@@ -77,6 +77,7 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<decimal> LastCurExc { get; set; }
         public Nullable<decimal> LastPriceVendor { get; set; }
         public string LastVendorCode { get; set; }
+        public Nullable<decimal> EstCurExch { get; set; }
     
         public virtual PR_Mst PR_Mst { get; set; }
         public virtual UOM_mst UOM_mst { get; set; }
