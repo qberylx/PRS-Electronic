@@ -154,7 +154,7 @@
                                     @Html.DisplayFor(modelItem => item.Remarks)
                                 </td>
                                 <td>
-                                    @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                                    @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", Confirm="Are you sure to delete this line?" }))
                                     {
                                         <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
                                         <input type="hidden" id="DelPrMstId" name="DelPrMstId" value="@item.PRid" />
@@ -217,7 +217,7 @@
                                 <td>
 
 
-                                    @using (Ajax.BeginForm("DeletePRDtlsPurchasingProses", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                                    @using (Ajax.BeginForm("DeletePRDtlsPurchasingProses", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", Confirm = "Are you sure to delete this line?" }))
                                     {
                                         <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
                                         <input type="hidden" id="DelPrMstId" name="DelPrMstId" value="@item.PRid" />
@@ -260,7 +260,7 @@
                                     @Html.DisplayFor(modelItem => item.SalesOrder)
                                 </td>
                                 <td>
-                                    @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                                    @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", Confirm="Are you sure to delete this line?" }))
                                     {
                                         <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
                                         <input type="hidden" id="DelPrMstId" name="DelPrMstId" value="@item.PRid" />

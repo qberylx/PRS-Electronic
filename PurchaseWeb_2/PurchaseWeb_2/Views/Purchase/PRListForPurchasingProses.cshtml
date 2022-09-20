@@ -43,7 +43,7 @@
             }
             @foreach (var item in Model)
             {
-                if (item.StatId == 11) { status = "true"; showFlag = ""; } else { status = "false"; showFlag = "d-none"; }
+                if (item.StatId == 11 || item.StatId == 15) { status = "true"; showFlag = ""; } else { status = "false"; showFlag = "d-none"; }
                 <tr data-widget="expandable-table" aria-expanded="@status">
                     <td>
                         @Html.DisplayFor(modelItem => item.PRNo)
@@ -155,7 +155,14 @@
                 </tr>
                 <tr class="expandable-body @showFlag ">
                     <td colspan="12">
-                        <p style="color:indianred; padding-left:2em">@item.HODPurComment </p>
+                        @if (item.StatId == 11)
+                        {
+                            <p style="color:indianred; padding-left:2em">@item.HODPurComment </p>
+                        }
+                        @if (item.StatId == 15)
+                        {
+                            <p style="color:indianred; padding-left:2em">@item.SourcingComment </p>
+                        }
                     </td>
                 </tr>
             }

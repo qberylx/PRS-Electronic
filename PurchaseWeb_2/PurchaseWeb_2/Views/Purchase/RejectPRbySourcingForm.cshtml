@@ -1,0 +1,20 @@
+﻿@model PurchaseWeb_2.ModelData.PR_Mst
+
+@using (Html.BeginForm("RejectPRbySourcing", "Purchase", FormMethod.Post))
+{
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12">
+                <b>Remarks</b>
+                <br />
+                @Html.TextAreaFor(model => model.SourcingComment, new { @class = "form-control", @rows = 3 })
+            </div>
+            @Html.HiddenFor(Model => Model.PRId)
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" name="submit" class="btn btn-secondary" data-dismiss="modal" value="close">Close</button>
+        <button type="submit" name="submit" class="btn btn-primary" value="save">Save changes</button>
+    </div>
+}
+

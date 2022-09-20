@@ -73,6 +73,7 @@ namespace PurchaseWeb_2.ModelData
         public string VendorCurrDiscount { get; set; }
         public string RejectCommentClerk { get; set; }
         public string RejectCommentClerktoUser { get; set; }
+        public string SourcingComment { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }

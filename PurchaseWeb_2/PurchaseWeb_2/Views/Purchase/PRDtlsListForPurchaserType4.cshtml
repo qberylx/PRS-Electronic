@@ -8,7 +8,7 @@
                 <div class="col-10">
                     <h4>PR Details List</h4>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -86,7 +86,7 @@
                             <th style="display:none"></th>
                         </tr>
                     </thead>
-                    
+
                     <tbody>
                         @{ int i = 0; }
                         @foreach (var item in Model)
@@ -135,7 +135,7 @@
                                     @strEstimateUnitPrice
 
                                 </td>
-                                    
+
                                 <td>
                                     @{
                                         String strLastPrice = String.Format("{0:n5}", item.LastPrice);
@@ -148,9 +148,9 @@
                                         String strLastQuoteDate = "";
                                         if (item.LastQuoteDate != null)
                                         {
-                                            DateTime LastQuoteDate = (DateTime)item.LastQuoteDate ;
+                                            DateTime LastQuoteDate = (DateTime)item.LastQuoteDate;
                                             strLastQuoteDate = LastQuoteDate.ToString("dd/MM/yyyy");
-                                        } 
+                                        }
                                     }
                                     @strLastQuoteDate
                                 </td>
@@ -170,7 +170,7 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.LastPONo)
                                 </td>
-                                
+
                                 <td>
                                     @Html.DisplayFor(modelItem => item.UnitPrice)
                                 </td>
@@ -204,14 +204,14 @@
 
                                 </td>
                             </tr>
-                            
+
                             <tr class="expandable-body">
                                 <td colspan="20">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div id="divVendorComparison_@item.PRDtId">
                                                 @{ Html.RenderAction("VendorComparison", "Purchase", new { PrDtlstId = item.PRDtId });}
-                                            </div>                                            
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -225,7 +225,7 @@
                             </tr>
                         }
                     </tbody>
-                    
+
 
                 </table>
             </div>
@@ -237,15 +237,34 @@
             <div class="row">
                 <div class="col-centered">
                     @Html.ActionLink("Return To Main List", "PRProsesList", "Purchase", new { @class = "btn btn-primary" })
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectPR">
+                        Reject PR to Purchasing
+                    </button>
                     @Html.ActionLink("Budget", "budgetUpdate", "Purchase", new { PrMstId = ViewBag.PrId }, new { @class = "btn btn-warning" })
                     @Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = ViewBag.PrId }, new { @class = "btn btn-success" })
                 </div>
             </div>
         </div>
-        
+
 
     </div>
 
 
 
+</div>
+
+<!--Modal to reject-->
+<div class="modal fade" id="rejectPR" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reject PR</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @{Html.RenderAction("RejectPRbySourcingForm", "Purchase", new { PrMstId = ViewBag.PrId });}
+
+        </div>
+    </div>
 </div>

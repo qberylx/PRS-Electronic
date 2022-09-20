@@ -224,7 +224,7 @@
     $(function () {
         $('input#Qty').blur(function () {
             var amt = parseFloat(this.value);
-            $(this).val( amt.toFixed(2));
+            $(this).val( amt.toFixed(4));
         });
     });
 

@@ -1868,6 +1868,7 @@ namespace PurchaseWeb_2.Controllers
             // get from sage the vendorlist
             var vendorlist = dbDom1.APVENs
                 .Where(x => x.SWACTV == 1)
+                .OrderBy(r => r.VENDNAME)
                 .ToList();
             ViewBag.vendorlist = vendorlist;
 
@@ -2033,6 +2034,7 @@ namespace PurchaseWeb_2.Controllers
             // get from sage the vendorlist
             var vendorlist = dbDom1.APVENs
                 .Where(x => x.SWACTV == 1)
+                .OrderBy(r => r.VENDNAME)
                 .ToList();
             ViewBag.vendorlist = vendorlist;
 
@@ -2044,6 +2046,7 @@ namespace PurchaseWeb_2.Controllers
             // get from sage the vendorlist
             var vendorlist = dbDom1.APVENs
                 .Where(x => x.SWACTV == 1)
+                .OrderBy(r => r.VENDNAME)
                 .ToList();
             ViewBag.vendorlist = vendorlist;
             ViewBag.PrDtlstId = PrDtlstId;
@@ -2819,6 +2822,7 @@ namespace PurchaseWeb_2.Controllers
             // get vendor list
             var vdLst = dbDom1.APVENs
                 .Where(x=>x.SWACTV == 1)
+                .OrderBy(r => r.VENDNAME)
                 .ToList();
 
             ViewBag.vdLst = vdLst;
@@ -3198,6 +3202,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var vdLst = dbDom1.APVENs
                 .Where(x=>x.SWACTV==1)
+                .OrderBy(r => r.VENDNAME)
                 .ToList();
 
             ViewBag.vdLst = vdLst;
@@ -4139,7 +4144,7 @@ namespace PurchaseWeb_2.Controllers
                     if (usrMst.SourcingFlag == true)
                     {
                         var PrMstList = db.PR_Mst
-                        .Where(x => x.StatId == 11 || x.StatId == 12 || x.StatId == 7)
+                        .Where(x => x.StatId == 11 || x.StatId == 12 || x.StatId == 7 || x.StatId == 15)
                         .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                         .ToList();
                         return PartialView("PRListForPurchasingProses", PrMstList);
@@ -4149,7 +4154,7 @@ namespace PurchaseWeb_2.Controllers
                         if (usrMst.Psn_id == 7)
                         {
                             var PrMstList = db.PR_Mst
-                            .Where(x => x.StatId == 7 || x.StatId == 11 || x.StatId == 12)
+                            .Where(x => x.StatId == 7 || x.StatId == 11 || x.StatId == 12 || x.StatId == 15)
                             .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                             .ToList();
                             return PartialView("PRListForPurchasingProses", PrMstList);
@@ -4166,7 +4171,7 @@ namespace PurchaseWeb_2.Controllers
                 } else
                 {
                     var PrMstList = db.PR_Mst
-                        .Where(x => x.StatId == 11 || x.StatId == 12 || x.StatId == 7)
+                        .Where(x => x.StatId == 11 || x.StatId == 12 || x.StatId == 7 || x.StatId == 15)
                         .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                         .ToList();
                     return PartialView("PRListForPurchasingProses", PrMstList);
@@ -4241,7 +4246,7 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.PrGroup = purMstr.PRGroupType;
 
             // get from sage the vendorlist
-            var vendorlist = dbDom1.APVENs.Where(x=>x.SWACTV == 1).ToList();
+            var vendorlist = dbDom1.APVENs.Where(x=>x.SWACTV == 1).OrderBy(r=>r.VENDNAME).ToList();
             ViewBag.vendorlist = vendorlist;
 
             return View("PRDtlsPurchasingProses");
@@ -4542,6 +4547,7 @@ namespace PurchaseWeb_2.Controllers
             // get from sage the vendorlist
             var vendorlist = dbDom1.APVENs
                 .Where(x=>x.SWACTV==1)
+                .OrderBy(r => r.VENDNAME)
                 .ToList();
             ViewBag.vendorlist = vendorlist;
 
@@ -4736,6 +4742,7 @@ namespace PurchaseWeb_2.Controllers
             // get from sage the vendorlist
             var vendorlist = dbDom1.APVENs
                 .Where(x=>x.SWACTV == 1)
+                .OrderBy(r => r.VENDNAME)
                 .ToList();
             ViewBag.vendorlist = vendorlist;
 
@@ -4908,6 +4915,7 @@ namespace PurchaseWeb_2.Controllers
             // get from sage the vendorlist exist for item
             var vendorlist = dbDom1.APVENs
                 .Where(x=>x.SWACTV == 1)
+                .OrderBy(r => r.VENDNAME)
                 .ToList();
             ViewBag.vendorlist = vendorlist;
 
@@ -4999,6 +5007,7 @@ namespace PurchaseWeb_2.Controllers
             //get vendor list
             var vendorList = dbDom1.APVENs
                 .Where(x=>x.SWACTV==1)
+                .OrderBy(r => r.VENDNAME)
                 .ToList();
             ViewBag.VendorList = vendorList;
 
@@ -5223,6 +5232,76 @@ namespace PurchaseWeb_2.Controllers
 
 
             return View("PurchasingProsesPR");
+        }
+
+        public ActionResult RejectPRbySourcingForm (int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            return PartialView("RejectPRbySourcingForm", PrMst);
+        }
+
+        public ActionResult RejectPRbySourcing (PR_Mst pR_Mst, int PRId, String submit)
+        {
+            if (submit == "save")
+            {
+                var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PRId)
+                .FirstOrDefault();
+                if (PrMst != null)
+                {
+                    PrMst.StatId = 15;
+                    PrMst.ModifiedBy = Convert.ToString(Session["Username"]);
+                    PrMst.ModifiedDate = DateTime.Now;
+                    PrMst.SourcingComment = pR_Mst.SourcingComment;
+
+                    db.SaveChanges();
+
+                    //audit log
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "UPDATE",
+                        ColumnStr = "StatId | SourcingComment",
+
+                        ValueStr =
+                        15 + "|" + pR_Mst.SourcingComment,
+
+                        PRId = PRId,
+                        PRDtlsId = 0,
+                        Remarks = "PR Reject by Sourcing"
+
+                    });
+                    db.SaveChanges();
+                }
+
+                //send email to user
+                //string userEmail = PrMst.Usr_mst.Email;
+                //string subject = @"PR " + PrMst.PRNo + " has been reject by purchasing. ";
+                //string body = @"Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                //SendEmail(userEmail, subject, body, "");
+
+                // send email to purchaser
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
+                string userEmail = usrmst.Email;
+                string subject = @"PR " + PrMst.PRNo + " has been reject by sourcing. ";
+                string body = @"Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                SendEmail(userEmail, subject, body, "");
+
+                Session["groupType"] = PrMst.PrGroupType1.GroupId;
+
+
+            }
+
+            return View("PRProsesList");
         }
 
         public ActionResult RejectPRPurchasingForm (int PrMstId)

@@ -331,7 +331,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="DepartmentName" Type="varchar" MaxLength="50" />
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="DomiPartNo" Type="varchar" MaxLength="50" />
-          <Property Name="VendorPartNo" Type="varchar" MaxLength="50" />
+          <Property Name="VendorPartNo" Type="varchar" MaxLength="150" />
           <Property Name="Qty" Type="decimal" Precision="18" Scale="4" />
           <Property Name="UOMId" Type="int" />
           <Property Name="ReqDevDate" Type="date" />
@@ -392,7 +392,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="TeamId" Type="varchar" MaxLength="10" />
           <Property Name="RequestDate" Type="datetime" />
           <Property Name="FIleName" Type="varchar" MaxLength="50" />
-          <Property Name="FilePath" Type="varchar" MaxLength="50" />
+          <Property Name="FilePath" Type="varchar(max)" />
           <Property Name="StatId" Type="int" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
@@ -435,6 +435,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="VendorCurrDiscount" Type="varchar" MaxLength="50" />
           <Property Name="RejectCommentClerk" Type="varchar(max)" />
           <Property Name="RejectCommentClerktoUser" Type="varchar(max)" />
+          <Property Name="SourcingComment" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -1545,7 +1546,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="DepartmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DomiPartNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="VendorPartNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VendorPartNo" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="Qty" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="UOMId" Type="Int32" />
           <Property Name="ReqDevDate" Type="DateTime" Precision="0" />
@@ -1619,7 +1620,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="PRTypeId" Type="Int32" />
           <NavigationProperty Name="PRType_mst" Relationship="Domi_PurModel.FK_PR_Mst_PRType_mst" FromRole="PR_Mst" ToRole="PRType_mst" />
           <Property Name="FIleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FilePath" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="HODApprovalBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="HODApprovalDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -1664,6 +1665,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="VendorCurrDiscount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="RejectCommentClerk" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="RejectCommentClerktoUser" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SourcingComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -2618,6 +2620,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="SourcingComment" ColumnName="SourcingComment" />
                 <ScalarProperty Name="RejectCommentClerktoUser" ColumnName="RejectCommentClerktoUser" />
                 <ScalarProperty Name="RejectCommentClerk" ColumnName="RejectCommentClerk" />
                 <ScalarProperty Name="VendorCurrDiscount" ColumnName="VendorCurrDiscount" />

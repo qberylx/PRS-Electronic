@@ -28,21 +28,24 @@
     function deleteFile(prMstId, fileId) {
         //alert(prMstId);
         //alert(fileId);
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("deleteFile", "Purchase")",
-            data: '{ PrMstId:"' + prMstId + '", Fileid:"' + fileId + '" }',
-            contentType: "application/json; charset=utf-8",
-            dataType: "html",
-            success: function (response) {
-                $("#divUploadQuote").html(response);
-            },
-            failure: function (response) {
-                alert(response.responseText);
-            },
-            error: function (response) {
-                alert(response.responseText);
-            }
-        });
+        if (confirm("Are you sure to delete this file?") == true) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("deleteFile", "Purchase")",
+                data: '{ PrMstId:"' + prMstId + '", Fileid:"' + fileId + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $("#divUploadQuote").html(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+
     };
 </script>
