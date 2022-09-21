@@ -128,7 +128,7 @@
     function OnSuccessAdd() {
         $.ajax({
             type: "POST",
-            url: "@Url.Action("AddPurListForm", "Purchase")",
+            url: "@Url.Action("AddPurList3Form", "Purchase")",
             data: '{PrMstId: "' + @ViewBag.PrMstId + '" }',
             contentType: "application/json; charset=utf-8",
             dataType: "html",

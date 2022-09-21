@@ -45,6 +45,7 @@
         </div>
         <!--card body-->
         @*using (Html.BeginForm("AddPurDtls", "Purchase",FormMethod.Post))*@
+    <div id="divAddPurDtls">
         @using (Ajax.BeginForm("AddPurDtlsType4", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
         {
             @Html.AntiForgeryToken()
@@ -63,7 +64,7 @@
                             <div class="custom-control custom-switch">
                                 &nbsp; <input type="checkbox" class="custom-control-input" id="swNewVendor" onchange="swNewVendorChg()" />
                                 <label class="custom-control-label" for="swNewVendor">Vendor not in the list?</label>
-                            </div> 
+                            </div>
                             <div class="col-md-10">
                                 <div id="divVendorList">
                                     <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode" onchange="vendorchg(this.value)">
@@ -73,7 +74,7 @@
                                             <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
                                         }
                                     </select>
-                                </div>                                
+                                </div>
                                 @Html.ValidationMessageFor(model => model.VendorCode, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -81,7 +82,7 @@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
-                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 3, @id="box" })
+                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 3, @id = "box" })
                                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -141,7 +142,7 @@
                                             @Html.DropDownList("EstCurCode",
                                            new SelectList(ViewBag.CurrList, "CURID", "CURID", "MYR"),
                                            new { @class = "custom-select form-control-border" })
-                                        </div>                                        
+                                        </div>
                                     </div>
                                     <div class="col-md-9">
                                         @Html.EditorFor(model => model.EstimateUnitPrice, new { htmlAttributes = new { @class = "form-control" } })
@@ -151,7 +152,7 @@
                             </div>
                         </div>
 
-                        
+
 
                     </div>
                 </div>
@@ -166,11 +167,13 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
 
             </div>
         }
+    </div>
+        
     </div>
 
 </div>
