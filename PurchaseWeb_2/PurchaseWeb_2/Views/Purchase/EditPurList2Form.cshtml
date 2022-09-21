@@ -120,16 +120,8 @@
                     <label class="control-label col-md-10">Request Delivery Date</label>
                     <div class="col-md-10">
                         @{ DateTime RequestDate = (DateTime)Model.ReqDevDate;}
-                        @Html.EditorFor(model => model.ReqDevDate, "{0:dd/MM/yyyy}", new
-                        {
-                            htmlAttributes = new
-                            {
-                                @type = "date",
-                                @class = "form-control"
-                       ,
-                                @Value = RequestDate.ToString("yyyy-MM-dd")
-                            }
-                        })
+                        @Html.EditorFor(model => model.ReqDevDate, "{0:dd/MM/yyyy}"
+                            , new { htmlAttributes = new { @type = "date", @class = "form-control", @Value = RequestDate.ToString("yyyy-MM-dd")} })
                         @Html.ValidationMessageFor(model => model.ReqDevDate, "", new { @class = "text-danger" })
                     </div>
                 </div>

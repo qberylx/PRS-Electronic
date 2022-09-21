@@ -48,6 +48,7 @@
                             </th>
 
                             <th></th>
+                            <th></th>
                         </tr>
                     }
                     else if (ViewBag.PrTypeId == 4)
@@ -159,6 +160,18 @@
                                     }
 
                                 </td>
+                                @if (ViewBag.PrTypeId == 3)
+                                {
+                                    <td>
+                                        @using (Ajax.BeginForm("EditPurList3Form", "Purchase"
+                                            , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divAddPurDtls", LoadingElementId = "loaderBody" }))
+                                        {
+                                            <input type="hidden" id="EditPrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                            <input type="hidden" id="EditPrMstId" name="EditPrMstId" value="@item.PRid" />
+                                            <button class="btn btn-info"><i class="fa fa-pen fa-xs"></i></button>
+                                        }
+                                    </td>
+                                }
                             </tr>
                         }
                     }
