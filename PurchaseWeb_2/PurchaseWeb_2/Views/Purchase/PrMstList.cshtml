@@ -1,10 +1,25 @@
 ﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Mst>
 
-<div class="card card-primary">
-    <div class="card-body  p-0" >
+<div class="card card-secondary">
+    <div class="card-header">
+        <h6 class="card-title">PR List</h6>
+
+        <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search">
+
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-default">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body  p-0">
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-head-fixed text-nowrap table-striped table-responsive table-sm">
+                <table class="table table-head-fixed text-nowrap table-striped table-responsive table-sm" id="tableA">
                     <tr>
                         <th>
                             PR No
@@ -36,114 +51,118 @@
 
                         <th></th>
                     </tr>
-                @{ String status = "false" ;
-                   String showFlag = "d-none";
+                    @{ String status = "false";
+                        String showFlag = "d-none";
                     }
-                @foreach (var item in Model)
-                {
-                    if (item.StatId == 2 || item.StatId == 13 ) { status = "true"; showFlag = ""; } else { status = "false"; showFlag = "d-none"; }
-                    <tr data-widget="expandable-table"   aria-expanded = "@status"  >
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PRNo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Usr_mst.Username)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AccTypeDept.DeptName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TeamId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.RequestDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PRType_mst.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PrGroupType1.GroupName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status_Mst.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelitem => item.PR_Details.Count)
-                        </td>
-
-                        @if (item.StatId != 1 && item.StatId != 2 && item.StatId != 13)
-                        {
+                    @foreach (var item in Model)
+                    {
+                        if (item.StatId == 2 || item.StatId == 13) { status = "true"; showFlag = ""; } else { status = "false"; showFlag = "d-none"; }
+                        <tr data-widget="expandable-table" aria-expanded="@status">
                             <td>
-                                @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
-                                @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
-                                {
-                                    @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
-                                }
-                                
+                                @Html.DisplayFor(modelItem => item.PRNo)
                             </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Usr_mst.Username)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AccTypeDept.DeptName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TeamId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RequestDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PRType_mst.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PrGroupType1.GroupName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status_Mst.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelitem => item.PR_Details.Count)
+                            </td>
+
+                            @if (item.StatId != 1 && item.StatId != 2 && item.StatId != 13)
+                            {
+                                <td>
+                                    @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                                    @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
+                                    {
+                                        @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
+                                    }
+
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @switch (item.PRTypeId)
+                                    {
+                                        case 1:
+                                            <!--<button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>-->
+                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtls","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                            break;
+
+                                        case 2:
+                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType2","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+
+                                            break;
+
+                                        case 3:
+                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+
+                                            break;
+
+                                        case 4:
+                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType4","Purchase", new {PrMstId = item.PRId , PrGroup = item.PRGroupType})">Add Details</a>
+
+                                            break;
+                                        case 5:
+                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+
+                                            break;
+
+
+                                    }
+
+                                    @Html.ActionLink("Send", "PRhod", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+
+                                    @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
+
+                                    @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+
+                                    @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
+                                    {
+                                        @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
+                                    }
+
+
+
+                                </td>
+                            }
+
+                        </tr>
+
+                        <tr class="expandable-body @showFlag ">
+                            <td colspan="10">
+                                <p style="color:indianred; padding-left:2em">
+                                    @if (item.StatId == 2)
+                                    {@item.HODComment }
+                                else if (item.StatId == 13)
+                                {
+                                    if (@item.PurchasingComment != null)
+                                    { @item.PurchasingComment }
+                                if (@item.RejectCommentClerktoUser != null)
+                                { @item.RejectCommentClerktoUser @item.RejectCommentClerk}
                         }
-                        else
-                        {
-                    <td>
-                        @switch (item.PRTypeId)
-                        {
-                            case 1:
-                                <!--<button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>-->
-                                <a class="btn btn-primary" href="@Url.Action("AddPurDtls","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-                                break;
-
-                            case 2:
-                                <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType2","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-
-                                break;
-
-                            case 3:
-                                <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-
-                                break;
-
-                            case 4:
-                                <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType4","Purchase", new {PrMstId = item.PRId , PrGroup = item.PRGroupType})">Add Details</a>
-
-                                break;
-                            case 5:
-                                <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
-
-                                break;
-
-
-                        }
-
-                        @Html.ActionLink("Send", "PRhod", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
-
-                        @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
-
-                        @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
-
-                        @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
-                        {
-                            @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
-                        }
-
-
-
-                    </td>
-                        }
-
-                    </tr>
-                    
-                    <tr class="expandable-body @showFlag " >
-                        <td colspan="10">
-                            <p style="color:indianred; padding-left:2em">
-                            @if (item.StatId == 2)
-                            { @item.HODComment }
-                            else if (item.StatId == 13)
-                            { if (@item.PurchasingComment != null ) { @item.PurchasingComment }
-                              if (@item.RejectCommentClerktoUser != null) { @item.RejectCommentClerktoUser }
-                            }</p>
-                        </td>
-                    </tr>
-                }
+                                </p>
+                            </td>
+                        </tr>
+                    }
 
                 </table>
             </div>
@@ -152,3 +171,17 @@
 </div>
 
 
+<script type="text/javascript">
+    $(function () {
+        var $rows = $('#tableA tr');
+        $('#search').keyup(function () {
+            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+            $rows.show().filter(function () {
+                var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                return !~text.indexOf(val);
+            }).hide();
+        });
+    });
+
+</script>

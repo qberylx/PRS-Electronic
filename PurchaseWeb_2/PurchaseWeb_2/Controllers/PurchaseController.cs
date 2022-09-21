@@ -81,9 +81,27 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult DashBoardPrMstList()
         {
-            var PrMst = db.PR_Mst.Where(x=>x.StatId != 1 && x.StatId != 2).OrderByDescending(x=>x.PRId).Take(300).ToList();
+            // if user or HOD only list out their department and team id with stat = 9
+            string username = Convert.ToString(Session["Username"]);
+            var userdtls = db.Usr_mst
+                            .Where(x => x.Username == username)
+                            .FirstOrDefault();
+            var userDpts = db.Usr_mst.Where(x => x.Username == username).Select(x => x.Dpt_id);
 
-            return PartialView("DashBoardPrMstList",PrMst);
+            ViewBag.Psn_id = userdtls.Psn_id;
+
+            if (userdtls.Psn_id == 1 || userdtls.Psn_id == 2)
+            {
+                var PrMst = db.PR_Mst.Where(x => x.StatId == 9 && userDpts.Any(i => x.DepartmentId == i) && x.TeamId == userdtls.Team_id)
+                    .OrderByDescending(x => x.PRId).Take(300).ToList();
+                return PartialView("DashBoardPrMstList", PrMst);
+            } else
+            {
+                var PrMst = db.PR_Mst.Where(x => x.StatId != 1 && x.StatId != 2).OrderByDescending(x => x.PRId).Take(300).ToList();
+                return PartialView("DashBoardPrMstList", PrMst);
+            }           
+
+            
         }
 
         public ActionResult SendToSourcing(int PrMstId)
@@ -680,8 +698,10 @@ namespace PurchaseWeb_2.Controllers
                             .Where(x => x.Username == username)
                             .FirstOrDefault();
 
+            var userDpts = db.Usr_mst.Where(x => x.Username == username).Select(x => x.Dpt_id);
+
             var PrMstList = db.PR_Mst
-                .Where(x => x.DepartmentId == userdtls.Dpt_id && x.DeActiveFlag != true && x.TeamId == userdtls.Team_id )
+                .Where(x => userDpts.Any(i => x.DepartmentId == i) && x.DeActiveFlag != true && x.TeamId == userdtls.Team_id && x.StatId != 9 )
                 .OrderByDescending(x=>x.PRId)
                 .ToList();
 

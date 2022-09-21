@@ -175,16 +175,26 @@
             <tr>
                 <td>@i</td>
                 <td>@item.Description</td>
-                <td>@item.VendorPartNo</td>
-                <td>@item.Qty</td>
+                @if (item.PR_Mst.PRTypeId == 4)
+                {
+                    <td>@item.VendorPartNo</td>
+                }
+                else
+                {
+                    <td>@item.DomiPartNo</td>
+                }
+
+                <td>@String.Format("{0:N5}", item.Qty)</td>
                 <td>@item.UOMName</td>
-                <td>@item.ReqDevDate</td>
-                <td>@item.EstimateUnitPrice</td>
+                @{ DateTime reqDevDate = (DateTime)item.ReqDevDate; }
+                
+                <td>@reqDevDate.ToString("dd/MM/yyyy")</td>
+                <td>@String.Format("{0:N5}", item.EstimateUnitPrice)</td>
                 <td>@item.CurCode</td>
-                <td>@item.UnitPrice</td>
-                <td>@item.TotCostnoTax</td>
+                <td>@String.Format("{0:N5}", item.UnitPrice)</td>
+                <td>@String.Format("{0:N5}", item.TotCostnoTax)</td>
                 <td>@item.Tax</td>
-                <td>@item.TotCostWitTax</td>
+                <td>@String.Format("{0:N5}", item.TotCostWitTax)</td>
                 <td>@item.TaxCode</td>
                 <td>@item.TaxClass</td>
                 <!--<td style="display:none">@item.LastPONo</td>-->
@@ -227,11 +237,11 @@
                 @if (Model.Discount > 0)
                 {
 
-                    <b>@intGtotalnTax</b>
+                    <b>@String.Format("{0:N5}", intGtotalnTax)</b>
                 }
                 else
                 {
-                    <b>@Model.PR_Details.Sum(x => x.TotCostnoTax)</b>
+                    <b>@String.Format("{0:N5}", Model.PR_Details.Sum(x => x.TotCostnoTax))</b>
                 }
             </td>
             <td>
@@ -244,11 +254,11 @@
                 @if (Model.Discount > 0)
                 {
 
-                    <b>@intGtotalTax</b>
+                    <b>@String.Format("{0:N5}", intGtotalTax)</b>
                 }
                 else
                 {
-                    <b>@Model.PR_Details.Sum(x => x.TotCostWitTax)</b>
+                    <b>@String.Format("{0:N5}", Model.PR_Details.Sum(x => x.TotCostWitTax) )</b>
                 }
 
             </td>
