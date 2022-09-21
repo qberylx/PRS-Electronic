@@ -1,0 +1,57 @@
+﻿@model PurchaseWeb_2.ModelData.PR_Mst
+
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    tr {
+        text-align: center;
+    }
+
+
+
+    tbody {
+        font-size: 15px;
+    }
+</style>
+
+<table style="width:100%">
+    <thead>
+        <tr>
+            <th>Item No.</th>
+            <th>PR Issue Date</th>
+            <th>Description</th>
+            <th>Dominant Part No.</th>
+            <th>Qty</th>
+            <th>U/M</th>
+            <th>Required Delivery Date</th>
+            <th>PR #</th>
+            <th>Remarks</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int i = 0;}
+        @foreach (var item in Model.PR_Details)
+        {
+            i++;
+            <tr>
+                <td>
+                    @i
+                </td>
+                @{ DateTime CreateDate = (DateTime)item.PR_Mst.CreateDate; }
+                <td>@CreateDate.ToString("dd/MM/yyyy")</td>
+                <td>@item.Description</td>
+                <td>@item.DomiPartNo</td>
+                <td>@String.Format("{0:N5}", item.Qty)</td>
+                <td>@item.UOMName</td>
+                @{ DateTime ReqDevDate = (DateTime)item.ReqDevDate; }
+                <td>@ReqDevDate.ToString("dd/MM/yyyy")</td>
+                <td>@item.PR_Mst.PRNo</td>
+                <td>@item.Remarks</td>
+            </tr>
+        }
+    </tbody>
+    
+</table>

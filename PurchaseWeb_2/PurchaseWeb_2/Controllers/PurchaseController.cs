@@ -170,6 +170,42 @@ namespace PurchaseWeb_2.Controllers
             return View("VendorView",Prdt);
         }
 
+        public void ExportPRDtlstoExcel(int PrMstId)
+        {
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+
+            string Filename = PrMst.PRNo + "_Dtls.xls";
+            //string Filename = "ExcelFrom" + DateTime.Now.ToString("mm_dd_yyy_hh_ss_tt") + ".xls";
+            string FolderPath = HttpContext.Server.MapPath("/ExcelFiles/");
+            string FilePath = System.IO.Path.Combine(FolderPath, Filename);
+
+            //Step-1: Checking: If file name exists in server then remove from server.
+            if (System.IO.File.Exists(FilePath))
+            {
+                System.IO.File.Delete(FilePath);
+            }
+
+            //Step-2: Get Html Data & Converted to String
+            string HtmlResult = RazorViewToStringHelper.RenderViewToString(this, "~/Views/Purchase/PRDtlsAttachment.cshtml", PrMst);
+
+            //Step-4: Html Result store in Byte[] array
+            byte[] ExcelBytes = Encoding.ASCII.GetBytes(HtmlResult);
+
+            //Step-5: byte[] array converted to file Stream and save in Server
+            using (Stream file = System.IO.File.OpenWrite(FilePath))
+            {
+                file.Write(ExcelBytes, 0, ExcelBytes.Length);
+            }
+
+            //Step-6: Download Excel file 
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(Filename));
+            Response.WriteFile(FilePath);
+            Response.End();
+            Response.Flush();
+
+        }
+
         public void ExportPRtoExcel(int PrMstId)
         {
             var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
@@ -824,6 +860,14 @@ namespace PurchaseWeb_2.Controllers
             //Response.Flush();
 
             return FilePath;
+        }
+
+        public ActionResult PRDtlsAttachment (int PrMstId)
+        {
+            ViewBag.PrMstId = PrMstId;
+            var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+
+            return View("PRDtlsAttachment", prMst);
         }
 
         public ActionResult PRAttachment(int PrMstId)

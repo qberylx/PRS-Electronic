@@ -90,6 +90,9 @@
                             {
                                 <td>
                                     @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+
+                                    @Html.ActionLink("Export PR Dtls (Excel)", "ExportPRDtlstoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn bg-olive" })
+
                                     @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
                                     {
                                         @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
@@ -134,6 +137,8 @@
                                     @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
 
                                     @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+
+                                    @Html.ActionLink("Export PR Dtls (Excel)", "ExportPRDtlstoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn bg-olive" })
 
                                     @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
                                     {

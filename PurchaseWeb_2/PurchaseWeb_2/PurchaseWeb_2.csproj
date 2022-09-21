@@ -2664,6 +2664,7 @@
     <Content Include="Views\Purchase\AddPurList3Form.cshtml" />
     <Content Include="Views\Purchase\EditPurList4Form.cshtml" />
     <Content Include="Views\Purchase\AddPurList4Form.cshtml" />
+    <Content Include="Views\Purchase\PRDtlsAttachment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
