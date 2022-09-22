@@ -81,9 +81,27 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult DashBoardPrMstList()
         {
-            var PrMst = db.PR_Mst.Where(x=>x.StatId != 1 && x.StatId != 2).OrderByDescending(x=>x.PRId).Take(300).ToList();
+            // if user or HOD only list out their department and team id with stat = 9
+            string username = Convert.ToString(Session["Username"]);
+            var userdtls = db.Usr_mst
+                            .Where(x => x.Username == username)
+                            .FirstOrDefault();
+            var userDpts = db.Usr_mst.Where(x => x.Username == username).Select(x => x.Dpt_id);
 
-            return PartialView("DashBoardPrMstList",PrMst);
+            ViewBag.Psn_id = userdtls.Psn_id;
+
+            if (userdtls.Psn_id == 1 || userdtls.Psn_id == 2)
+            {
+                var PrMst = db.PR_Mst.Where(x => x.StatId == 9 && userDpts.Any(i => x.DepartmentId == i) && x.TeamId == userdtls.Team_id)
+                    .OrderByDescending(x => x.PRId).Take(300).ToList();
+                return PartialView("DashBoardPrMstList", PrMst);
+            } else
+            {
+                var PrMst = db.PR_Mst.Where(x => x.StatId != 1 && x.StatId != 2).OrderByDescending(x => x.PRId).Take(300).ToList();
+                return PartialView("DashBoardPrMstList", PrMst);
+            }           
+
+            
         }
 
         public ActionResult SendToSourcing(int PrMstId)
@@ -150,6 +168,42 @@ namespace PurchaseWeb_2.Controllers
             var Prdt = db.PR_Details.Where(x => x.PRid == PrMstId).ToList();
 
             return View("VendorView",Prdt);
+        }
+
+        public void ExportPRDtlstoExcel(int PrMstId)
+        {
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+
+            string Filename = PrMst.PRNo + "_Dtls.xls";
+            //string Filename = "ExcelFrom" + DateTime.Now.ToString("mm_dd_yyy_hh_ss_tt") + ".xls";
+            string FolderPath = HttpContext.Server.MapPath("/ExcelFiles/");
+            string FilePath = System.IO.Path.Combine(FolderPath, Filename);
+
+            //Step-1: Checking: If file name exists in server then remove from server.
+            if (System.IO.File.Exists(FilePath))
+            {
+                System.IO.File.Delete(FilePath);
+            }
+
+            //Step-2: Get Html Data & Converted to String
+            string HtmlResult = RazorViewToStringHelper.RenderViewToString(this, "~/Views/Purchase/PRDtlsAttachment.cshtml", PrMst);
+
+            //Step-4: Html Result store in Byte[] array
+            byte[] ExcelBytes = Encoding.ASCII.GetBytes(HtmlResult);
+
+            //Step-5: byte[] array converted to file Stream and save in Server
+            using (Stream file = System.IO.File.OpenWrite(FilePath))
+            {
+                file.Write(ExcelBytes, 0, ExcelBytes.Length);
+            }
+
+            //Step-6: Download Excel file 
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", "attachment; filename=" + Path.GetFileName(Filename));
+            Response.WriteFile(FilePath);
+            Response.End();
+            Response.Flush();
+
         }
 
         public void ExportPRtoExcel(int PrMstId)
@@ -680,8 +734,10 @@ namespace PurchaseWeb_2.Controllers
                             .Where(x => x.Username == username)
                             .FirstOrDefault();
 
+            var userDpts = db.Usr_mst.Where(x => x.Username == username).Select(x => x.Dpt_id);
+
             var PrMstList = db.PR_Mst
-                .Where(x => x.DepartmentId == userdtls.Dpt_id && x.DeActiveFlag != true && x.TeamId == userdtls.Team_id )
+                .Where(x => userDpts.Any(i => x.DepartmentId == i) && x.DeActiveFlag != true && x.TeamId == userdtls.Team_id && x.StatId != 9 )
                 .OrderByDescending(x=>x.PRId)
                 .ToList();
 
@@ -806,6 +862,14 @@ namespace PurchaseWeb_2.Controllers
             return FilePath;
         }
 
+        public ActionResult PRDtlsAttachment (int PrMstId)
+        {
+            ViewBag.PrMstId = PrMstId;
+            var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+
+            return View("PRDtlsAttachment", prMst);
+        }
+
         public ActionResult PRAttachment(int PrMstId)
         {
             //int PrMstId = 60;
@@ -868,6 +932,175 @@ namespace PurchaseWeb_2.Controllers
             this.AddNotification("Row Deleted successfully!!", NotificationType.SUCCESS);
 
             return View("PurRequest");
+        }
+
+        public ActionResult EditPurListForm (int EditPrMstId , int PrDtlsId)
+        {
+            var purDetail = db.PR_Details.Where(x=>x.PRDtId == PrDtlsId).FirstOrDefault();
+            // get from sage 
+            var UomList = dbDom1.ICUCODs.ToList();
+            ViewBag.UOMList = UomList;
+
+            var UOM = dbDom1.POVUPRs
+                .Where(x => x.ITEMNO == purDetail.DomiPartNo)
+                .FirstOrDefault();
+            if (UOM != null)
+            {
+                ViewBag.UOM = UOM.DEFBUNIT;
+                ViewBag.UnitPrice = UOM.BAMOUNT;
+                ViewBag.vdCode = UOM.VDCODE;
+                ViewBag.CurCode = UOM.APVEN.CURNCODE;
+                ViewBag.AccGroup = UOM.APVEN.IDGRP;
+                ViewBag.VdName = UOM.APVEN.SHORTNAME;
+            }
+
+            var domipartlist = dbDom1.POVUPRs.ToList();
+            ViewBag.domipartlist = domipartlist;
+
+            return PartialView("EditPurListForm", purDetail);
+        }
+
+        public ActionResult EditPurList (PR_Details pR_)
+        {
+            try
+            {
+                var purDetails = db.PR_Details.Where(x => x.PRDtId == pR_.PRDtId).FirstOrDefault();
+                if (purDetails != null)
+                {
+                    //purDetails.PRNo = pR_.PRNo;
+                    //purDetails.TypePRId = pR_.TypePRId;
+                    purDetails.DomiPartNo = pR_.DomiPartNo;
+                    purDetails.VendorPartNo = pR_.VendorPartNo;
+                    purDetails.Qty = pR_.Qty;
+                    purDetails.ReqDevDate = pR_.ReqDevDate;
+                    purDetails.Device = pR_.Device;
+                    purDetails.SalesOrder = pR_.SalesOrder;
+                    purDetails.Remarks = pR_.Remarks;
+                    purDetails.Description = pR_.Description;
+                    purDetails.VendorName = pR_.VendorName; //
+                    purDetails.EstimateUnitPrice = 0.00M;
+                    purDetails.UnitPrice = pR_.UnitPrice; //
+                    purDetails.VendorCode = pR_.VendorCode; //
+                    purDetails.UOMName = pR_.UOMName;
+                    purDetails.TotCostnoTax = (decimal)pR_.UnitPrice * (decimal)pR_.Qty;
+                    purDetails.Tax = 0;
+                    purDetails.TotCostWitTax = (decimal)pR_.UnitPrice * (decimal)pR_.Qty;
+                    purDetails.TaxCode = "SSTG";
+                    purDetails.TaxClass = 1;
+                    purDetails.CurCode = pR_.CurCode; //
+                    purDetails.AccGroup = pR_.AccGroup; //
+                    db.SaveChanges();
+
+                    this.AddNotification("Details edited succesfull", NotificationType.SUCCESS);
+
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "UPDATE",
+                        ColumnStr = "PRid |" +
+                        "PRNo |" +
+                        "TypePRId |" +
+                        "UserId |" +
+                        "UserName |" +
+                        "DepartmentName |" +
+                        "DomiPartNo |" +
+                        "VendorPartNo |" +
+                        "Qty |" +
+                        "ReqDevDate |" +
+                        "Device |" +
+                        "SalesOrder |" +
+                        "Remarks |" +
+                        "Description |" +
+                        "VendorName |" +
+                        "EstimateUnitPrice |" +
+                        "UnitPrice |" +
+                        "VendorCode |" +
+                        "UOMName |" +
+                        "TotCostnoTax |" +
+                        "Tax |" +
+                        "TotCostWitTax |" +
+                        "TaxCode |" +
+                        "TaxClass |" +
+                        "CurCode |" +
+                        "AccGroup ",
+
+                        ValueStr =
+                        pR_.PRid + "|" +
+                        pR_.PRNo + "|" +
+                        pR_.TypePRId + "|" +
+                        pR_.DomiPartNo + "|" +
+                        pR_.VendorPartNo + "|" +
+                        pR_.Qty + "|" +
+                        pR_.ReqDevDate + "|" +
+                        pR_.Device + "|" +
+                        pR_.SalesOrder + "|" +
+                        pR_.Remarks + "|" +
+                        pR_.Description + "|" +
+                        pR_.VendorName + "|" +
+                        0.00M + "|" +
+                        pR_.UnitPrice + "|" +
+                        pR_.VendorCode + "|" +
+                        pR_.UOMName + "|" +
+                        (decimal)pR_.UnitPrice * (decimal)pR_.Qty + "|" +
+                        0 + "|" +
+                        (decimal)pR_.UnitPrice * (decimal)pR_.Qty + "|" +
+                        "SSTG" + "|" +
+                        1 + "|" +
+                        pR_.CurCode + "|" +
+                        pR_.AccGroup,
+
+                        PRId = pR_.PRid,
+                        PRDtlsId = pR_.PRDtId,
+                        Remarks = "Edit PR details"
+                    });
+                    db.SaveChanges();
+                }
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                throw;
+
+            }
+
+
+            return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+        }
+
+        public ActionResult AddPurListForm(int PrMstId)
+        {
+            ViewBag.PrMstId = PrMstId;
+
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.PrNo = purMstr.PRNo;
+            ViewBag.PrTypeID = purMstr.PRTypeId;
+
+            var UomList = dbDom1.ICUCODs.ToList();
+            ViewBag.UOMList = UomList;
+
+            // get from sage the domipartno
+            var domipartlist = dbDom1.POVUPRs.ToList();
+
+            ViewBag.domipartlist = domipartlist;
+
+            return PartialView("AddPurListForm");
         }
 
         //Start Purchase request Details
@@ -1524,6 +1757,182 @@ namespace PurchaseWeb_2.Controllers
             //return RedirectToAction("UploadQuo", "Purchase", new { PrMstId = PrMstId });
         }
 
+        public ActionResult EditPurList2Form (int EditPrMstId, int PrDtlsId)
+        {
+            var purDetail = db.PR_Details.Where(x => x.PRDtId == PrDtlsId).FirstOrDefault();
+            // get from sage 
+            var UomList = dbDom1.ICUCODs.ToList();
+            ViewBag.UOMList = UomList;
+
+            var UOM = dbDom1.POVUPRs
+                .Where(x => x.ITEMNO == purDetail.DomiPartNo)
+                .FirstOrDefault();
+            if (UOM != null)
+            {
+                ViewBag.UOM = UOM.DEFBUNIT;
+                ViewBag.UnitPrice = UOM.BAMOUNT;
+                ViewBag.vdCode = UOM.VDCODE;
+                ViewBag.CurCode = UOM.APVEN.CURNCODE;
+                ViewBag.AccGroup = UOM.APVEN.IDGRP;
+                ViewBag.VdName = UOM.APVEN.SHORTNAME;
+            }
+
+            var domipartlist = dbDom1.POVUPRs.ToList();
+            ViewBag.domipartlist = domipartlist;
+
+            return PartialView("EditPurList2Form", purDetail);
+        }
+
+        public ActionResult EditPurList2(PR_Details pR_)
+        {
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == pR_.PRid)
+                .FirstOrDefault();
+            try
+            {
+                var purDetails = db.PR_Details.Where(x => x.PRDtId == pR_.PRDtId).FirstOrDefault();
+                if (purDetails != null)
+                {
+                    purDetails.DomiPartNo = pR_.DomiPartNo;
+                    purDetails.VendorPartNo = pR_.VendorPartNo;
+                    purDetails.Qty = pR_.Qty;
+                    purDetails.ReqDevDate = pR_.ReqDevDate;
+                    purDetails.Device = pR_.Device;
+                    purDetails.SalesOrder = pR_.SalesOrder;
+                    purDetails.Remarks = pR_.Remarks;
+                    purDetails.Description = pR_.Description;
+                    purDetails.VendorName = pR_.VendorName; //
+                    purDetails.EstimateUnitPrice = 0.00M;
+                    purDetails.UnitPrice = pR_.UnitPrice; //
+                    purDetails.VendorCode = pR_.VendorCode; //
+                    purDetails.UOMName = pR_.UOMName;
+                    purDetails.TotCostnoTax = (decimal)pR_.UnitPrice * (decimal)pR_.Qty;
+                    purDetails.Tax = 0;
+                    purDetails.TotCostWitTax = (decimal)pR_.UnitPrice * (decimal)pR_.Qty;
+                    purDetails.TaxCode = "SSTG";
+                    purDetails.TaxClass = 1;
+                    purDetails.CurCode = pR_.CurCode; //
+                    purDetails.AccGroup = pR_.AccGroup; //
+                    db.SaveChanges();
+
+                    this.AddNotification("Details edited succesfull", NotificationType.SUCCESS);
+
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "UPDATE",
+
+                        ColumnStr =
+                        "PRid               |" +
+                        "PRNo               |" +
+                        "TypePRId           |" +
+                        "UserId             |" +
+                        "UserName           |" +
+                        "DepartmentName     |" +
+                        "DomiPartNo         |" +
+                        "VendorPartNo       |" +
+                        "Qty                |" +
+                        "ReqDevDate         |" +
+                        "Device             |" +
+                        "SalesOrder         |" +
+                        "Remarks            |" +
+                        "Description        |" +
+                        "VendorName         |" +
+                        "EstimateUnitPrice  |" +
+                        "UnitPrice          |" +
+                        "VendorCode         |" +
+                        "UOMName            |" +
+                        "TotCostnoTax       |" +
+                        "Tax                |" +
+                        "TotCostWitTax      |" +
+                        "TaxCode            |" +
+                        "TaxClass           |" +
+                        "CurCode            |" +
+                        "AccGroup           |",
+
+                        ValueStr =
+                        pR_.PRid + "|" +
+                        pR_.PRNo + "|" +
+                        pR_.TypePRId + "|" +
+                        pR_.DomiPartNo + "|" +
+                        pR_.VendorPartNo + "|" +
+                        pR_.Qty + "|" +
+                        pR_.ReqDevDate + "|" +
+                        pR_.Device + "|" +
+                        pR_.SalesOrder + "|" +
+                        pR_.Remarks + "|" +
+                        pR_.Description + "|" +
+                        pR_.VendorName + "|" +
+                        0.00M + "|" +
+                        pR_.UnitPrice + "|" +
+                        pR_.VendorCode + "|" +
+                        pR_.UOMName + "|" +
+                        (decimal)pR_.UnitPrice * (decimal)pR_.Qty + "|" +
+                        0 + "|" +
+                        (decimal)pR_.UnitPrice * (decimal)pR_.Qty + "|" +
+                        "SSTG" + "|" +
+                        1 + "|" +
+                        pR_.CurCode + "|" +
+                        pR_.AccGroup + "|",
+
+                        PRId = pR_.PRid,
+                        PRDtlsId = pR_.PRDtId,
+                        Remarks = "Edit PR Details"
+
+                    });
+                    db.SaveChanges();
+
+                }
+
+
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                throw;
+
+            }
+
+
+            return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+        }
+
+        public ActionResult AddPurList2Form(int PrMstId)
+        {
+            ViewBag.PrMstId = PrMstId;
+
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.PrNo = purMstr.PRNo;
+            ViewBag.PrTypeID = purMstr.PRTypeId;
+
+            var UomList = dbDom1.ICUCODs.ToList();
+            ViewBag.UOMList = UomList;
+
+            // get from sage the domipartno
+            var domipartlist = dbDom1.POVUPRs.ToList();
+
+            ViewBag.domipartlist = domipartlist;
+
+            return PartialView("AddPurList2Form");
+        }
+
         //Start Purchase request Details Type 2
 
         [HttpGet]
@@ -1681,6 +2090,175 @@ namespace PurchaseWeb_2.Controllers
 
 
             return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+        }
+
+        public ActionResult EditPurList3Form(int EditPrMstId, int PrDtlsId)
+        {
+            var purDetail = db.PR_Details.Where(x => x.PRDtId == PrDtlsId).FirstOrDefault();
+            // get from sage 
+            var UomList = dbDom1.ICUCODs.ToList();
+            ViewBag.UOMList = UomList;
+
+            var UOM = dbDom1.POVUPRs
+                .Where(x => x.ITEMNO == purDetail.DomiPartNo)
+                .FirstOrDefault();
+            if (UOM != null)
+            {
+                ViewBag.UOM = UOM.DEFBUNIT;
+                ViewBag.UnitPrice = UOM.BAMOUNT;
+                ViewBag.vdCode = UOM.VDCODE;
+                ViewBag.CurCode = UOM.APVEN.CURNCODE;
+                ViewBag.AccGroup = UOM.APVEN.IDGRP;
+                ViewBag.VdName = UOM.APVEN.SHORTNAME;
+            }
+
+            var domipartlist = dbDom1.POVUPRs.ToList();
+            ViewBag.domipartlist = domipartlist;
+
+            return PartialView("EditPurList3Form", purDetail);
+        }
+
+        public ActionResult EditPurList3(PR_Details pR_)
+        {
+            try
+            {
+                var purDetails = db.PR_Details.Where(x => x.PRDtId == pR_.PRDtId).FirstOrDefault();
+                if (purDetails != null)
+                {
+                    //purDetails.PRNo = pR_.PRNo;
+                    //purDetails.TypePRId = pR_.TypePRId;
+                    purDetails.DomiPartNo = pR_.DomiPartNo;
+                    purDetails.VendorPartNo = pR_.VendorPartNo;
+                    purDetails.Qty = pR_.Qty;
+                    purDetails.ReqDevDate = pR_.ReqDevDate;
+                    purDetails.Device = pR_.Device;
+                    purDetails.SalesOrder = pR_.SalesOrder;
+                    purDetails.Remarks = pR_.Remarks;
+                    purDetails.Description = pR_.Description;
+                    purDetails.VendorName = pR_.VendorName; //
+                    purDetails.EstimateUnitPrice = 0.00M;
+                    purDetails.UnitPrice = pR_.UnitPrice; //
+                    purDetails.VendorCode = pR_.VendorCode; //
+                    purDetails.UOMName = pR_.UOMName;
+                    purDetails.TotCostnoTax = (decimal)pR_.UnitPrice * (decimal)pR_.Qty;
+                    purDetails.Tax = 0;
+                    purDetails.TotCostWitTax = (decimal)pR_.UnitPrice * (decimal)pR_.Qty;
+                    purDetails.TaxCode = "SSTG";
+                    purDetails.TaxClass = 1;
+                    purDetails.CurCode = pR_.CurCode; //
+                    purDetails.AccGroup = pR_.AccGroup; //
+                    db.SaveChanges();
+
+                    this.AddNotification("Details edited succesfull", NotificationType.SUCCESS);
+
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "UPDATE",
+                        ColumnStr = "PRid |" +
+                        "PRNo |" +
+                        "TypePRId |" +
+                        "UserId |" +
+                        "UserName |" +
+                        "DepartmentName |" +
+                        "DomiPartNo |" +
+                        "VendorPartNo |" +
+                        "Qty |" +
+                        "ReqDevDate |" +
+                        "Device |" +
+                        "SalesOrder |" +
+                        "Remarks |" +
+                        "Description |" +
+                        "VendorName |" +
+                        "EstimateUnitPrice |" +
+                        "UnitPrice |" +
+                        "VendorCode |" +
+                        "UOMName |" +
+                        "TotCostnoTax |" +
+                        "Tax |" +
+                        "TotCostWitTax |" +
+                        "TaxCode |" +
+                        "TaxClass |" +
+                        "CurCode |" +
+                        "AccGroup ",
+
+                        ValueStr =
+                        pR_.PRid + "|" +
+                        pR_.PRNo + "|" +
+                        pR_.TypePRId + "|" +
+                        pR_.DomiPartNo + "|" +
+                        pR_.VendorPartNo + "|" +
+                        pR_.Qty + "|" +
+                        pR_.ReqDevDate + "|" +
+                        pR_.Device + "|" +
+                        pR_.SalesOrder + "|" +
+                        pR_.Remarks + "|" +
+                        pR_.Description + "|" +
+                        pR_.VendorName + "|" +
+                        0.00M + "|" +
+                        pR_.UnitPrice + "|" +
+                        pR_.VendorCode + "|" +
+                        pR_.UOMName + "|" +
+                        (decimal)pR_.UnitPrice * (decimal)pR_.Qty + "|" +
+                        0 + "|" +
+                        (decimal)pR_.UnitPrice * (decimal)pR_.Qty + "|" +
+                        "SSTG" + "|" +
+                        1 + "|" +
+                        pR_.CurCode + "|" +
+                        pR_.AccGroup,
+
+                        PRId = pR_.PRid,
+                        PRDtlsId = pR_.PRDtId,
+                        Remarks = "Edit PR details"
+                    });
+                    db.SaveChanges();
+                }
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                throw;
+
+            }
+
+
+            return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+        }
+
+        public ActionResult AddPurList3Form(int PrMstId)
+        {
+            ViewBag.PrMstId = PrMstId;
+
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.PrNo = purMstr.PRNo;
+            ViewBag.PrTypeID = purMstr.PRTypeId;
+
+            var UomList = dbDom1.ICUCODs.ToList();
+            ViewBag.UOMList = UomList;
+
+            // get from sage the domipartno
+            var domipartlist = dbDom1.POVUPRs.ToList();
+
+            ViewBag.domipartlist = domipartlist;
+
+            return View("AddPurList3Form");
         }
 
         //Start Purchase request Details Type 3
@@ -1841,6 +2419,200 @@ namespace PurchaseWeb_2.Controllers
 
 
             return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+        }
+
+        public ActionResult EditPurList4Form(int EditPrMstId, int PrDtlsId)
+        {
+            var purDetail = db.PR_Details.Where(x => x.PRDtId == PrDtlsId).FirstOrDefault();
+            // get from sage 
+            var UomList = dbDom1.ICUCODs.ToList();
+            ViewBag.UOMList = UomList;
+
+            var CurrList = dbDom1.CSCCDs.ToList();
+            ViewBag.CurrList = CurrList;
+
+            var vendorlist = dbDom1.APVENs
+                .Where(x => x.SWACTV == 1)
+                .ToList();
+            ViewBag.vendorlist = vendorlist;
+
+            var edtVendor = dbDom1.APVENs
+                .Where(x => x.SWACTV == 1 && x.VENDORID == purDetail.VendorCode)
+                .FirstOrDefault();
+            ViewBag.VendorId = edtVendor.VENDORID;
+
+            return PartialView("EditPurList4Form", purDetail);
+        }
+
+        public ActionResult EditPurList4(PR_Details pR_)
+        {
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == pR_.PRid)
+                .FirstOrDefault();
+
+            //if qty 0 not allowed
+            if (pR_.Qty == 0)
+            {
+                this.AddNotification("0 Quantity is not allowed !!", NotificationType.ERROR);
+                return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+            }
+
+            // find vendor name
+            string VendorName = "";
+            if (pR_.VendorCode == "0")
+            {
+                VendorName = pR_.VendorName;
+            }
+            else
+            {
+                var vendor = dbDom1.APVENs.Where(x => x.VENDORID == pR_.VendorCode).FirstOrDefault();
+                VendorName = vendor.VENDNAME.Trim();
+            }
+
+            decimal curExh = 1.00M;
+
+            if (pR_.EstCurCode != null)
+            {
+                var EstCurExc = dbDom1.CSCRDs.Where(x => x.HOMECUR == "MYR" && x.RATETYPE == "SP" && x.SOURCECUR == pR_.EstCurCode)
+                    .OrderByDescending(o => o.RATEDATE)
+                    .FirstOrDefault();
+                if (EstCurExc != null)
+                {
+                    curExh = EstCurExc.RATE;
+                }
+            }
+
+            try
+            {
+                var edtPrDtls = db.PR_Details.Where(x => x.PRDtId == pR_.PRDtId).FirstOrDefault();
+                if (edtPrDtls != null)
+                {
+                    edtPrDtls.DomiPartNo = "NS";
+                    edtPrDtls.Description = pR_.Description;
+                    edtPrDtls.Qty = pR_.Qty;
+                    edtPrDtls.ReqDevDate = pR_.ReqDevDate;
+                    edtPrDtls.Remarks = "-";
+                    edtPrDtls.VendorCode = pR_.VendorCode.Trim();
+                    edtPrDtls.VendorName = VendorName; //vendor.VENDNAME.Trim();
+                    edtPrDtls.VendorPartNo = pR_.VendorPartNo;
+                    edtPrDtls.Device = "-";
+                    edtPrDtls.SalesOrder = "-";
+                    edtPrDtls.EstimateUnitPrice = pR_.EstimateUnitPrice;
+                    edtPrDtls.EstTotalPrice = pR_.EstimateUnitPrice * pR_.Qty;
+                    edtPrDtls.UOMName = pR_.UOMName;
+                    edtPrDtls.EstCurCode = pR_.EstCurCode;
+                    edtPrDtls.Tax = 0;
+                    edtPrDtls.TaxCode = "SSTG";
+                    edtPrDtls.TaxClass = 1;
+                    edtPrDtls.EstCurExch = curExh;
+                    db.SaveChanges();
+                }
+
+                this.AddNotification("This item updated success", NotificationType.SUCCESS);
+
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "INSERT",
+
+                    ColumnStr =
+                    "PRid              |" +
+                    "PRNo              |" +
+                    "TypePRId          |" +
+                    "UserId            |" +
+                    "UserName          |" +
+                    "DepartmentName    |" +
+                    "DomiPartNo        |" +
+                    "Description       |" +
+                    "Qty               |" +
+                    "ReqDevDate        |" +
+                    "Remarks           |" +
+                    "VendorCode        |" +
+                    "VendorName        |" +
+                    "VendorPartNo      |" +
+                    "Device            |" +
+                    "SalesOrder        |" +
+                    "EstimateUnitPrice |" +
+                    "EstTotalPrice     |" +
+                    "UOMName           |" +
+                    "EstCurCode        |" +
+                    "Tax               |" +
+                    "TaxCode           |" +
+                    "TaxClass          |",
+
+                    ValueStr =
+                    pR_.PRid + "|" +
+                    pR_.PRNo + "|" +
+                    pR_.TypePRId + "|" +
+                    purMstr.UserId + "|" +
+                    purMstr.Usr_mst.Username + "|" +
+                    purMstr.AccTypeDept.DeptName + "|" +
+                    "NS" + "|" +
+                    pR_.Description + "|" +
+                    pR_.Qty + "|" +
+                    pR_.ReqDevDate + "|" +
+                    "-" + "|" +
+                    pR_.VendorCode.Trim() + "|" +
+                    VendorName + "|" +
+                    pR_.VendorPartNo + "|" +
+                    "-" + "|" +
+                    "-" + "|" +
+                    pR_.EstimateUnitPrice + "|" +
+                    pR_.EstimateUnitPrice * pR_.Qty + "|" +
+                    pR_.UOMName + "|" +
+                    pR_.EstCurCode + "|" +
+                    0 + "|" +
+                    "SSTG" + "|" +
+                     1 + "|",
+
+                    PRId = pR_.PRid,
+                    PRDtlsId = pR_.PRDtId,
+                    Remarks = "Add PR Details"
+
+                });
+                db.SaveChanges();
+            }
+            catch (RetryLimitExceededException)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+
+
+            return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+
+        }
+
+        public ActionResult AddPurList4Form(int PrMstId)
+        {
+            ViewBag.PrMstId = PrMstId;
+
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.PrNo = purMstr.PRNo;
+            ViewBag.PrTypeID = purMstr.PRTypeId;
+
+            var UomList = dbDom1.ICUCODs.ToList();
+            ViewBag.UOMList = UomList;
+
+            var CurrList = dbDom1.CSCCDs.ToList();
+            ViewBag.CurrList = CurrList;
+
+            ViewBag.PrGroup = purMstr.PrGroupType1.GroupId;
+
+            // get from sage the vendorlist
+            var vendorlist = dbDom1.APVENs
+                .Where(x => x.SWACTV == 1)
+                .ToList();
+            ViewBag.vendorlist = vendorlist;
+
+            return View("AddPurList4Form");
         }
 
         //Start Purchase request Details Type 4

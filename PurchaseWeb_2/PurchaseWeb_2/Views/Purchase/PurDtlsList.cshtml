@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Details>
 
 
-<div class="card card-success">
+<div class="card card-secondary">
     <div class="card-header">
         <h3 class="card-title vertical-center">Purchase Request Details List</h3>
         <!--
@@ -48,6 +48,7 @@
                             </th>
 
                             <th></th>
+                            <th></th>
                         </tr>
                     }
                     else if (ViewBag.PrTypeId == 4)
@@ -82,6 +83,7 @@
                             </th>
 
                             <th></th>
+                            <th></th>
                         </tr>
                     }
                     else
@@ -112,6 +114,7 @@
                                 @Html.DisplayNameFor(model => model.SalesOrder)
                             </th>
 
+                            <th></th>
                             <th></th>
                         </tr>
                     }
@@ -158,6 +161,18 @@
                                     }
 
                                 </td>
+                                @if (ViewBag.PrTypeId == 3 || ViewBag.PrTypeId == 5)
+                                {
+                                    <td>
+                                        @using (Ajax.BeginForm("EditPurList3Form", "Purchase"
+                                            , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divAddPurDtls", LoadingElementId = "loaderBody" }))
+                                        {
+                                            <input type="hidden" id="EditPrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                            <input type="hidden" id="EditPrMstId" name="EditPrMstId" value="@item.PRid" />
+                                            <button class="btn btn-info"><i class="fa fa-pen fa-xs"></i></button>
+                                        }
+                                    </td>
+                                }
                             </tr>
                         }
                     }
@@ -208,6 +223,15 @@
                                     }
 
                                 </td>
+                                <td>
+                                    @using (Ajax.BeginForm("EditPurList4Form", "Purchase"
+                                        , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divAddPurDtls", LoadingElementId = "loaderBody" }))
+                                    {
+                                        <input type="hidden" id="EditPrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                        <input type="hidden" id="EditPrMstId" name="EditPrMstId" value="@item.PRid" />
+                                        <button class="btn btn-info"><i class="fa fa-pen fa-xs"></i></button>
+                                    }
+                                </td>
                             </tr>
                         }
                     }
@@ -244,14 +268,40 @@
                                     @Html.DisplayFor(modelItem => item.SalesOrder)
                                 </td>
                                 <td>
-                                    @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                                    @using (Ajax.BeginForm("DelPurList", "Purchase"
+                                        , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", Confirm="Are you sure to delete this item?" }))
                                     {
                                         <input type="hidden" id="PrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
                                         <input type="hidden" id="DelPrMstId" name="DelPrMstId" value="@item.PRid" />
                                         <button class="btn btn-danger"><i class="fa fa-trash fa-xs"></i></button>
                                     }
-
                                 </td>
+                                @if (ViewBag.PrTypeId == 1)
+                                {
+                                    <td>
+                                    @using (Ajax.BeginForm("EditPurListForm", "Purchase"
+                                        , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divAddPurDtls", LoadingElementId= "loaderBody" }))
+                                    {
+                                        <input type="hidden" id="EditPrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                        <input type="hidden" id="EditPrMstId" name="EditPrMstId" value="@item.PRid" />
+                                        <button class="btn btn-info"><i class="fa fa-pen fa-xs"></i></button>
+                                    }
+                                </td>
+                                }
+
+                                @if (ViewBag.PrTypeId == 2)
+                                {
+                                    <td>
+                                    @using (Ajax.BeginForm("EditPurList2Form", "Purchase"
+                                        , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divAddPurDtls", LoadingElementId= "loaderBody" }))
+                                    {
+                                        <input type="hidden" id="EditPrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
+                                        <input type="hidden" id="EditPrMstId" name="EditPrMstId" value="@item.PRid" />
+                                        <button class="btn btn-info"><i class="fa fa-pen fa-xs"></i></button>
+                                    }
+                                </td>
+                                }
+                                
                             </tr>
                         }
                     }

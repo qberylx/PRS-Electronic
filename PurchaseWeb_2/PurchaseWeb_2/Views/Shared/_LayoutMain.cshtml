@@ -88,6 +88,33 @@
             margin: 0 auto;
         }
     </style>
+    <style>
+        /* Center the loader */
+        #loaderBody {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          z-index: 1;
+          width: 120px;
+          height: 120px;
+          margin: -76px 0 0 -76px;
+          border: 16px solid #f3f3f3;
+          border-radius: 50%;
+          border-top: 16px solid #3498db;
+          -webkit-animation: spin 2s linear infinite;
+          animation: spin 2s linear infinite;
+        }
+
+        @@-webkit-keyframes spin {
+          0% { -webkit-transform: rotate(0deg); }
+          100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @@keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body class="sidebar-mini sidebar-collapse zoomedElement" style="height: auto; min-height: 100%;">
 
@@ -110,6 +137,7 @@
             <!-- /.content-header -->
             <!-- Main content -->
             <section class="content">
+                <div id="loaderBody"></div>
                 <div class="container-fluid">
                     @RenderBody()
                 </div><!-- /.container-fluid -->
@@ -129,6 +157,11 @@
     </div>
     <!-- ./wrapper -->
 
+    <script>
+        $(window).on('load', function () {
+            $('#loaderBody').hide();
+        })
+    </script>
 
 </body>
 </html>

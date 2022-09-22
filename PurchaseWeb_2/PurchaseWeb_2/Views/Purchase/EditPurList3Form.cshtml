@@ -1,0 +1,171 @@
+﻿@model PurchaseWeb_2.ModelData.PR_Details
+
+@using (Ajax.BeginForm("EditPurList3", "Purchase"
+    , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", OnSuccess = "OnSuccessEdit", LoadingElementId = "loaderBody" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.PRid, new { @Value = Model.PRid })
+    @Html.HiddenFor(model => model.PRDtId, new { @Value = Model.PRDtId })
+    @Html.HiddenFor(model => model.PRNo, new { @Value = Model.PR_Mst.PRNo })
+    @Html.HiddenFor(model => model.TypePRId, new { @Value = Model.PR_Mst.PRTypeId })
+
+
+    <div class="card-body">
+        <div class="row">
+            <!--first column-->
+            <div class="col-md-4">
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-10">Domi. Part No.</label>
+                    <div class="col-md-10">
+                        <select class="custom-select form-control-border" id="DomiPartNo" name="DomiPartNo" onchange="domiChange(this.value)">
+                            <option value="">Select option</option>
+                            @foreach (var domi in ViewBag.domipartlist)
+                            {
+                                if (domi.ITEMNO == Model.DomiPartNo)
+                                {
+                                    <option value="@domi.ITEMNO" selected>@domi.ITEMNO</option>
+                                }
+                                else
+                                {
+                                    <option value="@domi.ITEMNO">@domi.ITEMNO</option>
+                                }
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(model => model.DomiPartNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div id="divDesc">
+                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-10">Vendor Part No.</label>
+                    <div class="col-md-10">
+                        <div id="divVendorPartNo">
+                            @Html.EditorFor(model => model.VendorPartNo, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.VendorPartNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="text" id="Qty" name="Qty" class="form-control" placeholder="0.0000" value="@Model.Qty" required/>
+                        @*@Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-10">UOM</label>
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="divUOM">
+                                    @Html.DropDownList("UOMName",
+                                   new SelectList(ViewBag.UOMList, "UNIT", "UNIT"),
+                                   "Please Select the UOM",
+                                   new { @class = "custom-select form-control-border" })
+
+                                    <input type="hidden" id="UnitPrice" name="UnitPrice"
+                                           value="@ViewBag.UnitPrice" />
+
+                                    <input type="hidden" id="VendorCode" name="VendorCode"
+                                           value="@ViewBag.vdCode" />
+
+                                    <input type="hidden" id="CurCode" name="CurCode"
+                                           value="@ViewBag.CurCode" />
+
+                                    <input type="hidden" id="AccGroup" name="AccGroup"
+                                           value="@ViewBag.AccGroup" />
+
+                                    <input type="hidden" id="VendorName" name="VendorName"
+                                           value="@ViewBag.VdName" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        @Html.ValidationMessageFor(model => model.UOMId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-10">Req. Delivery Date</label>
+                    <div class="col-md-10">
+                        @{ DateTime RequestDate = (DateTime)Model.ReqDevDate;}
+                        @Html.EditorFor(model => model.ReqDevDate, "{0:dd/MM/yyyy}"
+                            , new { htmlAttributes = new { @type = "date", @class = "form-control", @Value = RequestDate.ToString("yyyy-MM-dd"), @required = "required" } })
+                        @Html.ValidationMessageFor(model => model.ReqDevDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+    <div class="card-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-centered">
+                    <input type="submit" id="btnSubmit" name="Submit" value="Add PR Details" class="btn btn-primary btn-lg" />
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#DomiPartNo').select2();
+    });
+
+    function OnSuccessEdit() {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AddPurList3Form", "Purchase")",
+            data: '{PrMstId: "' + @Model.PRid + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divAddPurDtls').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>

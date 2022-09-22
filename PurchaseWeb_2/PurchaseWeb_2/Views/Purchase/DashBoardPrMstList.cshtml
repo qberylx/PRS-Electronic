@@ -97,12 +97,16 @@
                                 <td>
                                     @Html.ActionLink("View", "DashboardPrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
                                     @Html.ActionLink("Export To Excel", "ExportPRtoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
-                                    @if (item.StatId == 9)
+                                    @if (ViewBag.Psn_id != 1 && ViewBag.Psn_id != 2)
                                     {
-                                        @Html.ActionLink("Send Back PR to Sourcing", "SendToSourcing", "Purchase", new { PrMstId = item.PRId }
-                                           , new { @class = "btn btn-primary", onclick = "return confirm('Are you sure you wish to send this PR back to Sourcing?');" }
-                                           )
+                                        if (item.StatId == 9)
+                                        {
+                                            @Html.ActionLink("Send Back PR to Sourcing", "SendToSourcing", "Purchase", new { PrMstId = item.PRId }
+                                               , new { @class = "btn btn-primary", onclick = "return confirm('Are you sure you wish to send this PR back to Sourcing?');" }
+                                               )
+                                        }
                                     }
+
                                     @Html.ActionLink("Audit Log", "PRAuditLog", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-secondary" })
                                 </td>
                             }

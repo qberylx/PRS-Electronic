@@ -45,7 +45,8 @@
         </div>
         <!--card body-->
         @*using (Html.BeginForm("AddPurDtls", "Purchase",FormMethod.Post))*@
-        @using (Ajax.BeginForm("AddPurDtlsType3", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", OnSuccess = "OnSuccess" }))
+    <div id="divAddPurDtls">
+        @using (Ajax.BeginForm("AddPurDtlsType3", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", OnSuccess = "OnSuccess", LoadingElementId = "loaderBody" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -164,6 +165,8 @@
             </div>
         }
     </div>
+        
+    </div>
 
 </div>
 
@@ -228,6 +231,7 @@
     <div class="row">
         <div class="col-centered">
             @Html.ActionLink("Return To Main PR", "PurRequest", "Purchase", null, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Send To HOD", "PRhod", "Purchase", new { PrMstId = ViewBag.PrMstId }, new { @class = "btn btn-success" })
         </div>
     </div>
 </div>

@@ -61,11 +61,20 @@ namespace PurchaseWeb_2.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to data source=&quot;Domi20&quot;; database=&quot;Domi_Pur&quot; ;user id=pruser;password=user2020;.
+        ///   Looks up a localized string similar to data source=&quot;Domi20&quot;; database=&quot;Domi_Pur_Test&quot; ;user id=pruser;password=user2020;.
         /// </summary>
         internal static string ConnectionString {
             get {
                 return ResourceManager.GetString("ConnectionString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to data source=&quot;Domi20&quot;; database=&quot;Domi_Pur&quot; ;user id=pruser;password=user2020;.
+        /// </summary>
+        internal static string ConnectionString0 {
+            get {
+                return ResourceManager.GetString("ConnectionString0", resourceCulture);
             }
         }
         
