@@ -35,6 +35,7 @@ namespace PurchaseWeb_2.Controllers
             //con.ConnectionString = ConfigurationManager.ConnectionStrings["PRS"].ConnectionString;
         }
 
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult LogOn(LogOnModel model, string returnUrl)

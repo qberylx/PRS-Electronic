@@ -93,11 +93,11 @@ namespace PurchaseWeb_2.Controllers
             if (userdtls.Psn_id == 1 || userdtls.Psn_id == 2)
             {
                 var PrMst = db.PR_Mst.Where(x => x.StatId == 9 && userDpts.Any(i => x.DepartmentId == i) && x.TeamId == userdtls.Team_id)
-                    .OrderByDescending(x => x.PRId).Take(300).ToList();
+                    .OrderByDescending(x => x.PRId)./*Take(300).*/ToList();
                 return PartialView("DashBoardPrMstList", PrMst);
             } else
             {
-                var PrMst = db.PR_Mst.Where(x => x.StatId != 1 && x.StatId != 2).OrderByDescending(x => x.PRId).Take(300).ToList();
+                var PrMst = db.PR_Mst.Where(x => x.StatId != 1 && x.StatId != 2).OrderByDescending(x => x.PRId)./*Take(300).*/ToList();
                 return PartialView("DashBoardPrMstList", PrMst);
             }           
 
@@ -744,9 +744,10 @@ namespace PurchaseWeb_2.Controllers
             if (userdtls.Psn_id == 7)
             {
                 PrMstList = db.PR_Mst
-                    .Where(x => x.StatId != 9 && x.DeActiveFlag != true)
+                    .Where(x => x.StatId != 9 && x.DeActiveFlag != true )
                     .OrderByDescending(x => x.PRId)
                     .ToList();
+
             }
 
             return PartialView("PrMstList", PrMstList);
@@ -2436,10 +2437,18 @@ namespace PurchaseWeb_2.Controllers
                 .ToList();
             ViewBag.vendorlist = vendorlist;
 
-            var edtVendor = dbDom1.APVENs
+            if(purDetail.VendorCode != "0")
+            {
+                var edtVendor = dbDom1.APVENs
                 .Where(x => x.SWACTV == 1 && x.VENDORID == purDetail.VendorCode)
                 .FirstOrDefault();
-            ViewBag.VendorId = edtVendor.VENDORID;
+                ViewBag.VendorId = edtVendor.VENDORID;
+            }
+            else
+            {
+                ViewBag.VendorId = purDetail.VendorCode;
+            }
+            
 
             return PartialView("EditPurList4Form", purDetail);
         }

@@ -18,25 +18,43 @@
                 <div class="form-group">
                     <label class="control-label col-md-10">Vendor</label>
                     <div class="custom-control custom-switch">
-                        &nbsp; <input type="checkbox" class="custom-control-input" id="swNewVendor" onchange="swNewVendorChg()" />
+                        &nbsp;
+                        @if (ViewBag.VendorId == "0")
+                        {
+                            <input type="checkbox" class="custom-control-input" id="swNewVendor" onchange="swNewVendorChg()" checked />
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="custom-control-input" id="swNewVendor" onchange="swNewVendorChg()" />
+                        }
+
                         <label class="custom-control-label" for="swNewVendor">Vendor not in the list?</label>
                     </div>
                     <div class="col-md-10">
                         <div id="divVendorList">
-                            <select class="form-control-border" id="VendorCode" name="VendorCode" onchange="vendorchg(this.value)">
-                                <option value="">Select option</option>
-                                @foreach (var vendor in ViewBag.vendorlist)
-                                {
-                                    if ( vendor.VENDORID == ViewBag.VendorId)
+                            @if (ViewBag.VendorId == "0")
+                            {
+                                <input type="hidden" name="VendorCode" id="VendorCode" value="0" />
+                                <input type="text" name="VendorName" id="VendorName" class="form-control" value="@Model.VendorName" />
+                            }
+                            else
+                            {
+                                <select class="form-control-border" id="VendorCode" name="VendorCode" onchange="vendorchg(this.value)">
+                                    <option value="">Select option</option>
+                                    @foreach (var vendor in ViewBag.vendorlist)
                                     {
-                                        <option value="@vendor.VENDORID" selected>@vendor.VENDNAME</option>
+                                        if (vendor.VENDORID == ViewBag.VendorId)
+                                        {
+                                            <option value="@vendor.VENDORID" selected>@vendor.VENDNAME</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
+                                        }
                                     }
-                                    else
-                                    {
-                                        <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
-                                    }
-                                }
-                            </select>
+                                </select>
+                            }
+
                         </div>
                         @Html.ValidationMessageFor(model => model.VendorCode, "", new { @class = "text-danger" })
                     </div>

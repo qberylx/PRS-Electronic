@@ -13,6 +13,7 @@ namespace PurchaseWeb_2.Model
         //public string connectionString = @"data source=ML0001868\SQLEXPRESS; database=Domi_Pur ; Integrated Security=SSPI ";
         //SqlConnection con = new SqlConnection(@"data source=ML0001868\SQLEXPRESS; database=Domi_Pur ; Integrated Security=SSPI ");
         SqlConnection con = new SqlConnection(PurchaseWeb_2.Properties.Resources.ConnectionString);
+        
 
         //Fetch data
         public List<DropdownDepartment> FetchDepartment()

@@ -212,7 +212,7 @@
                                     @Html.DisplayFor(modelItem => item.EstCurCode)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.EstimateUnitPrice)
+                                    @String.Format("{0:N5}", item.EstimateUnitPrice)
                                 </td>
                                 <td>
                                     @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
