@@ -1,0 +1,61 @@
+﻿@model PurchaseWeb_2.ModelData.MonthlyDeptBudget
+
+@{
+    Layout = "~/Views/Shared/_LayoutPopup.cshtml";
+}
+
+@using (Ajax.BeginForm("EditBudget", "Budget", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divLstMonthDeptBudget", OnSuccess = "OnSuccessModal" }))
+{
+    <div class="modal-body">
+        @*<input type="text" name="NoOrder" id="NoOrder" value="@ViewBag.NoOrder" class="form-control" />*@
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label">Budget Code</label>
+                <input type="text" value="@Model.MonthlyBudget_Mst.BudgetCode" disabled />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Department</label>
+                <input type="text" value="@Model.MonthlyBudget_Mst.Department" disabled />
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-8">
+                <label class="form-label">Edit Initial Budget </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label">Stock</label>
+                @Html.EditorFor(model => model.StockInitial, new { htmlAttributes = new { @id = "StockInitial", @class = "form-control" , @required = "required" } })
+                @Html.ValidationMessageFor(model => model.NonStockInitial, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Non Stock</label>
+                @Html.EditorFor(model => model.NonStockInitial, new { htmlAttributes = new {  @id = "NonStockInitial", @class = "form-control", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.NonStockInitial, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label class="form-label">Remarks</label>
+                <textarea name="Remarks" id="Remarks" class="form-control" placeholder="Remark.." ></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="MDB_Id" id="MDB_Id" value="@Model.MDB_Id" />
+        <input type="hidden" name="BudgetId" id="BudgetId" value="@Model.BudgetId" />
+        <input type="hidden" name="MonthOf" id="MonthOf" value="@Model.MonthOf" />
+        <input type="hidden" name="YearOf" id="YearOf" value="@Model.YearOf" />
+        <button type="button" name="submit" class="btn btn-secondary" data-dismiss="modal" value="close" onclick="window.close();">Close</button>
+        <button type="submit" name="submit" class="btn btn-primary" value="save">Submit</button>
+    </div>
+}
+
+<script>
+    function OnSuccessModal() {
+        window.opener.updateWithNewData();
+        window.close();
+    }
+</script>

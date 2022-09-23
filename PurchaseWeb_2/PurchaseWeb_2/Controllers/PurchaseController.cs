@@ -2956,7 +2956,12 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.DepId == prMstSingle.BudgetDept && x.Month == sMonth && x.Year == sYear)
                 .FirstOrDefault();
 
-            var accDept = db.AccTypeDepts.Where(x => x.AccTypeDepID == prMstSingle.BudgetDept).FirstOrDefault();
+            var BudgetDept = prMstSingle.BudgetDept.ToString();
+            if (BudgetDept.Length < 2)
+            {
+                BudgetDept = "0" + BudgetDept;
+            }
+            var accDept = db.AccTypeDepts.Where(x => x.DeptCode == BudgetDept).FirstOrDefault();
 
             if (budgetSingle != null)
             {
