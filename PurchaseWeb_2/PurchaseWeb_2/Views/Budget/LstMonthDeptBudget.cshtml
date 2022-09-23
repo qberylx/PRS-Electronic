@@ -39,6 +39,18 @@
 
             window.open("/Budget/EditBudgetForm/" + BudgetId + "?NoOrder=0", "PopupWindow", 'width=400px,height=500px,toolbar=no,menubar=no,resizable=yes,top=' + top + ',left=' + left + '');
         }
+
+        function ShowLogBudget(BudgetId) {
+            console.log("ShowEditBudget =" + BudgetId);
+            let height = 500;
+            let width = 400;
+            // set the horizontal center of the popup window the center of the screen.
+            var left = (screen.width - width) / 2;
+            // set thevertical center of the popup window the center of the screen.
+            var top = (screen.height - height) / 2;
+
+            window.open("/Budget/LogBudgetForm/" + BudgetId + "?NoOrder=0", "PopupWindow", 'width=400px,height=500px,toolbar=no,menubar=no,resizable=yes,top=' + top + ',left=' + left + '');
+        }
     </script>
 
     <div class="card card-secondary">
@@ -121,7 +133,7 @@
                             }
                         </td>
                         <td>
-                            <button type="button" class="btn btn-info" id="@item.MDB_Id" value="@item.MDB_Id" onclick="ShowEditBudget(@item.MDB_Id )">
+                            <button type="button" class="btn btn-info" id="@item.MDB_Id" value="@item.MDB_Id" onclick="ShowEditBudget(@item.MDB_Id )" data-toggle="tooltip" data-placement="bottom" title="Edit Initial Budget">
                                 <i class="fa fa-pen-square"></i>
                             </button>
                         </td>
@@ -188,17 +200,26 @@
                         </td>
                         <td>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <button type="button" class="btn btn-success" id="@item.MDB_Id" value="@item.MDB_Id" onclick="ShowAddBudget(@item.MDB_Id )">
+                                <div class="col-md-4">
+                                    <button type="button" alt="Add Budget" class="btn btn-success" id="@item.MDB_Id" value="@item.MDB_Id" onclick="ShowAddBudget(@item.MDB_Id )" data-toggle="tooltip" data-placement="bottom" title="Additional">
                                         <i class="fa fa-plus-circle"></i>
                                     </button>
 
                                 </div>
-                                <div class="col-md-6">
-                                    <button type="button" class="btn btn-danger" id="@item.MDB_Id" value="@item.MDB_Id" onclick="ShowMinusBudget(@item.MDB_Id )">
+                                <div class="col-md-4">
+                                    <button type="button" alt="Consumption Budget" class="btn btn-danger" id="@item.MDB_Id" value="@item.MDB_Id" onclick="ShowMinusBudget(@item.MDB_Id )" data-toggle="tooltip" data-placement="bottom" title="Consumption">
                                         <i class="fa fa-minus-circle"></i>
                                     </button>
                                 </div>
+
+                                <div class="col-md-4">
+                                    <button type="button" alt="View Budget Log" class="btn btn-info" id="@item.MDB_Id" value="@item.MDB_Id" @*onclick="ShowLogBudget(@item.MDB_Id )"*@  onclick="location.href = '/Budget/LogBudgetForm/@item.MDB_Id?NoOrder=0';" data-toggle="tooltip" data-placement="bottom" title="Budget Log">
+                                        <i class="fa fa-sticky-note"></i>
+                                    </button>
+                                </div>
+
+                                
+                                
 
                             </div>
                         </td>
@@ -211,6 +232,10 @@
     </div>
 
     <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
     window.updateWithNewData = function () {
         
         $.ajax({

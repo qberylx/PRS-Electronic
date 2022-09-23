@@ -3121,6 +3121,14 @@ namespace PurchaseWeb_2.Controllers
             var AccCode = AccTypeExpensesID + "-" + AccTypeDivId + "-" + AccTypeDepID + "-" + AccCCLvl1ID + "-" + AccCCLvl2ID;
             var ATDepID = db.AccTypeDepts.Where(x => x.DeptCode == AccTypeDepID).FirstOrDefault();
 
+            //check if the MonthlyDeptBudget is null . 
+            // if null create list
+            var MonthlyDeptBudgetLst = db.MonthlyDeptBudgets.Where(x => x.MonthOf == DateTime.Now.Month && x.YearOf == DateTime.Now.Year ).ToList();
+            if (MonthlyDeptBudgetLst == null || MonthlyDeptBudgetLst.Count() == 0 )
+            {
+                var LstMonthDeptBudget = db.SP_MonthlyDeptBudget(DateTime.Now.Month, DateTime.Now.Year).ToList();
+            }
+
             var PrMst = db.PR_Mst.Where(x => x.PRId == PrMStId).FirstOrDefault();
             TempData["alertAssetNo"] = "";
 

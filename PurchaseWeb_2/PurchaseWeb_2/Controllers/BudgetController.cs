@@ -1224,7 +1224,7 @@ namespace PurchaseWeb_2.Controllers
             {
                 ModifiedBy = Session["Username"].ToString(),
                 ModifiedOn = DateTime.Now,
-                ActionBtn = "Additional ",
+                ActionBtn = "Edit Initial ",
                 ColumnStr = "StockInitial | NonStockInitial | BalanceStock | BalanceNonStock ",
                 ValueStr = monthlyDept.StockInitial + "|" + monthlyDept.NonStockInitial + "|" + dBalanceStock + "|" + dBalanceNonStock,
                 MDB_Id = monthlyDept.MDB_Id,
@@ -1236,6 +1236,16 @@ namespace PurchaseWeb_2.Controllers
 
             //return RedirectToAction("LstMonthDeptBudget", "Budget", new { seltMonth = monthlyDept.MonthOf , seltYear = monthlyDept.YearOf });
             return null;
+        }
+
+        public ActionResult LogBudgetForm(int Id, int NoOrder)
+        {
+            var budgetLog = db.AuditBudget_log.Where(x => x.MDB_Id == Id)
+                .OrderByDescending(r=>r.AuditBudget_id)
+                .ToList();
+            ViewBag.NoOrder = NoOrder;
+
+            return View("LogBudgetForm", budgetLog);
         }
 
         public ActionResult MonthlyDeptBudgetRpt()

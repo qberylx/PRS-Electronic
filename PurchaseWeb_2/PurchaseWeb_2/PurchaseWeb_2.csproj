@@ -2669,6 +2669,7 @@
     <Content Include="Views\Purchase\PRDtlsAttachment.cshtml" />
     <Content Include="Views\Purchase\RejectPRbySourcingForm.cshtml" />
     <Content Include="Views\Budget\EditBudgetForm.cshtml" />
+    <Content Include="Views\Budget\LogBudgetForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

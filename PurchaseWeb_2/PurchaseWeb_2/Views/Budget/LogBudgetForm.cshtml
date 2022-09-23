@@ -1,0 +1,60 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.AuditBudget_log>
+
+@{
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>Log Budget </h2>
+
+<tr>
+    <td>
+        <button onclick="history.back()" class="btn btn-primary">Back</button>
+    </td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+</tr>
+<br />
+<br />
+<table class="table table-sm table-bordered table-striped table-info">
+    <tr>
+        <th>
+            No
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            User Name
+        </th>
+        <th>
+            Action
+        </th>
+        <th>
+            Remarks
+        </th>
+    </tr>
+    @{ int i = 0;}
+    @foreach (var adt in Model)
+    {
+        i++;
+        <tr>
+            <td>
+                @i
+            </td>
+            <td>
+                @{ DateTime auditDate = (DateTime)adt.ModifiedOn;  }
+                @auditDate.ToString("dd/MM/yyyy")
+            </td>
+            <td>
+                @adt.ModifiedBy
+            </td>
+            <td>
+                @adt.ActionBtn
+            </td>
+            <td>
+                @adt.Remarks
+            </td>
+        </tr>
+    }
+</table>
