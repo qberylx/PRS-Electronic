@@ -55,7 +55,15 @@
                                         <span>Budget Balance : No Budget </span>
                                     } else
                                     {
-                                        <span>Budget Balance : RM @ViewBag.chkBudgetBal</span>
+                                        if (ViewBag.chkBudgetBal == "0.00")
+                                        {
+                                            <strong style="color:red"><span>Budget Balance : RM @ViewBag.chkBudgetBal</span></strong>
+                                        }
+                                        else
+                                        {
+                                            <span>Budget Balance : RM @ViewBag.chkBudgetBal</span>
+                                        }
+                                        
                                     }
                                     
                                     
