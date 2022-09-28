@@ -44,7 +44,12 @@
                             <div class="col-md-4">
                                 <!--PR Account-->
                                 <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode) <br />
-                                <strong>Account Name :</strong>@ViewBag.ExpenseName
+                                <strong>Account Name :</strong>@ViewBag.ExpenseName <br />
+                                @{bool BoolBudgetSkipFlag = Model.BudgetSkipFlag != true ? false : true ; }
+                                @if (BoolBudgetSkipFlag)
+                                {
+                                    <strong>Budget Skip :</strong><a>Yes</a>
+                                }
                                 
                             </div>
                         }

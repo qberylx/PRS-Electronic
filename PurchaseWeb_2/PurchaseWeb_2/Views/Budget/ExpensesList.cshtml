@@ -26,6 +26,9 @@
                 IC Category (Stockable)
             </td>
             <td>
+                Skippable
+            </td>
+            <td>
 
             </td>
         </tr>
@@ -51,6 +54,14 @@
                 </td>
                 <td>
                     @item.IC_CategoryCode
+                </td>
+                <td>
+                    @if (item.SkipFlag == true)
+                    {
+                        <span>YES</span>
+                    }
+                    
+
                 </td>
                 
                 <td>

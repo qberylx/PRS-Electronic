@@ -208,6 +208,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="ModifiedBy" Type="varchar" MaxLength="100" />
           <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="SkipFlag" Type="bit" />
         </EntityType>
         <EntityType Name="MonthlyBudget_Mst">
           <Key>
@@ -436,6 +437,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="RejectCommentClerk" Type="varchar(max)" />
           <Property Name="RejectCommentClerktoUser" Type="varchar(max)" />
           <Property Name="SourcingComment" Type="varchar(max)" />
+          <Property Name="BudgetSkipFlag" Type="bit" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -1666,6 +1668,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="RejectCommentClerk" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="RejectCommentClerktoUser" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="SourcingComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="BudgetSkipFlag" Type="Boolean" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -2242,6 +2245,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="Section" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Area" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Expenses" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SkipFlag" Type="Boolean" />
         </EntityType>
         <EntityType Name="MonthlyBudget_Mst">
           <Key>
@@ -2620,6 +2624,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="BudgetSkipFlag" ColumnName="BudgetSkipFlag" />
                 <ScalarProperty Name="SourcingComment" ColumnName="SourcingComment" />
                 <ScalarProperty Name="RejectCommentClerktoUser" ColumnName="RejectCommentClerktoUser" />
                 <ScalarProperty Name="RejectCommentClerk" ColumnName="RejectCommentClerk" />
@@ -3017,6 +3022,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="MonthlyBudget_Expense">
             <EntityTypeMapping TypeName="Domi_PurModel.MonthlyBudget_Expense">
               <MappingFragment StoreEntitySet="MonthlyBudget_Expense">
+                <ScalarProperty Name="SkipFlag" ColumnName="SkipFlag" />
                 <ScalarProperty Name="Expenses" ColumnName="Expenses" />
                 <ScalarProperty Name="Area" ColumnName="Area" />
                 <ScalarProperty Name="Section" ColumnName="Section" />

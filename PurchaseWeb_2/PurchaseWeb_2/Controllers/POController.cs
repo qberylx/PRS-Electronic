@@ -163,7 +163,7 @@ namespace PurchaseWeb_2.Controllers
                 .SingleOrDefault();
                 if (PrMst != null)
                 {
-                    if (PrMst.PrGroupType1.CPRFFlag == false)
+                    if (PrMst.PrGroupType1.CPRFFlag == false && PrMst.BudgetSkipFlag != true)
                     {
                         var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
                     }
@@ -225,7 +225,7 @@ namespace PurchaseWeb_2.Controllers
                 .SingleOrDefault();
                 if (PrMst != null)
                 {
-                    if (PrMst.PrGroupType1.CPRFFlag == false)
+                    if (PrMst.PrGroupType1.CPRFFlag == false && PrMst.BudgetSkipFlag != true)
                     {
                         var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
                     }

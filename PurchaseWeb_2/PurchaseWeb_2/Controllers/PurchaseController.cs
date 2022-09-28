@@ -423,20 +423,23 @@ namespace PurchaseWeb_2.Controllers
             //check if PR using budget dept 
             if (PrMst.PrGroupType1.CPRFFlag == false && PrMst.PRTypeId == 4)
             {
-                //check account code budget for accountcode not null
-                var TotalPr = PrMst.PR_Details.Sum(x => x.EstTotalPrice * (x.EstCurExch ?? 1));
-                //check if pr request date is there , if not use current month and year
-                if (PrMst.RequestDate == null)
+                //if skip budget laf is true skip the checking
+                if (PrMst.BudgetSkipFlag != true)
                 {
-                    ObjectParameter PassFlag = new ObjectParameter("PassFlag", typeof(int));
-                    var chkPassBudget = db.SP_ChkDeptBudgetSendToHOD(DateTime.Now.Month, DateTime.Now.Year, PrMst.AccountCode, TotalPr, PassFlag).FirstOrDefault();
-                    
-                    if (chkPassBudget == 0)
+                    var TotalPr = PrMst.PR_Details.Sum(x => x.EstTotalPrice * (x.EstCurExch ?? 1));
+
+                    if (PrMst.RequestDate == null)
                     {
-                        this.AddNotification("Please note that your department budget is not enough . <br/> Please contact Purchasing Department .", NotificationType.ERROR);
-                        return View("PurRequest");
+                        ObjectParameter PassFlag = new ObjectParameter("PassFlag", typeof(int));
+                        var chkPassBudget = db.SP_ChkDeptBudgetSendToHOD(DateTime.Now.Month, DateTime.Now.Year, PrMst.AccountCode, TotalPr, PassFlag).FirstOrDefault();
+
+                        if (chkPassBudget == 0)
+                        {
+                            this.AddNotification("Please note that your department budget is not enough . <br/> Please contact Purchasing Department .", NotificationType.ERROR);
+                            return View("PurRequest");
+                        }
                     }
-                }
+                }                
             }
 
             //update statid = 3 (Pending Approval HOD)
@@ -1395,6 +1398,36 @@ namespace PurchaseWeb_2.Controllers
             return RedirectToAction("AddPurDtls", "Purchase", new { PrMstId = Id });
         }
 
+        public ActionResult BudgetSkipChange(int PrMstId , string BudgetSkip)
+        {
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+            
+            if (PrMst != null)
+            {
+                PrMst.BudgetSkipFlag = bool.Parse(BudgetSkip);
+                db.SaveChanges();
+
+                //save in log
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Session["Username"].ToString(),
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "BudgetSkipFlag |  ",
+                    ValueStr = BudgetSkip + "|",
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "Budget Skip change to "+ BudgetSkip
+
+                });
+                db.SaveChanges();
+
+            }
+            return null;
+        }
+
         //Show purchase master selected for reference
         public ActionResult PurMstSelected(int PrMstId, int PrGroup)
         {
@@ -1416,6 +1449,8 @@ namespace PurchaseWeb_2.Controllers
 
             //check budget balance from AccountCode saved
             ViewBag.chkBudgetBal = "";
+            ViewBag.BudgetSkipFlag = false;
+            ViewBag.chkSkipFlag = false;
             if (purMstr.AccountCode != null)
             {
                 //check if pr request date is there , if not use current month and year
@@ -1436,6 +1471,19 @@ namespace PurchaseWeb_2.Controllers
                     ViewBag.chkBudgetBal = Convert.ToString(chkBudgetBal);
 
                 }
+
+                // get skip flag
+                if (purMstr.BudgetSkipFlag != null)
+                {
+                    ViewBag.BudgetSkipFlag = purMstr.BudgetSkipFlag;
+                }
+                
+                var chkSkipFlag = db.MonthlyBudget_Expense.Where(x => x.ExpenseString == purMstr.AccountCode.Replace("-", "") && x.DeleteFlag != true).FirstOrDefault();
+                if (chkSkipFlag != null)
+                {
+                    ViewBag.chkSkipFlag = chkSkipFlag.SkipFlag;
+                }
+                
                 
             }
             
@@ -1470,6 +1518,23 @@ namespace PurchaseWeb_2.Controllers
 
             ViewBag.PrMstId = PrMstId;
             ViewBag.PrGroup = PrGroup;
+
+            var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+            ViewBag.SkipFlag = false;
+            if (prMst.AccountCode != null)
+            {
+                var chkSkipFlag = db.MonthlyBudget_Expense.Where(x => x.ExpenseString == prMst.AccountCode.Replace("-", "") && x.DeleteFlag != true).FirstOrDefault();
+                if (chkSkipFlag != null)
+                {
+                    if (chkSkipFlag.SkipFlag != null)
+                    {
+                        ViewBag.SkipFlag = chkSkipFlag.SkipFlag;
+                    }                    
+                }
+            }
+            ViewBag.SkipFlag = false;
+
+
 
             return PartialView("AccountNoForm");
         }
@@ -3116,7 +3181,7 @@ namespace PurchaseWeb_2.Controllers
         }
 
         public ActionResult GetAccountNo(int PrMStId, string AccTypeExpensesID, string AccTypeDivId, string AccTypeDepID, string AccCCLvl1ID, 
-            string AccCCLvl2ID, int NonProductflag, int AssetFlag, string AssetNo, int PrGroup)
+            string AccCCLvl2ID, int NonProductflag, int AssetFlag, string AssetNo, int PrGroup, int BudgetSkipflag)
         {
             var AccCode = AccTypeExpensesID + "-" + AccTypeDivId + "-" + AccTypeDepID + "-" + AccCCLvl1ID + "-" + AccCCLvl2ID;
             var ATDepID = db.AccTypeDepts.Where(x => x.DeptCode == AccTypeDepID).FirstOrDefault();
@@ -3131,6 +3196,12 @@ namespace PurchaseWeb_2.Controllers
 
             var PrMst = db.PR_Mst.Where(x => x.PRId == PrMStId).FirstOrDefault();
             TempData["alertAssetNo"] = "";
+
+            bool BoolSkipflag = false;
+            if (BudgetSkipflag == 1)
+            {
+                BoolSkipflag = true;
+            }
 
             //check if asset no required or not
             if (NonProductflag == 1)
@@ -3149,6 +3220,7 @@ namespace PurchaseWeb_2.Controllers
                         PrMst.AssetFlag     = AssetFlag;
                         PrMst.AssetNo       = AssetNo;
                         PrMst.BudgetDept    = ATDepID.AccTypeDepID;
+                        //PrMst.BudgetSkipFlag = BoolSkipflag;
                         db.SaveChanges();
                     }
 
@@ -3167,7 +3239,8 @@ namespace PurchaseWeb_2.Controllers
                         "ItemNo      |"+
                         "AssetFlag   |"+
                         "AssetNo     |"+
-                        "BudgetDept  |",
+                        "BudgetDept  |"+
+                        "BudgetSkipFlag|",
                         
                         ValueStr = 
                         AccCode +"|"+
@@ -3175,7 +3248,8 @@ namespace PurchaseWeb_2.Controllers
                         "CAPEX" +"|"+
                         AssetFlag +"|"+
                         AssetNo +"|"+
-                        ATDepID.AccTypeDepID + "|",
+                        ATDepID.AccTypeDepID + "|"+
+                        BoolSkipflag + "|",
                         
                         PRId = PrMStId,
                         PRDtlsId = 0,
@@ -3196,6 +3270,7 @@ namespace PurchaseWeb_2.Controllers
                         PrMst.AccountCode = AccCode;
                         PrMst.BudgetDept = ATDepID.AccTypeDepID;
                         PrMst.AssetFlag = AssetFlag;
+                        //PrMst.BudgetSkipFlag = BoolSkipflag;
                         db.SaveChanges();
 
                         string Username = (string)Session["Username"];
@@ -3209,11 +3284,13 @@ namespace PurchaseWeb_2.Controllers
 
                             ColumnStr =
                             "AccountCode |" +
-                            "BudgetDept  |",
+                            "BudgetDept  |" +
+                            "BudgetSkipFlag|",
 
                             ValueStr =
                             AccCode + "|" +
-                            ATDepID.AccTypeDepID + "|",
+                            ATDepID.AccTypeDepID + "|" +
+                            BoolSkipflag + "|",
 
                             PRId = PrMStId,
                             PRDtlsId = 0,
@@ -3232,6 +3309,7 @@ namespace PurchaseWeb_2.Controllers
                         PrMst.AssetFlag = AssetFlag;
                         PrMst.AssetNo = AssetNo;
                         PrMst.BudgetDept = ATDepID.AccTypeDepID;
+                        //PrMst.BudgetSkipFlag = BoolSkipflag;
                         db.SaveChanges();
 
                         string Username = (string)Session["Username"];
@@ -3248,14 +3326,16 @@ namespace PurchaseWeb_2.Controllers
                             "ItemNo      |" +
                             "AssetFlag   |" +
                             "AssetNo     |" +
-                            "BudgetDept  |",
+                            "BudgetDept  |" +
+                            "BudgetSkipFlag |",
 
                             ValueStr =
                             AccCode + "|" +
                             "CAPEX" + "|" +
                             AssetFlag + "|" +
                             AssetNo + "|" +
-                            ATDepID.AccTypeDepID + "|",
+                            ATDepID.AccTypeDepID + "|" +
+                            BoolSkipflag + "|",
 
                             PRId = PrMStId,
                             PRDtlsId = 0,
@@ -3334,23 +3414,29 @@ namespace PurchaseWeb_2.Controllers
                     // if budget not enuf , error notification
                     if ( PrMst.PrGroupType1.CPRFFlag == false)
                     {
-                        if(PrMst.AccountCode == null)
+                        // check if budget skip true
+                        bool boolBudgetSkipFlag = (bool)PrMst.BudgetSkipFlag == true ? true : false;
+                        if (!boolBudgetSkipFlag)
                         {
-                            this.AddNotification("AccountCode is null please check Account Code for budget deduction", NotificationType.ERROR);
-                            Session["groupType"] = PrMst.PrGroupType1.GroupId;
-                            return View("PRProsesList");
-                        }
-                        else
-                        {
-                            var chkDepBudget = db.SP_ChkDeptBudgetSendToPurHOD(PrMst.PRId, Convert.ToString(Session["Username"])).FirstOrDefault();
-                            
-                            if(chkDepBudget.PassFlag == 0)
+                            if (PrMst.AccountCode == null)
                             {
-                                this.AddNotification(chkDepBudget.Remarks, NotificationType.ERROR);
+                                this.AddNotification("AccountCode is null please check Account Code for budget deduction", NotificationType.ERROR);
                                 Session["groupType"] = PrMst.PrGroupType1.GroupId;
                                 return View("PRProsesList");
                             }
+                            else
+                            {
+                                var chkDepBudget = db.SP_ChkDeptBudgetSendToPurHOD(PrMst.PRId, Convert.ToString(Session["Username"])).FirstOrDefault();
+
+                                if (chkDepBudget.PassFlag == 0)
+                                {
+                                    this.AddNotification(chkDepBudget.Remarks, NotificationType.ERROR);
+                                    Session["groupType"] = PrMst.PrGroupType1.GroupId;
+                                    return View("PRProsesList");
+                                }
+                            }
                         }
+                        
                     }
 
                     //check if all item in pr dtls have winner reject if there are
@@ -4560,7 +4646,7 @@ namespace PurchaseWeb_2.Controllers
                 .FirstOrDefault();
             if (PrMst != null)
             {
-                if (PrMst.PrGroupType1.CPRFFlag == false)
+                if (PrMst.PrGroupType1.CPRFFlag == false && PrMst.BudgetSkipFlag != true)
                 {
                     var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
                 }
@@ -4766,7 +4852,7 @@ namespace PurchaseWeb_2.Controllers
                 .FirstOrDefault();
             if (PrMst != null)
             {
-                if (PrMst.PrGroupType1.CPRFFlag == false)
+                if (PrMst.PrGroupType1.CPRFFlag == false && PrMst.BudgetSkipFlag != true)
                 {
                     var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
                 }
@@ -5063,6 +5149,35 @@ namespace PurchaseWeb_2.Controllers
                 ViewBag.ExpenseName = "";
             }
 
+            ViewBag.chkBudgetBal = "";
+            ViewBag.BudgetSkipFlag = "";
+            if (purMstr.AccountCode != null)
+            {
+                //check if pr request date is there , if not use current month and year
+                if (purMstr.RequestDate == null)
+                {
+                    ObjectParameter DeptBudgetBalance = new ObjectParameter("DeptBudgetBalance", typeof(string));
+                    var chkBudgetBal = db.SP_ChkDeptBudgetBalance(DateTime.Now.Month, DateTime.Now.Year, purMstr.AccountCode, DeptBudgetBalance).FirstOrDefault();
+                    ViewBag.chkBudgetBal = Convert.ToString(chkBudgetBal);
+                }
+                else
+                {
+                    DateTime RequestDate = (DateTime)purMstr.RequestDate;
+
+                    string strMonthOf = RequestDate.ToString("MM");
+                    string strYearOf = RequestDate.ToString("yyyy");
+
+                    ObjectParameter DeptBudgetBalance = new ObjectParameter("DeptBudgetBalance", typeof(string));
+                    var chkBudgetBal = db.SP_ChkDeptBudgetBalance(int.Parse(strMonthOf), int.Parse(strYearOf), purMstr.AccountCode, DeptBudgetBalance).FirstOrDefault();
+                    ViewBag.chkBudgetBal = Convert.ToString(chkBudgetBal);
+
+                }
+
+                // get skip flag
+                ViewBag.BudgetSkipFlag = purMstr.BudgetSkipFlag;
+                
+            }
+
             //var AccExpList = db.AccTypeExpenses.ToList();
             //var DivList = db.AccTypeDivisions.ToList();
             //var DptList = db.AccTypeDepts.ToList();
@@ -5108,8 +5223,8 @@ namespace PurchaseWeb_2.Controllers
                 ModifiedBy = Session["Username"].ToString(),
                 ModifiedOn = DateTime.Now,
                 ActionBtn = "UPDATE",
-                ColumnStr = "AccountCode ",
-                ValueStr = AccountCode,
+                ColumnStr = "AccountCode |  ",
+                ValueStr = AccountCode +"|",
                 PRId = PrMstId,
                 PRDtlsId = 0,
                 Remarks = "Edit PR Account Code "

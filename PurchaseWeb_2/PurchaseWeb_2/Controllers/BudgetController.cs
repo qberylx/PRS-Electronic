@@ -852,7 +852,8 @@ namespace PurchaseWeb_2.Controllers
                         AccountDesc = strAccDesc,
                         ExpenseString = strExpCode,
                         CreateBy = Session["Username"].ToString(),
-                        CreateDate = DateTime.Now
+                        CreateDate = DateTime.Now,
+                        SkipFlag = budget_Expense.SkipFlag
                     };
                     db.MonthlyBudget_Expense.Add(newExpenses);
                     db.SaveChanges();
@@ -864,6 +865,7 @@ namespace PurchaseWeb_2.Controllers
                     chkExpense.Section = budget_Expense.Section;
                     chkExpense.Area = budget_Expense.Area;
                     chkExpense.Expenses = budget_Expense.Expenses;
+                    chkExpense.SkipFlag = budget_Expense.SkipFlag;
                     chkExpense.DeleteFlag = false;
                     chkExpense.ModifiedBy = Session["Username"].ToString();
                     chkExpense.ModifiedDate = DateTime.Now;

@@ -56,7 +56,7 @@
                 <label class="form-check-label">Not an Asset</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="AssetFlag" value="1"  />
+                <input class="form-check-input" type="radio" name="AssetFlag" value="1" />
                 <label class="form-check-label">New Asset</label>
             </div>
             <div class="form-check">
@@ -73,7 +73,22 @@
                 <a class="text-danger">@TempData["alertAssetNo"]</a>
             }
         </div>
-        
+        @if (ViewBag.SkipFlag)
+        {
+            <div class="col-3">
+                <div class="custom-control custom-switch">
+                    <input type="hidden" id="BudgetSkipflag" name="BudgetSkipflag" value="0" />
+                    <input type="checkbox" class="custom-control-input" id="BudgetSkip" name="BudgetSkip" onchange="BudgetSkipChange()" />
+                    <label class="custom-control-label" for="BudgetSkip">Budget Skip?</label>
+                </div>
+            </div>
+        }
+        else
+        {
+            <input type="hidden" id="BudgetSkipflag" name="BudgetSkipflag" value="0" />
+        }
+
+
     </div>
     <br />
     <div class="row">
@@ -93,6 +108,14 @@
             $("#NonProductflag").val("1");
         } else {
             $("#NonProductflag").val("0");
+        }
+    }
+
+    function BudgetSkipChange() {
+        if ($("#BudgetSkip").is(":checked")) {
+            $("#BudgetSkipflag").val("1");
+        } else {
+            $("#BudgetSkipflag").val("0");
         }
     }
 

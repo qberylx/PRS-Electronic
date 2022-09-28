@@ -55,7 +55,8 @@
                                         <span>Budget Balance : No Budget </span>
                                     } else
                                     {
-                                        if (ViewBag.chkBudgetBal == "0.00")
+                                        var bal = decimal.Parse(ViewBag.chkBudgetBal);
+                                        if (bal < 0.00M )
                                         {
                                             <strong style="color:red"><span>Budget Balance : RM @ViewBag.chkBudgetBal</span></strong>
                                         }
@@ -65,6 +66,23 @@
                                         }
                                         
                                     }
+                                    <br />
+                                    @if (ViewBag.chkSkipFlag)
+                                    {
+                                        <strong>Budget Skip :</strong>
+                                        <select class="form-select" onchange="BudgetSkipChange(@Model.PRId);" id="budgetSkip" name="budgetSkip">
+                                            @if (ViewBag.BudgetSkipFlag)
+                                            {
+                                                <option value="true" selected>Yes</option>
+                                                <option value="false">No</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="true" >Yes</option>
+                                                <option value="false" selected>No</option>
+                                            }
+                                        </select>
+                                    } 
                                     
                                     
                                     
@@ -115,6 +133,8 @@
                             <div class="col-3">
                                 <strong>Asset No: </strong>@Model.AssetNo
                             </div>
+                            
+
                         </div>
 
                     }
@@ -238,6 +258,27 @@
 </div>
 
 <script>
+    function BudgetSkipChange(Prid) {
+        var budgetSelection = $("#budgetSkip").val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("BudgetSkipChange", "Purchase")",
+            data: '{PrMstId: "' + Prid + '" , BudgetSkip: "' + budgetSelection +'" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                //$('#divPRDtlsForm').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+
     function CSNonProductChange() {
         if ($("#CSNonProduct").is(":checked")) {
             $("#NonProductflag").val("1");
@@ -275,7 +316,7 @@
         }
     }
 
-   
+
 </script>
 
 <script>

@@ -49,8 +49,30 @@
                                 <div class="col-md-4">
                                     <!--PR Account-->
                                     <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode) <br />                                    
-                                    <strong>Account Name :</strong>@ViewBag.ExpenseName
-                                    <br />
+                                    <strong>Account Name :</strong>@ViewBag.ExpenseName    <br />
+                                    @if (ViewBag.chkBudgetBal == "99.00") { 
+                                        <strong>Budget Balance :</strong><a>No Budget</a> <br />
+                                    }else {
+                                        <strong>Budget Balance :</strong>@ViewBag.chkBudgetBal <br />
+                                    }
+                                    @if (Model.BudgetSkipFlag != null)
+                                    {
+                                        <strong>Budget Skip :</strong>
+                                        <select class="form-select" onchange="BudgetSkipChange(@Model.PRId);" id="budgetSkip" name="budgetSkip">
+                                            @{ bool boolBudgetSkipFlag = Model.BudgetSkipFlag == true ? true : false;}
+                                            @if (boolBudgetSkipFlag)
+                                            {
+                                                <option value="true" selected>Yes</option>
+                                                <option value="false">No</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="true">Yes</option>
+                                                <option value="false" selected>No</option>
+                                            }
+                                        </select>
+                                    }
+                                    
                                     @using (Ajax.BeginForm("editAccountCode","Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurChaseMasterSelected" }))
                                     {
                                         
@@ -215,6 +237,26 @@
 </div>
 
 <script>
+    function BudgetSkipChange(Prid) {
+        var budgetSelection = $("#budgetSkip").val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("BudgetSkipChange", "Purchase")",
+            data: '{PrMstId: "' + Prid + '" , BudgetSkip: "' + budgetSelection +'" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                //$('#divPRDtlsForm').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
     function CSNonProductChange() {
         if ($("#CSNonProduct").is(":checked")) {
             $("#NonProductflag").val("1");
