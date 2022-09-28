@@ -19,7 +19,7 @@
     <div class="card-body  p-0">
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-head-fixed text-nowrap table-striped table-responsive table-sm" id="tableA">
+                <table class="table table-head-fixed table-striped table-responsive table-sm" id="tableA">
                     <thead>
                         <tr>
                             <th style="display:none">
@@ -31,6 +31,9 @@
                             </th>
                             <th>
                                 PO No
+                            </th>
+                            <th>
+                                Description
                             </th>
                             <th>
                                 Requestor
@@ -76,6 +79,20 @@
                                 @foreach (var PoNo in PoNoLst.Select(x => x.NoPo).Distinct())
                                 {
                                     <a>@PoNo </a> <br />
+                                }
+
+                            </td>
+                            <td>
+                                @if (item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault() != null)
+                                {
+                                    if (item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault().Count() >= 60)
+                                    {
+                                        <span style="white-space: pre-line">@item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault().Substring(0, 60) </span>
+                                    }
+                                    else
+                                    {
+                                        <span style="white-space: pre-line">@item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault() </span>
+                                    }
                                 }
 
                             </td>

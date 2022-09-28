@@ -19,10 +19,13 @@
     <div class="card-body  p-0">
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-head-fixed text-nowrap table-striped table-responsive table-sm" id="tableA">
+                <table class="table table-head-fixed  table-striped table-sm" id="tableA" width="100%">
                     <tr>
                         <th>
                             PR No
+                        </th>
+                        <th>
+                            Description
                         </th>
                         <th>
                             Requestor
@@ -50,6 +53,8 @@
                         </th>
 
                         <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     @{ String status = "false";
                         String showFlag = "d-none";
@@ -60,6 +65,9 @@
                         <tr data-widget="expandable-table" aria-expanded="@status">
                             <td>
                                 @Html.DisplayFor(modelItem => item.PRNo)
+                            </td>
+                            <td>
+                                <span style="white-space: pre-line">@item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault() </span>
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Usr_mst.Username)
@@ -90,14 +98,15 @@
                             {
                                 <td>
                                     @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
-
+                                </td>
+                                <td>
                                     @Html.ActionLink("Export PR Dtls (Excel)", "ExportPRDtlstoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn bg-olive" })
-
+                                </td>
+                                <td>
                                     @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
                                     {
                                         @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
                                     }
-
                                 </td>
                             }
                             else
@@ -132,10 +141,17 @@
 
                                     }
 
+                                    
+
+                                </td>
+
+                                <td>
                                     @Html.ActionLink("Send", "PRhod", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
 
                                     @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger", onclick = "return confirm('Are you sure you wish to delete this PR?');" })
 
+                                </td>
+                                <td>
                                     @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
 
                                     @Html.ActionLink("Export PR Dtls (Excel)", "ExportPRDtlstoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn bg-olive" })
@@ -144,9 +160,6 @@
                                     {
                                         @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
                                     }
-
-
-
                                 </td>
                             }
 

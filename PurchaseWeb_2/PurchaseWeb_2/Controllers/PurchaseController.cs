@@ -1448,7 +1448,7 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.CCLvl2 = CCLvl2;
 
             //check budget balance from AccountCode saved
-            ViewBag.chkBudgetBal = "";
+            ViewBag.chkBudgetBal = "0.00";
             ViewBag.BudgetSkipFlag = false;
             ViewBag.chkSkipFlag = false;
             if (purMstr.AccountCode != null)

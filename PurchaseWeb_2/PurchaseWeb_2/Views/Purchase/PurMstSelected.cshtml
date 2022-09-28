@@ -56,7 +56,7 @@
                                     } else
                                     {
                                         var bal = decimal.Parse(ViewBag.chkBudgetBal);
-                                        if (bal < 0.00M )
+                                        if (bal <= 0.00M )
                                         {
                                             <strong style="color:red"><span>Budget Balance : RM @ViewBag.chkBudgetBal</span></strong>
                                         }
