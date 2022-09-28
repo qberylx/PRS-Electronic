@@ -55,6 +55,9 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     @{ String status = "false";
                         String showFlag = "d-none";
@@ -67,7 +70,18 @@
                                 @Html.DisplayFor(modelItem => item.PRNo)
                             </td>
                             <td>
-                                <span style="white-space: pre-line">@item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault() </span>
+                                @if (item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault() != null)
+                                {
+                                    if (item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault().Count() >= 60)
+                                    {
+                                        <span style="white-space: pre-line">@item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault().Substring(0, 60) </span>
+                                    }
+                                    else
+                                    {
+                                        <span style="white-space: pre-line">@item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault() </span>
+                                    }
+                                }
+                                
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Usr_mst.Username)
@@ -100,7 +114,7 @@
                                     @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
                                 </td>
                                 <td>
-                                    @Html.ActionLink("Export PR Dtls (Excel)", "ExportPRDtlstoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn bg-olive" })
+                                    @Html.ActionLink("Export PR Dtls", "ExportPRDtlstoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn bg-olive" })
                                 </td>
                                 <td>
                                     @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
@@ -108,6 +122,9 @@
                                         @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
                                     }
                                 </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             }
                             else
                             {
@@ -142,20 +159,29 @@
                                     }
 
                                     
-
+                                    
                                 </td>
-
                                 <td>
                                     @Html.ActionLink("Send", "PRhod", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                                </td>
 
-                                    @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger", onclick = "return confirm('Are you sure you wish to delete this PR?');" })
+                                <td>
+                                    
+                                    @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
 
                                 </td>
                                 <td>
-                                    @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                                    @Html.ActionLink("Delete", "DelPRMst", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger", onclick = "return confirm('Are you sure you wish to delete this PR?');" })
+                                </td>
+                                
+                                <td>
+                                    
 
-                                    @Html.ActionLink("Export PR Dtls (Excel)", "ExportPRDtlstoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn bg-olive" })
+                                    @Html.ActionLink("Export PR Dtls", "ExportPRDtlstoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn bg-olive" })
 
+                                    
+                                </td>
+                                <td>
                                     @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
                                     {
                                         @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })

@@ -1428,6 +1428,27 @@ namespace PurchaseWeb_2.Controllers
             return null;
         }
 
+        public ActionResult ShowPRBudgetList(int Id)
+        {
+            var PrMst = db.PR_Mst.Where(x => x.PRId == Id).FirstOrDefault();
+            
+            DateTime StartDate = DateTime.Now.Date;
+            if (PrMst.RequestDate != null)
+            {
+                StartDate = (DateTime)PrMst.RequestDate;
+            }
+
+            StartDate = new DateTime(StartDate.Year, StartDate.Month, 1);
+            var endDate = StartDate.AddMonths(1);
+
+
+            var PrMstList = db.PR_Mst
+                .Where(x => x.AccountCode == PrMst.AccountCode && x.DeActiveFlag != true && x.BudgetSkipFlag != true && x.RequestDate >= StartDate && x.RequestDate < endDate )
+                .ToList();
+
+            return View("ShowPRBudgetList", PrMstList);
+        }
+
         //Show purchase master selected for reference
         public ActionResult PurMstSelected(int PrMstId, int PrGroup)
         {
@@ -1479,7 +1500,7 @@ namespace PurchaseWeb_2.Controllers
                 }
                 
                 var chkSkipFlag = db.MonthlyBudget_Expense.Where(x => x.ExpenseString == purMstr.AccountCode.Replace("-", "") && x.DeleteFlag != true).FirstOrDefault();
-                if (chkSkipFlag != null)
+                if (chkSkipFlag != null && chkSkipFlag.SkipFlag != null)
                 {
                     ViewBag.chkSkipFlag = chkSkipFlag.SkipFlag;
                 }
@@ -5151,6 +5172,7 @@ namespace PurchaseWeb_2.Controllers
 
             ViewBag.chkBudgetBal = "";
             ViewBag.BudgetSkipFlag = "";
+            ViewBag.chkSkipFlag = false;
             if (purMstr.AccountCode != null)
             {
                 //check if pr request date is there , if not use current month and year
@@ -5174,6 +5196,12 @@ namespace PurchaseWeb_2.Controllers
                 }
 
                 // get skip flag
+                var chkSkipFlag = db.MonthlyBudget_Expense.Where(x => x.ExpenseString == purMstr.AccountCode.Replace("-", "") && x.DeleteFlag != true).FirstOrDefault();
+                if (chkSkipFlag != null && chkSkipFlag.SkipFlag != null)
+                {
+                    ViewBag.chkSkipFlag = chkSkipFlag.SkipFlag;
+                }
+
                 ViewBag.BudgetSkipFlag = purMstr.BudgetSkipFlag;
                 
             }

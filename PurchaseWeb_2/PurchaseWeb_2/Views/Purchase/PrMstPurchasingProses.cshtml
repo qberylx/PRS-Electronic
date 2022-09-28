@@ -55,7 +55,7 @@
                                     }else {
                                         <strong>Budget Balance :</strong>@ViewBag.chkBudgetBal <br />
                                     }
-                                    @if (Model.BudgetSkipFlag != null)
+                                    @if (ViewBag.chkSkipFlag == true)
                                     {
                                         <strong>Budget Skip :</strong>
                                         <select class="form-select" onchange="BudgetSkipChange(@Model.PRId);" id="budgetSkip" name="budgetSkip">

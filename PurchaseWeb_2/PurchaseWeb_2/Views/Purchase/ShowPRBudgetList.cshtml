@@ -1,0 +1,98 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.PR_Mst>
+
+@{
+    ViewBag.Title = "ShowPRBudgetList";
+    Layout = "~/Views/Shared/_LayoutPopup.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8 col-centered">
+        <br />
+        <h3>PR List for Kod Account : @Model.Select(x => x.AccountCode).Take(1).FirstOrDefault()</h3>
+        <br />
+
+
+        <table class="table table-bordered table-head-fixed table-info table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        No
+                    </th>
+                    <th>
+                        PR No.
+                    </th>
+                    <th>
+                        Vendor Name
+                    </th>
+                    <th>
+                        Item Description
+                    </th>
+                    <th>
+                        Total (RM)
+                    </th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @{ int i = 0;}
+                @{ decimal eTot = 0.00M;}
+                @foreach (var item in Model.OrderBy(o => o.PRId))
+                {
+                    i++;
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @item.PRNo
+                        </td>
+                        <td>
+                            @foreach (var dt in item.PR_Details.Select(x=>x.VendorName).Distinct() )
+                            {
+                                @dt <br />
+                            }
+                        </td>
+                        <td>
+                            <table>
+                                @{ int j = 0;}
+                                @foreach (var dt in item.PR_Details.OrderBy(o => o.PRDtId))
+                                {
+                                    j++;
+
+                                    <tr>
+                                        <td>
+                                            @j
+                                        </td>
+                                        <td>
+                                            @dt.Description
+                                        </td>
+                                    </tr>
+
+
+                                }
+                            </table>
+                        </td>
+                        <td>
+                            @String.Format("{0:N2}", item.PR_Details.Sum(x => x.EstTotalPrice))
+                            @{ decimal DecEstTotalPrice = item.PR_Details.Sum(x => x.EstTotalPrice) ?? 0.00M  ;}
+                            @{ eTot = eTot + DecEstTotalPrice;}
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <strong>Total Amount</strong>
+                    </td>
+                    <td>
+                        @String.Format("{0:N2}", eTot )
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+

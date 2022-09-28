@@ -59,13 +59,20 @@
                                         if (bal <= 0.00M )
                                         {
                                             <strong style="color:red"><span>Budget Balance : RM @ViewBag.chkBudgetBal</span></strong>
+                                            @*<i class="fa fa-2x fa-sticky-note float-right" data-toggle="tooltip" data-placement="left" title="Budget History List"></i>*@
                                         }
                                         else
                                         {
                                             <span>Budget Balance : RM @ViewBag.chkBudgetBal</span>
+                                            @*<i class="fa fa-2x fa-sticky-note float-right" data-toggle="tooltip" data-placement="left" title="Budget History List"></i>*@
                                         }
+                                        <a data-toggle="tooltip" data-placement="left" title="Budget History List" onclick="ShowPRBudgetList(@Model.PRId)">
+                                            <i class="fa fa-2x fa-comment-dots float-right " style="color:cadetblue"></i>
+                                        </a>
+                                        
                                         
                                     }
+
                                     <br />
                                     @if (ViewBag.chkSkipFlag)
                                     {
@@ -256,6 +263,12 @@
     </div>
 
 </div>
+
+<script>
+    function ShowPRBudgetList(PrMstId) {
+        window.open("/Purchase/ShowPRBudgetList?id=" + PrMstId);
+    }
+</script>
 
 <script>
     function BudgetSkipChange(Prid) {
