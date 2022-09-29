@@ -3436,7 +3436,7 @@ namespace PurchaseWeb_2.Controllers
                     if ( PrMst.PrGroupType1.CPRFFlag == false)
                     {
                         // check if budget skip true
-                        bool boolBudgetSkipFlag = (bool)PrMst.BudgetSkipFlag == true ? true : false;
+                        bool boolBudgetSkipFlag = PrMst.BudgetSkipFlag == true ? true : false;
                         if (!boolBudgetSkipFlag)
                         {
                             if (PrMst.AccountCode == null)
@@ -5045,7 +5045,7 @@ namespace PurchaseWeb_2.Controllers
                     if (usrMst.SourcingFlag == true)
                     {
                         var PrMstList = db.PR_Mst
-                        .Where(x => x.StatId == 11 || x.StatId == 12 || x.StatId == 7 || x.StatId == 15)
+                        .Where(x => x.StatId == 11 || x.StatId == 12 || x.StatId == 7 )
                         .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                         .ToList();
                         return PartialView("PRListForPurchasingProses", PrMstList);
@@ -5063,7 +5063,7 @@ namespace PurchaseWeb_2.Controllers
                         else
                         {
                             var PrMstList = db.PR_Mst
-                            .Where(x => x.StatId == 7 || x.StatId == 11)
+                            .Where(x => x.StatId == 7 || x.StatId == 11 || x.StatId == 15)
                             .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                             .ToList();
                             return PartialView("PRListForPurchasingProses", PrMstList);

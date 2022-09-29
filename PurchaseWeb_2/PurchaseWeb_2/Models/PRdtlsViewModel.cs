@@ -25,7 +25,7 @@ namespace PurchaseWeb_2.Models
         public string Description { get; set; }
         [Required(ErrorMessage = "Please enter Dominant Part No.")]
         public string DomiPartNo { get; set; }
-        [Required(ErrorMessage = "Please enter Vendor Part No.")]
+        
         public string VendorPartNo { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         [Required(ErrorMessage = "Please enter Quantity")]

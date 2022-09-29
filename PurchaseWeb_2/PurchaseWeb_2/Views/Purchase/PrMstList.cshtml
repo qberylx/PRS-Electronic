@@ -114,12 +114,12 @@
                                     @Html.ActionLink("View", "PrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
                                 </td>
                                 <td>
-                                    @Html.ActionLink("Export PR Dtls", "ExportPRDtlstoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn bg-olive" })
+                                    @Html.ActionLink("Export", "ExportPRDtlstoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn bg-olive" })
                                 </td>
                                 <td>
                                     @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
                                     {
-                                        @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
+                                        @Html.ActionLink("Send_Email", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
                                     }
                                 </td>
                                 <td></td>
@@ -133,25 +133,25 @@
                                     {
                                         case 1:
                                             <!--<button class="btn btn-primary" onclick="location.href = '/Purchase/AddPurDtls?PrMstId=@item.PRId' ;">Add Details</button>-->
-                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtls","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtls","Purchase", new {PrMstId = item.PRId})">Add</a>
                                             break;
 
                                         case 2:
-                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType2","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType2","Purchase", new {PrMstId = item.PRId})">Add</a>
 
                                             break;
 
                                         case 3:
-                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add</a>
 
                                             break;
 
                                         case 4:
-                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType4","Purchase", new {PrMstId = item.PRId , PrGroup = item.PRGroupType})">Add Details</a>
+                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType4","Purchase", new {PrMstId = item.PRId , PrGroup = item.PRGroupType})">Add</a>
 
                                             break;
                                         case 5:
-                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add Details</a>
+                                            <a class="btn btn-primary" href="@Url.Action("AddPurDtlsType3","Purchase", new {PrMstId = item.PRId})">Add</a>
 
                                             break;
 
@@ -177,14 +177,14 @@
                                 <td>
                                     
 
-                                    @Html.ActionLink("Export PR Dtls", "ExportPRDtlstoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn bg-olive" })
+                                    @Html.ActionLink("Export", "ExportPRDtlstoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn bg-olive" })
 
                                     
                                 </td>
                                 <td>
                                     @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
                                     {
-                                        @Html.ActionLink("Send Email HOD", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
+                                        @Html.ActionLink("Send_Email", "EmailHOD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
                                     }
                                 </td>
                             }
