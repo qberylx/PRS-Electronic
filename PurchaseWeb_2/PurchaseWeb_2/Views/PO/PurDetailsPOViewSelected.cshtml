@@ -349,13 +349,13 @@
                                         @Html.DisplayFor(modelItem => Model[i].CurCode)
                                     </td>
                                     <td>
-                                        @{String strEstimateUnitPrice = String.Format("{0:n}", Model[i].EstimateUnitPrice);}
+                                        @{String strEstimateUnitPrice = String.Format("{0:N5}", Model[i].EstimateUnitPrice);}
                                         @strEstimateUnitPrice
                                         @*
                                         @Html.DisplayFor(modelItem => Model[i].EstimateUnitPrice)*@
                                     </td>
                                     <th>
-                                        @{String strUnitPrice = String.Format("{0:n}", Model[i].UnitPrice);}
+                                        @{String strUnitPrice = String.Format("{0:N5}", Model[i].UnitPrice);}
                                         @strUnitPrice
                                         
                                     </th>
@@ -442,7 +442,7 @@
                                         @{ViewBag.Currency = Model[i].CurCode;}
                                     </td>
                                     <th>
-                                        @{String strUnitPrice = String.Format("{0:n}", Model[i].UnitPrice);}
+                                        @{String strUnitPrice = String.Format("{0:N5}", Model[i].UnitPrice);}
                                         @strUnitPrice
                                     </th>
                                     <th>

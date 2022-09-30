@@ -67,7 +67,8 @@
                 }
                 else
                 {
-                    @Html.ActionLink("Return To Main PR", "PurRequest", "Purchase", null, new { @class = "btn btn-primary" })
+                    @*@Html.ActionLink("Return To Main PR", "PurRequest", "Purchase", null, new { @class = "btn btn-primary" })*@
+                    <button class="btn btn-primary" onclick="history.back();">Return To Main PR</button>
                 }
 
                 <!--Add reject with comments-->

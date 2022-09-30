@@ -582,6 +582,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="Flag_Aproval" Type="bit" />
           <Property Name="TelExt" Type="varchar" MaxLength="10" />
           <Property Name="SourcingFlag" Type="bit" />
+          <Property Name="MD_PA_Flag" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1464,6 +1465,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <NavigationProperty Name="AccTypeDept" Relationship="Domi_PurModel.FK_Usr_mst_AccTypeDept" FromRole="Usr_mst" ToRole="AccTypeDept" />
           <Property Name="SourcingFlag" Type="Boolean" />
           <Property Name="Team_id" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MD_PA_Flag" Type="Boolean" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -2521,6 +2523,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="Usr_mst">
             <EntityTypeMapping TypeName="Domi_PurModel.Usr_mst">
               <MappingFragment StoreEntitySet="Usr_mst">
+                <ScalarProperty Name="MD_PA_Flag" ColumnName="MD_PA_Flag" />
                 <ScalarProperty Name="Team_id" ColumnName="Team_id" />
                 <ScalarProperty Name="SourcingFlag" ColumnName="SourcingFlag" />
                 <ScalarProperty Name="TelExt" ColumnName="TelExt" />

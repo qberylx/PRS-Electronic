@@ -84,14 +84,14 @@
                     <td>
                         <div class="row">
                             <div class="col-md-4">
-                                
+
                                 @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                 {
                                     @currency.Max(s => s.CurCode) <br />
                                 }
                             </div>
                             <div class="col-md-8">
-                                
+
                                 @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                 {
                                     String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.TotCostWitTax));
@@ -101,17 +101,36 @@
                             </div>
                         </div>
                     </td>
-                    <td>
-                        @{String strTotAmtMyr = String.Format("{0:n2}", @item.PR_Details.Sum(s => s.TotCostWitTaxMYR));}
-                        @*item.PR_Details.Sum(s => s.TotCostWitTaxMYR)*@
-                        @strTotAmtMyr
-                    </td>
+                    @if (item.StatId == 3)
+                    {
+                        <td>
+                            @{String strTotAmtMyr = String.Format("{0:n2}", @item.PR_Details.Sum(s => s.EstTotalPrice));}
+                            @*item.PR_Details.Sum(s => s.TotCostWitTaxMYR)*@
+                            @strTotAmtMyr
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @{String strTotAmtMyr = String.Format("{0:n2}", @item.PR_Details.Sum(s => s.TotCostWitTaxMYR));}
+                            @*item.PR_Details.Sum(s => s.TotCostWitTaxMYR)*@
+                            @strTotAmtMyr
+                        </td>
+                    }
+
                     <td>
                         @Html.DisplayFor(modelItem => item.Status_Mst.Name)
                     </td>
                     <td>
-                        @*@Html.ActionLink("View", "PrHODPuchasingViewSummary", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info", @target="_blank" })*@
-                        @Html.ActionLink("View", "PrHODPuchasingView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                        @if (item.StatId == 3)
+                        {
+                            @Html.ActionLink("View", "PrView", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("View", "PrHODPuchasingView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                        }
+
                         @Html.ActionLink("Approve", "ApproveMD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
                         @Html.ActionLink("Reject", "RejectMD", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
 

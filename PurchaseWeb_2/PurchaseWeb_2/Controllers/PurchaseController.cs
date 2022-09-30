@@ -486,25 +486,46 @@ namespace PurchaseWeb_2.Controllers
             SendEmail(userEmail, subject, body,"");
 
             //hod email
-            var usrMst = db.Usr_mst
-                .Where(x => x.Dpt_id == PrMst.DepartmentId && x.Psn_id == 2 && x.Team_id == PrMst.TeamId)
-                .ToList();
-
-            
-            foreach (var Usr in usrMst)
+            // if md as HOD
+            bool blMD_PA_Flag = PrMst.Usr_mst.MD_PA_Flag != true ? false : true;
+            if (blMD_PA_Flag)
             {
-                string Subject = PrMst.PRNo + " - " + PrMst.Purpose;
+                var usrMstMD = db.Usr_mst.Where(x => x.Psn_id == 3).FirstOrDefault();
 
-                string Body = "<br/>" +
-                    "Hi " + Usr.Username + " , <br/><br/>" +
+                string SubjectMD = PrMst.PRNo + " - " + PrMst.Purpose;
+
+                string BodyMD = "<br/>" +
+                    "Hi " + usrMstMD.Username + " , <br/><br/>" +
                     "Kindly review attached PR and login to http://prs.dominant-semi.com/ to proceed. <br/>" +
                     "Or kindly reply 'Ok'/'Approve' to give an approval or 'Reject' to send this PR back. <br/><br/>";
 
-                string FilePath = ExportToExcel(PrMstId);
+                string FilePathMD = ExportToExcel(PrMstId);
 
-                SendEmail(Usr.Email, Subject, Body, FilePath);
-                
-            };
+                SendEmail(usrMstMD.Email, SubjectMD, BodyMD, FilePathMD);
+            }
+            else
+            {
+                var usrMst = db.Usr_mst
+                .Where(x => x.Dpt_id == PrMst.DepartmentId && x.Psn_id == 2 && x.Team_id == PrMst.TeamId)
+                .ToList();
+
+
+                foreach (var Usr in usrMst)
+                {
+                    string Subject = PrMst.PRNo + " - " + PrMst.Purpose;
+
+                    string Body = "<br/>" +
+                        "Hi " + Usr.Username + " , <br/><br/>" +
+                        "Kindly review attached PR and login to http://prs.dominant-semi.com/ to proceed. <br/>" +
+                        "Or kindly reply 'Ok'/'Approve' to give an approval or 'Reject' to send this PR back. <br/><br/>";
+
+                    string FilePath = ExportToExcel(PrMstId);
+
+                    SendEmail(Usr.Email, Subject, Body, FilePath);
+
+                };
+            }
+            
                         
 
             return View("PurRequest");
@@ -3378,7 +3399,7 @@ namespace PurchaseWeb_2.Controllers
         {
 
             var PrMstList = db.PR_Mst
-                .Where(x => x.StatId == 12 || x.StatId == 11 || x.StatId == 14 ) 
+                .Where(x => x.StatId == 12 || x.StatId == 11 || x.StatId == 14 || x.StatId == 16) 
                 .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group )
                 .ToList();
 
@@ -4786,7 +4807,7 @@ namespace PurchaseWeb_2.Controllers
         public ActionResult MDApprovalList()
         {
             var PRMstList = db.PR_Mst
-                .Where(x => x.StatId == 5)
+                .Where(x => x.StatId == 5 || (x.Usr_mst.MD_PA_Flag == true && x.StatId == 3 ) )
                 .ToList();
 
             return View("MDApprovalList", PRMstList);
@@ -4799,69 +4820,121 @@ namespace PurchaseWeb_2.Controllers
                 .FirstOrDefault();
             if (PrMst != null)
             {
-                PrMst.StatId = 9;
-                PrMst.MDApprovalBy = Convert.ToString(Session["Username"]);
-                PrMst.MDApprovalDate = DateTime.Now;
-                db.SaveChanges();
-
-                //audit log
-                string Username = (string)Session["Username"];
-                // add audit log for PR
-                var auditLog = db.Set<AuditPR_Log>();
-                auditLog.Add(new AuditPR_Log
+                //if status = 3 then statid change to 7
+                if (PrMst.StatId == 3)
                 {
-                    ModifiedBy = Username,
-                    ModifiedOn = DateTime.Now,
-                    ActionBtn = "INSERT",
-                    ColumnStr = "StatId |" +
-                    "MDApprovalBy |",
+                    PrMst.StatId = 7;
+                    PrMst.HODApprovalBy = Convert.ToString(Session["Username"]);
+                    PrMst.HODApprovalDate = DateTime.Now;
+                    db.SaveChanges();
 
-                    ValueStr =
-                    9 + "|" +
-                    Username + "|",
+                    //audit log
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "INSERT",
+                        ColumnStr = "StatId |" +
+                        "HODApprovalBy |",
 
-                    PRId = PrMstId,
-                    PRDtlsId = 0,
-                    Remarks = "Approve by MD by PRS"
+                        ValueStr =
+                        9 + "|" +
+                        Username + "|",
 
-                });
-                db.SaveChanges();
+                        PRId = PrMstId,
+                        PRDtlsId = 0,
+                        Remarks = "Approve by HOD in PRS"
 
-                //send email to user
-                string userEmail = PrMst.Usr_mst.Email;
-                string subject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
-                string body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. ";
+                    });
+                    db.SaveChanges();
 
-                SendEmail(userEmail, subject, body,"");
+                    //send email to user
+                    string userEmail = PrMst.Usr_mst.Email;
+                    string subject = @"PR " + PrMst.PRNo + " has been approved by HOD  ";
+                    string body = @"PR " + PrMst.PRNo + " has been approved and has been sent  to purchasing for processing. ";
 
-                //send email to purchaser
-                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
-                userEmail = usrmst.Email;
-                subject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
-                body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. <br/> " +
-                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                    //send email to MD
+                    var MDUser = db.Usr_mst.Where(x => x.Psn_id == 3).FirstOrDefault();
+                    string MDEmail = MDUser.Email;
+                    string MDsubject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
+                    string MDbody = @"PR " + PrMst.PRNo + " has been approved by MD and has been sent  to purchasing for processing. ";
 
-                SendEmail(userEmail, subject, body,"");
+                    SendEmail(MDEmail, MDsubject, MDbody, "");
 
-                //send email to purchasing HOD
-                var usrmstHOD = db.Usr_mst.Where(x => x.Username == PrMst.HODPurDeptApprovalBy).FirstOrDefault();
-                userEmail = usrmstHOD.Email;
-                subject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
-                body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. ";
-                    
+                    // send email to purchasing
+                    userEmail = "pr.purchasing@dominant-semi.com";
+                    subject = @"PR " + PrMst.PRNo + " has been approved by HOD ";
+                    body = @"PR " + PrMst.PRNo + " has been approved and has been sent to purchasing for processing. " +
+                        " Kindly go to http://prs.dominant-semi.com/ for futher action.";
 
-                SendEmail(userEmail, subject, body,"");
+                    SendEmail(userEmail, subject, body, "");
 
-                //send email to MD
-                var MDUser = db.Usr_mst.Where(x => x.Psn_id == 3).FirstOrDefault();
-                string MDEmail = MDUser.Email;
-                string MDsubject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
-                string MDbody = @"PR " + PrMst.PRNo + " has been approved by MD and has been sent for PO processing. ";
-                    
-                SendEmail(MDEmail, MDsubject, MDbody,"");
+                } else
+                {
+                    PrMst.StatId = 9;
+                    PrMst.MDApprovalBy = Convert.ToString(Session["Username"]);
+                    PrMst.MDApprovalDate = DateTime.Now;
+                    db.SaveChanges();
+
+                    //audit log
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "INSERT",
+                        ColumnStr = "StatId |" +
+                        "MDApprovalBy |",
+
+                        ValueStr =
+                        9 + "|" +
+                        Username + "|",
+
+                        PRId = PrMstId,
+                        PRDtlsId = 0,
+                        Remarks = "Approve by MD by PRS"
+
+                    });
+                    db.SaveChanges();
+
+                    //send email to user
+                    string userEmail = PrMst.Usr_mst.Email;
+                    string subject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
+                    string body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. ";
+
+                    SendEmail(userEmail, subject, body, "");
+
+                    //send email to purchaser
+                    var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
+                    userEmail = usrmst.Email;
+                    subject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
+                    body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. <br/> " +
+                        "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                    SendEmail(userEmail, subject, body, "");
+
+                    //send email to purchasing HOD
+                    var usrmstHOD = db.Usr_mst.Where(x => x.Username == PrMst.HODPurDeptApprovalBy).FirstOrDefault();
+                    userEmail = usrmstHOD.Email;
+                    subject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
+                    body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. ";
 
 
+                    SendEmail(userEmail, subject, body, "");
 
+                    //send email to MD
+                    var MDUser = db.Usr_mst.Where(x => x.Psn_id == 3).FirstOrDefault();
+                    string MDEmail = MDUser.Email;
+                    string MDsubject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
+                    string MDbody = @"PR " + PrMst.PRNo + " has been approved by MD and has been sent for PO processing. ";
+
+                    SendEmail(MDEmail, MDsubject, MDbody, "");
+                }
             }
             return RedirectToAction("MDApprovalList");
         }
@@ -4873,60 +4946,113 @@ namespace PurchaseWeb_2.Controllers
                 .FirstOrDefault();
             if (PrMst != null)
             {
-                if (PrMst.PrGroupType1.CPRFFlag == false && PrMst.BudgetSkipFlag != true)
+                if (PrMst.StatId == 3)
                 {
-                    var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
+                    if (PrMst.PrGroupType1.CPRFFlag == false && PrMst.BudgetSkipFlag != true)
+                    {
+                        var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
+                    }
+
+                    PrMst.StatId = 2;
+                    db.SaveChanges();
+
+                    //audit log
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "UPDATE",
+                        ColumnStr = "StatId |",
+
+                        ValueStr =
+                        7 + "|",
+
+                        PRId = PrMstId,
+                        PRDtlsId = 0,
+                        Remarks = "Reject by HOD"
+
+                    });
+                    db.SaveChanges();
+
+                    //send email to user
+                    string userEmail = PrMst.Usr_mst.Email;
+                    string subject = @"PR " + PrMst.PRNo + " has been rejected by HOD  ";
+                    string body = @"PR " + PrMst.PRNo + " has been rejected " +
+                        "Kindly go to http://prs.dominant-semi.com/ for futher action. ";
+
+                    SendEmail(userEmail, subject, body, "");
+
+                    //send email to MD
+                    var MDUser = db.Usr_mst.Where(x => x.Psn_id == 3).FirstOrDefault();
+                    string MDEmail = MDUser.Email;
+                    string MDsubject = @"PR " + PrMst.PRNo + " has been  rejected by HOD  ";
+                    string MDbody = @"PR " + PrMst.PRNo + " has been rejected by HOD and has been sent back to " + PrMst.PurchaserName + " .  ";
+
+                    SendEmail(MDEmail, MDsubject, MDbody, "");
+
+                }
+                else
+                {
+                    if (PrMst.PrGroupType1.CPRFFlag == false && PrMst.BudgetSkipFlag != true)
+                    {
+                        var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
+                    }
+
+                    PrMst.StatId = 16;
+                    db.SaveChanges();
+
+                    //audit log
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "UPDATE",
+                        ColumnStr = "StatId |",
+
+                        ValueStr =
+                        7 + "|",
+
+                        PRId = PrMstId,
+                        PRDtlsId = 0,
+                        Remarks = "Reject by MD"
+
+                    });
+                    db.SaveChanges();
+
+                    //send email to purchaser
+                    var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
+                    string userEmail = usrmst.Email;
+                    string subject = @"PR " + PrMst.PRNo + " has been reject by MD  ";
+                    string body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to " + PrMst.PurchaserName + " . <br/> " +
+                        "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+
+                    SendEmail(userEmail, subject, body, "");
+
+                    //send email to purchasing HOD
+                    var usrmstHOD = db.Usr_mst.Where(x => x.Username == PrMst.HODPurDeptApprovalBy).FirstOrDefault();
+                    userEmail = usrmstHOD.Email;
+                    subject = @"PR " + PrMst.PRNo + " has been rejected by MD  ";
+                    body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to " + PrMst.PurchaserName + " . ";
+
+
+                    SendEmail(userEmail, subject, body, "");
+
+                    //send email to MD
+                    var MDUser = db.Usr_mst.Where(x => x.Psn_id == 3).FirstOrDefault();
+                    string MDEmail = MDUser.Email;
+                    string MDsubject = @"PR " + PrMst.PRNo + " has been  rejected by MD  ";
+                    string MDbody = @"PR " + PrMst.PRNo + " has been rejected by MD and has been sent back to " + PrMst.PurchaserName + " .  ";
+
+                    SendEmail(MDEmail, MDsubject, MDbody, "");
                 }
 
-                PrMst.StatId = 7;
-                db.SaveChanges();
-
-                //audit log
-                string Username = (string)Session["Username"];
-                // add audit log for PR
-                var auditLog = db.Set<AuditPR_Log>();
-                auditLog.Add(new AuditPR_Log
-                {
-                    ModifiedBy = Username,
-                    ModifiedOn = DateTime.Now,
-                    ActionBtn = "UPDATE",
-                    ColumnStr = "StatId |" ,
-                    
-                    ValueStr =
-                    7 + "|" ,
-                    
-                    PRId = PrMstId,
-                    PRDtlsId = 0,
-                    Remarks = "Reject by MD"
-
-                });
-                db.SaveChanges();
-
-                //send email to purchaser
-                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
-                string userEmail = usrmst.Email;
-                string subject = @"PR " + PrMst.PRNo + " has been reject by MD  ";
-                string body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to " + PrMst.PurchaserName + " . <br/> " +
-                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
-
-                SendEmail(userEmail, subject, body,"");
-
-                //send email to purchasing HOD
-                var usrmstHOD = db.Usr_mst.Where(x => x.Username == PrMst.HODPurDeptApprovalBy).FirstOrDefault();
-                userEmail = usrmstHOD.Email;
-                subject = @"PR " + PrMst.PRNo + " has been rejected by MD  ";
-                body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to " + PrMst.PurchaserName + " . ";
-                   
-
-                SendEmail(userEmail, subject, body,"");
-
-                //send email to MD
-                var MDUser = db.Usr_mst.Where(x => x.Psn_id == 3).FirstOrDefault();
-                string MDEmail = MDUser.Email;
-                string MDsubject = @"PR " + PrMst.PRNo + " has been  rejected by MD  ";
-                string MDbody = @"PR " + PrMst.PRNo + " has been rejected by MD and has been sent back to " + PrMst.PurchaserName + " .  ";
-
-                SendEmail(MDEmail, MDsubject, MDbody,"");
+                
 
             }
             return RedirectToAction("MDApprovalList");
