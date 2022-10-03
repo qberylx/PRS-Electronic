@@ -2671,6 +2671,8 @@
     <Content Include="Views\Budget\EditBudgetForm.cshtml" />
     <Content Include="Views\Budget\LogBudgetForm.cshtml" />
     <Content Include="Views\Purchase\ShowPRBudgetList.cshtml" />
+    <Content Include="Views\Purchase\callVendorChange.cshtml" />
+    <Content Include="Views\Purchase\callVendorChangeUPrice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -5985,7 +5985,16 @@ namespace PurchaseWeb_2.Controllers
             var vendorItemList = dbDom1.ICITMVs
                 .Where(x => x.ITEMNO == PRDtlsView.DomiPartNo)
                 .ToList();
-            ViewBag.vendorItemList = vendorItemList;
+            if (vendorItemList != null && vendorItemList.Count() != 0 )
+            {
+                ViewBag.vendorItemList = vendorItemList;
+            }
+            else
+            {
+                var vendorNewList = dbDom1.APVENs.Where(x => x.VENDORID == PRDtlsView.VendorCode).ToList();
+                ViewBag.vendorNewItemList = vendorNewList;
+            }
+            
 
             var UomList = dbDom1.ICUCODs.ToList();
             ViewBag.UOMList = UomList;
@@ -5997,7 +6006,56 @@ namespace PurchaseWeb_2.Controllers
             var itemDesc = dbDom1.POVUPRs.Where(x => x.ITEMNO == PRDtlsView.DomiPartNo).FirstOrDefault();
             ViewBag.itemDesc = itemDesc.VCPDESC;
 
+            var UOM = dbDom1.POVUPRs
+                .Where(x => x.VDCODE == PRDtlsView.VendorCode && x.ITEMNO == PRDtlsView.DomiPartNo)
+                .FirstOrDefault();
+            if (UOM != null)
+            {
+                ViewBag.UOM = UOM.DEFBUNIT;
+                ViewBag.UnitPrice = UOM.BAMOUNT;
+                ViewBag.vdCode = UOM.VDCODE;
+                ViewBag.CurCode = UOM.APVEN.CURNCODE;
+                ViewBag.AccGroup = UOM.APVEN.IDGRP;
+                ViewBag.VdName = UOM.APVEN.SHORTNAME;
+            }
+
+
+
             return PartialView("EditPRDtlsPurchasingProsesStockable", PRDtlsView);
+        }
+
+        public ActionResult callVendorChangeUPrice (string vendorId, string itemno)
+        {
+            var UOM = dbDom1.POVUPRs
+                .Where(x => x.VDCODE == vendorId && x.ITEMNO == itemno)
+                .FirstOrDefault();
+            if (UOM != null)
+            {
+                ViewBag.UOM = UOM.DEFBUNIT;
+                ViewBag.UnitPrice = UOM.BAMOUNT;
+                ViewBag.vdCode = UOM.VDCODE;
+                ViewBag.CurCode = UOM.APVEN.CURNCODE;
+                ViewBag.AccGroup = UOM.APVEN.IDGRP;
+                ViewBag.VdName = UOM.APVEN.SHORTNAME;
+            }
+            return PartialView("callVendorChangeUPrice");
+        }
+
+        public ActionResult callVendorChange (string vendorId, string itemno)
+        {
+            var UOM = dbDom1.POVUPRs
+                .Where(x => x.VDCODE == vendorId && x.ITEMNO == itemno)
+                .FirstOrDefault();
+            if (UOM != null)
+            {
+                ViewBag.UOM = UOM.DEFBUNIT;
+                ViewBag.UnitPrice = UOM.BAMOUNT;
+                ViewBag.vdCode = UOM.VDCODE;
+                ViewBag.CurCode = UOM.APVEN.CURNCODE;
+                ViewBag.AccGroup = UOM.APVEN.IDGRP;
+                ViewBag.VdName = UOM.APVEN.SHORTNAME;
+            }
+            return PartialView("callVendorChange");
         }
 
         public ActionResult UpdatePRDtlsPurchasingStockable(PRDtlsPurProViewModel proViewModel)
@@ -6020,6 +6078,9 @@ namespace PurchaseWeb_2.Controllers
                 prDtls.Remarks = proViewModel.Remarks;
                 prDtls.Device = proViewModel.Device;
                 prDtls.SalesOrder = proViewModel.SalesOrder;
+                prDtls.UnitPrice = proViewModel.UnitPrice;
+                prDtls.TotCostnoTax = (decimal)proViewModel.UnitPrice * (decimal)proViewModel.Qty;
+                prDtls.TotCostWitTax = (decimal)proViewModel.UnitPrice * (decimal)proViewModel.Qty;
                 
                 db.SaveChanges();
 

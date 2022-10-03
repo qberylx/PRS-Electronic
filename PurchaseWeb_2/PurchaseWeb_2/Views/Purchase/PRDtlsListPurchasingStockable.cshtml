@@ -39,6 +39,9 @@
                                 UOM
                             </th>
                             <th>
+                                Unit Price
+                            </th>
+                            <th>
                                 Req. Delivery Date
                             </th>
                             <th>
@@ -105,6 +108,12 @@
                                 @Html.DisplayNameFor(model => model.Qty)
                             </th>
                             <th>
+                                UOM
+                            </th>
+                            <th>
+                                Unit Price
+                            </th>
+                            <th>
                                 Req. Delivery Date
                             </th>
                             <th>
@@ -148,14 +157,19 @@
                                     @Html.DisplayFor(modelItem => item.UOMName)
                                 </td>
                                 <td>
+                                    @item.CurCode @String.Format("{0:N5}", item.UnitPrice) 
+                                </td>
+                                <td>
                                     @{ DateTime reqDevDate = (DateTime)item.ReqDevDate; }
-                                    @reqDevDate.ToString("dd/MM/yyyy")
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Remarks)
-                                </td>
-                                <td>
-                                    @using (Ajax.BeginForm("EditPRDtlsPurchasingProsesStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPRDtlsForm" }))
+                                                @reqDevDate.ToString("dd/MM/yyyy")
+                                            </td>
+            
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Remarks)
+                                            </td>
+            
+                                            <td>
+                                                @using (Ajax.BeginForm("EditPRDtlsPurchasingProsesStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPRDtlsForm" }))
                                     {
                                         <input type="hidden" id="EditPrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
                                         <input type="hidden" id="EditPrMstId" name="PrMstId" value="@item.PRid" />
@@ -171,15 +185,16 @@
                                     }
 
                                 </td>
-                                
+
+
                             </tr>
                         }
                     }
                     else if (ViewBag.PrTypeId == 4)
-                    {
-                        foreach (var item in Model)
-                        {
-                            i++;
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            i++;
                             <tr>
                                 <td>
                                     @i
@@ -210,7 +225,7 @@
                                     @Html.DisplayFor(modelItem => item.CurCode)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.EstimateUnitPrice)
+                                    @String.Format("{0:N5}", item.EstimateUnitPrice )
                                 </td>
                                 <td>
                                     @using (Ajax.BeginForm("DelPurList", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
@@ -247,6 +262,12 @@
                                 </td>
                                 <td>
                                     @String.Format("{0:N4}", item.Qty)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UOMName)
+                                </td>
+                                <td>
+                                    @item.CurCode @String.Format("{0:N5}", item.UnitPrice)
                                 </td>
                                 <td>
                                     @{ DateTime reqDevDate = (DateTime)item.ReqDevDate; }
