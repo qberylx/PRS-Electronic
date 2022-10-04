@@ -4,7 +4,7 @@
     <div class="card-header">
         <h3 class="card-title">PR List</h3>
 
-        <div class="card-tools">
+        @*<div class="card-tools">
             <div class="input-group input-group-sm" style="width: 150px;">
                 <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search">
 
@@ -14,7 +14,7 @@
                     </button>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
     <div class="card-body  p-0">
         <div class="row">
@@ -78,7 +78,18 @@
                             <td>
                                 @foreach (var PoNo in PoNoLst.Select(x => x.NoPo).Distinct())
                                 {
-                                    <a>@PoNo </a> <br />
+                                    @*<a>@PoNo </a> <br />*@
+                                    <table>
+                                        <tr>
+                                            <td>@PoNo</td>
+                                            <td>
+                                                @foreach(var domiPN in PoNoLst.Where(x=>x.NoPo == PoNo && PoNo != null).ToList())
+                                                {
+                                                    <a>@domiPN.DomiPartNo</a><br />
+                                                }
+                                            </td>
+                                        </tr>
+                                    </table>
                                 }
 
                             </td>

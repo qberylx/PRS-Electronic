@@ -256,7 +256,12 @@
 
 <script>
     function OnSuccess() {
-        this.reset();
+        //this.reset();
+        $("#Qty").val(0.0000);
+        $("#Remarks").val("");
+        $("#ReqDevDate").val("");
+        $("#Device").val("");
+        $("#SalesOrder").val("");
     }
 
     function domiChange(itemno) {

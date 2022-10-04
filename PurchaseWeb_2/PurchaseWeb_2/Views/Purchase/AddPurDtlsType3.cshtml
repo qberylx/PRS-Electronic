@@ -68,7 +68,7 @@
                                     <option value="">Select option</option>
                                     @foreach (var domi in ViewBag.domipartlist)
                                     {
-                                        <option value="@domi.ITEMNO">@domi.ITEMNO</option>
+                                        <option value="@domi.ITEMNO">@domi.ITEMNO - @domi.APVEN.VENDNAME </option>
                                     }
                                 </select>
                                 @Html.ValidationMessageFor(model => model.DomiPartNo, "", new { @class = "text-danger" })
@@ -239,7 +239,11 @@
 
 <script>
     function OnSuccess() {
-        this.reset();
+        //this.reset();
+        $("#Qty").val(0.0000);
+        $("#Remarks").val("");
+        $("#ReqDevDate").val("");
+        
     }
 
     function domiChange(itemno) {

@@ -163,6 +163,7 @@ namespace PurchaseWeb_2.Controllers
                 .SingleOrDefault();
                 if (PrMst != null)
                 {
+                    
                     if (PrMst.PrGroupType1.CPRFFlag == false && PrMst.BudgetSkipFlag != true)
                     {
                         var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
@@ -195,6 +196,9 @@ namespace PurchaseWeb_2.Controllers
 
                     });
                     db.SaveChanges();
+                    
+
+                    
                 }
 
                 this.AddNotification("PR " + PrMst.PRNo + " has been rejected back to Sourcing", NotificationType.SUCCESS);
@@ -323,7 +327,7 @@ namespace PurchaseWeb_2.Controllers
                 //Currency_Mst = x.Currency_Mst,
                 //Currency_Mst1 = x.Currency_Mst1,
                 PR_VendorComparison = x.PR_VendorComparison
-            }).ToList();
+            }).OrderBy(r=>r.VendorName).ToList();
 
 
 

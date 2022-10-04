@@ -244,7 +244,12 @@
 
 <script>
     function OnSuccess() {
-        this.reset();
+        //this.reset();
+        $("#Qty").val(0.0000);
+        $("#Remarks").val("");
+        $("#ReqDevDate").val("");
+        $("#Device").val("Consignment Wafer");
+        $("#SalesOrder").val("-");
     }
 
     function domiChange(itemno) {
