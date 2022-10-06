@@ -86,18 +86,30 @@ namespace PurchaseWeb_2.Controllers
             var userdtls = db.Usr_mst
                             .Where(x => x.Username == username)
                             .FirstOrDefault();
-            var userDpts = db.Usr_mst.Where(x => x.Username == username).Select(x => x.Dpt_id);
+            //var userDpts = db.Usr_mst.Where(x => x.Username == username).Select(x => x.Dpt_id);
 
             ViewBag.Psn_id = userdtls.Psn_id;
 
             if (userdtls.Psn_id == 1 || userdtls.Psn_id == 2)
             {
-                var PrMst = db.PR_Mst.Where(x => x.StatId == 9 && userDpts.Any(i => x.DepartmentId == i) && x.TeamId == userdtls.Team_id)
-                    .OrderByDescending(x => x.PRId)./*Take(300).*/ToList();
+                //var PrMst = db.PR_Mst.Where(x => x.StatId == 9 && userDpts.Any(i => x.DepartmentId == i) && x.TeamId == userdtls.Team_id)
+                //    .OrderByDescending(x => x.PRId)./*Take(300).*/ToList();
+
+                var PrMst = (from prMst in db.PR_Mst
+                                 join usrMst in db.Usr_mst
+                                 on new { DepartmentId = prMst.DepartmentId, TeamId = prMst.TeamId }
+                                 equals new { DepartmentId = usrMst.Dpt_id, TeamId = usrMst.Team_id }
+                                 where usrMst.Username == username && prMst.StatId == 9 && prMst.DeActiveFlag != true
+                                 select prMst
+                          ).OrderByDescending(x => x.PRId)
+                          .ToList();
+
                 return PartialView("DashBoardPrMstList", PrMst);
             } else
             {
-                var PrMst = db.PR_Mst.Where(x => x.StatId != 1 && x.StatId != 2).OrderByDescending(x => x.PRId)./*Take(300).*/ToList();
+                var PrMst = db.PR_Mst.Where(x => x.StatId != 1 && x.StatId != 2 && x.DeActiveFlag != true)
+                    .OrderByDescending(x => x.PRId)./*Take(300).*/ToList();
+
                 return PartialView("DashBoardPrMstList", PrMst);
             }           
 
@@ -539,15 +551,23 @@ namespace PurchaseWeb_2.Controllers
                             .Where(x => x.Username == username)
                             .FirstOrDefault();
 
-            var userDpts = db.Usr_mst.Where(x => x.Username == username).Select(x => x.Dpt_id);
+            //var userDpts = db.Usr_mst.Where(x => x.Username == username).Select(x => x.Dpt_id);
 
-            var PrMst = db.PR_Mst
-                .Where(x => userDpts.Any(i=>x.DepartmentId == i) && x.StatId == 3 && x.TeamId == userdtls.Team_id)
-                .ToList();
+            //var PrMst = db.PR_Mst
+            //    .Where(x => userDpts.Any(i=>x.DepartmentId == i) && x.StatId == 3 && x.TeamId == userdtls.Team_id)
+            //    .ToList();
+
+            var PrMst = (from prMst in db.PR_Mst
+                         join usrMst in db.Usr_mst 
+                         on new { DepartmentId = prMst.DepartmentId , TeamId = prMst.TeamId }
+                         equals new { DepartmentId = usrMst.Dpt_id , TeamId = usrMst.Team_id }
+                         where usrMst.Username == username && prMst.StatId == 3
+                         select prMst
+                          ).ToList();
 
             if (userdtls.Psn_id == 7)
             {
-                PrMst = db.PR_Mst.Where(x=>x.StatId == 3).ToList();
+                PrMst = db.PR_Mst.Where(x => x.StatId == 3).ToList();
             }
 
             return View("ApprovalHOD", PrMst);
@@ -758,17 +778,26 @@ namespace PurchaseWeb_2.Controllers
                             .Where(x => x.Username == username)
                             .FirstOrDefault();
 
-            var userDpts = db.Usr_mst.Where(x => x.Username == username).Select(x => x.Dpt_id);
+            //var userDpts = db.Usr_mst.Where(x => x.Username == username).Select(x => x.Dpt_id);
 
-            var PrMstList = db.PR_Mst
-                .Where(x => userDpts.Any(i => x.DepartmentId == i) && x.DeActiveFlag != true && x.TeamId == userdtls.Team_id && x.StatId != 9 )
-                .OrderByDescending(x=>x.PRId)
-                .ToList();
+            //var PrMstList = db.PR_Mst
+            //    .Where(x => userDpts.Any(i => x.DepartmentId == i) && x.DeActiveFlag != true && x.TeamId == userdtls.Team_id && x.StatId != 9 )
+            //    .OrderByDescending(x=>x.PRId)
+            //    .ToList();
+
+            var PrMstList = (from prMst in db.PR_Mst
+                         join usrMst in db.Usr_mst
+                         on new { DepartmentId = prMst.DepartmentId, TeamId = prMst.TeamId }
+                         equals new { DepartmentId = usrMst.Dpt_id, TeamId = usrMst.Team_id }
+                         where usrMst.Username == username && prMst.StatId != 9 && prMst.DeActiveFlag != true
+                             select prMst
+                          ).OrderByDescending(x => x.PRId)
+                          .ToList();
 
             if (userdtls.Psn_id == 7)
             {
                 PrMstList = db.PR_Mst
-                    .Where(x => x.StatId != 9 && x.DeActiveFlag != true )
+                    .Where(x => x.StatId != 9 && x.DeActiveFlag != true)
                     .OrderByDescending(x => x.PRId)
                     .ToList();
 
