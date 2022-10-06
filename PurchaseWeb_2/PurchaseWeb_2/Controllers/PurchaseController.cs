@@ -3063,10 +3063,15 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.DepId == prMstSingle.BudgetDept && x.Month == sMonth && x.Year == sYear)
                 .FirstOrDefault();
 
-            var BudgetDept = prMstSingle.BudgetDept.ToString();
-            if (BudgetDept.Length < 2)
+            //var BudgetDept = prMstSingle.BudgetDept.ToString();
+            var BudgetDept = prMstSingle.AccountCode.Replace("-", "").ToString();
+            if (BudgetDept.Length > 8)
             {
-                BudgetDept = "0" + BudgetDept;
+                BudgetDept = BudgetDept.Substring(7, 2);
+                //BudgetDept = "0" + BudgetDept;
+            } else
+            {
+                BudgetDept = "22";
             }
             var accDept = db.AccTypeDepts.Where(x => x.DeptCode == BudgetDept).FirstOrDefault();
 
@@ -3085,7 +3090,15 @@ namespace PurchaseWeb_2.Controllers
                 
                 ViewBag.PrMstId = PrMstId;
                 ViewBag.FlagUpdateBudget = prMstSingle.FlagUpdateMonthlyBudget;
-                ViewBag.departName = accDept.DeptName;
+                if (BudgetDept == "22")
+                {
+                    ViewBag.departName = "";
+                }
+                else
+                {
+                    ViewBag.departName = accDept.DeptName;
+                }
+                
 
                 return PartialView("budgetMonthly", budgetSingle);
             }
