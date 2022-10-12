@@ -30,7 +30,8 @@
                                 <th>
                                     No.
                                 </th>
-                                <th></th>
+                                <th>Yes <br /> <input type="checkbox" id="chkAllYes" name="chkAllYes" /> </th>
+                                <th>No <br /> <input type="checkbox" id="chkAllNo" name="chkAllNo" /></th>
                                 <th>
                                     Description
                                 </th>
@@ -146,7 +147,8 @@
                                 <th>
                                     No.
                                 </th>
-                                <th></th>
+                                <th>Yes <br /> <input type="checkbox" id="chkAllYes" name="chkAllYes" /> </th>
+                                <th>No <br /> <input type="checkbox" id="chkAllNo" name="chkAllNo" /></th>
                                 <th>
                                     DomiPartNo
                                 </th>
@@ -209,7 +211,7 @@
                                         @Html.HiddenFor(modeItem => Model[i].PRDtId)
                                         @Html.HiddenFor(modeItem => Model[i].VendorCode)
                                     </td>
-                                    <td>
+                                    @*<td>
                                         @if (Model[i].PoFlag)
                                         {
                                             @Html.CheckBoxFor(modeItem => Model[i].PoFlag, new { @disabled = "disabled" })
@@ -217,6 +219,26 @@
                                         else
                                         {
                                             @Html.CheckBoxFor(modeItem => Model[i].PoFlag)
+                                        }
+                                    </td>*@
+                                    <td>
+                                        @if (Model[i].PoFlag)
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag, new { @disabled = "disabled" , @class = "chkYes" })
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag, new { @class = "chkYes" })
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].NoPoFlag)
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].NoPoFlag, new { @disabled = "disabled" , @class= "chkNo" })
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].NoPoFlag, new { @class = "chkNo" })
                                         }
                                     </td>
                                     <td>
@@ -399,7 +421,7 @@
                                         @Html.HiddenFor(modeItem => Model[i].PRDtId)
                                         @Html.HiddenFor(modeItem => Model[i].VendorCode)
                                     </td>
-                                    <td>
+                                    @*<td>
                                         @if (Model[i].PoFlag)
                                         {
                                             @Html.CheckBoxFor(modeItem => Model[i].PoFlag, new { @disabled = "disabled" })
@@ -409,6 +431,26 @@
                                             @Html.CheckBoxFor(modeItem => Model[i].PoFlag)
                                         }
 
+                                    </td>*@
+                                    <td>
+                                        @if (Model[i].PoFlag)
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag, new { @disabled = "disabled" , @class = "chkYes" })
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].PoFlag, new { @class = "chkYes" })
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model[i].NoPoFlag)
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].NoPoFlag, new { @disabled = "disabled" , @class= "chkNo" })
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBoxFor(modeItem => Model[i].NoPoFlag, new { @class = "chkNo" })
+                                        }
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => Model[i].DomiPartNo)
@@ -470,7 +512,7 @@
                         <tr>
                             @if (ViewBag.PrTypeId == 3)
                             {
-                                <td colspan="11"></td>
+                                <td colspan="12"></td>
                             }
                             else
                             {
