@@ -134,7 +134,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => Model[i].CurCode)
+                                    @*@Html.DisplayFor(modelItem => Model[i].CurCode )*@
+                                    <input type="text" id="CurCode_@Model[i].PRDtId" name="[@i].CurCode" class="form-control" value="@Model[i].CurCode"  disabled="disabled"/>
                                 </td>
                                 <td>
                                     <div id="divUP_@Model[i].PRDtId">
@@ -190,7 +191,7 @@
             <div class="row">
                 <div class="col-md-3">
                     @*@Html.ActionLink("Return To Main List", "PRProsesList", "Purchase", new { @class = "btn btn-primary" })*@
-                    <input type="submit" id="btnBack" name="submit" value="Back" class="btn btn-primary" />
+                    <input type="submit" id="btnBack" name="submit" value="Back" class="btn btn-primary" onclick="history.back()" />
                     <input type="submit" id="btnSubmit" name="submit" value="Save" class="btn btn-success" />
                     <input type="hidden" name="PrMstIdsvPr" id="PrMstIdsvPr" value="@ViewBag.PrMstId" />
                 </div>
@@ -227,6 +228,7 @@
                     var bAmount = response[i].BAmount;
                     var TotCostNoTax = response[i].TotCostNoTax;
                     var TotCostWithTax = response[i].TotCostWithTax;
+                    var curCode = response[i].CURNCODE;
 
                     console.log(bAmount);
                     console.log(TotCostWithTax);
@@ -236,6 +238,9 @@
 
                     $("#TotCostnoTax_" + id + "").val(TotCostNoTax.toFixed(2));
                     $("#divTotCostnoTax_" + id + "").html(TotCostNoTax.toFixed(2));
+
+                    $("#CurCode_" + id + "").val(curCode);
+
 
                 }
 

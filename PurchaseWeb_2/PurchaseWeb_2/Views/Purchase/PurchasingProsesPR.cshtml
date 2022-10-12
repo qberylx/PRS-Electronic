@@ -54,7 +54,17 @@
 <div class="row">
     <div class="col-md-12">
         <div id="divPrMstList">
-            @{ Html.RenderAction("PRListForPurchasingProses", "Purchase", new { Doctype = 1, group = 1 });}
+            @{int docTypeSession = (int)(Session["docTypePur"] ?? 0); }
+            @{int groupTypeSession = (int)(Session["groupTypePur"] ?? 0); }
+            @if (groupTypeSession != 0 && docTypeSession != 0)
+            {
+                Html.RenderAction("PRListForPurchasingProses", "Purchase", new { Doctype = docTypeSession, group = groupTypeSession });
+            }
+            else
+            {
+                Html.RenderAction("PRListForPurchasingProses", "Purchase", new { Doctype = 1, group = 1 });
+            }
+
         </div>
     </div>
 </div>

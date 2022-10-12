@@ -240,6 +240,9 @@
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectPR">
                         Reject PR to Purchasing
                     </button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectPRUser">
+                        Reject PR to User
+                    </button>
                     @Html.ActionLink("Budget", "budgetUpdate", "Purchase", new { PrMstId = ViewBag.PrId }, new { @class = "btn btn-warning" })
                     @Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = ViewBag.PrId }, new { @class = "btn btn-success" })
                 </div>
@@ -264,6 +267,23 @@
                 </button>
             </div>
             @{Html.RenderAction("RejectPRbySourcingForm", "Purchase", new { PrMstId = ViewBag.PrId });}
+
+        </div>
+    </div>
+</div>
+
+
+<!--Modal to reject user-->
+<div class="modal fade" id="rejectPRUser" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reject PR</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @{Html.RenderAction("RejectPRPurchasingForm", "Purchase", new { PrMstId = ViewBag.PrId });}
 
         </div>
     </div>

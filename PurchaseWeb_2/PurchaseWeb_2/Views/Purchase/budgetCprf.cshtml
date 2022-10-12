@@ -35,7 +35,9 @@
                             <strong>PR Amount </strong>
                         </div>
                         <div class="col-md-6">
-                            @{String strTotCostWitTax = String.Format("{0:n2}", Model.PR_Details.Sum(x => x.TotCostWitTaxMYR)); }
+                            @{ var discount = Model.Discount ?? 0.00M ;}
+
+                            @{String strTotCostWitTax = String.Format("{0:n2}", Model.PR_Details.Sum(x => x.TotCostWitTaxMYR) - discount ); }
                             <strong>: </strong> MYR @strTotCostWitTax
                         </div>
                     </div>
@@ -44,7 +46,7 @@
                             <strong>B/O </strong>
                         </div>
                         <div class="col-md-6">
-                            @{decimal bo = ViewBag.CPRFBalance - Model.PR_Details.Sum(x => x.TotCostWitTaxMYR); }
+                            @{decimal bo = ViewBag.CPRFBalance - Model.PR_Details.Sum(x => x.TotCostWitTaxMYR) + discount ; }
                             @{String strAssetBal = String.Format("{0:n2}", bo); }
                             <strong>: </strong> MYR @strAssetBal
                         </div>

@@ -151,10 +151,7 @@
                             }
                             @Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
 
-                            @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
-                            {
-                                @Html.ActionLink("Send Email HOD Pur", "EmailHODPur", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-primary" })
-                            }
+                            
                         </td>
                     </tr>
                     <tr class="expandable-body @showFlag ">

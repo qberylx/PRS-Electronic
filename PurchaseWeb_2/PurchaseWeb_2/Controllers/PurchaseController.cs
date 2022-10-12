@@ -3464,9 +3464,11 @@ namespace PurchaseWeb_2.Controllers
 
             string FilePath = ExportToExcel(PrMstId);
 
-            SendEmail("mohd.qatadah@dominant-semi.com", Subject, HTMLStringWithModel, FilePath);
+            var usrMst = db.Usr_mst.Where(x => x.Psn_id == 5).FirstOrDefault();
 
-            return View("PRProsesList");
+            SendEmail(usrMst.Email, Subject, HTMLStringWithModel, FilePath);
+
+            return RedirectToAction("HODPurApprovalList");
         }
 
         public ActionResult VendorReport()
@@ -3488,7 +3490,10 @@ namespace PurchaseWeb_2.Controllers
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
                 .FirstOrDefault();
-            
+
+            Session["docTypePur"] = PrMst.PRTypeId;
+            Session["groupTypePur"] = PrMst.PrGroupType1.GroupId;
+
             if (PrMst != null)
             {
                 // if pr type 4
@@ -4350,6 +4355,8 @@ namespace PurchaseWeb_2.Controllers
             public decimal BAmount { get; set; }
             public decimal TotCostNoTax { get; set; }
             public decimal TotCostWithTax { get; set; }
+            public string CURNCODE { get; set; }
+            public string IDGRP { get; set; }
 
         }
 
@@ -4365,13 +4372,17 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.VDCODE == vdCode && x.ITEMNO == prdtLst.DomiPartNo)
                 .FirstOrDefault();
 
+            var vendorDt = dbDom1.APVENs.Where(x => x.VENDORID == vdCode).FirstOrDefault();
+
             var getVndrDtLst = new List<JsonGetPrDtls>
             {
                 new JsonGetPrDtls
                 {
                     BAmount = itemLst.BAMOUNT,
                     TotCostNoTax = (decimal)itemLst.BAMOUNT * (decimal)prdtLst.Qty,
-                    TotCostWithTax = (decimal)itemLst.BAMOUNT * (decimal)prdtLst.Qty
+                    TotCostWithTax = (decimal)itemLst.BAMOUNT * (decimal)prdtLst.Qty,
+                    CURNCODE = vendorDt.CURNCODE,
+                    IDGRP = vendorDt.IDGRP
                 }
             };
 
@@ -4384,13 +4395,15 @@ namespace PurchaseWeb_2.Controllers
             {
                 var prMst = db.PR_Mst.Where(x => x.PRId == PrMstIdsvPr).FirstOrDefault();
 
-                return RedirectToAction("PRListForPurchaser","Purchase", new { Doctype = prMst.PRTypeId, group = prMst.PRGroupType });
+                //return RedirectToAction("PRListForPurchaser","Purchase", new { Doctype = prMst.PRTypeId, group = prMst.PRGroupType });
+                return null;
             } 
             else if(submit == "Save" ) 
             {
                 foreach (PRDtlsPurchaser Dtls in pRDtls)
                 {
                     var uptPrDtls = db.PR_Details.FirstOrDefault(x => x.PRDtId == Dtls.PRDtId);
+                    var vendorDt = dbDom1.APVENs.Where(x => x.VENDORID == Dtls.VendorCode).FirstOrDefault();
                     if (uptPrDtls != null)
                     {
                         uptPrDtls.VendorCode    = Dtls.VendorCode;
@@ -4400,6 +4413,8 @@ namespace PurchaseWeb_2.Controllers
                         uptPrDtls.TotCostWitTax = Dtls.TotCostWitTax;
                         uptPrDtls.TaxCode       = Dtls.TaxCode;
                         uptPrDtls.TaxClass      = Dtls.TaxClass;
+                        uptPrDtls.CurCode = vendorDt.CURNCODE;
+                        uptPrDtls.AccGroup = vendorDt.IDGRP;
                         db.SaveChanges();
 
                         //audit log
@@ -5303,6 +5318,9 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.PRId == PrMstId)
                 .FirstOrDefault();
 
+            Session["docTypePur"] = purMstr.PRTypeId;
+            Session["groupTypePur"] = purMstr.PrGroupType1.GroupId;
+
             ViewBag.PrNo = purMstr.PRNo;
             ViewBag.PrTypeID = purMstr.PRTypeId;
 
@@ -5916,6 +5934,9 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.PRId == PrMstId)
                 .FirstOrDefault();
 
+            Session["docTypePur"] = purMstr.PRTypeId;
+            Session["groupTypePur"] = purMstr.PrGroupType1.GroupId;
+
             ViewBag.PrNo = purMstr.PRNo;
             ViewBag.PrTypeID = purMstr.PRTypeId;
 
@@ -6357,6 +6378,10 @@ namespace PurchaseWeb_2.Controllers
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
                 .FirstOrDefault();
+
+            Session["docTypePur"] = PrMst.PRTypeId;
+            Session["groupTypePur"] = PrMst.PrGroupType1.GroupId;
+
             if (PrMst != null)
             {
                 PrMst.StatId = 12;
@@ -6490,6 +6515,11 @@ namespace PurchaseWeb_2.Controllers
                 var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PRId)
                 .FirstOrDefault();
+
+                Session["docTypePur"] = PrMst.PRTypeId;
+                Session["groupTypePur"] = PrMst.PrGroupType1.GroupId;
+                var StatsId = PrMst.StatId;
+
                 if (PrMst != null)
                 {
                     PrMst.StatId = 13;
@@ -6529,17 +6559,27 @@ namespace PurchaseWeb_2.Controllers
                 SendEmail(userEmail, subject, body,"");
 
                 // send email to purchaser
-                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
+                string PurName = (string)Session["Username"];
+                var usrmst = db.Usr_mst.Where(x => x.Username == PurName).FirstOrDefault();
                 userEmail = usrmst.Email;
                 subject = @"PR " + PrMst.PRNo + " has been reject by purchasing. ";
                 body = @"Kindly login to http://prs.dominant-semi.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body,"");
 
-                return View();
+                if (StatsId == 12)
+                {
+                    return RedirectToAction("PRProsesList");
+                }
+                else
+                {
+                    return RedirectToAction("PurchasingProsesPR");
+                }
+                
+                
             } else
             {
-                return View();
+                return RedirectToAction("PurchasingProsesPR");
             }
             
         }

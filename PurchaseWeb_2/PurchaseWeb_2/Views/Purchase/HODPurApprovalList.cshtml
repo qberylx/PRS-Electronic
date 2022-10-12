@@ -142,8 +142,14 @@
                     <td>
                         @Html.ActionLink("View", "PrHODPuchasingView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
                         @Html.ActionLink("Approve", "ApproveHODPurchasingDept", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+
+                        @if (Convert.ToString(Session["Username"]) == "mohd.qatadah")
+                        {
+                            @Html.ActionLink("Send Email HOD Pur", "EmailHODPur", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-primary" })
+                        }
+
                         @*
-                        @Html.ActionLink("Reject", "RejectHODPurchasingDept", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
+        @Html.ActionLink("Reject", "RejectHODPurchasingDept", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-danger" })
                         *@
                     </td>
                 </tr>
