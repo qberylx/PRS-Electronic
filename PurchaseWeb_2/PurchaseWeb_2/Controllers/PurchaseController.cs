@@ -1330,10 +1330,10 @@ namespace PurchaseWeb_2.Controllers
             return PartialView("callVendorpart");
         }
 
-        public ActionResult callUOM(String itemno)
+        public ActionResult callUOM(String itemno, string vendId)
         {
             var UOM = dbDom1.POVUPRs
-                .Where(x => x.ITEMNO == itemno)
+                .Where(x => x.ITEMNO == itemno && x.VDCODE == vendId)
                 .FirstOrDefault();
             if (UOM != null)
             {

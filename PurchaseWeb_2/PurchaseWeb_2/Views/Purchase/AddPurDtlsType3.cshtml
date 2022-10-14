@@ -64,13 +64,14 @@
                         <div class="form-group">
                             <label class="control-label col-md-10">Domi. Part No.</label>
                             <div class="col-md-10">
-                                <select class="fstdropdown-select form-control-border" id="DomiPartNo" name="DomiPartNo" onchange="domiChange(this.value)">
+                                <select class="fstdropdown-select form-control-border" id="slctDomiPartNo" name="slctDomiPartNo" onchange="domiChange(this.value)">
                                     <option value="">Select option</option>
                                     @foreach (var domi in ViewBag.domipartlist)
                                     {
-                                        <option value="@domi.ITEMNO">@domi.ITEMNO - @domi.APVEN.VENDNAME </option>
+                                        <option value='{"itemNo":"@domi.ITEMNO","vendId":"@domi.VDCODE"}' >@domi.ITEMNO - @domi.APVEN.VENDNAME </option>
                                     }
                                 </select>
+                                <input type="hidden" name="DomiPartNo" id="DomiPartNo" value="" />
                                 @Html.ValidationMessageFor(model => model.DomiPartNo, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -247,10 +248,17 @@
     }
 
     function domiChange(itemno) {
+        var obj = JSON.parse(itemno);
+        console.log(obj.itemNo);
+        console.log(obj.vendId);
+
+        $("#DomiPartNo").val(obj.itemNo);
+
         $.ajax({
             type: "POST",
             url: "@Url.Action("callVendorpart","Purchase")",
-            data: '{itemno: "' + itemno + '" }',
+            //data: '{itemno: "' + itemno + '" }',
+            data: JSON.stringify({ itemno: obj.itemNo }),
             contentType: "application/json; charset=utf-8",
             dataType: "html",
             success: function (response) {
@@ -267,7 +275,8 @@
         $.ajax({
             type: "POST",
             url: "@Url.Action("callUOM","Purchase")",
-            data: '{itemno: "' + itemno + '" }',
+            data: JSON.stringify({ itemno: obj.itemNo, vendId: obj.vendId }),
+            //data: '{itemno: "' + itemno + '" }',
             contentType: "application/json; charset=utf-8",
             dataType: "html",
             success: function (response) {
@@ -284,7 +293,8 @@
         $.ajax({
             type: "POST",
             url: "@Url.Action("callDesc","Purchase")",
-            data: '{itemno: "' + itemno + '" }',
+            data: JSON.stringify({ itemno: obj.itemNo }),
+            //data: '{itemno: "' + itemno + '" }',
             contentType: "application/json; charset=utf-8",
             dataType: "html",
             success: function (response) {

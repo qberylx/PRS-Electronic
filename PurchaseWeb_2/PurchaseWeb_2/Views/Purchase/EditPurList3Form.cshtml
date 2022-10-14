@@ -20,20 +20,21 @@
                 <div class="form-group">
                     <label class="control-label col-md-10">Domi. Part No.</label>
                     <div class="col-md-10">
-                        <select class="custom-select form-control-border" id="DomiPartNo" name="DomiPartNo" onchange="domiChange(this.value)">
+                        <select class="custom-select form-control-border" id="slctDomiPartNo" name="slctDomiPartNo" onchange="domiChange(this.value)">
                             <option value="">Select option</option>
                             @foreach (var domi in ViewBag.domipartlist)
                             {
-                                if (domi.ITEMNO == Model.DomiPartNo)
+                                if (domi.ITEMNO == Model.DomiPartNo && domi.VDCODE == Model.VendorCode)
                                 {
-                                    <option value="@domi.ITEMNO" selected>@domi.ITEMNO</option>
+                                    <option value='{"itemNo":"@domi.ITEMNO","vendId":"@domi.VDCODE"}' selected>@domi.ITEMNO - @domi.APVEN.VENDNAME</option>
                                 }
                                 else
                                 {
-                                    <option value="@domi.ITEMNO">@domi.ITEMNO</option>
+                                    <option value='{"itemNo":"@domi.ITEMNO","vendId":"@domi.VDCODE"}'>@domi.ITEMNO - @domi.APVEN.VENDNAME</option>
                                 }
                             }
                         </select>
+                        <input type="hidden" id="DomiPartNo" name="DomiPartNo" value="" />
                         @Html.ValidationMessageFor(model => model.DomiPartNo, "", new { @class = "text-danger" })
                     </div>
                 </div>
