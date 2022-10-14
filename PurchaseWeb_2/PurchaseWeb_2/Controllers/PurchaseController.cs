@@ -4415,6 +4415,7 @@ namespace PurchaseWeb_2.Controllers
                         uptPrDtls.TaxClass      = Dtls.TaxClass;
                         uptPrDtls.CurCode = vendorDt.CURNCODE;
                         uptPrDtls.AccGroup = vendorDt.IDGRP;
+                        uptPrDtls.VendorName = vendorDt.VENDNAME;
                         db.SaveChanges();
 
                         //audit log
@@ -5255,7 +5256,7 @@ namespace PurchaseWeb_2.Controllers
                 } else
                 {
                     var PrMstList = db.PR_Mst
-                        .Where(x => x.StatId == 11 || x.StatId == 12 || x.StatId == 7 || x.StatId == 15)
+                        .Where(x => x.StatId == 11 || x.StatId == 12 || x.StatId == 7 || x.StatId == 15 || x.StatId == 14)
                         .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                         .ToList();
                     return PartialView("PRListForPurchasingProses", PrMstList);
@@ -6357,9 +6358,9 @@ namespace PurchaseWeb_2.Controllers
                 });
                 db.SaveChanges();
 
-                PR_Details pR_ = new PR_Details() { PRDtId = PrDtlsId };
-                db.PR_Details.Attach(pR_);
-                db.PR_Details.Remove(pR_);
+                //PR_Details pR_ = new PR_Details() { PRDtId = PrDtlsId };
+                //db.PR_Details.Attach(pR_);
+                db.PR_Details.Remove(_prDtls);
                 db.SaveChanges();                
 
                 this.AddNotification("The details Deleted successfully!!", NotificationType.SUCCESS);
