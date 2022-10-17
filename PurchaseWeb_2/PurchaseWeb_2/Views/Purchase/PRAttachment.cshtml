@@ -29,6 +29,7 @@
             <th colspan="1">
                 No:  @Model.PRNo
             </th>
+            <th colspan="2">&nbsp;</th>
         </tr>
         <tr>
             <th colspan="7">
@@ -43,6 +44,7 @@
             <th colspan="1">
                 *Asset No.
             </th>
+            <th colspan="2">&nbsp;</th>
         </tr>
         <tr>
             <th colspan="7">
@@ -65,6 +67,7 @@
             <th colspan="1">
                 @Model.AssetNo
             </th>
+            <th colspan="2">&nbsp;</th>
         </tr>
         <tr>
             <th colspan="7">
@@ -73,6 +76,7 @@
             <th colspan="7">
                 &nbsp;
             </th>
+            <th colspan="2">&nbsp;</th>
         </tr>
         <tr>
             <th colspan="7">
@@ -87,6 +91,7 @@
             <th colspan="1">
                 * Tel Ext
             </th>
+            <th colspan="2">&nbsp;</th>
         </tr>
         <tr>
             <th colspan="7">
@@ -101,6 +106,7 @@
             <th colspan="1">
                 @Model.Usr_mst.TelExt
             </th>
+            <th colspan="2">&nbsp;</th>
         </tr>
         <tr>
             <th colspan="7">
@@ -109,6 +115,7 @@
             <th colspan="7">
                 &nbsp;
             </th>
+            <th colspan="2">&nbsp;</th>
         </tr>
     </thead>
     <tbody>
@@ -137,6 +144,7 @@
             <td colspan="7">
                 For Purchasing use only
             </td>
+            <td colspan="2">&nbsp;</td>
         </tr>
         <tr>
             <td>
@@ -162,6 +170,8 @@
             <td>
                 Tax Class
             </td>
+            <td>Po No.</td>
+            <td>Vendor Name</td>
             <!--td style="display:none">
             PO No.
         </td>
@@ -197,7 +207,8 @@
                 <td>@String.Format("{0:N5}", item.TotCostWitTax)</td>
                 <td>@item.TaxCode</td>
                 <td>@item.TaxClass</td>
-                <!--<td style="display:none">@item.LastPONo</td>-->
+                <td>@item.NoPo</td>
+                <td>@item.VendorName</td>
             </tr>
         }
 

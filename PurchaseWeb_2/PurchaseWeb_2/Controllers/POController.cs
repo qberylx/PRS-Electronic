@@ -327,9 +327,7 @@ namespace PurchaseWeb_2.Controllers
                 //Currency_Mst = x.Currency_Mst,
                 //Currency_Mst1 = x.Currency_Mst1,
                 PR_VendorComparison = x.PR_VendorComparison
-            }).OrderBy(r=>r.VendorName).ToList();
-
-
+            }).ToList();
 
             var GrandTotal = db.PR_Details
                 .Where(x => x.PRid == PrMstId)
@@ -338,6 +336,11 @@ namespace PurchaseWeb_2.Controllers
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
                 .FirstOrDefault();
+
+            if (PrMst.PRTypeId == 4)
+            {
+                pRdtlsViews = pRdtlsViews.OrderBy(r => r.VendorName).OrderBy(r => r.PRDtId).ToList();
+            }
 
             ViewBag.PrDiscount = PrMst.Discount;
             ViewBag.PrTypeId = PrMst.PRTypeId;
