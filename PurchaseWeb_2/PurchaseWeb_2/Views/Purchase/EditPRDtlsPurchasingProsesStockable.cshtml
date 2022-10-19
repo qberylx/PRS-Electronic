@@ -1,9 +1,18 @@
 ﻿@model  PurchaseWeb_2.Models.PRDtlsPurProViewModel
 
+<style>
+    div#loadingForm {
+        display: none;
+    }
+</style>
+
 <div class="row zoomedElement">
     <div class="col-md-12">
         <!--card header-->
         <div class="card card-primary">
+            <div class="overlay" id="loadingForm">
+                <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+            </div>
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-2 ">
@@ -12,7 +21,7 @@
 
                 </div>
             </div>
-        </div>
+        
         <!--card body-->
         @*using (Html.BeginForm("AddPurDtls", "Purchase",FormMethod.Post))*@
         @using (Ajax.BeginForm("UpdatePRDtlsPurchasingStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", OnSuccess = "OnSuccess" }))
@@ -68,7 +77,7 @@
                     </div>
 
                     <div class="col-1">
-                        @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label " })
                         <br />
                         @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control", @Value = Model.Qty } })
                         @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
@@ -173,15 +182,18 @@
             </div>
             <div class="card-footer">
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <button type="submit" id="btnSubmit" name="Submit" value="Update" class="btn btn-primary">Update</button>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button type="submit" id="btnSubmit" name="Submit" value="Update" class="btn btn-primary">UPDATE</button>
+                        </div>
                     </div>
+                    
                 </div>
 
             </div>
         }
     </div>
-
+    </div>
 </div>
 
 <script>

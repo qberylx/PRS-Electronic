@@ -160,20 +160,20 @@
                                     @item.CurCode @String.Format("{0:N5}", item.UnitPrice) 
                                 </td>
                                 <td>
-                                    @{ DateTime reqDevDate = (DateTime)item.ReqDevDate; }
-                                                @reqDevDate.ToString("dd/MM/yyyy")
-                                            </td>
+                                    @{ DateTime reqDevDate = (DateTime)item.ReqDevDate ; }
+                                        @reqDevDate.ToString("dd/MM/yyyy")
+                                </td>
             
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Remarks)
-                                            </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Remarks)
+                                </td>
             
-                                            <td>
-                                                @using (Ajax.BeginForm("EditPRDtlsPurchasingProsesStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPRDtlsForm" }))
+                                <td>
+                                    @using (Ajax.BeginForm("EditPRDtlsPurchasingProsesStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPRDtlsForm" , LoadingElementId= "loadingForm" }))
                                     {
                                         <input type="hidden" id="EditPrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
                                         <input type="hidden" id="EditPrMstId" name="PrMstId" value="@item.PRid" />
-                                        <button class="btn btn-primary"><i class="fa fa-pen fa-xs"></i></button>
+                                        <button class="btn btn-primary" ><i class="fa fa-pen fa-xs"></i></button>
                                     }
                                 </td>
                                 <td>
@@ -283,11 +283,11 @@
                                     @Html.DisplayFor(modelItem => item.SalesOrder)
                                 </td>
                                 <td>
-                                    @using (Ajax.BeginForm("EditPRDtlsPurchasingProsesStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPRDtlsForm" }))
+                                    @using (Ajax.BeginForm("EditPRDtlsPurchasingProsesStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPRDtlsForm"  }))
                                     {
                                         <input type="hidden" id="EditPrDtlsId" name="PrDtlsId" value="@item.PRDtId" />
                                         <input type="hidden" id="EditPrMstId" name="PrMstId" value="@item.PRid" />
-                                        <button class="btn btn-primary"><i class="fa fa-pen fa-xs"></i></button>
+                                        <button class="btn btn-primary" ><i class="fa fa-pen fa-xs"></i></button>
                                     }
                                 </td>
                                 <td>
@@ -343,6 +343,5 @@
     }
 
 </div>
-
 
 

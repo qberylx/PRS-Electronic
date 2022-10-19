@@ -29,14 +29,19 @@ namespace PurchaseWeb_2.Models
         [Required(ErrorMessage = "Please enter Quantity")]
         [RegularExpression(@"^\d+(\.\d{1,4})?$", ErrorMessage = "Valid Decimal number with maximum 4 decimal places.")]
         public Nullable<decimal> Qty { get; set; }
-
+        [Required(ErrorMessage = "Please select UOM")]
         public Nullable<int> UOMId { get; set; }
         [DataType(DataType.Date)]
+        [Required(ErrorMessage = "Please enter Delivery Date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public Nullable<System.DateTime> ReqDevDate { get; set; }
         public string Remarks { get; set; }
+        [Required(ErrorMessage = "Please select Vendor")]
         public string VendorName { get; set; }
         public Nullable<int> CurrId { get; set; }
+        [Column(TypeName = "decimal(18,5)")]
+        [Required(ErrorMessage = "Please enter Unit Price")]
+        [RegularExpression(@"^\d+(\.\d{1,5})?$", ErrorMessage = "Valid Decimal number with maximum 5 decimal places.")]
         public Nullable<decimal> UnitPrice { get; set; }
         public Nullable<decimal> TotCostnoTax { get; set; }
         public Nullable<int> Tax { get; set; }
