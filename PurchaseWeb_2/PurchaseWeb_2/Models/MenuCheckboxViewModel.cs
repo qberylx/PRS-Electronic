@@ -15,7 +15,8 @@ namespace PurchaseWeb_2.Models
         public int Active { get; set; }
         public int ParentId { get; set; }
         public bool menuActive { get; set; }
-
+        public int Ordering { get; set; }
+        public int MenuLayer { get; set; }
 
         public bool IsChecked { get; set; }
 

@@ -208,9 +208,37 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult getMenulist(int roleid)
         {
+            // check all menu in menu mst
+            var menuMst = db.Menu_mst.Where(x => x.Active == true).ToList();
+
             List<RoleMenuMapping_mst> menuList = db.RoleMenuMapping_mst
                 .Where(x => x.RoleId == roleid && x.Menu_mst.Active == true)                                    
                 .ToList();
+            if (menuList.Count() < menuMst.Count())
+            {
+                //add menu in RoleMenuMapping_Mst and reload them
+                foreach (var item in menuMst)
+                {
+                    var MenuMap = db.RoleMenuMapping_mst.Where(x => x.RoleId == roleid && x.MenuId == item.Menu_id).FirstOrDefault();
+                    if (MenuMap == null)
+                    {
+                        var addMenu = new RoleMenuMapping_mst
+                        {
+                            RoleId = roleid,
+                            MenuId = item.Menu_id,
+                            Active = false
+                        };
+                        db.RoleMenuMapping_mst.Add(addMenu);
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            menuList = db.RoleMenuMapping_mst
+                .Where(x => x.RoleId == roleid && x.Menu_mst.Active == true)
+                .ToList();
+
+
             MenuCheckboxViewModel mcVM = new MenuCheckboxViewModel();
 
             List<MenuCheckboxViewModel> mcVMList = menuList.Select(x => new MenuCheckboxViewModel
@@ -220,7 +248,9 @@ namespace PurchaseWeb_2.Controllers
                 MenuName = x.Menu_mst.Menu_name,
                 IsChecked = (bool)x.Active,
                 ParentId = (int)x.Menu_mst.Menu_ParentId,
-                menuActive = (bool)x.Menu_mst.Active
+                menuActive = (bool)x.Menu_mst.Active,
+                Ordering = (int)x.Menu_mst.Ordering,
+                MenuLayer = (int)x.Menu_mst.MenuLayer
             }).ToList();
 
             //var menuList = db.Menu_mst.ToList();
