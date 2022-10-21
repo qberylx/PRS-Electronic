@@ -66,6 +66,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<Section_Mst> Section_Mst { get; set; }
         public virtual DbSet<AuditBudget_log> AuditBudget_log { get; set; }
         public virtual DbSet<MonthlyDeptBudget> MonthlyDeptBudgets { get; set; }
+        public virtual DbSet<HODManager_Map> HODManager_Map { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {

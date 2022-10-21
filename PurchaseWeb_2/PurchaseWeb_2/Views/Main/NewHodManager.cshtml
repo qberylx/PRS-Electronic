@@ -1,0 +1,78 @@
+﻿
+
+<style>
+    div#loadingForm {
+        /*display: none;*/
+    }
+</style>
+
+<div class="card card-primary">
+    <div class="overlay" id="loadingForm">
+        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+    </div>
+    <div class="card-header">
+        <h6 class="card-title">HOD Manager Setup</h6>
+    </div>
+    @using (Ajax.BeginForm("SaveHodManager", "Main", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divHodManagerList", OnSuccess = "OnSuccessSave", LoadingElementId = "loaderList" }))
+    {
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:10%">
+                                HOD Manager
+                            </td>
+                            <td style="width:2%">:</td>
+                            <td style="width:10%">
+                                <select class="form-control-border" id="HodManagerId" name="HodManagerId">
+                                    <option value="">Select option</option>
+                                    @foreach (var user in ViewBag.HodManUser)
+                                    {
+                                        <option value="@user.usr_id">@user.Username</option>
+                                    }
+                                </select>
+                            </td>
+                            <td style="width:10%">
+                                HOD
+                            </td>
+                            <td style="width:2%">:</td>
+                            <td style="width:10%">
+                                <select class="form-control-border" id="HodId" name="HodId">
+                                    <option value="">Select option</option>
+                                    @foreach (var user in ViewBag.HodUsers)
+                                    {
+                                        <option value="@user.usr_id">@user.Username</option>
+                                    }
+                                </select>
+                            </td>
+                            <td style="width:5%">
+                                <button type="submit" class="btn btn-success"><i class="fa fa-plus-circle"> ADD </i></button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    }
+
+</div>
+
+<script>
+    //$(window).on('load', function () {
+    //    console.log("Test load");
+    //    $("#loadingForm").css("display", "none");
+    //});
+
+    $(document).ready(function () {
+        //console.log("Test");
+
+        //$("#HodManagerId").addClass("fstdropdown-select");
+        //$("#HodId").addClass("fstdropdown-select");
+        //setFstDropdown();
+        //setFstDropdown();
+        //$("#loadingForm").css("display", "none");
+    });
+        
+</script>

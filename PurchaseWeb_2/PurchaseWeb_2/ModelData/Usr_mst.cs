@@ -19,6 +19,8 @@ namespace PurchaseWeb_2.ModelData
         {
             this.PR_Details = new HashSet<PR_Details>();
             this.PR_Mst = new HashSet<PR_Mst>();
+            this.HODManager_Map = new HashSet<HODManager_Map>();
+            this.HODManager_Map1 = new HashSet<HODManager_Map>();
         }
     
         public int usr_id { get; set; }
@@ -41,5 +43,9 @@ namespace PurchaseWeb_2.ModelData
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Mst> PR_Mst { get; set; }
         public virtual AccTypeDept AccTypeDept { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HODManager_Map> HODManager_Map { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HODManager_Map> HODManager_Map1 { get; set; }
     }
 }

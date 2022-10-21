@@ -1,0 +1,87 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.HODManager_Map>
+
+<div class="card card-secondary">
+    <div class="overlay" id="loadingList">
+        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+    </div>
+    <div id="notification">
+        @Html.Partial("_Notifications")
+    </div>
+    <div class="card-header">
+        <h6 class="card-title">List</h6>
+    </div>
+    <div class="card-body">
+        <table style="width:100%">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>HOD Manager</th>
+                    <th>HOD</th>
+
+                </tr>
+                @{ int i = 0;}
+                @foreach (var user in ViewBag.HODs)
+                {
+                    i++;
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @user.Username
+                        </td>
+                        <td>
+                            @foreach (var hod in Model.Where(x => x.HodManagerId == user.usr_id))
+                            {
+                                <table >
+                                    <tr>
+                                        <td style="width:50%">
+                                            @hod.Usr_mst1.Username
+                                        </td>
+                                        <td style="width:5%">&nbsp;</td>
+                                        <td style="width:20%">
+                                            <button class="btn btn-danger" onclick="DeleteHOD(@hod.HodId, @user.usr_id)"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            }
+                        </td>
+                    </tr>
+                }
+            </thead>
+        </table>
+    </div>
+</div>
+
+<script>
+    function DeleteHOD(hodId , hodManId) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("DeleteHodManager", "Main")",
+            data: JSON.stringify({ hodId: hodId, hodManId: hodManId }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divHodManagerList').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(2000).fadeOut("slow");
+        function hideLoaderList() {
+            $("#loadingList").css("display", "none");
+        }
+        window.setTimeout(hideLoaderList, 1000);
+    });
+</script>
+
+

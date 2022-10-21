@@ -609,8 +609,72 @@ namespace PurchaseWeb_2.Controllers
             return View("ContactAdmin", userMst);
         }
 
+        //page for HOD Manager register HOD below him
+        public ActionResult HODManagerForm()
+        {
+            var HodUser = db.Usr_mst.Where(x => x.Psn_id == 2 && x.Flag_Aproval == true).ToList();
+            ViewBag.HodUsers = HodUser;
 
+            var HodManUser = db.Usr_mst.Where(x => x.Psn_id == 12 && x.Flag_Aproval == true).ToList();
+            ViewBag.HodManUser = HodManUser;
 
+            return View("HODManagerForm");
+        }
+
+        public ActionResult NewHodManager()
+        {
+            var HodUser = db.Usr_mst.Where(x => x.Psn_id == 2 && x.Flag_Aproval == true).ToList();
+            ViewBag.HodUsers = HodUser;
+
+            var HodManUser = db.Usr_mst.Where(x => x.Psn_id == 12 && x.Flag_Aproval == true).ToList();
+            ViewBag.HodManUser = HodManUser;
+
+            return PartialView("NewHodManager");
+        }
+
+        public ActionResult SaveHodManager(int HodManagerId, int HodId)
+        {
+            // check if its in the list
+            var hodManager = db.HODManager_Map.Where(x => x.HodManagerId == HodManagerId && x.HodId == HodId).FirstOrDefault();
+            if(hodManager == null) // add new
+            {
+                var newHodManager = new HODManager_Map
+                {
+                    HodManagerId = HodManagerId,
+                    HodId = HodId,
+                    CreateBy = Session["Username"].ToString(),
+                    CreateDate = DateTime.Now
+                };
+                db.HODManager_Map.Add(newHodManager);
+                db.SaveChanges();
+            }
+
+            this.AddNotification("Add HOD Manager Successfully", NotificationType.SUCCESS);
+
+            return RedirectToAction("ListHodManager");
+        }
+
+        public ActionResult ListHodManager()
+        {
+            var HODManagerLst = db.HODManager_Map.ToList();
+
+            var HOD = db.Usr_mst.Where(x => x.Psn_id == 12 && x.Flag_Aproval == true).ToList();
+            ViewBag.HODs = HOD;
+
+            return PartialView("ListHodManager", HODManagerLst);
+        }
+
+        public ActionResult DeleteHodManager(int hodId, int hodManId)
+        {
+            var delHod = db.HODManager_Map.Where(x => x.HodId == hodId && x.HodManagerId == hodManId).FirstOrDefault();
+            db.HODManager_Map.Remove(delHod);
+            db.SaveChanges();
+
+            this.AddNotification("HOD has been deleted", NotificationType.SUCCESS);
+
+            return RedirectToAction("ListHodManager");
+
+        }
 
 
 

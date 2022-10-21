@@ -129,6 +129,16 @@
           <Property Name="ModifiedBy" Type="varchar" MaxLength="100" />
           <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="HODManager_Map">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HodManagerId" Type="int" />
+          <Property Name="HodId" Type="int" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="100" />
+          <Property Name="CreateDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="ICCategory_Mst">
           <Key>
             <PropertyRef Name="IC_id" />
@@ -595,6 +605,30 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="VCId" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_HODManager_Map_Usr_mst">
+          <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="0..1" />
+          <End Role="HODManager_Map" Type="Self.HODManager_Map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usr_mst">
+              <PropertyRef Name="usr_id" />
+            </Principal>
+            <Dependent Role="HODManager_Map">
+              <PropertyRef Name="HodManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HODManager_Map_Usr_mst1">
+          <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="0..1" />
+          <End Role="HODManager_Map" Type="Self.HODManager_Map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usr_mst">
+              <PropertyRef Name="usr_id" />
+            </Principal>
+            <Dependent Role="HODManager_Map">
+              <PropertyRef Name="HodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MonthlyBudget_AccTypeDept">
           <End Role="AccTypeDept" Type="Self.AccTypeDept" Multiplicity="0..1" />
           <End Role="MonthlyBudget" Type="Self.MonthlyBudget" Multiplicity="*" />
@@ -998,6 +1032,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySet Name="Currency_Mst" EntityType="Self.Currency_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department_mst" EntityType="Self.Department_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Expenses_Mst" EntityType="Self.Expenses_Mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HODManager_Map" EntityType="Self.HODManager_Map" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ICCategory_Mst" EntityType="Self.ICCategory_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LastNoMst" EntityType="Self.LastNoMst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu_mst" EntityType="Self.Menu_mst" Schema="dbo" store:Type="Tables" />
@@ -1069,6 +1104,14 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
     [vw_sourcingRemarksLst].[VCId] AS [VCId]
     FROM [dbo].[vw_sourcingRemarksLst] AS [vw_sourcingRemarksLst]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_HODManager_Map_Usr_mst" Association="Self.FK_HODManager_Map_Usr_mst">
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+            <End Role="HODManager_Map" EntitySet="HODManager_Map" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HODManager_Map_Usr_mst1" Association="Self.FK_HODManager_Map_Usr_mst1">
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+            <End Role="HODManager_Map" EntitySet="HODManager_Map" />
+          </AssociationSet>
           <AssociationSet Name="FK_MonthlyBudget_AccTypeDept" Association="Self.FK_MonthlyBudget_AccTypeDept">
             <End Role="AccTypeDept" EntitySet="AccTypeDept" />
             <End Role="MonthlyBudget" EntitySet="MonthlyBudget" />
@@ -1438,6 +1481,15 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
             <Parameter Name="PrId" Mode="In" Type="Int32" />
             <Parameter Name="SourcingName" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="HODManager_Map" EntityType="Domi_PurModel.HODManager_Map" />
+          <AssociationSet Name="FK_HODManager_Map_Usr_mst" Association="Domi_PurModel.FK_HODManager_Map_Usr_mst">
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+            <End Role="HODManager_Map" EntitySet="HODManager_Map" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HODManager_Map_Usr_mst1" Association="Domi_PurModel.FK_HODManager_Map_Usr_mst1">
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+            <End Role="HODManager_Map" EntitySet="HODManager_Map" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -1466,6 +1518,8 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="SourcingFlag" Type="Boolean" />
           <Property Name="Team_id" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="MD_PA_Flag" Type="Boolean" />
+          <NavigationProperty Name="HODManager_Map" Relationship="Domi_PurModel.FK_HODManager_Map_Usr_mst" FromRole="Usr_mst" ToRole="HODManager_Map" />
+          <NavigationProperty Name="HODManager_Map1" Relationship="Domi_PurModel.FK_HODManager_Map_Usr_mst1" FromRole="Usr_mst" ToRole="HODManager_Map" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -2459,6 +2513,42 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Type="Int32" Name="PassFlag" Nullable="false" />
           <Property Type="String" Name="Remarks" Nullable="true" MaxLength="359" />
         </ComplexType>
+        <EntityType Name="HODManager_Map">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HodManagerId" Type="Int32" />
+          <Property Name="HodId" Type="Int32" />
+          <Property Name="CreateBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_HODManager_Map_Usr_mst" FromRole="HODManager_Map" ToRole="Usr_mst" />
+          <NavigationProperty Name="Usr_mst1" Relationship="Domi_PurModel.FK_HODManager_Map_Usr_mst1" FromRole="HODManager_Map" ToRole="Usr_mst" />
+        </EntityType>
+        <Association Name="FK_HODManager_Map_Usr_mst">
+          <End Type="Domi_PurModel.Usr_mst" Role="Usr_mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.HODManager_Map" Role="HODManager_Map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usr_mst">
+              <PropertyRef Name="usr_id" />
+            </Principal>
+            <Dependent Role="HODManager_Map">
+              <PropertyRef Name="HodManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HODManager_Map_Usr_mst1">
+          <End Type="Domi_PurModel.Usr_mst" Role="Usr_mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.HODManager_Map" Role="HODManager_Map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usr_mst">
+              <PropertyRef Name="usr_id" />
+            </Principal>
+            <Dependent Role="HODManager_Map">
+              <PropertyRef Name="HodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3176,6 +3266,17 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_ChkDeptBudgetReject" FunctionName="Domi_PurModel.Store.SP_ChkDeptBudgetReject" />
+          <EntitySetMapping Name="HODManager_Map">
+            <EntityTypeMapping TypeName="Domi_PurModel.HODManager_Map">
+              <MappingFragment StoreEntitySet="HODManager_Map">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="HodId" ColumnName="HodId" />
+                <ScalarProperty Name="HodManagerId" ColumnName="HodManagerId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

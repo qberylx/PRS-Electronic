@@ -345,6 +345,7 @@ namespace PurchaseWeb_2.Controllers
             
             string PRnewNo = getNewPrNO((int)prType.PRTypeNo);
             string username = Convert.ToString(Session["Username"]);
+            
             //get User id and department id
             var userdtls = db.Usr_mst
                             .Where(x => x.Username == username)
@@ -517,25 +518,59 @@ namespace PurchaseWeb_2.Controllers
             }
             else
             {
-                var usrMst = db.Usr_mst
-                .Where(x => x.Dpt_id == PrMst.DepartmentId && x.Psn_id == 2 && x.Team_id == PrMst.TeamId)
-                .ToList();
-
-
-                foreach (var Usr in usrMst)
+                // if Pr raise by HOD . chk HOD Manager . if not null send email to HOD manager
+                if (PrMst.Usr_mst.Psn_id == 2)
                 {
-                    string Subject = PrMst.PRNo + " - " + PrMst.Purpose;
+                    var HodManager = db.HODManager_Map.Where(x => x.HodId == PrMst.UserId).ToList();
 
-                    string Body = "<br/>" +
-                        "Hi " + Usr.Username + " , <br/><br/>" +
-                        "Kindly review attached PR and login to http://prs.dominant-semi.com/ to proceed. <br/>" +
-                        "Or kindly reply 'Ok'/'Approve' to give an approval or 'Reject' to send this PR back. <br/><br/>";
+                    if (HodManager != null)
+                    {
+                        // get email HOD Manager
 
-                    string FilePath = ExportToExcel(PrMstId);
+                        foreach (var Usr in HodManager)
+                        {
+                            string HODManEmail = Usr.Usr_mst.Email;
 
-                    SendEmail(Usr.Email, Subject, Body, FilePath);
+                            string Subject = PrMst.PRNo + " - " + PrMst.Purpose;
 
-                };
+                            string Body = "<br/>" +
+                                "Hi " + Usr.Usr_mst.Username + " , <br/><br/>" +
+                                "Kindly review attached PR and login to http://prs.dominant-semi.com/ to proceed. <br/>" +
+                                "Or kindly reply 'Ok'/'Approve' to give an approval or 'Reject' to send this PR back. <br/><br/>";
+
+                            string FilePath = ExportToExcel(PrMstId);
+
+                            SendEmail(HODManEmail, Subject, Body, FilePath);
+
+                        };
+
+                    }
+
+                } 
+                else
+                {
+                    var usrMst = db.Usr_mst
+                                .Where(x => x.Dpt_id == PrMst.DepartmentId && x.Psn_id == 2 && x.Team_id == PrMst.TeamId)
+                                .ToList();
+
+
+                    foreach (var Usr in usrMst)
+                    {
+                        string Subject = PrMst.PRNo + " - " + PrMst.Purpose;
+
+                        string Body = "<br/>" +
+                            "Hi " + Usr.Username + " , <br/><br/>" +
+                            "Kindly review attached PR and login to http://prs.dominant-semi.com/ to proceed. <br/>" +
+                            "Or kindly reply 'Ok'/'Approve' to give an approval or 'Reject' to send this PR back. <br/><br/>";
+
+                        string FilePath = ExportToExcel(PrMstId);
+
+                        SendEmail(Usr.Email, Subject, Body, FilePath);
+
+                    };
+                }
+
+                
             }
             
                         
@@ -557,6 +592,8 @@ namespace PurchaseWeb_2.Controllers
             //    .Where(x => userDpts.Any(i=>x.DepartmentId == i) && x.StatId == 3 && x.TeamId == userdtls.Team_id)
             //    .ToList();
 
+            
+
             var PrMst = (from prMst in db.PR_Mst
                          join usrMst in db.Usr_mst 
                          on new { DepartmentId = prMst.DepartmentId , TeamId = prMst.TeamId }
@@ -564,6 +601,18 @@ namespace PurchaseWeb_2.Controllers
                          where usrMst.Username == username && prMst.StatId == 3
                          select prMst
                           ).ToList();
+
+            // if user login position HOD Manager then list out only HOD under him
+            if (userdtls.Psn_id == 12)
+            {
+                PrMst = (from prMst in db.PR_Mst
+                         join HODMap in db.HODManager_Map
+                         on new { HODId = prMst.UserId }
+                         equals new { HODId = HODMap.HodId }
+                         where HODMap.HodManagerId == userdtls.usr_id && prMst.StatId == 3
+                         select prMst
+                         ).ToList();
+            }
 
             if (userdtls.Psn_id == 7)
             {

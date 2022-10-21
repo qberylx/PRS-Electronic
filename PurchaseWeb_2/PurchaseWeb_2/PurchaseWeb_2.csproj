@@ -258,6 +258,9 @@
     <Compile Include="ModelData\GetPOListbyDate_Result.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\HODManager_Map.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\ICCategory_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -436,6 +439,7 @@
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\font-awesome.css" />
     <Content Include="css\Formstyle.css" />
+    <Content Include="css\ionicons.min.css" />
     <Content Include="css\style.css" />
     <Content Include="dist\css\adminlte.css" />
     <Content Include="dist\css\adminlte.min.css" />
@@ -490,6 +494,7 @@
     <Content Include="dist\js\pages\dashboard2.js" />
     <Content Include="dist\js\pages\dashboard3.js" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fonts.googleapis.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -2673,6 +2678,9 @@
     <Content Include="Views\Purchase\ShowPRBudgetList.cshtml" />
     <Content Include="Views\Purchase\callVendorChange.cshtml" />
     <Content Include="Views\Purchase\callVendorChangeUPrice.cshtml" />
+    <Content Include="Views\Main\HODManagerForm.cshtml" />
+    <Content Include="Views\Main\NewHodManager.cshtml" />
+    <Content Include="Views\Main\ListHodManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

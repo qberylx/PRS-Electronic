@@ -74,6 +74,9 @@
         <EntityTypeShape EntityType="Domi_PurModel.AuditBudget_log" Width="1.5" PointX="18.75" PointY="0.75" />
         <EntityTypeShape EntityType="Domi_PurModel.MonthlyDeptBudget" Width="1.5" PointX="0.75" PointY="18.75" />
         <AssociationConnector Association="Domi_PurModel.FK_MonthlyDeptBudget_MonthlyBudget_Mst" />
+        <EntityTypeShape EntityType="Domi_PurModel.HODManager_Map" Width="1.5" PointX="3" PointY="25.875" />
+        <AssociationConnector Association="Domi_PurModel.FK_HODManager_Map_Usr_mst" />
+        <AssociationConnector Association="Domi_PurModel.FK_HODManager_Map_Usr_mst1" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
