@@ -105,7 +105,15 @@ namespace PurchaseWeb_2.Controllers
                           .ToList();
 
                 return PartialView("DashBoardPrMstList", PrMst);
-            } else
+            } 
+            else if (userdtls.Psn_id == 12)
+            {
+                var PrMst = db.PR_Mst.Where(x => x.DeActiveFlag != true && x.DepartmentId == userdtls.Dpt_id)
+                    .OrderByDescending(x => x.PRId)./*Take(300).*/ToList();
+
+                return PartialView("DashBoardPrMstList", PrMst);
+            }            
+            else
             {
                 var PrMst = db.PR_Mst.Where(x => x.StatId != 1 && x.StatId != 2 && x.DeActiveFlag != true)
                     .OrderByDescending(x => x.PRId)./*Take(300).*/ToList();

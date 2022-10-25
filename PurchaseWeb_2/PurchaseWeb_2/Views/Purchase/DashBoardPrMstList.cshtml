@@ -134,7 +134,7 @@
                                 <td>
                                     @Html.ActionLink("View", "DashboardPrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
                                     @Html.ActionLink("Export To Excel", "ExportPRtoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
-                                    @if (ViewBag.Psn_id != 1 && ViewBag.Psn_id != 2)
+                                    @if (ViewBag.Psn_id != 1 && ViewBag.Psn_id != 2 && ViewBag.Psn_id != 12)
                                     {
                                         if (item.StatId == 9)
                                         {

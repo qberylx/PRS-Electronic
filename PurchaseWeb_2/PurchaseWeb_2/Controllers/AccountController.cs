@@ -127,7 +127,7 @@ namespace PurchaseWeb_2.Controllers
                 {
                     return RedirectToAction("MDApprovalList", "Purchase");
                 }
-                else if (userRoleId == "2")
+                else if (userRoleId == "2" || userRoleId == "12")
                 {
                     return RedirectToAction("ApprovalHOD", "Purchase");
                 }
