@@ -24,7 +24,7 @@
         
         <!--card body-->
         @*using (Html.BeginForm("AddPurDtls", "Purchase",FormMethod.Post))*@
-        @using (Ajax.BeginForm("UpdatePRDtlsPurchasingStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("UpdatePRDtlsPurchasingStockable", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", OnSuccess = "OnSuccess", LoadingElementId= "loadingForm" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })

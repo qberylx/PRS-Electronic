@@ -4441,7 +4441,7 @@ namespace PurchaseWeb_2.Controllers
                     CURNCODE = vendorDt.CURNCODE,
                     IDGRP = vendorDt.IDGRP
                 }
-            };
+            }.FirstOrDefault();
 
             return Json(getVndrDtLst, JsonRequestBehavior.AllowGet);
         }
@@ -6250,8 +6250,8 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.UOMList = UomList;
 
             // get from sage the domipartno
-            //var domipartlist = dbDom1.POVUPRs.ToList();
-            //ViewBag.domipartlist = domipartlist;
+            var domipartlist = dbDom1.POVUPRs.ToList();
+            ViewBag.domipartlist = domipartlist;
 
             //get vendor list
             var vendorList = dbDom1.APVENs
@@ -6273,6 +6273,54 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.CurrList = CurrList;
 
             return PartialView("AddPRDtlsPurchasingStockable");
+        }
+
+        public class JsonPurChgDomiPart
+        {
+            public string VendorPartNo { get; set; }
+            public string Description { get; set; }
+            public string VendorCode { get; set; }
+            public string VendorName { get; set; }
+            public string CurCode { get; set; }
+            public string UOMName { get; set; }
+            public decimal UnitPrice { get; set; }
+        }
+
+        public ActionResult purChangeDomiPart(string itemno, string vendId)
+        {
+            //get vendor list
+            var vendor = dbDom1.APVENs
+                .Where(x => x.SWACTV == 1 && x.VENDORID == vendId)
+                .FirstOrDefault();
+
+            var domipart = dbDom1.POVUPRs
+                .Where(x => x.ITEMNO == itemno && x.VDCODE == vendId)
+                .FirstOrDefault();
+
+            var VendorPartNo = dbDom1.ICITMVs.Where(x => x.ITEMNO == itemno && x.VENDNUM == vendId).FirstOrDefault();
+            var VENDITEM = "";
+            if (VendorPartNo != null)
+            {
+                VENDITEM = VendorPartNo.VENDITEM; 
+            }
+
+            var getChgDomi = new List<JsonPurChgDomiPart>
+            {
+                new JsonPurChgDomiPart
+                {
+                    
+                    VendorPartNo = VENDITEM,
+                    Description = domipart.VCPDESC.ToString(),
+                    VendorCode = vendId,
+                    VendorName = domipart.APVEN.VENDNAME,
+                    CurCode = domipart.APVEN.CURNCODE,
+                    UnitPrice = domipart.BAMOUNT,
+                    UOMName = domipart.DEFBUNIT
+                }
+            };
+
+
+            return Json(getChgDomi, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AddPRDtlsPurchasingStockable2(PRDtlsPurProViewModel pR_)

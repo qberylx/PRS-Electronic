@@ -7,9 +7,7 @@
         margin: 0 auto;
     }
 
-    div#loadingForm {
-        display:none;
-    }
+    
     
 </style>
 
@@ -32,7 +30,7 @@
             <!--</div>-->
             <!--card body-->
             @*using (Html.BeginForm("AddPurDtls", "Purchase",FormMethod.Post))*@
-            @using (Ajax.BeginForm("AddPRDtlsPurchasingStockable2", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", OnSuccess = "OnSuccess" }))
+            @using (Ajax.BeginForm("AddPRDtlsPurchasingStockable2", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList", OnSuccess = "OnSuccessSave", LoadingElementId= "loadingForm" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -46,12 +44,17 @@
 
                     <div class="row">
 
-                        <div class="col-1">
+                        <div class="col-2">
                             @Html.LabelFor(model => model.DomiPartNo, htmlAttributes: new { @class = "control-label " })
                             <br />
-                            <select class="custom-select form-control-border" id="DomiPartNo" name="DomiPartNo" onchange="domiChange(this.value)">
-                                <option value="NS">NS</option>
+                            <select class="fstdropdown-select custom-select form-control-border" id="SlctDomiPartNo" name="SlctDomiPartNo" onchange="domiPurChange(this.value)">
+                                <option value="">NS</option>
+                                @foreach (var domi in ViewBag.domipartlist)
+                                {
+                                    <option value='{"itemNo":"@domi.ITEMNO","vendId":"@domi.VDCODE"}'>@domi.ITEMNO - @domi.APVEN.VENDNAME </option>
+                                }
                             </select>
+                            <input type="hidden" name="DomiPartNo" id="DomiPartNo" value="NS" />
                             @Html.ValidationMessageFor(model => model.DomiPartNo, "", new { @class = "text-danger" })
 
                         </div>
@@ -59,14 +62,14 @@
                         <div class="col-1">
                             @Html.LabelFor(model => model.VendorPartNo, htmlAttributes: new { @class = "control-label " })
                             <br />
-                            @Html.EditorFor(model => model.VendorPartNo, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.VendorPartNo, new { htmlAttributes = new { @class = "form-control" , @id = "VendorPartNo" } })
                             @Html.ValidationMessageFor(model => model.VendorPartNo, "", new { @class = "text-danger" })
                         </div>
 
-                        <div class="col-3">
+                        <div class="col-2">
                             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
                             <br />
-                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" , @id = "Description" } })
                             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                         </div>
 
@@ -87,18 +90,20 @@
                         <div class="col-1">
                             @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label " })
                             <br />
-                            @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control"  } })
                             @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="col-1">
                             <strong>UOM</strong>
                             <br />
-                            @Html.DropDownList("UOMName",
+                            <div id="divUOM">
+                                @Html.DropDownList("UOMName",
                                 new SelectList(ViewBag.UOMList, "UNIT", "UNIT"),
                                 "Please Select the UOM",
                                 new { @class = "custom-select form-control-border", @required = "required" })
-                            @Html.ValidationMessageFor(model => model.UOMName, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.UOMName, "", new { @class = "text-danger" })
+                            </div>                            
                         </div>
 
                         <div class="col-2">
@@ -113,7 +118,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-9">
-                                    @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" , @id= "UnitPrice" } })
                                 </div>
                             </div>
                             @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
@@ -176,7 +181,56 @@
 
 </div>
 
+
 <script>
+    $(document).ready(function () {
+        console.log("ready!");
+        setFstDropdown();
+    });
+
+    function domiPurChange(itemno) {
+        //console.log(itemno);
+        var obj = JSON.parse(itemno);
+        //console.log(obj.itemNo);
+        //console.log(obj.vendId);
+
+        $("#DomiPartNo").val(obj.itemNo);
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("purChangeDomiPart","Purchase")",
+            data: JSON.stringify({ itemno: obj.itemNo, vendId: obj.vendId }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "JSON",
+            success: function (response) {
+                $("#VendorPartNo").val(response[0].VendorPartNo);
+                $("#Description").val(response[0].Description);
+                var inputVendorCode = '<input type="hidden" id="VendorCode" name="VendorCode" value ="' + response[0].VendorCode + '" />' +
+                    '<input type="text" id="VendorName" name="VendorName" class="form-control" value="' + response[0].VendorName + '" />';
+
+                $("#vendorList").replaceWith(inputVendorCode);
+
+                var inputUOM = '<input type="text" id="UOMName" name="UOMName" class="form-control" value="' + response[0].UOMName + '" />';
+                $("#divUOM").replaceWith(inputUOM);
+
+                var inputCur = '<input type="text" id="CurCode" name="CurCode" class="form-control" value="' + response[0].CurCode + '" />';
+                $("#divVendorHidden").replaceWith(inputCur);
+
+                $("#UnitPrice").val(response[0].UnitPrice);
+
+                console.log(response[0].Description);
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+    }
+
     function vendorChange(vendorCode) {
         console.log(vendorCode);
         $.ajax({
@@ -196,5 +250,32 @@
             }
         });
     }
+
+    function OnSuccessSave() {
+        this.reset();
+        var PrMstId = $("#PRid").val();
+        //$("#divPRDtlsForm").html();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AddPRDtlsPurchasingStockable", "Purchase")",
+            data: '{PrMstId: "' + PrMstId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divPRDtlsForm').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
 </script>
 
+<style>
+    div#loadingForm {
+        display: none;
+    }
+</style>
