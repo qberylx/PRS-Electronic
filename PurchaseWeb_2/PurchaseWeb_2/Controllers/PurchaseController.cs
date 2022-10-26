@@ -3711,9 +3711,24 @@ namespace PurchaseWeb_2.Controllers
 
                 
             }
-            //return View("PurchasingProsesPR");
+            
             Session["groupType"] = PrMst.PrGroupType1.GroupId;
-            return View("PRProsesList");
+            
+            return RedirectToAction("PRListForPurchaser", "Purchase", new { Doctype = 4, group = PrMst.PrGroupType1.GroupId });
+        }
+
+        public ActionResult PRListPurchaserSubmit(int PrMstId , string submit)
+        {
+            if (submit == "details")
+            {
+                return RedirectToAction("PRDtlsForPurchaser", "Purchase", new { PrMstId = PrMstId });
+            }
+            else if (submit == "hod")
+            {
+                return RedirectToAction("PurHODApproval", "Purchase", new { PrMstId = PrMstId });
+            }
+            
+            return null;
         }
 
         public ActionResult PRDtlsForPurchaser(int PrMstId)
@@ -3724,6 +3739,7 @@ namespace PurchaseWeb_2.Controllers
             ViewBag.PrTypeID = Prmst.PRTypeId;
             ViewBag.PrMstId = PrMstId;
 
+            //return RedirectToAction("PRListForPurchaser", "Purchase", new { Doctype = 4 , group = Prmst.PRGroupType });
             return View("PRDtlsForPurchaser");
         }
 

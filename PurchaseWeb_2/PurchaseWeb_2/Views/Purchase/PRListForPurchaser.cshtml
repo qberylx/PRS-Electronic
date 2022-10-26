@@ -18,6 +18,9 @@
             </div>
         </div>
     </div>
+    <div id="notification">
+        @Html.Partial("_Notifications")
+    </div>
     <div class="card-body">
         <table class="table table-responsive table-head-fixed table-sm table-striped" style="width:100%" id="tableA">
             <tr>
@@ -58,132 +61,157 @@
             </tr>
             @{ String status = "false";
                 String showFlag = "d-none";
-                }
-                @foreach (var item in Model)
-                {
-                    if (item.StatId == 11 || item.StatId == 14) { status = "true"; showFlag = ""; } else { status = "false"; showFlag = "d-none"; }
-                    <tr data-widget="expandable-table"   aria-expanded = "@status" >
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PRNo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.RequestDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AccTypeDept.DeptName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Usr_mst.Username)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PRType_mst.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PrGroupType1.GroupName)
-                        </td>
-                        <td style="width:200px">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
-                                    {
-                                        @currency.Max(s => s.CurCode) <br />
-                                    }
-                                </div>
-                                <div class="col-md-8">
-
-                                    @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
-                                    {
-                                        @*currency.Sum(s => s.TotCostWitTax) *@
-                                        String strTotAmtEst = String.Format("{0:n2}", currency.Sum(s => s.EstTotalPrice));
-                                        @strTotAmtEst
-                                        <br />
-                                    }
-                                </div>
-                            </div>
-                        </td>
-                        <td style="width:200px">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
-                                    {
-                                        @currency.Max(s => s.CurCode) <br />
-                                    }
-                                </div>
-                                <div class="col-md-8">
-
-                                    @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
-                                    {
-                                        @*currency.Sum(s => s.TotCostWitTax) *@
-                                        String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.TotCostWitTax));
-                                        @strTotAmt
-                                        <br />
-                                    }
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            @{String strTotAmtMYR = String.Format("{0:n2}", item.PR_Details.Sum(s=>s.TotCostWitTaxMYR)  ); }
-                            @strTotAmtMYR
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status_Mst.Name)
-                        </td>
-                        <td>
-                            @{ var prDtList = item.PR_Details.ToList();
-                                foreach (var prDt in prDtList)
+            }
+            @foreach (var item in Model)
+            {
+                if (item.StatId == 11 || item.StatId == 14) { status = "true"; showFlag = ""; } else { status = "false"; showFlag = "d-none"; }
+                <tr data-widget="expandable-table" aria-expanded="@status" class="tr">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PRNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccTypeDept.DeptName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Usr_mst.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PRType_mst.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrGroupType1.GroupName)
+                    </td>
+                    <td style="width:200px">
+                        <div class="row">
+                            <div class="col-md-4">
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
                                 {
-                                    var commList = prDt.PR_VendorComparison.ToList();
-                                    foreach (var comm in commList)
+                                    @currency.Max(s => s.CurCode) <br />
+                                }
+                            </div>
+                            <div class="col-md-8">
+
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                {
+                                    @*currency.Sum(s => s.TotCostWitTax) *@
+                                    String strTotAmtEst = String.Format("{0:n2}", currency.Sum(s => s.EstTotalPrice));
+                                    @strTotAmtEst
+                                    <br />
+                                }
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:200px">
+                        <div class="row">
+                            <div class="col-md-4">
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                {
+                                    @currency.Max(s => s.CurCode) <br />
+                                }
+                            </div>
+                            <div class="col-md-8">
+
+                                @foreach (var currency in item.PR_Details.OrderBy(o => o.CurCode).GroupBy(x => x.CurCode))
+                                {
+                                    @*currency.Sum(s => s.TotCostWitTax) *@
+                                    String strTotAmt = String.Format("{0:n2}", currency.Sum(s => s.TotCostWitTax));
+                                    @strTotAmt
+                                    <br />
+                                }
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        @{String strTotAmtMYR = String.Format("{0:n2}", item.PR_Details.Sum(s => s.TotCostWitTaxMYR)); }
+                        @strTotAmtMYR
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status_Mst.Name)
+                    </td>
+                    <td>
+                        @{ var prDtList = item.PR_Details.ToList();
+                            foreach (var prDt in prDtList)
+                            {
+                                var commList = prDt.PR_VendorComparison.ToList();
+                                foreach (var comm in commList)
+                                {
+                                    if (comm.Remarks != null)
                                     {
-                                        if (comm.Remarks != null)
-                                        {
-                                            <a>@comm.Remarks</a>
-                                        }
+                                        <a>@comm.Remarks</a>
                                     }
                                 }
                             }
-                        </td>
-                        <td>
-                            @Html.ActionLink("Details", "PRDtlsForPurchaser", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                        }
+                    </td>
+                    <td>
+                        <table id="tableB" >
+                            <tr>
+                                <td>
+                                    @Html.ActionLink("Details", "PRDtlsForPurchaser", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                                </td>
+                                <td>
+                                    @using (Ajax.BeginForm("PRListPurchaserSubmit", "Purchase"
+                                        , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPrMstList", LoadingElementId = "loaderBody" }))
+                                    {
+                                        <input type="hidden" name="PrMstId" id="PrMstId" value="@item.PRId" />
+                                        <button class="btn btn-success" name="submit" value="hod">Send To HOD</button>
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                        
+                        
+
+                        @*@Html.ActionLink("Details", "PRDtlsForPurchaser", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
                             @if (item.PRTypeId == 4)
                             {
                                 @Html.ActionLink("Budget", "budgetUpdate", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
                             }
-                            @Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })
+                            @Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-success" })*@
 
-                            
-                        </td>
-                    </tr>
-                    <tr class="expandable-body @showFlag ">
-                        <td colspan="12">
-                            @if (item.StatId == 11)
-                            {
-                                <p style="color:indianred; padding-left:2em">@item.HODPurComment</p>
-                            }
-                            @if (item.StatId == 14)
-                            {
-                                <p style="color:indianred; padding-left:2em">@item.RejectCommentClerk</p>
-                            }
-                        </td>
-                    </tr>
-                }
 
-            </table>
+                    </td>
+                </tr>
+                <tr class="expandable-body @showFlag ">
+                    <td colspan="12">
+                        @if (item.StatId == 11)
+                        {
+                            <p style="color:indianred; padding-left:2em">@item.HODPurComment</p>
+                        }
+                        @if (item.StatId == 14)
+                        {
+                            <p style="color:indianred; padding-left:2em">@item.RejectCommentClerk</p>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>
     </div>
 </div>
 
 
 <script type="text/javascript">
     $(function () {
-        var $rows = $('#tableA tr');
+        var $rows = $('#tableA .tr');
+        
         $('#search').keyup(function () {
             var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
 
             $rows.show().filter(function () {
+                
                 var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
                 return !~text.indexOf(val);
             }).hide();
         });
     });
 
+    $(document).ready(function () {
+        $("#notification").delay(3500).fadeOut("slow");
+    });
+
 </script>
+

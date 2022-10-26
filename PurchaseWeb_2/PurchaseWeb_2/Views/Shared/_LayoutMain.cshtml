@@ -106,6 +106,7 @@
             margin: 0 auto;
         }
     </style>
+    
     <style>
         /* Center the loader */
         #loaderBody {
@@ -165,8 +166,12 @@
             <!-- /.content-header -->
             <!-- Main content -->
             <section class="content">
-                <div id="loaderBody"></div>
+                <div class="preloader flex-column justify-content-center align-items-center" id="preloader">
+                    <img class="animation__shake" src="~/dist/img/dominant.png" alt="DominantLogo" height="145" width="348">
+                </div>
+                
                 <div class="container-fluid">
+                    <div  id="loaderBody"></div>
                     @RenderBody()
                 </div><!-- /.container-fluid -->
             </section>
