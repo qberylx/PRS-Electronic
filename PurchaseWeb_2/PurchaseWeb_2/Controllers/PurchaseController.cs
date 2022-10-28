@@ -3542,7 +3542,7 @@ namespace PurchaseWeb_2.Controllers
             return PartialView("VendorComparisonReport", ComparisonReport);
         }
 
-        public ActionResult PurHODApproval(int PrMstId)
+        public ActionResult PurHODApproval(int PrMstId , string url)
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
@@ -3714,7 +3714,15 @@ namespace PurchaseWeb_2.Controllers
             
             Session["groupType"] = PrMst.PrGroupType1.GroupId;
             
-            return RedirectToAction("PRListForPurchaser", "Purchase", new { Doctype = 4, group = PrMst.PrGroupType1.GroupId });
+            if (url == "PRListForPurchaser")
+            {
+                return RedirectToAction("PRListForPurchaser", "Purchase", new { Doctype = 4, group = PrMst.PrGroupType1.GroupId });
+            } else
+            {
+                return View("PRProsesList");
+            }
+
+            
         }
 
         public ActionResult PRListPurchaserSubmit(int PrMstId , string submit)
@@ -3725,7 +3733,7 @@ namespace PurchaseWeb_2.Controllers
             }
             else if (submit == "hod")
             {
-                return RedirectToAction("PurHODApproval", "Purchase", new { PrMstId = PrMstId });
+                return RedirectToAction("PurHODApproval", "Purchase", new { PrMstId = PrMstId, url = "PRListForPurchaser" });
             }
             
             return null;
