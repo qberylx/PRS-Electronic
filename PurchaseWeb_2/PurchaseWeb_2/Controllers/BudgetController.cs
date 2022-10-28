@@ -1135,7 +1135,7 @@ namespace PurchaseWeb_2.Controllers
             {
                 ModifiedBy = Session["Username"].ToString(),
                 ModifiedOn = DateTime.Now,
-                ActionBtn = "Additional ",
+                ActionBtn = "Deduction ",
                 ColumnStr = "ConsumptionStock | ConsumptionNonStock | BalanceStock | BalanceNonStock ",
                 ValueStr = dStock + "|" + dNonStock + "|" + dBalanceStock + "|" + dBalanceNonStock,
                 MDB_Id = monthlyDept.MDB_Id,
