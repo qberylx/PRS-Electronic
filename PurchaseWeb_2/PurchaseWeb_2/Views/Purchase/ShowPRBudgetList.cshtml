@@ -73,8 +73,13 @@
                             </table>
                         </td>
                         <td>
-                            @String.Format("{0:N2}", item.PR_Details.Sum(x => x.EstTotalPrice))
-                            @{ decimal DecEstTotalPrice = item.PR_Details.Sum(x => x.EstTotalPrice) ?? 0.00M  ;}
+                            @{ var totPrice = item.PR_Details.Sum(x => x.TotCostWitTaxMYR) ?? 0.00M; }
+                            @if (totPrice == 0.00M)
+                            {
+                                totPrice = item.PR_Details.Sum(x => x.EstTotalPrice) ?? 0.00M ;
+                            }
+                            @String.Format("{0:N2}", totPrice)
+                            @{ decimal DecEstTotalPrice = totPrice;}
                             @{ eTot = eTot + DecEstTotalPrice;}
                         </td>
                     </tr>

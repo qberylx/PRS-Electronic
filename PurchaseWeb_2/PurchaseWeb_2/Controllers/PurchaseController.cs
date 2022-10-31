@@ -1538,7 +1538,13 @@ namespace PurchaseWeb_2.Controllers
         public ActionResult ShowPRBudgetList(int Id)
         {
             var PrMst = db.PR_Mst.Where(x => x.PRId == Id).FirstOrDefault();
-            
+
+            int? monthofRd = int.Parse(PrMst.RequestDate?.ToString("MM"));
+            int? yearofRd = int.Parse(PrMst.RequestDate?.ToString("yyyy"));
+
+            var monthofstr = PrMst.RequestDate?.ToString("MM") ;
+            var yearofstr = PrMst.RequestDate?.ToString("yyyy");
+
             DateTime StartDate = DateTime.Now.Date;
             if (PrMst.RequestDate != null)
             {
@@ -1548,12 +1554,37 @@ namespace PurchaseWeb_2.Controllers
             StartDate = new DateTime(StartDate.Year, StartDate.Month, 1);
             var endDate = StartDate.AddMonths(1);
 
-
             var PrMstList = db.PR_Mst
                 .Where(x => x.AccountCode == PrMst.AccountCode && x.DeActiveFlag != true && x.BudgetSkipFlag != true && x.RequestDate >= StartDate && x.RequestDate < endDate )
                 .ToList();
 
-            return View("ShowPRBudgetList", PrMstList);
+            var budgetList = (from a in db.PR_Mst
+                              join b in db.MonthlyBudget_Expense
+                              on new { AccountCode = PrMst.AccountCode.Replace("-", "")   }
+                              equals new { AccountCode = b.ExpenseString }
+                              join b1 in db.MonthlyBudget_Expense
+                              on new { AccountCode = a.AccountCode.Replace("-", ""), BudgetId = b.BudgetId }
+                              equals new { AccountCode = b1.ExpenseString, BudgetId = b1.BudgetId }
+                              join c in db.MonthlyDeptBudgets
+                              on new { BudgetId = b.BudgetId, monthof1 = monthofRd, yearof1 = yearofRd  }
+                              equals new { BudgetId = c.BudgetId, monthof1 = c.MonthOf , yearof1 = c.YearOf }
+                              where a.RequestDate >= StartDate && a.RequestDate < endDate
+                              select a
+                              ).ToList();
+
+//select AccountCode, b1.ExpenseString, *
+//from PR_Mst a
+//inner
+//join MonthlyBudget_Expense b
+//on b.ExpenseString = replace('82080-20-06-21-FOL', '-', '')
+//inner
+//join MonthlyBudget_Expense b1
+//on b1.ExpenseString = replace(a.AccountCode, '-', '') and b1.BudgetId = b.BudgetId
+//inner join MonthlyDeptBudget c
+//on c.BudgetId = b.BudgetId and c.MonthOf = month(a.RequestDate) and c.YearOf = year(a.RequestDate)
+//order by PRId desc
+
+            return View("ShowPRBudgetList", budgetList);
         }
 
         //Show purchase master selected for reference
