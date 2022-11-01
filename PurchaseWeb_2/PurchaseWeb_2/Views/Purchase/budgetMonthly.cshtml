@@ -1,6 +1,6 @@
 ﻿<div id="divbudgetMonthly">
 
-    @model PurchaseWeb_2.ModelData.MonthlyBudget
+    @model PurchaseWeb_2.ModelData.MonthlyDeptBudget
 
     <div class="card card-info">
         <div class="card-header">
@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-md-6">
                     
-                    @{String strAssetBudget = String.Format("{0:n2}", Model.Budget ); }
+                    @{String strAssetBudget = String.Format("{0:n2}", Model.BalanceNonStock); }
                     <strong>: </strong> MYR @strAssetBudget
                 </div>
             </div>
@@ -44,7 +44,7 @@
                     <strong>B/O </strong>
                 </div>
                 <div class="col-md-6">
-                    @{String strAssetBal = String.Format("{0:n2}", Model.Balance); }
+                    @{String strAssetBal = String.Format("{0:n2}", Model.BalanceNonStock); }
                     <strong>: </strong> MYR @strAssetBal
                 </div>
             </div>
@@ -77,7 +77,7 @@
 
                     </div>
                     <div class="col-md-9">
-                        <input type="text" id="AssetBudget" name="AssetBudget" value="@Model.Balance" class="form-control" onfocusout="" />
+                        <input type="text" id="AssetBudget" name="AssetBudget" value="@Model.BalanceNonStock" class="form-control" onfocusout="" />
                     </div>
                 </div>
                 <div class="row">
@@ -85,7 +85,7 @@
                         <strong>B/O After Update </strong>
                     </div>
                     <div class="col-md-9">
-                        @{ decimal NewBal = Model.Balance - ViewBag.PrTotAmount + ViewBag.PRDiscount ;}
+                        @{ decimal NewBal = (decimal)Model.BalanceNonStock;}
                         <input type="text" id="Balance" name="Balance" value="@NewBal" class="form-control" />
                     </div>
                 </div>

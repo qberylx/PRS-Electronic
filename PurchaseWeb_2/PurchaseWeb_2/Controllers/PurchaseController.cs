@@ -3176,26 +3176,33 @@ namespace PurchaseWeb_2.Controllers
             // get tot amount of PR
             decimal TotAmt = (decimal)prMstSingle.PR_Details.Sum(x => x.TotCostWitTaxMYR);
 
-            var budgetSingle = db.MonthlyBudgets
-                .Where(x => x.DepId == prMstSingle.BudgetDept && x.Month == sMonth && x.Year == sYear)
+            //var budgetSingle = db.MonthlyBudgets
+            //    .Where(x => x.DepId == prMstSingle.BudgetDept && x.Month == sMonth && x.Year == sYear)
+            //    .FirstOrDefault();
+
+            //get budget id
+            var budgetMst = db.MonthlyBudget_Expense.Where(x => x.ExpenseString == prMstSingle.AccountCode.Replace("-", "")).FirstOrDefault();
+            // get nonstockbalance
+            var budgetDept = db.MonthlyDeptBudgets
+                .Where(x => x.BudgetId == budgetMst.BudgetId && x.MonthOf == sMonth && x.YearOf == sYear)
                 .FirstOrDefault();
 
             //var BudgetDept = prMstSingle.BudgetDept.ToString();
-            var BudgetDept = prMstSingle.AccountCode.Replace("-", "").ToString();
-            if (BudgetDept.Length > 8)
-            {
-                BudgetDept = BudgetDept.Substring(7, 2);
-                //BudgetDept = "0" + BudgetDept;
-            } else
-            {
-                BudgetDept = "22";
-            }
-            var accDept = db.AccTypeDepts.Where(x => x.DeptCode == BudgetDept).FirstOrDefault();
+            //var BudgetDept = prMstSingle.AccountCode.Replace("-", "").ToString();
+            //if (BudgetDept.Length > 8)
+            //{
+            //    BudgetDept = BudgetDept.Substring(7, 2);
+            //    //BudgetDept = "0" + BudgetDept;
+            //} else
+            //{
+            //    BudgetDept = "22";
+            //}
+            //var accDept = db.AccTypeDepts.Where(x => x.DeptCode == BudgetDept).FirstOrDefault();
 
-            if (budgetSingle != null)
-            {
-                ViewBag.Budget = budgetSingle.Budget;
-                ViewBag.Balance = budgetSingle.Balance;
+            //if (budgetDept != null)
+            //{
+                ViewBag.Budget = budgetDept.BalanceNonStock;
+                ViewBag.Balance = budgetDept.BalanceNonStock;
                 ViewBag.PrTotAmount = TotAmt;
                 if (prMstSingle.Discount > 0)
                 {
@@ -3207,41 +3214,44 @@ namespace PurchaseWeb_2.Controllers
                 
                 ViewBag.PrMstId = PrMstId;
                 ViewBag.FlagUpdateBudget = prMstSingle.FlagUpdateMonthlyBudget;
-                if (BudgetDept == "22")
-                {
-                    ViewBag.departName = "";
-                }
-                else
-                {
-                    ViewBag.departName = accDept.DeptName;
-                }
-                
+                //if (BudgetDept == "22")
+                //{
+                //    ViewBag.departName = "";
+                //}
+                //else
+                //{
+                //    ViewBag.departName = accDept.DeptName;
+                //}
+                ViewBag.departName = budgetMst.AccTypeDept.DeptName;
 
-                return PartialView("budgetMonthly", budgetSingle);
-            }
-            else
-            {
-                ViewBag.departName = accDept.DeptName;
-                ViewBag.department = prMstSingle.AccTypeDept.DeptName;
-                ViewBag.Budget = 0;
-                ViewBag.Balance = 0;
-                ViewBag.PrTotAmount = TotAmt;
-                if (prMstSingle.Discount > 0)
-                {
-                    ViewBag.PRDiscount = prMstSingle.Discount;
-                }
-                else
-                {
-                    ViewBag.PRDiscount = 0;
-                }
-                ViewBag.PrMstId = PrMstId;
-                ViewBag.FlagUpdateBudget = prMstSingle.FlagUpdateMonthlyBudget;
-                return PartialView("budgetMonthlynotSet", budgetSingle);
-            }
+
+
+                return PartialView("budgetMonthly", budgetDept);
+            //}
+            
+            //else
+            //{
+            //    ViewBag.departName = accDept.DeptName;
+            //    ViewBag.department = prMstSingle.AccTypeDept.DeptName;
+            //    ViewBag.Budget = 0;
+            //    ViewBag.Balance = 0;
+            //    ViewBag.PrTotAmount = TotAmt;
+            //    if (prMstSingle.Discount > 0)
+            //    {
+            //        ViewBag.PRDiscount = prMstSingle.Discount;
+            //    }
+            //    else
+            //    {
+            //        ViewBag.PRDiscount = 0;
+            //    }
+            //    ViewBag.PrMstId = PrMstId;
+            //    ViewBag.FlagUpdateBudget = prMstSingle.FlagUpdateMonthlyBudget;
+            //    return PartialView("budgetMonthlynotSet", budgetSingle);
+            //}
             
         }
 
-        public ActionResult SaveBudgetMonthly(MonthlyBudget monthlyBudget, int PrMstId, string submit)
+        public ActionResult SaveBudgetMonthly(MonthlyDeptBudget monthlyBudget, int PrMstId, string submit)
         {
             var Prmst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
@@ -3250,18 +3260,19 @@ namespace PurchaseWeb_2.Controllers
             {
                 Prmst.FlagUpdateMonthlyBudget = true;
                 db.SaveChanges();
-            }
-            
-            var budgetSingle = db.MonthlyBudgets
-                .Where(x => x.BudgetId == monthlyBudget.BudgetId)
-                .FirstOrDefault();
-
-            if(budgetSingle != null && submit == "save")
-            {
-                budgetSingle.Balance = monthlyBudget.Balance;
-                db.SaveChanges();
                 this.AddNotification("Saved", NotificationType.SUCCESS);
             }
+            
+            //var budgetSingle = db.MonthlyBudgets
+            //    .Where(x => x.BudgetId == monthlyBudget.BudgetId)
+            //    .FirstOrDefault();
+
+            //if(budgetSingle != null && submit == "save")
+            //{
+            //    budgetSingle.Balance = monthlyBudget.Balance;
+            //    db.SaveChanges();
+            //    this.AddNotification("Saved", NotificationType.SUCCESS);
+            //}
 
             if(Prmst != null && submit == "pass")
             {
