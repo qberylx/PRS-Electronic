@@ -1255,5 +1255,10 @@ namespace PurchaseWeb_2.Controllers
             return View("MonthlyDeptBudgetRpt");
         }
 
+        public ActionResult DeptBudgetDetails()
+        {
+            return View("DeptBudgetDetails");
+        }
+
     }
 }
