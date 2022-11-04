@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    @using (Ajax.BeginForm("CreatePoNo", "PO", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPurDetailsPOViewSelected" }))
+    @using (Ajax.BeginForm("CreatePoNo", "PO", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPurDetailsPOViewSelected", LoadingElementId = "loaderBody" }))
     {
         <div class="card-body  p-0">
 
