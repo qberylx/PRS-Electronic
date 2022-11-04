@@ -135,7 +135,12 @@ namespace PurchaseWeb_2.Controllers
 
                 var Prdtls = db.PR_Details.Where(x => x.PRid == PrMstId).ToList();
 
-                foreach(var item in Prdtls)
+                if (PrMst.PrGroupType1.CPRFFlag == false && PrMst.BudgetSkipFlag != true)
+                {
+                    var addBackBudget = db.SP_ChkDeptBudgetReject(PrMst.PRId, (string)Session["Username"]);
+                }
+
+                foreach (var item in Prdtls)
                 {
                     item.PoFlag = false;
                     db.SaveChanges();
