@@ -77,7 +77,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             ViewBag.StatusId = PrMst.StatId;
             ViewBag.PrMstId = PrMstId;
@@ -86,11 +86,33 @@ namespace PurchaseWeb_2.Controllers
             return View("POProsesView");
         }
 
+        public ActionResult ReviewPR (int PrMstId)
+        {
+            var PrMst = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            if (PrMst != null)
+            {
+                if (PrMst.PrGroupType1.CPRFFlag == false)
+                {
+                    PrMst.FlagUpdateMonthlyBudget = true;
+                }
+                else
+                {
+                    PrMst.FlagUpdatedCPRF = true;
+                }
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("PoProsesList", "PO");
+        }
+
         public ActionResult POReject( int PrMstId)
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
             if(PrMst != null)
             {
                 if (PrMst.PrGroupType1.CPRFFlag == false)
@@ -124,7 +146,7 @@ namespace PurchaseWeb_2.Controllers
                 db.SaveChanges();
 
                 //send email to purchaser
-                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
                 string userEmail = usrmst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List  ";
                 string body = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List and has been sent back to purchasing. " +
@@ -140,7 +162,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             return PartialView("RejectPOForm", PrMst);
         }
@@ -149,7 +171,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PrMstId)
-                .SingleOrDefault();
+                .FirstOrDefault();
 
             return PartialView("RejectPOUserForm", PrMst);
         }
@@ -160,7 +182,7 @@ namespace PurchaseWeb_2.Controllers
             {
                 var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PRId)
-                .SingleOrDefault();
+                .FirstOrDefault();
                 if (PrMst != null)
                 {
                     
@@ -204,7 +226,7 @@ namespace PurchaseWeb_2.Controllers
                 this.AddNotification("PR " + PrMst.PRNo + " has been rejected back to Sourcing", NotificationType.SUCCESS);
 
                 //send email to purchaser
-                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).SingleOrDefault();
+                var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
                 string userEmail = usrmst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List  ";
                 string body = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List and has been sent back to purchasing. " +
@@ -226,7 +248,7 @@ namespace PurchaseWeb_2.Controllers
             {
                 var PrMst = db.PR_Mst
                 .Where(x => x.PRId == PRId)
-                .SingleOrDefault();
+                .FirstOrDefault();
                 if (PrMst != null)
                 {
                     if (PrMst.PrGroupType1.CPRFFlag == false && PrMst.BudgetSkipFlag != true)
@@ -264,7 +286,7 @@ namespace PurchaseWeb_2.Controllers
                     this.AddNotification("PR " + PrMst.PRNo + " has been rejected back to User", NotificationType.SUCCESS);
 
                     //send email to purchaser
-                    var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.Usr_mst.Username).SingleOrDefault();
+                    var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.Usr_mst.Username).FirstOrDefault();
                     string userEmail = usrmst.Email;
                     string subject = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List  ";
                     string body = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List and has been sent back to you. <br/> " +
@@ -384,7 +406,7 @@ namespace PurchaseWeb_2.Controllers
                 //get PRtypeNo
                 var prType = db.PRType_mst
                     .Where(x => x.PRTypeId == Doctype)
-                    .SingleOrDefault();
+                    .FirstOrDefault();
 
                 string POnewNo = "";
                 //get poFlag
@@ -398,7 +420,7 @@ namespace PurchaseWeb_2.Controllers
                 {
                     var chkPrDetails = db.PR_Details
                         .Where(x => x.PRDtId == pR_Detail.PRDtId)
-                        .SingleOrDefault();
+                        .FirstOrDefault();
                     if (chkPrDetails != null)
                     {
                         if (pR_Detail.PoFlag) // if poflag has been check
@@ -444,7 +466,7 @@ namespace PurchaseWeb_2.Controllers
                 if (PoFlag1)
                 {
                     //get pr mst
-                    var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).SingleOrDefault();
+                    var prMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
 
                     // wondering if needed to make new table for PO created
                     var PO = db.Set<PO_Mst>();

@@ -49,6 +49,7 @@
                     <a>&nbsp;</a>
                     @*@Html.ActionLink("Reject PR back to Purchasing", "POReject", "PO", new { PrMstId = ViewBag.PrMstId }, new { @class = "btn btn-danger" })
                         <a>&nbsp;</a>*@
+                    @Html.ActionLink("Review", "ReviewPR", "PO", new { PrMstId = ViewBag.PrMstId }, new { @class = "btn btn-info" })
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectPR">
                         Reject PR back to Sourcing
                     </button>
