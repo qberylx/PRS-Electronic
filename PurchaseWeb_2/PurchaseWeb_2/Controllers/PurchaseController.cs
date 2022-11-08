@@ -2541,7 +2541,7 @@ namespace PurchaseWeb_2.Controllers
                     ReqDevDate = pR_.ReqDevDate,
                     Remarks = pR_.Remarks,
                     VendorName = pR_.VendorName,
-                    VendorPartNo = "-",
+                    VendorPartNo = pR_.VendorPartNo ?? "-",
                     Device = "-",
                     SalesOrder = "-",
                     EstimateUnitPrice = 0.00M,

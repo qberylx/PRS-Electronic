@@ -1207,7 +1207,14 @@ namespace PurchaseWeb_2.Controllers
                             var taxclass1 = "1";
                             if (pr.TaxCode.ToUpper() == "SSTS")
                             {
-                                taxclass2 = pr.TaxClass.ToString();
+                                if (pr.Tax == 0)
+                                {
+                                    taxclass2 = pr.TaxClass.ToString();
+                                }else
+                                {
+                                    taxclass2 = "2";
+                                }
+                                
                             } else
                             {
                                 taxclass1 = pr.TaxClass.ToString();
