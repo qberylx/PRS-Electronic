@@ -45,6 +45,30 @@
                                 <!--PR Account-->
                                 <strong>Account Code :</strong>@Html.DisplayFor(model => model.AccountCode) <br />
                                 <strong>Account Name :</strong>@ViewBag.ExpenseName <br />
+                                @if (ViewBag.chkBudgetBal == "99.00")
+                                {
+                                    <span>Budget Balance : No Budget </span>
+                                } else
+                                {
+                                    var bal = decimal.Parse(ViewBag.chkBudgetBal);
+                                    if (bal <= 0.00M )
+                                    {
+                                        <strong style="color:red"><span>Budget Balance : RM @ViewBag.chkBudgetBal</span></strong>
+                                        @*<i class="fa fa-2x fa-sticky-note float-right" data-toggle="tooltip" data-placement="left" title="Budget History List"></i>*@
+                                    }
+                                    else
+                                    {
+                                        <span>Budget Balance : RM @ViewBag.chkBudgetBal</span>
+                                        @*<i class="fa fa-2x fa-sticky-note float-right" data-toggle="tooltip" data-placement="left" title="Budget History List"></i>*@
+                                    }
+                                    <a data-toggle="tooltip" data-placement="left" title="Budget History List" onclick="ShowPRBudgetList(@Model.PRId)">
+                                        <i class="fa fa-2x fa-comment-dots float-right " style="color:cadetblue"></i>
+                                    </a>
+                                        
+                                        
+                                }
+
+                                <br />
                                 @{bool BoolBudgetSkipFlag = Model.BudgetSkipFlag != true ? false : true ; }
                                 @if (BoolBudgetSkipFlag)
                                 {
@@ -209,3 +233,9 @@
     </div>
     <!-- /.card-body -->
 </div>
+
+<script>
+    function ShowPRBudgetList(PrMstId) {
+        window.open("/Purchase/ShowPRBudgetList?id=" + PrMstId);
+    }
+</script>

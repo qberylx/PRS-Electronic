@@ -813,6 +813,27 @@ namespace PurchaseWeb_2.Controllers
             //ViewBag.Filename = files.FileName;
             //ViewBag.Filepath = files.FilePath + files.FileName;
 
+            ViewBag.chkBudgetBal = 0.00;
+            //check if pr request date is there , if not use current month and year
+            if (prMst.RequestDate == null)
+            {
+                ObjectParameter DeptBudgetBalance = new ObjectParameter("DeptBudgetBalance", typeof(string));
+                var chkBudgetBal = db.SP_ChkDeptBudgetBalance(DateTime.Now.Month, DateTime.Now.Year, prMst.AccountCode, DeptBudgetBalance).FirstOrDefault();
+                ViewBag.chkBudgetBal = Convert.ToString(chkBudgetBal);
+            }
+            else
+            {
+                DateTime RequestDate = (DateTime)prMst.RequestDate;
+
+                string strMonthOf = RequestDate.ToString("MM");
+                string strYearOf = RequestDate.ToString("yyyy");
+
+                ObjectParameter DeptBudgetBalance = new ObjectParameter("DeptBudgetBalance", typeof(string));
+                var chkBudgetBal = db.SP_ChkDeptBudgetBalance(int.Parse(strMonthOf), int.Parse(strYearOf), prMst.AccountCode, DeptBudgetBalance).FirstOrDefault();
+                ViewBag.chkBudgetBal = Convert.ToString(chkBudgetBal);
+
+            }
+
             return PartialView("PurMstViewSelected", prMst);
         }
 
@@ -1544,11 +1565,28 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst.Where(x => x.PRId == Id).FirstOrDefault();
 
-            int? monthofRd = int.Parse(PrMst.RequestDate?.ToString("MM"));
-            int? yearofRd = int.Parse(PrMst.RequestDate?.ToString("yyyy"));
+            int? monthofRd;
+            int? yearofRd;
+            if (PrMst.RequestDate != null)
+            {
+                monthofRd = int.Parse(PrMst.RequestDate?.ToString("MM"));
+                yearofRd = int.Parse(PrMst.RequestDate?.ToString("yyyy"));
+            } else
+            {
+                monthofRd = DateTime.Now.Month;
+                yearofRd = DateTime.Now.Year;
+            }
 
-            var monthofstr = PrMst.RequestDate?.ToString("MM") ;
-            var yearofstr = PrMst.RequestDate?.ToString("yyyy");
+            if (PrMst.RequestDate != null)
+            {
+                var monthofstr = PrMst.RequestDate?.ToString("MM");
+                var yearofstr = PrMst.RequestDate?.ToString("yyyy");
+            } else
+            {
+                var monthofstr = DateTime.Now.ToString("MM");
+                var yearofstr = DateTime.Now.ToString("yyyy");
+            }
+            
 
             DateTime StartDate = DateTime.Now.Date;
             if (PrMst.RequestDate != null)
@@ -1562,6 +1600,10 @@ namespace PurchaseWeb_2.Controllers
             var PrMstList = db.PR_Mst
                 .Where(x => x.AccountCode == PrMst.AccountCode && x.DeActiveFlag != true && x.BudgetSkipFlag != true && x.RequestDate >= StartDate && x.RequestDate < endDate )
                 .ToList();
+
+            var monthof = db.Months.Where(x => x.Month1 == monthofRd).FirstOrDefault();
+            ViewBag.Monthof = monthof.MonthName;
+            ViewBag.Yearof = yearofRd;
 
             var budgetList = (from a in db.PR_Mst
                               join b in db.MonthlyBudget_Expense
