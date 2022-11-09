@@ -3198,6 +3198,27 @@ namespace PurchaseWeb_2.Controllers
                 Prmst.FlagUpdatedCPRF = true;
                 db.SaveChanges();
 
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "FlagUpdatedCPRF |",
+
+                    ValueStr =
+                    true + "|",
+
+                    PRId = pR_Mst.PRId,
+                    PRDtlsId = 0,
+                    Remarks = "PR Reviewed"
+
+                });
+                db.SaveChanges();
+
                 var CprfMst = db.CPRFMsts.Where(x => x.CPRFNo == Prmst.CPRF)
                     .FirstOrDefault();
                 if (CprfMst != null)
@@ -3308,6 +3329,27 @@ namespace PurchaseWeb_2.Controllers
                 Prmst.FlagUpdateMonthlyBudget = true;
                 db.SaveChanges();
                 this.AddNotification("Saved", NotificationType.SUCCESS);
+
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "FlagUpdateMonthlyBudget |",
+
+                    ValueStr =
+                    true + "|",
+
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "PR Reviewed"
+
+                });
+                db.SaveChanges();
             }
             
             //var budgetSingle = db.MonthlyBudgets
@@ -3326,7 +3368,30 @@ namespace PurchaseWeb_2.Controllers
                 Prmst.FlagUpdateMonthlyBudget = true;
                 db.SaveChanges();
                 this.AddNotification("Budget Passed", NotificationType.SUCCESS);
+
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "FlagUpdateMonthlyBudget |",
+
+                    ValueStr =
+                    true + "|",
+
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "PR Reviewed"
+
+                });
+                db.SaveChanges();
             }
+
+            
 
 
             return RedirectToAction("budgetMonthly", new { PrMstId  = PrMstId });

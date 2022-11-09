@@ -103,6 +103,27 @@ namespace PurchaseWeb_2.Controllers
                     PrMst.FlagUpdatedCPRF = true;
                 }
                 db.SaveChanges();
+
+                //audit log
+                string Username = (string)Session["Username"];
+                // add audit log for PR
+                var auditLog = db.Set<AuditPR_Log>();
+                auditLog.Add(new AuditPR_Log
+                {
+                    ModifiedBy = Username,
+                    ModifiedOn = DateTime.Now,
+                    ActionBtn = "UPDATE",
+                    ColumnStr = "FlagUpdateMonthlyBudget |",
+
+                    ValueStr =
+                    true + "|",
+
+                    PRId = PrMstId,
+                    PRDtlsId = 0,
+                    Remarks = "PR Reviewed"
+
+                });
+                db.SaveChanges();
             }
 
             return RedirectToAction("PoProsesList", "PO");
