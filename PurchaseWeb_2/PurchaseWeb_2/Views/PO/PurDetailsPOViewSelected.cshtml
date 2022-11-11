@@ -582,6 +582,12 @@
 
 
 <script>
+    $('form').submit(function () {
+        if ($(this).valid()) {
+            $(':submit', this).attr('disabled', 'disabled');
+        }
+    });
+
     $(document).ready(function () {
         $("#notification").delay(2000).fadeOut("slow");
     });

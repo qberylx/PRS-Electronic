@@ -54,9 +54,9 @@
             <div id="DivPRDtlsListForPurchaser">
                 @{ Html.RenderAction("PRDtlsListForPurchaser", "Purchase", new { PrMstId = ViewBag.PrMstId });}
             </div>
-                    }
-                    else
-                    {
+        }
+        else
+        {
             <div id="DivPRDtlsListForPurchaserType4">
                 @{Html.RenderAction("PRDtlsListForPurchaserType4", "Purchase", new { PrMstId = ViewBag.PrMstId });}                
             </div>
