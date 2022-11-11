@@ -407,6 +407,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ReportView\ConsumptionSummary.aspx.cs">
+      <DependentUpon>ConsumptionSummary.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportView\ConsumptionSummary.aspx.designer.cs">
+      <DependentUpon>ConsumptionSummary.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ReportView\DeptBudgetDetails.aspx.cs">
       <DependentUpon>DeptBudgetDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2365,6 +2372,7 @@
     <Content Include="plugins\uplot\uPlot.iife.js" />
     <Content Include="plugins\uplot\uPlot.iife.min.js" />
     <Content Include="plugins\uplot\uPlot.min.css" />
+    <Content Include="ReportView\ConsumptionSummary.aspx" />
     <Content Include="ReportView\DeptBudgetDetails.aspx" />
     <Content Include="ReportView\MonthlyDeptBudget.aspx" />
     <Content Include="ReportView\PRProcessTime.aspx" />
@@ -2690,6 +2698,7 @@
     <Content Include="Views\Main\NewHodManager.cshtml" />
     <Content Include="Views\Main\ListHodManager.cshtml" />
     <Content Include="Views\Budget\DeptBudgetDetails.cshtml" />
+    <Content Include="Views\Budget\ConsumptionRpt.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

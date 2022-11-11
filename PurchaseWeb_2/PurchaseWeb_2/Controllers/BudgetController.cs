@@ -1260,5 +1260,10 @@ namespace PurchaseWeb_2.Controllers
             return View("DeptBudgetDetails");
         }
 
+        public ActionResult ConsumptionRpt()
+        {
+            return View("ConsumptionRpt");
+        }
+
     }
 }
