@@ -434,7 +434,7 @@ namespace PurchaseWeb_2.Controllers
         {
             var PrMst = db.PR_Mst.FirstOrDefault(pr => pr.PRId == PrMstId);
             // check if account is empty
-            if (PrMst.AccountCode == null && PrMst.PrGroupType1.CPRFFlag == false && PrMst.PRTypeId == 4)
+            if ( (PrMst.AccountCode == null || PrMst.AccountCode.Replace("-","") == "" ) && PrMst.PrGroupType1.CPRFFlag == false && PrMst.PRTypeId == 4)
             {
                 this.AddNotification("Please dont leave Account Code empty", NotificationType.ERROR);
                 return View("PurRequest");
