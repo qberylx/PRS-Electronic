@@ -16,7 +16,8 @@
         </div>
     </div>
 
-    @using (Ajax.BeginForm("CreatePoNo", "PO", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPurDetailsPOViewSelected", LoadingElementId = "loaderBody" }))
+    @using (Ajax.BeginForm("CreatePoNo", "PO"
+        , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DivPurDetailsPOViewSelected", OnBegin= "OBCreatePoNo", OnSuccess= "OSCreatePoNo" }))
     {
         <div class="card-body  p-0">
 
@@ -582,11 +583,21 @@
 
 
 <script>
-    $('form').submit(function () {
-        if ($(this).valid()) {
-            $(':submit', this).attr('disabled', 'disabled');
-        }
-    });
+    function OBCreatePoNo() {
+        console.log("overlay show");
+        $("#overlayLoader").show();
+    }
+
+    function OSCreatePoNo() {
+        console.log("overlay hide");
+        $("#overlayLoader").hide();
+    }
+
+    //$('form').submit(function () {
+    //    if ($(this).valid()) {
+    //        $(':submit', this).attr('disabled', 'disabled');
+    //    }
+    //});
 
     $(document).ready(function () {
         $("#notification").delay(2000).fadeOut("slow");
