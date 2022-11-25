@@ -11130,13 +11130,15 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .animation__shake {
-  -webkit-animation: shake 1500ms;
-  animation: shake 1500ms;
+    -webkit-animation: shake 11500ms;
+    animation: shake 11500ms;
+    animation-iteration-count: infinite;
 }
 
 .animation__wobble {
-  -webkit-animation: wobble 1500ms;
-  animation: wobble 1500ms;
+    -webkit-animation: wobble 11500ms;
+    animation: wobble 11500ms;
+    animation-iteration-count: infinite;
 }
 
 .preloader {

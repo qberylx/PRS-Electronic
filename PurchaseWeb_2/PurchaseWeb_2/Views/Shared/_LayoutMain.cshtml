@@ -144,6 +144,13 @@
             }
         }
     </style>
+    <style>
+        .animation__shake {
+            -webkit-animation: shake 1500ms;
+            animation: shake 1500ms;
+            animation-iteration-count: infinite;
+        }
+    </style>
 </head>
 <body class="sidebar-mini sidebar-collapse zoomedElement" style="height: auto; min-height: 100%;">
 
@@ -167,7 +174,7 @@
             <!-- Main content -->
             <section class="content">
                 <div class="preloader flex-column justify-content-center align-items-center" id="preloader">
-                    <img class="animation__shake" src="~/dist/img/dominant.png" alt="DominantLogo" height="145" width="348">
+                    <img class="animation__shake" id="preloaderImg" src="~/dist/img/dominant.png" alt="DominantLogo" height="145" width="348">
                 </div>
                 
                 <div class="container-fluid">

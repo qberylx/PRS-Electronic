@@ -83,7 +83,7 @@
                                         <tr>
                                             <td>@PoNo</td>
                                             <td>
-                                                @foreach(var domiPN in PoNoLst.Where(x=>x.NoPo == PoNo && PoNo != null).ToList())
+                                                @foreach (var domiPN in PoNoLst.Where(x => x.NoPo == PoNo && PoNo != null).ToList())
                                                 {
                                                     <a>@domiPN.DomiPartNo</a><br />
                                                 }
@@ -138,9 +138,41 @@
                                     {
                                         if (item.StatId == 9)
                                         {
-                                            @Html.ActionLink("Send Back PR to Sourcing", "SendToSourcing", "Purchase", new { PrMstId = item.PRId }
+                                            @*@Html.ActionLink("Send Back PR to Sourcing", "SendToSourcing", "Purchase", new { PrMstId = item.PRId }
                                                , new { @class = "btn btn-primary", onclick = "return confirm('Are you sure you wish to send this PR back to Sourcing?');" }
-                                               )
+                                               )*@
+                                            <button name="SendToSourcing" class="btn btn-primary" data-toggle="modal" data-target="#SendModal_@item.PRId">Send Back PR to Sourcing</button>
+                                            <div class="modal fade" id="SendModal_@item.PRId" tabindex="-1" role="dialog" aria-labelledby="SendSourcingModal_@item.PRId" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="SendSourcingModal_@item.PRId">Send To Sourcing Reason</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        @*@using (Ajax.BeginForm("SendToSourcing", "Purchase", new AjaxOptions { HttpMethod = "POST" , OnBegin= "CloseModal("+item.PRId+")" , UpdateTargetId= "divPRDashBoard" }))*@
+                                                        @using (Html.BeginForm("SendToSourcing","Purchase", FormMethod.Post))
+                                                        {
+                                                            <div class="modal-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-3" >
+                                                                        Reason :
+                                                                    </div>
+                                                                    <div class="col-md-10">
+                                                                        <textarea class="form-control" name="clerkReason" ></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary" onclick="CloseModal(@item.PRId)" >Save</button>
+                                                                <input type="hidden" name="PrMstId" value="@item.PRId" />
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
                                         }
                                     }
 
@@ -166,6 +198,8 @@
                                 </p>
                             </td>
                         </tr>*@
+
+                        
                     }
                 </tbody>
                     
@@ -178,6 +212,12 @@
 
 
 <script type="text/javascript">
+    function CloseModal(PRId) {
+        console.log(PRId);
+        $("#SendModal_" + PRId).modal('hide');
+        $('#loaderBody').show();
+    }
+
     $(function () {
         var $rows = $('#tableA tr');
         $('#search').keyup(function () {

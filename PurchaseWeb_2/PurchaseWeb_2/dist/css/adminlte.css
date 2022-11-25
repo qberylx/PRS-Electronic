@@ -11129,8 +11129,9 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .animation__shake {
-  -webkit-animation: shake 1500ms;
-  animation: shake 1500ms;
+    -webkit-animation: shake 1500ms;
+    animation: shake 1500ms;
+    animation-iteration-count: infinite;
 }
 
 .animation__wobble {

@@ -124,13 +124,16 @@ namespace PurchaseWeb_2.Controllers
             
         }
 
-        public ActionResult SendToSourcing(int PrMstId)
+        public ActionResult SendToSourcing(int PrMstId, string clerkReason)
         {
             var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
 
             if (PrMst != null)
             {
-                PrMst.StatId = 12;
+                PrMst.StatId = 14;
+                PrMst.RejectCommentClerk = clerkReason;
+                PrMst.FlagUpdateMonthlyBudget = false;
+                PrMst.FlagUpdatedCPRF = false;
                 db.SaveChanges();
 
                 var Prdtls = db.PR_Details.Where(x => x.PRid == PrMstId).ToList();
@@ -156,11 +159,12 @@ namespace PurchaseWeb_2.Controllers
                     ModifiedOn = DateTime.Now,
                     ActionBtn = "UPDATE",
                     ColumnStr = "PRid |" +
-                    "StatId |",
+                    "StatId | RejectCommentClerk",
 
                     ValueStr =
                     PrMstId + "|" +
-                    PrMst.StatId + "|",
+                    PrMst.StatId + "|" +
+                    clerkReason + "|" ,
 
                     PRId = PrMstId,
                     PRDtlsId = 0,

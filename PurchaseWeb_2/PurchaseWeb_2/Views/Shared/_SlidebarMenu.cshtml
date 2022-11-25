@@ -83,10 +83,10 @@
                                 <ul class="nav nav-treeview" data-widget="treeview" role="menu" data-accordion="false" data-expandSidebar="true">
                                     @foreach (var e in submenu)
                                     {
-                                        <li class="nav-item menu-is-opening menu-open" style="word-wrap:break-word;">
+                                        <li class="nav-item menu-is-opening menu-open" >
                                             <a href="@Url.Action(e.Action, e.Controller)" class="nav-link " id="menu" onclick="chosenMenu(@e.MenuId)">
                                                 <i class="far fa-circle nav-icon"></i>
-                                                <p>@e.MenuName</p>
+                                                <p style="word-wrap:normal;">@e.MenuName</p>
                                             </a>
                                         </li>
 
@@ -143,3 +143,12 @@
 
 </aside>
 <!--/. Main sidebar-->
+<script>
+    function chosenMenu(menuId) {
+        console.log("preloader show")
+        var winHeight = $(window).height();
+        $('#preloader').height(winHeight);
+        $('#preloaderImg').show();
+        
+    }
+</script>
