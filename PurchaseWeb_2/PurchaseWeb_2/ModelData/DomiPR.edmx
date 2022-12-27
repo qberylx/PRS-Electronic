@@ -153,13 +153,13 @@
             <PropertyRef Name="LastNoId" />
           </Key>
           <Property Name="LastNoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Initial" Type="varchar" MaxLength="3" />
+          <Property Name="Initial" Type="varchar" MaxLength="10" />
           <Property Name="DocType" Type="int" />
           <Property Name="DocYear" Type="int" />
           <Property Name="LastNo" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'Domi_PurEL.dbo.Lgn_mst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Lgn_mst">
           <Key>
             <PropertyRef Name="Lgn_id" />
@@ -267,7 +267,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.Lgn_mst' does not have a primary key 
           <Property Name="MonthName" Type="varchar" MaxLength="20" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'Domi_PurEL.dbo.PO_CSV_Header' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PO_CSV_Header">
           <Key>
             <PropertyRef Name="ID" />
@@ -448,6 +448,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="RejectCommentClerktoUser" Type="varchar(max)" />
           <Property Name="SourcingComment" Type="varchar(max)" />
           <Property Name="BudgetSkipFlag" Type="bit" />
+          <Property Name="CPRFLvl2" Type="varchar" MaxLength="50" />
+          <Property Name="CPRFLvl3" Type="varchar" MaxLength="50" />
+          <Property Name="NonProductflag" Type="smallint" />
+          <Property Name="internalDocNo" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -595,7 +599,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.PO_CSV_Header' does not have a primar
           <Property Name="MD_PA_Flag" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vw_sourcingRemarksLst">
           <Key>
             <PropertyRef Name="VCId" />
@@ -1725,6 +1729,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <Property Name="RejectCommentClerktoUser" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="SourcingComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="BudgetSkipFlag" Type="Boolean" />
+          <Property Name="CPRFLvl2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CPRFLvl3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NonProductflag" Type="Int16" />
+          <Property Name="internalDocNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -2237,7 +2245,7 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
             <PropertyRef Name="LastNoId" />
           </Key>
           <Property Name="LastNoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Initial" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="Initial" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="DocType" Type="Int32" />
           <Property Name="DocYear" Type="Int32" />
           <Property Name="LastNo" Type="Int32" />
@@ -2717,6 +2725,10 @@ warning 6002: The table/view 'Domi_Pur.dbo.vw_sourcingRemarksLst' does not have 
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="internalDocNo" ColumnName="internalDocNo" />
+                <ScalarProperty Name="NonProductflag" ColumnName="NonProductflag" />
+                <ScalarProperty Name="CPRFLvl3" ColumnName="CPRFLvl3" />
+                <ScalarProperty Name="CPRFLvl2" ColumnName="CPRFLvl2" />
                 <ScalarProperty Name="BudgetSkipFlag" ColumnName="BudgetSkipFlag" />
                 <ScalarProperty Name="SourcingComment" ColumnName="SourcingComment" />
                 <ScalarProperty Name="RejectCommentClerktoUser" ColumnName="RejectCommentClerktoUser" />

@@ -151,7 +151,7 @@
                     {
                         <br />
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-2">
                                 @if (Model.AssetFlag == 2)
                                 {
                                     <strong>Asset Status :</strong><a>Not an Asset </a>
@@ -166,16 +166,20 @@
                                 }
                             </div>
 
-                            <div class="col-3">
-                                <strong>Asset No: @Model.AssetNo </strong>
+                            <div class="col-2">
+                                <strong>Asset No: </strong> @Model.AssetNo 
                             </div>
 
-                            <div class="col-3">
-                                <strong>Internal Order No: @Model.IOrderNo </strong>
+                            <div class="col-2">
+                                <strong>Internal Order No: </strong> @Model.IOrderNo 
                             </div>
 
-                            <div class="col-3">
-                                <strong>Cost Centre No: @Model.CostCentreNo </strong>
+                            <div class="col-2">
+                                <strong>Cost Centre No: </strong> @Model.CostCentreNo 
+                            </div>
+
+                            <div class="col-2">
+                                <strong>Internal Document No:</strong> @Model.internalDocNo 
                             </div>
                         </div>
 

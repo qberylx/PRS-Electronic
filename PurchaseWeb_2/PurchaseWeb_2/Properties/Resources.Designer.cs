@@ -61,7 +61,7 @@ namespace PurchaseWeb_2.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to data source=&quot;Domi20&quot;; database=&quot;Domi_Pur&quot; ;user id=pruser;password=user2020;.
+        ///   Looks up a localized string similar to data source=&quot;ML0001868\SQLEXPRESS&quot;; database=&quot;Domi_PurEL&quot; ;user id=sa;password=password;.
         /// </summary>
         internal static string ConnectionString {
             get {
@@ -70,7 +70,16 @@ namespace PurchaseWeb_2.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to data source=&quot;Testserver1&quot;; database=&quot;Domi_Pur&quot; ;user id=pruser;password=user2020;.
+        ///   Looks up a localized string similar to data source=&quot;Domi20&quot;; database=&quot;Domi_PurEL&quot; ;user id=pruser;password=user2020;.
+        /// </summary>
+        internal static string ConnectionString0 {
+            get {
+                return ResourceManager.GetString("ConnectionString0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to data source=&quot;Testserver1&quot;; database=&quot;Domi_PurEL&quot; ;user id=pruser;password=user2020;.
         /// </summary>
         internal static string ConnectionString1 {
             get {
@@ -79,16 +88,7 @@ namespace PurchaseWeb_2.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to data source=&quot;ML0001868\SQLEXPRESS&quot;; database=&quot;Domi_Pur&quot; ;user id=sa;password=password;.
-        /// </summary>
-        internal static string ConnectionString2 {
-            get {
-                return ResourceManager.GetString("ConnectionString2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to data source=&quot;Domi20&quot;; database=&quot;Domi_Pur_Test&quot; ;user id=pruser;password=user2020;.
+        ///   Looks up a localized string similar to data source=&quot;Domi20&quot;; database=&quot;Domi_PurEL_Test&quot; ;user id=pruser;password=user2020;.
         /// </summary>
         internal static string ConnectionString3 {
             get {

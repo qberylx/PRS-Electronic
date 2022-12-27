@@ -2,6 +2,99 @@
 
 @using (Ajax.BeginForm("UpdateCPRF", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurChaseMasterSelected" }))
 {
+    <table style="width:100%">
+        <tr>
+            <td style="width:15%">
+                <b>CPRF NO :</b>
+            </td>
+            <td style="width:17%">
+                <select class="fstdropdown-select form-control-border" id="CPRF" name="CPRF" data-val="true" data-val-required="Please select CPRF No" aria-describedby="CPRF-error" aria-invalid="true">
+                    <option value="">Select option</option>
+                    @foreach (var cprf in ViewBag.cprfList)
+                    {
+                        <option value="@cprf.CPRFNo">@cprf.CPRFNo</option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.CPRF, "", new { @class = "text-danger" })
+            </td>
+            <td style="text-align: right; width: 17%">
+                <b>Internal Order NO :</b>
+            </td>
+            <td style="width:17%"> 
+                @Html.EditorFor(model => model.IOrderNo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IOrderNo, "", new { @class = "text-danger" })
+            </td>
+            <td style="text-align: right; width: 17%">
+                <b>Cost Centre NO :</b>
+            </td>
+            <td style="width:17%">
+                @Html.EditorFor(model => model.CostCentreNo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CostCentreNo, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="AssetFlag" id="AssetFlag1" value="1" checked="checked" />
+                    <label class="form-check-label">New Asset</label>
+                </div>
+                
+            </td>
+            <td>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="AssetFlag" id="AssetFlag2" value="0" />
+                    <label class="form-check-label">Existing Asset</label>
+                </div>
+            </td>
+            <td style="text-align:right">
+                <b>ASSET NO :</b>
+            </td>
+            <td>
+                @Html.EditorFor(model => model.AssetNo, new { htmlAttributes = new { @class = "form-control", @Value = "-" } })
+                @Html.ValidationMessageFor(model => model.AssetNo, "", new { @class = "text-danger" })
+                @if ((string)TempData["alertAssetNo"] != "")
+                {
+                    <a class="text-danger">@TempData["alertAssetNo"]</a>
+                }
+            </td>
+            <td colspan="2" style="text-align:center">
+                <div class="custom-control custom-switch">
+                    <input type="hidden" id="NonProductflag" name="NonProductflag" value="0" />
+                    <input type="checkbox" class="custom-control-input" id="CSNonProduct" name="CSNonProduct" onchange="CSNonProductChange()" />
+                    <label class="custom-control-label" for="CSNonProduct">Is this non production asset?</label>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align:center">
+                <div class="custom-control custom-switch">
+                    <input type="hidden" id="internalDoc" name="internalDoc" value="0" />
+                    <input type="checkbox" class="custom-control-input" id="csinternal" name="csinternal" onchange="oninternalDoc()" />
+                    <label class="custom-control-label" for="csinternal">Require to refer internal document?</label>
+                </div>
+            </td>
+            <td class="divInternal hide" >
+                <b>
+                    Internal document number :
+                </b>
+            </td>
+            <td class="divInternal hide">
+                <input type="text" name="internalDocNo" id="internalDocNo" class="form-control" value="" required/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                &nbsp;
+            </td>
+            <td style="text-align:left">
+                <input type="hidden" name="CPRFPrId" id="CPRFPrId" value="@ViewBag.PrMstId" />
+                <input type="hidden" name="CPRFPrGroup" id="CPRFPrGroup" value="@ViewBag.PrGroup" />
+                <button class="btn btn-info" type="submit" value="update" name="UpCPRF">Update CPRF</button>
+            </td>
+        </tr>
+    </table>
+
+    <!--
     <div class="row">
         <div class="col-1">
             <b>CPRF NO :</b>
@@ -22,7 +115,7 @@
         <div class="col-2">
             @Html.EditorFor(model => model.IOrderNo, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.IOrderNo, "", new { @class = "text-danger" })
-            
+
         </div>
         <div class="col-2">
             <b>Cost Centre NO :</b>
@@ -69,6 +162,7 @@
         </div>
     </div>
     <br />
+
     <div class="row">
         <div class="col-10">
 
@@ -79,5 +173,22 @@
             <button class="btn btn-info" type="submit" value="update" name="UpCPRF">Update CPRF</button>
         </div>
     </div>
+        -->
 }
 
+<script>
+    $(document).ready(function () {
+        oninternalDoc();
+        setFstDropdown();
+    });
+
+    function oninternalDoc() {
+        var chkcsinternal = $("#csinternal").is(":checked");
+        console.log("chkcsinternal="+chkcsinternal);
+        if (chkcsinternal == true) {
+            $(".divInternal").show();
+        } else {
+            $(".divInternal").hide();
+        }
+    }
+</script>

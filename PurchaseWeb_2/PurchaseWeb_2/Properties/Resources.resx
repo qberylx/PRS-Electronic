@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ConnectionString" xml:space="preserve">
-    <value>data source="Domi20"; database="Domi_Pur" ;user id=pruser;password=user2020;</value>
+    <value>data source="ML0001868\SQLEXPRESS"; database="Domi_PurEL" ;user id=sa;password=password;</value>
+    <comment>SQL Server Connection</comment>
+  </data>
+  <data name="ConnectionString0" xml:space="preserve">
+    <value>data source="Domi20"; database="Domi_PurEL" ;user id=pruser;password=user2020;</value>
     <comment>SQL Server Connection</comment>
   </data>
   <data name="ConnectionString1" xml:space="preserve">
-    <value>data source="Testserver1"; database="Domi_Pur" ;user id=pruser;password=user2020;</value>
-    <comment>SQL Server Connection</comment>
-  </data>
-  <data name="ConnectionString2" xml:space="preserve">
-    <value>data source="ML0001868\SQLEXPRESS"; database="Domi_Pur" ;user id=sa;password=password;</value>
+    <value>data source="Testserver1"; database="Domi_PurEL" ;user id=pruser;password=user2020;</value>
     <comment>SQL Server Connection</comment>
   </data>
   <data name="ConnectionString3" xml:space="preserve">
-    <value>data source="Domi20"; database="Domi_Pur_Test" ;user id=pruser;password=user2020;</value>
+    <value>data source="Domi20"; database="Domi_PurEL_Test" ;user id=pruser;password=user2020;</value>
     <comment>SQL Server Connection</comment>
   </data>
 </root>

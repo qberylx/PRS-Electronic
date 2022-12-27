@@ -1764,7 +1764,7 @@ namespace PurchaseWeb_2.Controllers
 
         //Udate CPRF details
         public ActionResult UpdateCPRF(PR_Mst pR_Mst,int CPRFPrId, String CPRF, int AssetFlag , string AssetNo , string IOrderNo, String CostCentreNo, 
-            int CPRFPrGroup, int NonProductflag)
+            int CPRFPrGroup, int NonProductflag, string internalDocNo)
         {
             var PrMaster = db.PR_Mst
                 .Where(x => x.PRId == CPRFPrId)
@@ -1786,6 +1786,7 @@ namespace PurchaseWeb_2.Controllers
                     PrMaster.AssetNo = AssetNo;
                     PrMaster.IOrderNo = IOrderNo;
                     PrMaster.CostCentreNo = CostCentreNo;
+                    PrMaster.internalDocNo = internalDocNo;
                     if (NonProductflag == 1)
                     {
                         PrMaster.ItemNo = "CAPEX02";
@@ -1820,6 +1821,7 @@ namespace PurchaseWeb_2.Controllers
                     "AssetNo |"+
                     "IOrderNo |"+
                     "CostCentreNo |"+
+                    "internalDocNo |"+
                     "ItemNo |",
                     
                     ValueStr = 
@@ -1828,6 +1830,7 @@ namespace PurchaseWeb_2.Controllers
                     AssetNo +"|"+
                     IOrderNo +"|"+
                     CostCentreNo +"|"+
+                    internalDocNo + "|" +
                     itemno ,
                     
                     PRId = pR_Mst.PRId,

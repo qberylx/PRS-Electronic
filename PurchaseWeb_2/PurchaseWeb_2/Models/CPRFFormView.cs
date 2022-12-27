@@ -19,6 +19,8 @@ namespace PurchaseWeb_2.Models
         public string CostCentreNo { get; set; }
         [Required(ErrorMessage = "Please enter Item No")]
         public string ItemNo { get; set; }
+        public string internalDocNo { get; set; }
+
 
         public virtual ICollection<CPRFMst> CPRFMst { get; set; }
     }
