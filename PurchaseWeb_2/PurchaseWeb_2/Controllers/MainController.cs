@@ -477,13 +477,14 @@ namespace PurchaseWeb_2.Controllers
         public ActionResult EditUser(Usr_mst usr_Mst)
         {
             var userUpdate = db.Usr_mst
-                .SingleOrDefault(x => x.usr_id == usr_Mst.usr_id);
+                .FirstOrDefault(x => x.usr_id == usr_Mst.usr_id);
             if (userUpdate != null)
             {
                 userUpdate.Dpt_id = usr_Mst.Dpt_id;
                 userUpdate.Psn_id = usr_Mst.Psn_id;
                 userUpdate.Team_id = usr_Mst.Team_id;
                 userUpdate.TelExt = usr_Mst.TelExt;
+                userUpdate.Email = usr_Mst.Email;
                 userUpdate.Flag_Aproval = usr_Mst.Flag_Aproval;
                 userUpdate.Date_modified = DateTime.Now;
                 db.SaveChanges();
@@ -516,12 +517,12 @@ namespace PurchaseWeb_2.Controllers
                 MailMessage mail = new MailMessage();
                 mail.To.Add(email);
                 //mail.From = new MailAddress("mqatadahabdaziz@gmail.com");
-                //mail.From = new MailAddress("prs.system@dominant-semi.com");
-                //mail.From = new MailAddress("itsupport@dominant-semi.com","prs.system@dominant-semi.com");
-                mail.From = new MailAddress("prs.system@dominant-semi.com", "prs.system");
+                //mail.From = new MailAddress("prs.e@dominant-e.com");
+                //mail.From = new MailAddress("itsupport@dominant-semi.com","prs.e@dominant-e.com");
+                mail.From = new MailAddress("prs.e@dominant-e.com", "prs.system");
                 mail.Subject = @"Web Approval";
                 string Body = @"Hi , your User Id has been approved. <br/>
-                                You may login to Dominant Purchase Order System at http://prs.dominant-semi.com/ ";
+                                You may login to Dominant Purchase Order System at http://prs-electronic.dominant-e.com/ ";
                 mail.Body = Body;
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient();
@@ -530,7 +531,7 @@ namespace PurchaseWeb_2.Controllers
                 smtp.UseDefaultCredentials = false;
                 //itsupport @dominant-semi.com
                 //Domi$dm1n
-                smtp.Credentials = new System.Net.NetworkCredential("prs.system@dominant-semi.com", "Prs1305");
+                smtp.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe2812");
                 //smtp.Credentials = new System.Net.NetworkCredential("itsupport@dominant-semi.com", "Domi$dm1n"); // Enter seders User name and password       
                 //smtp.EnableSsl = true;
                 smtp.Send(mail);
@@ -573,7 +574,7 @@ namespace PurchaseWeb_2.Controllers
                 String emailAdm = item.Email;
                 MailMessage mailAdm = new MailMessage();
                 mailAdm.To.Add(emailAdm);
-                mailAdm.From = new MailAddress("prs.system@dominant-semi.com", "prs.system");
+                mailAdm.From = new MailAddress("prs.e@dominant-e.com", "prs.system");
                 mailAdm.Subject = subject;
                 string bodyAdm = message + " <br/>" + " From : " + userMst.Username + " <br/>" + " Email : " + userMst.Email + " <br/>" + " On : " + DateTime.Now;
                 mailAdm.Body = bodyAdm;
@@ -582,7 +583,7 @@ namespace PurchaseWeb_2.Controllers
                 smtpAdm.Host = "mail1.dominant-semi.com";// mail1.dominant-semi.com smtp.gmail.com
                 smtpAdm.Port = 28; // 28 587
                 smtpAdm.UseDefaultCredentials = false;
-                smtpAdm.Credentials = new System.Net.NetworkCredential("prs.system@dominant-semi.com", "Prs1305");
+                smtpAdm.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe2812");
                 smtpAdm.Send(mailAdm);
             }
 
@@ -590,7 +591,7 @@ namespace PurchaseWeb_2.Controllers
             String email = userMst.Email;
             MailMessage mail = new MailMessage();
             mail.To.Add(email);
-            mail.From = new MailAddress("prs.system@dominant-semi.com", "prs.system");
+            mail.From = new MailAddress("prs.e@dominant-e.com", "prs.system");
             mail.Subject = @"Thank you for contacting us";
             String body = @"Your email has been received. <br/>
                             Our support personnel will get back to you ASAP. ";
@@ -600,7 +601,7 @@ namespace PurchaseWeb_2.Controllers
             smtp.Host = "mail1.dominant-semi.com";// mail1.dominant-semi.com smtp.gmail.com
             smtp.Port = 28; // 28 587
             smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new System.Net.NetworkCredential("prs.system@dominant-semi.com", "Prs1305");
+            smtp.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe2812");
             smtp.Send(mail);
 
             this.AddNotification("Your message has been sent!!", NotificationType.SUCCESS);

@@ -21,11 +21,11 @@
                                 <div class="col-md-10">
                                     <select class="form-control" data-val="true" data-val-number="The field TypePRId must be a number." id="Doctype" name="Doctype" onchange="chgPRtype(this.value)">
                                         <!--<option value="0">Please choose your PR type</option>-->
-                                        <option value="1">Stockable - Wafer - Non Consign</option>
-                                        <option value="2">Stockable - Wafer - Consignment</option>
-                                        <option value="3">Stockable - Non Wafer - Non Consign</option>
-                                        <option value="5">Stockable - Non Wafer - Consignment</option>
-                                        <option value="4">Non Stockable</option>
+                                        @*<option value="1">Stockable - Wafer - Non Consign</option>
+                                        <option value="2">Stockable - Wafer - Consignment</option>*@
+                                        <option value="3">Stockable - Non Wafer - Non Consign </option> 
+                                        @*<option value="5">Stockable - Non Wafer - Consignment</option>*@
+                                        <option value="4">Non Stockable </option>
                                     </select>
                                 </div>
                             </div>
@@ -34,7 +34,7 @@
                             <div class="row">
                                 <div class="col-10">
                                     <div id="groupType">
-                                        @{ Html.RenderAction("groupType", "Purchase", new { groupType = 1 });}
+                                        @{ Html.RenderAction("groupType", "Purchase", new { groupType = 3 });}
                                     </div>
                                 </div>
                             </div>

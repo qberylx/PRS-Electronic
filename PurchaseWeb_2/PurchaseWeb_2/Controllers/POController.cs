@@ -28,10 +28,15 @@ namespace PurchaseWeb_2.Controllers
             try
             {
                 String email = userEmail;
+                if (Convert.ToString(Session["Debug"]) == "Debug")
+                {
+                    email = "mohd.qatadah@dominant-semi.com";
+                    userEmail = "mohd.qatadah@dominant-semi.com";
+                }
                 MailMessage mail = new MailMessage();
                 mail.To.Add(email);
-                //mail.From = new MailAddress("itsupport@dominant-semi.com", "prs.system@dominant-semi.com");
-                mail.From = new MailAddress("prs.system@dominant-semi.com", "prs.system");
+                //mail.From = new MailAddress("itsupport@dominant-semi.com", "prs.e@dominant-e.com");
+                mail.From = new MailAddress("prs.e@dominant-e.com", "prs.system");
                 Subject = Subject.Replace('\r', ' ').Replace('\n', ' ');
                 mail.Subject = Subject;
                 mail.Body = body;
@@ -42,7 +47,7 @@ namespace PurchaseWeb_2.Controllers
                 smtp.UseDefaultCredentials = false;
                 //itsupport @dominant-semi.com
                 //Domi$dm1n
-                smtp.Credentials = new System.Net.NetworkCredential("prs.system@dominant-semi.com", "Prs1305");
+                smtp.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe2812");
                 //smtp.Credentials = new System.Net.NetworkCredential("itsupport@dominant-semi.com", "Domi$dm1n"); // Enter seders User name and password       
                 //smtp.EnableSsl = true;
                 smtp.Send(mail);
@@ -171,7 +176,7 @@ namespace PurchaseWeb_2.Controllers
                 string userEmail = usrmst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List  ";
                 string body = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List and has been sent back to purchasing. " +
-                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                    "Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body);
             }
@@ -251,7 +256,7 @@ namespace PurchaseWeb_2.Controllers
                 string userEmail = usrmst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List  ";
                 string body = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List and has been sent back to purchasing. " +
-                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                    "Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body);
 
@@ -311,7 +316,7 @@ namespace PurchaseWeb_2.Controllers
                     string userEmail = usrmst.Email;
                     string subject = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List  ";
                     string body = @"PR " + PrMst.PRNo + " has been rejected from PO Proses List and has been sent back to you. <br/> " +
-                        "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                        "Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                     SendEmail(userEmail, subject, body);
                 }

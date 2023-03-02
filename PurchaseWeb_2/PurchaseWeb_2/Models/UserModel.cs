@@ -16,6 +16,7 @@ namespace PurchaseWeb_2.Models
         public string Username { get; set; }
 
         [Required(ErrorMessage ="Please enter your office Email ")]
+
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Please choose your department")]

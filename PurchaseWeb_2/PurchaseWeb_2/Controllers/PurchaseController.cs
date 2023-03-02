@@ -30,10 +30,15 @@ namespace PurchaseWeb_2.Controllers
             try
             {
                 String email = userEmail;
+                if ( Convert.ToString(Session["Debug"]) == "Debug")
+                {
+                    email = "mohd.qatadah@dominant-semi.com";
+                    userEmail = "mohd.qatadah@dominant-semi.com";
+                }
                 MailMessage mail = new MailMessage();
                 mail.To.Add(email);
-                //mail.From = new MailAddress("itsupport@dominant-semi.com", "prs.system@dominant-semi.com");
-                mail.From = new MailAddress("prs.system@dominant-semi.com", "prs.system");
+                //mail.From = new MailAddress("itsupport@dominant-semi.com", "prs.e@dominant-e.com");
+                mail.From = new MailAddress("prs.e@dominant-e.com", "prs.system");
                 Subject = Subject.Replace('\r', ' ').Replace('\n', ' ');
                 mail.Subject = Subject;
                 mail.Body = body;
@@ -51,7 +56,7 @@ namespace PurchaseWeb_2.Controllers
                 smtp.Port = 28; // 28 587
                 smtp.UseDefaultCredentials = false;
                 
-                smtp.Credentials = new System.Net.NetworkCredential("prs.system@dominant-semi.com", "Prs1305");
+                smtp.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe2812");
                 
                 //smtp.Credentials = new System.Net.NetworkCredential("itsupport@dominant-semi.com", "Domi$dm1n"); // Enter seders User name and password       
                 //smtp.EnableSsl = true;
@@ -526,7 +531,7 @@ namespace PurchaseWeb_2.Controllers
 
                 string BodyMD = "<br/>" +
                     "Hi " + usrMstMD.Username + " , <br/><br/>" +
-                    "Kindly review attached PR and login to http://prs.dominant-semi.com/ to proceed. <br/>" +
+                    "Kindly review attached PR and login to http://prs-electronic.dominant-e.com/ to proceed. <br/>" +
                     "Or kindly reply 'Ok'/'Approve' to give an approval or 'Reject' to send this PR back. <br/><br/>";
 
                 string FilePathMD = ExportToExcel(PrMstId);
@@ -552,7 +557,7 @@ namespace PurchaseWeb_2.Controllers
 
                             string Body = "<br/>" +
                                 "Hi " + Usr.Usr_mst.Username + " , <br/><br/>" +
-                                "Kindly review attached PR and login to http://prs.dominant-semi.com/ to proceed. <br/>" +
+                                "Kindly review attached PR and login to http://prs-electronic.dominant-e.com/ to proceed. <br/>" +
                                 "Or kindly reply 'Ok'/'Approve' to give an approval or 'Reject' to send this PR back. <br/><br/>";
 
                             string FilePath = ExportToExcel(PrMstId);
@@ -577,7 +582,7 @@ namespace PurchaseWeb_2.Controllers
 
                         string Body = "<br/>" +
                             "Hi " + Usr.Username + " , <br/><br/>" +
-                            "Kindly review attached PR and login to http://prs.dominant-semi.com/ to proceed. <br/>" +
+                            "Kindly review attached PR and login to http://prs-electronic.dominant-e.com/ to proceed. <br/>" +
                             "Or kindly reply 'Ok'/'Approve' to give an approval or 'Reject' to send this PR back. <br/><br/>";
 
                         string FilePath = ExportToExcel(PrMstId);
@@ -619,8 +624,8 @@ namespace PurchaseWeb_2.Controllers
                          select prMst
                           ).ToList();
 
-            // if user login position HOD Manager then list out only HOD under him
-            if (userdtls.Psn_id == 12)
+            // if user login position Purchaser HOD then list out only HOD under him
+            if (userdtls.Psn_id == 5)
             {
                 PrMst = (from prMst in db.PR_Mst
                          join HODMap in db.HODManager_Map
@@ -699,13 +704,21 @@ namespace PurchaseWeb_2.Controllers
 
             SendEmail(userEmail, subject, body,"");
 
-            // send email to purchasing
-            userEmail = "pr.purchasing@dominant-semi.com";
-            subject = @"PR " + PrMst.PRNo + " has been approved by HOD ";
-            body = @"PR " + PrMst.PRNo + " has been approved and has been sent to purchasing for processing. " +
-                " Kindly go to http://prs.dominant-semi.com/ for futher action.";
+            // send email to purchaser. 
+            //userEmail = "pr.purchasing@dominant-semi.com";
+            // 4	Purchaser Staf
+            var PurEmailList = db.Usr_mst.Where(x => x.Psn_id == 4).ToList;
+            foreach (var pur in PurEmailList)
+            {
+                userEmail = pur.email;
+                subject = @"PR " + PrMst.PRNo + " has been approved by HOD ";
+                body = @"PR " + PrMst.PRNo + " has been approved and has been sent to purchasing for processing. " +
+                    " Kindly go to http://prs-electronic.dominant-e.com/ for futher action.";
 
-            SendEmail(userEmail, subject, body,"");
+                SendEmail(userEmail, subject, body, "");
+            }
+
+            
 
             return RedirectToAction("ApprovalHOD");
         }
@@ -760,7 +773,7 @@ namespace PurchaseWeb_2.Controllers
             string userEmail = PrMst.Usr_mst.Email;
             string subject = @"PR " + PrMst.PRNo + " has been reject by HOD ";
             string body = @"PR " + PrMst.PRNo + " has been rejected " +
-                "Kindly go to http://prs.dominant-semi.com/ for futher action. ";
+                "Kindly go to http://prs-electronic.dominant-e.com/ for futher action. ";
 
             SendEmail(userEmail, subject, body,"");
 
@@ -937,7 +950,7 @@ namespace PurchaseWeb_2.Controllers
 
                 string BodyHOD = "<br/>" +
                     "Hi " + Usr.Username + " , <br/><br/>" +
-                    "Kindly review attached PR and login to http://prs.dominant-semi.com/ to proceed. <br/>" +
+                    "Kindly review attached PR and login to http://prs-electronic.dominant-e.com/ to proceed. <br/>" +
                     "Or kindly reply 'Ok'/'Approve' to give an approval or 'Reject' to send this PR back. <br/><br/>";
 
                 string FilePathHOD = ExportToExcel(PrMstId);
@@ -3793,7 +3806,7 @@ namespace PurchaseWeb_2.Controllers
                         //string userEmail = usrmst.Email;
                         //string subject = @"PR " + PrMst.PRNo + " has been sent for HOD Purchasing Approval ";
                         //string body = @"PR " + PrMst.PRNo + " has been sent for Approval. " +
-                        //    "Kindly login to http://prs.dominant-semi.com/ for further action.";
+                        //    "Kindly login to http://prs-electronic.dominant-e.com/ for further action.";
 
                         var ReportParam = new ReportParam()
                         {
@@ -3817,7 +3830,7 @@ namespace PurchaseWeb_2.Controllers
                         string userEmail = usrmstPur.Email;
                         string subject = @"PR " + PrMst.PRNo + " has been sent for HOD Purchasing Approval ";
                         string body = @"PR " + PrMst.PRNo + " has been sent for Approval. " +
-                            "Kindly login to http://prs.dominant-semi.com/ for further action.";
+                            "Kindly login to http://prs-electronic.dominant-e.com/ for further action.";
 
                         SendEmail(userEmail, subject, body,"");
                     }
@@ -3862,7 +3875,7 @@ namespace PurchaseWeb_2.Controllers
                         string userEmail = usrmstPur.Email;
                         string subject = @"PR " + PrMst.PRNo + " has been sent for PO Processing ";
                         string body = @"PR " + PrMst.PRNo + " has been sent for Po Processing. " +
-                            "Kindly login to http://prs.dominant-semi.com/ for further action.";
+                            "Kindly login to http://prs-electronic.dominant-e.com/ for further action.";
 
                         SendEmail(userEmail, subject, body,"");
                     }
@@ -4892,7 +4905,7 @@ namespace PurchaseWeb_2.Controllers
                         //string MDsubject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
                         //string MDbody = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD . <br/>" +
                         //    " PR Total Amount has exceed RM 30K and need MD Approval to continue for PO Processing. <br/>" +
-                        //    " Kindly login to http://prs.dominant-semi.com/ for further action.";
+                        //    " Kindly login to http://prs-electronic.dominant-e.com/ for further action.";
 
                         var ReportParam = new ReportParam()
                         {
@@ -4962,7 +4975,7 @@ namespace PurchaseWeb_2.Controllers
                 //userEmail = usrmst.Email;
                 //subject = @"PR " + PrMst.PRNo + " has been approved by Purchasing HOD  ";
                 //body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. <br/> " +
-                //    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                //    "Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                 //SendEmail(userEmail, subject, body,"");
 
@@ -5025,7 +5038,7 @@ namespace PurchaseWeb_2.Controllers
                 string userEmail = usrmst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been reject by Purchasing HOD  ";
                 string body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to " + PrMst.PurchaserName + " . <br/> " +
-                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                    "Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body,"");
 
@@ -5034,7 +5047,7 @@ namespace PurchaseWeb_2.Controllers
                 userEmail = usrmstHOD.Email;
                 subject = @"PR " + PrMst.PRNo + " has been rejected by Purchasing HOD  ";
                 body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to "+ PrMst.PurchaserName + " .<br/> " +
-                    "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                    "Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body,"");
             }
@@ -5168,7 +5181,7 @@ namespace PurchaseWeb_2.Controllers
                     userEmail = "pr.purchasing@dominant-semi.com";
                     subject = @"PR " + PrMst.PRNo + " has been approved by HOD ";
                     body = @"PR " + PrMst.PRNo + " has been approved and has been sent to purchasing for processing. " +
-                        " Kindly go to http://prs.dominant-semi.com/ for futher action.";
+                        " Kindly go to http://prs-electronic.dominant-e.com/ for futher action.";
 
                     SendEmail(userEmail, subject, body, "");
 
@@ -5214,7 +5227,7 @@ namespace PurchaseWeb_2.Controllers
                     userEmail = usrmst.Email;
                     subject = @"PR " + PrMst.PRNo + " has been approved by MD  ";
                     body = @"PR " + PrMst.PRNo + " has been approved and has been sent for PO processing. <br/> " +
-                        "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                        "Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                     SendEmail(userEmail, subject, body, "");
 
@@ -5281,7 +5294,7 @@ namespace PurchaseWeb_2.Controllers
                     string userEmail = PrMst.Usr_mst.Email;
                     string subject = @"PR " + PrMst.PRNo + " has been rejected by HOD  ";
                     string body = @"PR " + PrMst.PRNo + " has been rejected " +
-                        "Kindly go to http://prs.dominant-semi.com/ for futher action. ";
+                        "Kindly go to http://prs-electronic.dominant-e.com/ for futher action. ";
 
                     SendEmail(userEmail, subject, body, "");
 
@@ -5330,7 +5343,7 @@ namespace PurchaseWeb_2.Controllers
                     string userEmail = usrmst.Email;
                     string subject = @"PR " + PrMst.PRNo + " has been reject by MD  ";
                     string body = @"PR " + PrMst.PRNo + " has been rejected and has been sent back to " + PrMst.PurchaserName + " . <br/> " +
-                        "Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                        "Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                     SendEmail(userEmail, subject, body, "");
 
@@ -5456,6 +5469,12 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult PurchasingProsesPR()
         {
+            var StockableCount = db.PR_Mst.Where(x => (x.StatId == 11 || x.StatId == 12 || x.StatId == 7 || x.StatId == 14) && x.PRGroupType == 3).Count();
+            var NonStockableCount = db.PR_Mst.Where(x => (x.StatId == 11 || x.StatId == 12 || x.StatId == 7 || x.StatId == 14) && x.PRGroupType == 4).Count();
+
+            ViewBag.StockableCount = StockableCount;
+            ViewBag.NonStockableCount = NonStockableCount;
+
             return View("PurchasingProsesPR");
         }
 
@@ -6711,7 +6730,7 @@ namespace PurchaseWeb_2.Controllers
                 //send email to sourcing
                 string userEmail = sourcing.Email;
                 string subject = @"" + PrMst.PRNo + " has been sent for Sourcing. ";
-                string body = @""+ PrMst.PRNo + " has been sent for Sourcing. <br/> Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                string body = @""+ PrMst.PRNo + " has been sent for Sourcing. <br/> Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body, "");
             }
@@ -6770,7 +6789,7 @@ namespace PurchaseWeb_2.Controllers
                 //send email to user
                 //string userEmail = PrMst.Usr_mst.Email;
                 //string subject = @"PR " + PrMst.PRNo + " has been reject by purchasing. ";
-                //string body = @"Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                //string body = @"Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                 //SendEmail(userEmail, subject, body, "");
 
@@ -6778,7 +6797,7 @@ namespace PurchaseWeb_2.Controllers
                 var usrmst = db.Usr_mst.Where(x => x.Username == PrMst.PurchaserName).FirstOrDefault();
                 string userEmail = usrmst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been reject by sourcing. ";
-                string body = @"Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                string body = @"Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body, "");
 
@@ -6845,7 +6864,7 @@ namespace PurchaseWeb_2.Controllers
                 //send email to user
                 string userEmail = PrMst.Usr_mst.Email;
                 string subject = @"PR " + PrMst.PRNo + " has been reject by purchasing. ";
-                string body = @"Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                string body = @"Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body,"");
 
@@ -6854,7 +6873,7 @@ namespace PurchaseWeb_2.Controllers
                 var usrmst = db.Usr_mst.Where(x => x.Username == PurName).FirstOrDefault();
                 userEmail = usrmst.Email;
                 subject = @"PR " + PrMst.PRNo + " has been reject by purchasing. ";
-                body = @"Kindly login to http://prs.dominant-semi.com/ for further action. ";
+                body = @"Kindly login to http://prs-electronic.dominant-e.com/ for further action. ";
 
                 SendEmail(userEmail, subject, body,"");
 

@@ -12,6 +12,7 @@ namespace PurchaseWeb_2.Controllers
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             HttpSessionStateBase session = filterContext.HttpContext.Session;
+            session["Debug"] = "Live";
             if (session != null && session["Username"] == null)
             {
                 filterContext.Result = new RedirectToRouteResult(

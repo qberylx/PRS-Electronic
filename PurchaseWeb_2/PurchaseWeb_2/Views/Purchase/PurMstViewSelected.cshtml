@@ -48,10 +48,11 @@
                                 @if (ViewBag.chkBudgetBal == "99.00")
                                 {
                                     <span>Budget Balance : No Budget </span>
-                                } else
+                                }
+                                else
                                 {
                                     var bal = decimal.Parse(ViewBag.chkBudgetBal);
-                                    if (bal <= 0.00M )
+                                    if (bal <= 0.00M)
                                     {
                                         <strong style="color:red"><span>Budget Balance : RM @ViewBag.chkBudgetBal</span></strong>
                                         @*<i class="fa fa-2x fa-sticky-note float-right" data-toggle="tooltip" data-placement="left" title="Budget History List"></i>*@
@@ -64,17 +65,17 @@
                                     <a data-toggle="tooltip" data-placement="left" title="Budget History List" onclick="ShowPRBudgetList(@Model.PRId)">
                                         <i class="fa fa-2x fa-comment-dots float-right " style="color:cadetblue"></i>
                                     </a>
-                                        
-                                        
+
+
                                 }
 
                                 <br />
-                                @{bool BoolBudgetSkipFlag = Model.BudgetSkipFlag != true ? false : true ; }
+                                @{bool BoolBudgetSkipFlag = Model.BudgetSkipFlag != true ? false : true; }
                                 @if (BoolBudgetSkipFlag)
                                 {
                                     <strong>Budget Skip :</strong><a>Yes</a>
                                 }
-                                
+
                             </div>
                         }
                         if (Model.PrGroupType1.CPRFFlag == true)
@@ -123,7 +124,11 @@
                 {
                     <br />
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-2">
+                            @if (Model.AssetFlag == 2)
+                            {
+                                <strong>Asset Status :</strong><a>Not an Asset </a>
+                            }
                             @if (Model.AssetFlag == 1)
                             {
                                 <strong>Asset Status :</strong><a>New Asset </a>
@@ -134,16 +139,20 @@
                             }
                         </div>
 
-                        <div class="col-3">
-                            <strong>Asset No: </strong>@Model.AssetNo
+                        <div class="col-2">
+                            <strong>Asset No: </strong> @Model.AssetNo
                         </div>
 
-                        <div class="col-3">
-                            <strong>Internal Order No: </strong>@Model.IOrderNo
+                        <div class="col-2">
+                            <strong>Internal Order No: </strong> @Model.IOrderNo
                         </div>
 
-                        <div class="col-3">
-                            <strong>Cost Centre No: </strong>@Model.CostCentreNo
+                        <div class="col-2">
+                            <strong>Cost Centre No: </strong> @Model.CostCentreNo
+                        </div>
+
+                        <div class="col-2">
+                            <strong>Internal Document No:</strong> @Model.internalDocNo
                         </div>
                     </div>
 
@@ -181,7 +190,7 @@
                             <strong>Remarks</strong><br />
                             @Html.DisplayFor(model => model.Remarks)
                         </div>
-                        
+
                     </div>
                 }
 

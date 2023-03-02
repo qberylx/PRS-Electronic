@@ -957,18 +957,6 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Usr_mst_Department_mst">
-          <End Role="Department_mst" Type="Self.Department_mst" Multiplicity="0..1" />
-          <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Department_mst">
-              <PropertyRef Name="Dpt_id" />
-            </Principal>
-            <Dependent Role="Usr_mst">
-              <PropertyRef Name="Dpt_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Usr_mst_Position_mst">
           <End Role="Position_mst" Type="Self.Position_mst" Multiplicity="0..1" />
           <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="*" />
@@ -1222,10 +1210,6 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           </AssociationSet>
           <AssociationSet Name="FK_Usr_mst_AccTypeDept" Association="Self.FK_Usr_mst_AccTypeDept">
             <End Role="AccTypeDept" EntitySet="AccTypeDept" />
-            <End Role="Usr_mst" EntitySet="Usr_mst" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Usr_mst_Department_mst" Association="Self.FK_Usr_mst_Department_mst">
-            <End Role="Department_mst" EntitySet="Department_mst" />
             <End Role="Usr_mst" EntitySet="Usr_mst" />
           </AssociationSet>
           <AssociationSet Name="FK_Usr_mst_Position_mst" Association="Self.FK_Usr_mst_Position_mst">
