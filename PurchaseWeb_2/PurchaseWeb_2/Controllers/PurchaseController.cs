@@ -707,10 +707,10 @@ namespace PurchaseWeb_2.Controllers
             // send email to purchaser. 
             //userEmail = "pr.purchasing@dominant-semi.com";
             // 4	Purchaser Staf
-            var PurEmailList = db.Usr_mst.Where(x => x.Psn_id == 4).ToList;
+            var PurEmailList = db.Usr_mst.Where(x => x.Psn_id == 4).ToList();
             foreach (var pur in PurEmailList)
             {
-                userEmail = pur.email;
+                userEmail = pur.Email;
                 subject = @"PR " + PrMst.PRNo + " has been approved by HOD ";
                 body = @"PR " + PrMst.PRNo + " has been approved and has been sent to purchasing for processing. " +
                     " Kindly go to http://prs-electronic.dominant-e.com/ for futher action.";

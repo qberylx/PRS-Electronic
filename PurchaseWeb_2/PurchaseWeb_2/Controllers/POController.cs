@@ -841,7 +841,7 @@ namespace PurchaseWeb_2.Controllers
                         sb.Append(PORLSEQ.ToString() + ',');
                         sb.Append(',');
                         sb.Append(pr.DomiPartNo.ToString() + ',');
-                        sb.Append("N1000S" + ',');
+                        sb.Append("E1000S" + ',');
                         sb.Append(pr.Description.ToString().Replace(',', ' ').Replace("\n", "").Replace("\r", "") + ',');
                         sb.Append(pr.VendorPartNo.ToString() + ',');
                         sb.Append("FALSE" + ',');
@@ -1268,7 +1268,7 @@ namespace PurchaseWeb_2.Controllers
                                 PORLSEQ.ToString(),
                                 "",
                                 pr.DomiPartNo.ToString(),
-                                "N1000S",
+                                "E1000S",
                                 pr.Description.ToString(),
                                 VendorPartNo,
                                 "FALSE",
@@ -1523,7 +1523,7 @@ namespace PurchaseWeb_2.Controllers
                             PORLSEQ.ToString(),
                             "",
                             pr.DomiPartNo.ToString(),
-                            "N1000S",
+                            "E1000S",
                             pr.Description.ToString(),
                             pr.VendorPartNo.ToString(),
                             "FALSE",
