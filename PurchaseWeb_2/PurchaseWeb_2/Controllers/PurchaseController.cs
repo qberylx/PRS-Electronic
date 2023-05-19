@@ -3673,7 +3673,7 @@ namespace PurchaseWeb_2.Controllers
 
             var PrMstList = db.PR_Mst
                 .Where(x => x.StatId == 12 || x.StatId == 11 || x.StatId == 14 || x.StatId == 16) 
-                .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group )
+                //.Where(x => x.PRTypeId == Doctype && x.PRGroupType == group )
                 .ToList();
 
 
@@ -4987,6 +4987,7 @@ namespace PurchaseWeb_2.Controllers
                     
 
                 SendEmail(userEmail, subject, body,"");
+                SendEmail("nur.suliza@dominant-e.com", subject, body, "");
 
             }
             return RedirectToAction("HODPurApprovalList");
@@ -5178,12 +5179,12 @@ namespace PurchaseWeb_2.Controllers
                     SendEmail(MDEmail, MDsubject, MDbody, "");
 
                     // send email to purchasing
-                    userEmail = "pr.purchasing@dominant-semi.com";
-                    subject = @"PR " + PrMst.PRNo + " has been approved by HOD ";
-                    body = @"PR " + PrMst.PRNo + " has been approved and has been sent to purchasing for processing. " +
-                        " Kindly go to http://prs-electronic.dominant-e.com/ for futher action.";
+                    //userEmail = "pr.purchasing@dominant-semi.com";
+                    //subject = @"PR " + PrMst.PRNo + " has been approved by HOD ";
+                    //body = @"PR " + PrMst.PRNo + " has been approved and has been sent to purchasing for processing. " +
+                    //    " Kindly go to http://prs-electronic.dominant-e.com/ for futher action.";
 
-                    SendEmail(userEmail, subject, body, "");
+                    //SendEmail(userEmail, subject, body, "");
 
                 } else
                 {
@@ -5491,7 +5492,7 @@ namespace PurchaseWeb_2.Controllers
                     {
                         var PrMstList = db.PR_Mst
                         .Where(x => x.StatId == 11 || x.StatId == 12 || x.StatId == 7 || x.StatId == 14)
-                        .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
+                        //.Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                         .ToList();
                         return PartialView("PRListForPurchasingProses", PrMstList);
                     }
@@ -5501,7 +5502,7 @@ namespace PurchaseWeb_2.Controllers
                         {
                             var PrMstList = db.PR_Mst
                             .Where(x => x.StatId == 7 || x.StatId == 11 || x.StatId == 12 || x.StatId == 15 || x.StatId == 14)
-                            .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
+                            //.Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                             .ToList();
                             return PartialView("PRListForPurchasingProses", PrMstList);
                         }
@@ -5509,7 +5510,7 @@ namespace PurchaseWeb_2.Controllers
                         {
                             var PrMstList = db.PR_Mst
                             .Where(x => x.StatId == 7 || x.StatId == 11 || x.StatId == 15 || x.StatId == 14)
-                            .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
+                            //.Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                             .ToList();
                             return PartialView("PRListForPurchasingProses", PrMstList);
                         }
@@ -5518,7 +5519,7 @@ namespace PurchaseWeb_2.Controllers
                 {
                     var PrMstList = db.PR_Mst
                         .Where(x => x.StatId == 11 || x.StatId == 12 || x.StatId == 7 || x.StatId == 15 || x.StatId == 14)
-                        .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
+                        //.Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                         .ToList();
                     return PartialView("PRListForPurchasingProses", PrMstList);
                 }
@@ -5527,7 +5528,7 @@ namespace PurchaseWeb_2.Controllers
             {
                 var PrMstList = db.PR_Mst
                     .Where(x => x.StatId == 7 || x.StatId == 11)
-                    .Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
+                    //.Where(x => x.PRTypeId == Doctype && x.PRGroupType == group)
                     .ToList();
                 return PartialView("PRListForPurchasingProses", PrMstList);
             }

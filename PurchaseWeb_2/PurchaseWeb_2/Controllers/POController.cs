@@ -554,11 +554,11 @@ namespace PurchaseWeb_2.Controllers
             string initial = "";
             if (Doctype == 4 || Doctype == 5)
             {
-                initial = "POC";
+                initial = "DEC";
             }
             else
             {
-                initial = "PO";
+                initial = "DE";
             }
             
             ObjectParameter lstDocNo = new ObjectParameter("LastDocNo", typeof(string));
