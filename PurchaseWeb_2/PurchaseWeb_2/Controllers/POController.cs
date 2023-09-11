@@ -985,6 +985,7 @@ namespace PurchaseWeb_2.Controllers
                     dt2.Columns.Add("DISCPCT");
                     dt2.Columns.Add("DISCOUNT");
                     dt2.Columns.Add("DETAILNUM");
+                    dt2.Columns.Add("GLACEXPENS");
 
                     //Purchase_Order_Comments
                     dt3.Columns.Add("PORHSEQ");
@@ -1259,6 +1260,12 @@ namespace PurchaseWeb_2.Controllers
 
                             var VendorPartNo = pr.VendorPartNo?.ToString() ?? "";
 
+                            var GLACEXPENS = pr.PR_Mst.AccountCode;
+                            if ( pr.PR_Mst.CPRF != null || pr.PR_Mst.CPRF.Length > 0)
+                            {
+                                GLACEXPENS = "99920-00-00-00-000";
+                            }
+
 
 
                             dt2.Rows.Add(
@@ -1297,7 +1304,8 @@ namespace PurchaseWeb_2.Controllers
                                 strTaxBase,
                                 "0",
                                 strDiscVendor,
-                                DETAILNUM.ToString()
+                                DETAILNUM.ToString(),
+                                GLACEXPENS
                                 );
 
                             ws2.Cell(2, 1).InsertData(dt2.AsEnumerable());

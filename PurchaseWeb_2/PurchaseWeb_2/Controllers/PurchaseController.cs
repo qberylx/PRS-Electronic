@@ -1727,11 +1727,11 @@ namespace PurchaseWeb_2.Controllers
         //Account No Form
         public ActionResult AccountNoForm(int PrMstId, int PrGroup)
         {
-            var AccExpList = db.AccTypeExpenses.ToList();
-            var DivList = db.AccTypeDivisions.ToList();
-            var DptList = db.AccTypeDepts.ToList();
-            var CCLvl1 = db.AccCCLvl1.ToList();
-            var CCLvl2 = db.AccCCLvl2.ToList();
+            var AccExpList = db.AccTypeExpenses.Where(x => x.DeleteFlag != true).ToList();
+            var DivList = db.AccTypeDivisions.Where(x => x.DeleteFlag != true).ToList();
+            var DptList = db.AccTypeDepts.Where(x => x.DeleteFlag != true).ToList();
+            var CCLvl1 = db.AccCCLvl1.Where(x => x.DeleteFlag != true).ToList();
+            var CCLvl2 = db.AccCCLvl2.Where(x=>x.DeleteFlag != true).ToList();
 
             ViewBag.ExpList = AccExpList;
             ViewBag.DivList = DivList;

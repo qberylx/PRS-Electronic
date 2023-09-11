@@ -101,24 +101,64 @@
                         <b>Item No</b>
                         <br />
                         <select class="form-control form-control-border" id="DomiPartNo" name="DomiPartNo">
-                            @if (Model.DomiPartNo == "CAPEX")
+                            @{
+                                var DomiPartNoList = new List<string> {"NS","CAPEX","CAPEX02","PCB", "PROOFING FEE", "TEST FIXTURE FEE"
+                                    ,"NOZZLE","STENCIL","CALIBRATION","CUSTOM FEE","PALLET"};
+                            }
+                            @foreach (var dp in DomiPartNoList)
+                            {
+                                if (Model.DomiPartNo == dp)
+                                {
+                                    <option value="@dp" selected>dp</option>
+                                }
+                                else
+                                {
+                                    <option value="@dp">dp</option>
+                                }
+                            }
+
+                            @*@if (Model.DomiPartNo == "CAPEX")
                             {
                                 <option value="NS">NS</option>
                                 <option value="CAPEX" selected>CAPEX</option>
                                 <option value="CAPEX02">CAPEX02</option>
+                                <option value="PCB">PCB</option>
+                                <option value="PROOFING FEE">PROOFING FEE</option>
+                                <option value="TEST FIXTURE FEE">TEST FIXTURE FEE</option>
+                                <option value="NOZZLE">NOZZLE</option>
+                                <option value="STENCIL">STENCIL</option>
+                                <option value="CALIBRATION">CALIBRATION</option>
+                                <option value="CUSTOM FEE">CUSTOM FEE</option>
+                                <option value="PALLET">PALLET</option>
                             }
                             else if (Model.DomiPartNo == "CAPEX02")
                             {
                                 <option value="NS">NS</option>
                                 <option value="CAPEX">CAPEX</option>
                                 <option value="CAPEX02" selected>CAPEX02</option>
+                                <option value="PCB">PCB</option>
+                                <option value="PROOFING FEE">PROOFING FEE</option>
+                                <option value="TEST FIXTURE FEE">TEST FIXTURE FEE</option>
+                                <option value="NOZZLE">NOZZLE</option>
+                                <option value="STENCIL">STENCIL</option>
+                                <option value="CALIBRATION">CALIBRATION</option>
+                                <option value="CUSTOM FEE">CUSTOM FEE</option>
+                                <option value="PALLET">PALLET</option>
                             }
                             else
                             {
                                 <option value="NS" selected>NS</option>
                                 <option value="CAPEX">CAPEX</option>
                                 <option value="CAPEX02">CAPEX02</option>
-                            }
+                                <option value="PCB">PCB</option>
+                                <option value="PROOFING FEE">PROOFING FEE</option>
+                                <option value="TEST FIXTURE FEE">TEST FIXTURE FEE</option>
+                                <option value="NOZZLE">NOZZLE</option>
+                                <option value="STENCIL">STENCIL</option>
+                                <option value="CALIBRATION">CALIBRATION</option>
+                                <option value="CUSTOM FEE">CUSTOM FEE</option>
+                                <option value="PALLET">PALLET</option>
+                            }*@
 
 
                         </select>
