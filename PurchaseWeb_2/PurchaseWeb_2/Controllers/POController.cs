@@ -47,7 +47,7 @@ namespace PurchaseWeb_2.Controllers
                 smtp.UseDefaultCredentials = false;
                 //itsupport @dominant-semi.com
                 //Domi$dm1n
-                smtp.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe2812");
+                smtp.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe@2812");
                 //smtp.Credentials = new System.Net.NetworkCredential("itsupport@dominant-semi.com", "Domi$dm1n"); // Enter seders User name and password       
                 //smtp.EnableSsl = true;
                 smtp.Send(mail);
@@ -810,8 +810,8 @@ namespace PurchaseWeb_2.Controllers
                     sb.Append("SST" + ',');
                     sb.Append(prdt.TaxCode.ToString() + ',');
                     sb.Append(prdt.TaxClass.ToString() + ',');
-                    sb.Append(',');
-                    sb.Append(',');
+                    sb.Append("E1000S" + ',');
+                    sb.Append("E1000S" + ',');
                     sb.Append(',');
                     sb.Append(',');
 
@@ -949,6 +949,8 @@ namespace PurchaseWeb_2.Controllers
                     dt.Columns.Add("TAXCLASS1");
                     dt.Columns.Add("TAXCLASS2");
                     dt.Columns.Add("DISCOUNT");
+                    dt.Columns.Add("BTCODE");
+                    dt.Columns.Add("STCODE");
 
                     //Purchase_Order_Lines
                     dt2.Columns.Add("PORHSEQ");
@@ -1130,7 +1132,7 @@ namespace PurchaseWeb_2.Controllers
                         getPO.CreateDate?.ToString("dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo),
                         prdt.ReqDevDate?.ToString("dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo),
                         Remarks,
-                        prdt.PRNo.ToString() + '/' + getPO.CreateBy,
+                        prdt.PRNo.ToString() + '/' + prdt.PR_Mst.Usr_mst.Username,
                         "",
                         "",
                         "",
@@ -1146,8 +1148,9 @@ namespace PurchaseWeb_2.Controllers
                         "SSTS",
                         "1",
                         "1",
-                        discountPR
-
+                        discountPR,
+                        "E1000S",
+                        "E1000S"
                         );
 
                         ws.Cell(2, 1).InsertData(dt.AsEnumerable());
@@ -1261,7 +1264,7 @@ namespace PurchaseWeb_2.Controllers
                             var VendorPartNo = pr.VendorPartNo?.ToString() ?? "";
 
                             var GLACEXPENS = pr.PR_Mst.AccountCode;
-                            if ( pr.PR_Mst.CPRF != null || pr.PR_Mst.CPRF.Length > 0)
+                            if ( pr.PR_Mst.CPRF != null )
                             {
                                 GLACEXPENS = "99920-00-00-00-000";
                             }

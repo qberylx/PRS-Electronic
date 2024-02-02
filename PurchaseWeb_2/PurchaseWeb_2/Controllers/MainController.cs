@@ -531,7 +531,7 @@ namespace PurchaseWeb_2.Controllers
                 smtp.UseDefaultCredentials = false;
                 //itsupport @dominant-semi.com
                 //Domi$dm1n
-                smtp.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe2812");
+                smtp.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe@2812");
                 //smtp.Credentials = new System.Net.NetworkCredential("itsupport@dominant-semi.com", "Domi$dm1n"); // Enter seders User name and password       
                 //smtp.EnableSsl = true;
                 smtp.Send(mail);
@@ -583,7 +583,7 @@ namespace PurchaseWeb_2.Controllers
                 smtpAdm.Host = "mail1.dominant-semi.com";// mail1.dominant-semi.com smtp.gmail.com
                 smtpAdm.Port = 28; // 28 587
                 smtpAdm.UseDefaultCredentials = false;
-                smtpAdm.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe2812");
+                smtpAdm.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe@2812");
                 smtpAdm.Send(mailAdm);
             }
 
@@ -601,7 +601,7 @@ namespace PurchaseWeb_2.Controllers
             smtp.Host = "mail1.dominant-semi.com";// mail1.dominant-semi.com smtp.gmail.com
             smtp.Port = 28; // 28 587
             smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe2812");
+            smtp.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe@2812");
             smtp.Send(mail);
 
             this.AddNotification("Your message has been sent!!", NotificationType.SUCCESS);

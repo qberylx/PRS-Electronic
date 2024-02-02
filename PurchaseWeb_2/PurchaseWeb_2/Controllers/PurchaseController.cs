@@ -14,6 +14,7 @@ using PurchaseWeb_2.Extensions;
 using PurchaseWeb_2.Models;
 using System.Net.Mail;
 using System.Text;
+using System.Threading;
 
 namespace PurchaseWeb_2.Controllers
 {
@@ -56,7 +57,7 @@ namespace PurchaseWeb_2.Controllers
                 smtp.Port = 28; // 28 587
                 smtp.UseDefaultCredentials = false;
                 
-                smtp.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe2812");
+                smtp.Credentials = new System.Net.NetworkCredential("prs.e@dominant-e.com", "PRSe@2812");
                 
                 //smtp.Credentials = new System.Net.NetworkCredential("itsupport@dominant-semi.com", "Domi$dm1n"); // Enter seders User name and password       
                 //smtp.EnableSsl = true;
@@ -605,7 +606,7 @@ namespace PurchaseWeb_2.Controllers
             string username = Convert.ToString(Session["Username"]);
             //get User id and department id
             var userdtls = db.Usr_mst
-                            .Where(x => x.Username == username)
+                            .Where(x => x.Username == username )
                             .FirstOrDefault();
 
             //var userDpts = db.Usr_mst.Where(x => x.Username == username).Select(x => x.Dpt_id);
@@ -969,6 +970,7 @@ namespace PurchaseWeb_2.Controllers
             string Filename = "PRFrom" + DateTime.Now.ToString("MM_dd_yyyy_hh_ss_tt") + ".xls";
             string FolderPath = HttpContext.Server.MapPath("/ExcelFiles/");
             string FilePath = System.IO.Path.Combine(FolderPath, Filename);
+            Thread.Sleep(1000); // hold 1 seconds
 
             //Step-1: Checking: If file name exists in server then remove from server.
             if (System.IO.File.Exists(FilePath))
@@ -1495,6 +1497,13 @@ namespace PurchaseWeb_2.Controllers
 
                 });
                 db.SaveChanges();
+
+                var pR_Vendor = db.PR_VendorComparison.Where(x => x.PRDtId == PrDtlsId).ToList();
+                if(pR_Vendor != null)
+                {
+                    db.PR_VendorComparison.RemoveRange(pR_Vendor);
+                    db.SaveChanges();
+                }
 
                 PR_Details pR_ = new PR_Details() { PRDtId = PrDtlsId };
                 db.PR_Details.Attach(pR_);

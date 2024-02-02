@@ -269,7 +269,7 @@ namespace PurchaseWeb_2.Controllers
         {
             if (iCCategory.IC_id == 0)
             {
-                var checkCode = db.ICCategory_Mst.Where(x => x.IC_CategoryCode == iCCategory.IC_CategoryCode).ToList();
+                var checkCode = db.ICCategory_Mst.Where(x => x.IC_CategoryCode == iCCategory.IC_CategoryCode && x.DeleteFlag != true).ToList();
                 if (checkCode != null && checkCode.Count != 0)
                 {
                     this.AddNotification("This code already exist", NotificationType.ERROR);
@@ -334,7 +334,7 @@ namespace PurchaseWeb_2.Controllers
         {
             if (cCLvl2.AccCCLvl2ID == 0)
             {
-                var checkExpCode = db.AccCCLvl2.Where(x => x.CCLvl2Code == cCLvl2.CCLvl2Code).ToList();
+                var checkExpCode = db.AccCCLvl2.Where(x => x.CCLvl2Code == cCLvl2.CCLvl2Code && x.DeleteFlag != true).ToList();
                 if (checkExpCode != null && checkExpCode.Count != 0)
                 {
                     this.AddNotification("CC (Lvl 2) Type Code already exist", NotificationType.ERROR);
@@ -399,7 +399,7 @@ namespace PurchaseWeb_2.Controllers
         {
             if (cCLvl1.AccCCLvl1ID == 0)
             {
-                var checkExpCode = db.AccCCLvl1.Where(x => x.CCLvl1Code == cCLvl1.CCLvl1Code).ToList();
+                var checkExpCode = db.AccCCLvl1.Where(x => x.CCLvl1Code == cCLvl1.CCLvl1Code && x.DeleteFlag != true).ToList();
                 if (checkExpCode != null && checkExpCode.Count != 0)
                 {
                     this.AddNotification("CC (Lvl 1) Type Code already exist", NotificationType.ERROR);
@@ -464,7 +464,7 @@ namespace PurchaseWeb_2.Controllers
         {
             if (typeDept.AccTypeDepID == 0)
             {
-                var checkExpCode = db.AccTypeDepts.Where(x => x.DeptCode == typeDept.DeptCode).ToList();
+                var checkExpCode = db.AccTypeDepts.Where(x => x.DeptCode == typeDept.DeptCode && x.DeleteFlag != true).ToList();
                 if (checkExpCode != null && checkExpCode.Count != 0)
                 {
                     this.AddNotification("Department Type Code already exist", NotificationType.ERROR);
@@ -529,7 +529,7 @@ namespace PurchaseWeb_2.Controllers
         {
             if (typeDivision.AccTypeDivId == 0)
             {
-                var checkExpCode = db.AccTypeDivisions.Where(x => x.DivCode == typeDivision.DivCode).ToList();
+                var checkExpCode = db.AccTypeDivisions.Where(x => x.DivCode == typeDivision.DivCode && x.DeleteFlag != true).ToList();
                 if (checkExpCode != null && checkExpCode.Count != 0)
                 {
                     this.AddNotification("Division Type Code already exist", NotificationType.ERROR);
@@ -593,7 +593,7 @@ namespace PurchaseWeb_2.Controllers
         {
             if (typeExpens.AccTypeExpensesID == 0)
             {
-                var checkExpCode = db.AccTypeExpenses.Where(x=>x.ExpCode == typeExpens.ExpCode).ToList();
+                var checkExpCode = db.AccTypeExpenses.Where(x=>x.ExpCode == typeExpens.ExpCode && x.DeleteFlag != true).ToList();
                 if (checkExpCode != null && checkExpCode.Count != 0) 
                 {
                     this.AddNotification("Expenses Type Code already exist", NotificationType.ERROR);

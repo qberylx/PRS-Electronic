@@ -17,8 +17,9 @@
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
                         <td>
-                            <!--<input type="date" id="FromDate" name="FromDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" />-->
-                            @Html.EditorFor(model => model.FromDate, new { @onchange = "chgDateFrom(this.value)" })
+                            <input type="date" id="FromDate" name="FromDate" class="form-control" value="@DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd")" />
+                            @*@Html.EditorFor(model => model.FromDate, new { @onchange = "chgDateFrom(this.value)" })*@
+
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
                         <td>
@@ -26,14 +27,14 @@
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
                         <td>
-                            <!--<input type="date" id="ToDate" name="ToDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" />-->
-                            @Html.EditorFor(model => model.ToDate, new { @onchange = "chgDateTo(this.value)" })
+                            <input type="date" id="ToDate" name="ToDate" class="form-control"  value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                            @*@Html.EditorFor(model => model.ToDate, new { @onchange = "chgDateTo(this.value)" })*@
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
                         <td>
                             <select class="form-control form-control-border" id="selcons" name="selcons">
                                 <option value="0">Consignment</option>
-                                <option value="1">Non Consignment</option>
+                                <option value="1" selected>Non Consignment</option>
                             </select>
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
