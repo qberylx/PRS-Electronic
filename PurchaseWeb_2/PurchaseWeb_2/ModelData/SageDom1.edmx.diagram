@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="63eb284ea9ac43c4a90a7188c2fb2309" Name="Diagram1" ZoomLevel="106">
+      <Diagram DiagramId="63eb284ea9ac43c4a90a7188c2fb2309" Name="Diagram1" ZoomLevel="92">
         <EntityTypeShape EntityType="dom1Model.APVEN" Width="1.5" PointX="7.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="dom1Model.CSCCD" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="dom1Model.ICITMV" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
@@ -16,6 +16,8 @@
         <EntityTypeShape EntityType="dom1Model.CSCRD" Width="1.5" PointX="0.875" PointY="0.625" />
         <EntityTypeShape EntityType="dom1Model.APRTA" Width="1.5" PointX="0.75" PointY="8.75" />
         <EntityTypeShape EntityType="dom1Model.APVENO" Width="1.5" PointX="3.375" PointY="11.75" />
+        <EntityTypeShape EntityType="dom1Model.AMCATE" Width="1.5" PointX="13.375" PointY="0.75" />
+        <EntityTypeShape EntityType="dom1Model.AMASST" Width="1.5" PointX="13.375" PointY="5.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

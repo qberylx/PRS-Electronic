@@ -1,0 +1,181 @@
+﻿@model PurchaseWeb_2.ModelData.CPRFBudget_Mst 
+
+
+
+
+<div class="card card-secondary">
+    <div class="card-header">
+        <h4 class="card-title">CPRF Request</h4>
+    </div>
+    <div id="notificationCPRFMst">
+        @Html.Partial("_Notifications")
+    </div>
+    <div>
+        @using (Ajax.BeginForm("SaveCPRFMst", "CPRF",
+new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCPRFMainForm", OnBegin = "OBSaveCPRFMst", OnSuccess = "OSSaveCPRFMst" }))
+        {
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table style="width:100%">
+                            <tr>
+                                <td style="width:35%">
+                                    Project Owner
+                                </td>
+                                <td style="width:5%">
+                                    :
+                                </td>
+                                <td style="width:60%">
+                                    @Model.Usr_mst.Username
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>HOD</td>
+                                <td>:</td>
+                                <td>@Model.HOD</td>
+                            </tr>
+                            <tr style="display:none">
+                                <td>Project Owner</td>
+                                <td>:</td>
+                                <td>
+                                    <input type="text" name="ProjectOwner" id="ProjectOwner" class="form-control" value="@Model.ProjectOwner" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Project Title</td>
+                                <td>:</td>
+                                <td>
+                                    <textarea name="ProjectTitle" id="ProjectTitle" class="form-control">@Model.ProjectTitle</textarea>
+                                    @*<input type="text" name="ProjectTitle" id="ProjectTitle" class="form-control" value="@Model.ProjectTitle" />*@
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Budget utilization for year</td>
+                                <td>:</td>
+                                <td>
+                                    @{ var thisYear = DateTime.Now.Year;}
+                                    @{ var nextYear = DateTime.Now.Year + 1;}
+                                    <select name="BudgetUtilYear" id="BudgetUtilYear" class="form-control">
+                                        @if (Model.BudgetUtilYear == thisYear)
+                                        {
+                                            <option value="@thisYear" selected>@thisYear</option>
+                                            <option value="@nextYear">@nextYear</option>
+                                        }
+                                        else if (Model.BudgetUtilYear == nextYear)
+                                        {
+                                            <option value="@nextYear" selected>@nextYear</option>
+                                            <option value="@thisYear">@thisYear</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@thisYear">@thisYear</option>
+                                            <option value="@nextYear">@nextYear</option>
+                                        }
+
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Category</td>
+                                <td>:</td>
+                                <td>
+                                    <select name="CatMain" id="CatMain" class="form-control" required>
+                                        @{string EQselected = "";}
+                                        @{string IFselected = "";}
+                                        @if (Model.CatMain == "EQUIPMENT")
+                                        {
+                                            EQselected = "selected";
+                                        }
+                                        else if (Model.CatMain == "INFRASTRUCTURE")
+                                        {
+                                            IFselected = "selected";
+                                        }
+
+                                        <option value="EQUIPMENT" @EQselected>EQUIPMENT</option>
+                                        <option value="INFRASTRUCTURE" @IFselected>INFRASTRUCTURE</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Investment Term</td>
+                                <td>:</td>
+                                <td>
+                                    <select name="InvestTerm" id="InvestTerm" class="form-control" required>
+                                        @{string ST = "";}
+                                        @{string MT = "";}
+                                        @{string LT = "";}
+                                        @if (Model.InvestTerm == "SHORT TERM")
+                                        {
+                                            ST = "selected";
+                                        }
+                                        else if (Model.InvestTerm == "MID TERM")
+                                        {
+                                            MT = "selected";
+                                        }
+                                        else if (Model.InvestTerm == "LONG TERM")
+                                        {
+                                            LT = "selected";
+                                        }
+                                        <option value="SHORT TERM" @ST>SHORT TERM</option>
+                                        <option value="MID TERM" @MT>MID TERM</option>
+                                        <option value="LONG TERM" @LT>LONG TERM</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table style="width:100%">
+                            <tr>
+                                <td>Project Justification</td>
+                                <td>:</td>
+                                <td>
+                                    <textarea class="form-control" name="ProjectJustification" id="ProjectJustification" rows="3">@Model.ProjectJustification</textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Saving / Benefits</td>
+                                <td>:</td>
+                                <td>
+                                    <textarea class="form-control" name="Benefits" id="Benefits" rows="3">@Model.Benefits</textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-centered">
+                        @if (ViewBag.EditFlag != 1)
+                        {
+                            <button class="btn btn-primary">Update</button>
+                        }
+                        <input type="hidden" name="CPRF_Id" value="@Model.CPRF_Id" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+
+</div>
+
+
+
+<script>
+    //notificationCPRFMst
+    $(document).ready(function () {
+        $("#notificationCPRFMst").delay(3000).fadeOut("slow");
+    });
+    function OBSaveCPRFMst(){
+        $("#overlay").show();
+    }
+
+    function OSSaveCPRFMst(){
+        $("#overlay").hide();
+    }
+</script>

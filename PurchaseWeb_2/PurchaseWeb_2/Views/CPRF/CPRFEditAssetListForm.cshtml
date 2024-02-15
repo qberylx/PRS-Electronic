@@ -1,0 +1,227 @@
+﻿@model PurchaseWeb_2.ModelData.CPRFBudget_Dtls
+
+<input type="hidden" name="AssetStatusEdt" id="AssetStatusEdt" value="@Model.AssetStatus"/>
+<input type="hidden" name="CprfIdEdt" id="CprfIdEdt" value="@Model.CPRF_Id" />
+<input type="hidden" name="CprfDtIdEdt" id="CprfDtIdEdt" value="@Model.CPRFDt_Id" />
+<div class="row">
+    <div class="col-md-4">
+        <table style="width:100%">
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio1" id="rdoNew" onclick="NewAsset(@ViewBag.CprfId)" value="1" >
+                            <label class="form-check-label">New Asset</label>
+                            <br />
+                            <h6 style="font-size:small;color:orangered">(New asset id will be create based on quantity after save)</h6>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio1" id="rdoExist" value="2" onclick="ExistingAsset(@ViewBag.CprfId)">
+                            <label class="form-check-label">Existing Asset</label>
+                            &nbsp;&nbsp;
+                            <i class="fa fa-search" onclick="ShowExistingAsset(@ViewBag.CprfId )"></i>
+                            <br />
+                            <h6 style="font-size:small;color:orangered">(Please select the existing assets before proceed)</h6>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio1" id="rdoSubAset" value="3" onclick="SubAsset(@ViewBag.CprfId)">
+                            <label class="form-check-label">Sub Asset</label>
+                            <br />
+                            <h6 style="font-size:small;color:orangered">(Please choose line item with main asset)</h6>
+
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-8">
+        <div id="divAssetCategory">
+            <table style="width:100%">
+                <tr>
+                    <td>Asset Category</td>
+                    <td>:</td>
+                    <td>
+                        <select id="AssetCatId" name="AssetCatId" class="form-control">
+                            @foreach (var cat in ViewBag.assetCatLst)
+                            {
+                                if (cat.AssetCatId == Model.AssetCatId)
+                                {
+                                    <option value="@cat.AssetCatId" selected>@cat.AssetCatCode - @cat.AssetCatDesc</option>
+                                }
+                                else
+                                {
+                                    <option value="@cat.AssetCatId">@cat.AssetCatCode - @cat.AssetCatDesc</option>
+                                }
+
+
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="divCatWarning" style="display:none;color:orangered">Please select Asset Category</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="divRdoNew">
+            <table style="width:100%">
+                <tr>
+                    <td>New asset item quantity</td>
+                    <td>:</td>
+                    <td>
+                        <input type="text" class="form-control qty" name="assetqty" id="assetqty" value="0" />
+                    </td>
+                    <td>
+                        <button class="btn btn-warning" onclick="generateNewAsset(@ViewBag.CprfId)">Generate Asset No</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <div id="divNewAssetList">
+                            <table class="table table-head-fixed table-warning table-sm" style="width:50%">
+                                <thead>
+                                    <tr>
+                                        <td>No</td>
+                                        <td>System Asset No</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="divRdoExist">
+            <table class="table table-head-fixed table-warning table-sm" style="width:50%">
+                <thead>
+                    <tr>
+                        <td>No</td>
+                        <td>System Asset No</td>
+                        <td></td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <div id="divRdoSub">
+            <table>
+                <tr>
+                    <td>
+                        CPRF Details ID
+                    </td>
+                    <td>:</td>
+                    <td>
+                        <div id="divSctCPRFdtLvl1">
+                            <select name="CPRFReferId" id="CPRFReferId" class="form-control" required>
+                                <option value="0">
+                                </option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="col-centered">
+                        <button class="btn btn-warning" onclick="CPRFReferIdSave()">Save</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        //AssetStatusEdt
+        var AssetStatus = $("#AssetStatusEdt").val();
+        var CprfId = $("#CprfIdEdt").val();
+        var CprfDtId = $("#CprfDtIdEdt").val();
+
+        if (AssetStatus == "1") {
+            $("#divRdoNew").show();
+            $("#divRdoExist").hide();
+            $("#divRdoSub").hide();
+
+            $("#rdoNew").prop("checked", true);
+            NewAsset(CprfId);
+
+            // refresh table
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("NewAssetRefresh", "CPRF")",
+                data: JSON.stringify({ CPRFDtId: CprfDtId }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#divNewAssetList').html(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+
+        if (AssetStatus == "2") {
+            $("#divRdoNew").hide();
+            $("#divRdoExist").show();
+            $("#divRdoSub").hide();
+
+            $("#rdoExist").prop("checked", true);
+            ExistingAsset(CprfId);
+
+            // refresh table
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("refreshExistAssetList", "CPRF")",
+                data: JSON.stringify({ CPRFDtId: CprfDtId }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#divRdoExist').html(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+
+        if (AssetStatus == "3") {
+            $("#divRdoNew").hide();
+            $("#divRdoExist").hide();
+            $("#divRdoSub").show();
+
+            $("#rdoSubAset").prop("checked", true);
+            SubAsset(CprfId);
+
+            // refresh table
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("refreshSubAssetList", "CPRF")",
+                data: JSON.stringify({ CPRFDtId: CprfDtId }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#divSctCPRFdtLvl1').html(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+
+    });
+</script>

@@ -62,6 +62,15 @@
           <Property Name="ModifiedBy" Type="varchar" MaxLength="100" />
           <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="AssetCategory_Mst">
+          <Key>
+            <PropertyRef Name="AssetCatId" />
+          </Key>
+          <Property Name="AssetCatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AssetCatCode" Type="varchar" MaxLength="10" />
+          <Property Name="AssetCatDesc" Type="varchar" MaxLength="200" />
+          <Property Name="ActiveFlag" Type="bit" />
+        </EntityType>
         <EntityType Name="AuditBudget_log">
           <Key>
             <PropertyRef Name="AuditBudget_id" />
@@ -74,6 +83,21 @@
           <Property Name="ValueStr" Type="varchar(max)" />
           <Property Name="MDB_Id" Type="int" />
           <Property Name="BudgetId" Type="int" />
+          <Property Name="Remarks" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="AuditCPRF_log">
+          <Key>
+            <PropertyRef Name="AuditCPRF_id" />
+          </Key>
+          <Property Name="AuditCPRF_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ModifiedBy" Type="varchar" MaxLength="100" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ActionBtn" Type="varchar" MaxLength="100" />
+          <Property Name="ColumnStr" Type="varchar(max)" />
+          <Property Name="ValueStr" Type="varchar(max)" />
+          <Property Name="CPRF_Id" Type="int" />
+          <Property Name="CPRFDt_Id" Type="int" />
+          <Property Name="PRId" Type="int" />
           <Property Name="Remarks" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="AuditPR_Log">
@@ -89,6 +113,167 @@
           <Property Name="PRId" Type="int" />
           <Property Name="PRDtlsId" Type="int" />
           <Property Name="Remarks" Type="varchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Domi_PurEL.dbo.Category_Mst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Category_Mst">
+          <Key>
+            <PropertyRef Name="Category_Id" />
+          </Key>
+          <Property Name="Category_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Category_Name" Type="varchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="CostCentre_Mst">
+          <Key>
+            <PropertyRef Name="CostCentreId" />
+          </Key>
+          <Property Name="CostCentreId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Prefix" Type="varchar" MaxLength="2" />
+          <Property Name="DepartmentId" Type="int" />
+          <Property Name="ProcessId" Type="int" />
+          <Property Name="AreaId" Type="int" />
+          <Property Name="CostCentreStr" Type="varchar" MaxLength="50" />
+          <Property Name="DeleteFlag" Type="bit" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="CPRF_File">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CPRF_Id" Type="int" />
+          <Property Name="FileName" Type="varchar" MaxLength="100" />
+          <Property Name="FilePath" Type="varchar(max)" />
+          <Property Name="UploadFileName" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="CprfArea_Mst">
+          <Key>
+            <PropertyRef Name="AreaId" />
+          </Key>
+          <Property Name="AreaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AreaCode" Type="varchar" MaxLength="3" />
+          <Property Name="AreaDesc" Type="varchar" MaxLength="100" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="CPRFAsset_Mst">
+          <Key>
+            <PropertyRef Name="AssetId" />
+          </Key>
+          <Property Name="AssetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CPRFDt_Id" Type="int" />
+          <Property Name="CPRF_Id" Type="int" />
+          <Property Name="AssetNo" Type="varchar" MaxLength="100" />
+          <Property Name="AssetSystemNo" Type="varchar" MaxLength="100" />
+          <Property Name="StatusId" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="50" />
+          <Property Name="AssetCatId" Type="int" />
+          <Property Name="EstPrDate" Type="date" />
+          <Property Name="DelistReqFlag" Type="bit" />
+          <Property Name="DelistReqBy" Type="varchar" MaxLength="100" />
+          <Property Name="DelistReqDate" Type="datetime" />
+          <Property Name="DelistUnlockBy" Type="varchar" MaxLength="100" />
+          <Property Name="DelistUnlockDate" Type="datetime" />
+          <Property Name="MatchFlag" Type="bit" />
+          <Property Name="MatchBy" Type="varchar" MaxLength="100" />
+          <Property Name="MatchDate" Type="datetime" />
+          <Property Name="PRSNumbering" Type="varchar" MaxLength="200" />
+          <Property Name="AssetDesc" Type="varchar(max)" />
+          <Property Name="CostCentre" Type="varchar" MaxLength="100" />
+          <Property Name="Area" Type="varchar" MaxLength="100" />
+          <Property Name="Requestor" Type="varchar" MaxLength="100" />
+          <Property Name="PONo" Type="varchar" MaxLength="100" />
+          <Property Name="SerialNo" Type="varchar" MaxLength="100" />
+          <Property Name="MachineID" Type="varchar" MaxLength="100" />
+          <Property Name="AssetTagStatus" Type="varchar" MaxLength="200" />
+          <Property Name="Remarks" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="CPRFBudget_Dtls">
+          <Key>
+            <PropertyRef Name="CPRFDt_Id" />
+          </Key>
+          <Property Name="CPRFDt_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CPRF_Id" Type="int" />
+          <Property Name="CPRFDt_Id_Refer" Type="int" />
+          <Property Name="CPRFDt_No" Type="varchar" MaxLength="300" />
+          <Property Name="CPRF_Lvl" Type="int" />
+          <Property Name="Description" Type="varchar" MaxLength="300" />
+          <Property Name="TotalBudget" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Balance" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="StatusId" Type="int" />
+          <Property Name="DepartmentId" Type="int" />
+          <Property Name="CategoryId" Type="int" />
+          <Property Name="ProcessId" Type="int" />
+          <Property Name="AreaId" Type="int" />
+          <Property Name="CostCentreStr" Type="varchar" MaxLength="100" />
+          <Property Name="Qty" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AssetStatus" Type="int" />
+          <Property Name="CurrencyId" Type="varchar" MaxLength="10" />
+          <Property Name="Exchange" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="TotalBudgetMYR" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="BalanceMYR" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Create_By" Type="varchar" MaxLength="300" />
+          <Property Name="Create_Date" Type="datetime" />
+          <Property Name="Modified_By" Type="varchar" MaxLength="300" />
+          <Property Name="Modified_Date" Type="datetime" />
+          <Property Name="AssetCatId" Type="int" />
+        </EntityType>
+        <EntityType Name="CPRFBudget_Mst">
+          <Key>
+            <PropertyRef Name="CPRF_Id" />
+          </Key>
+          <Property Name="CPRF_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CPRF_No" Type="varchar" MaxLength="50" />
+          <Property Name="ApprovalDate" Type="datetime" />
+          <Property Name="Category" Type="varchar" MaxLength="300" />
+          <Property Name="ProjectTitle" Type="varchar" MaxLength="300" />
+          <Property Name="TotalBudget" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ProjectOwner" Type="varchar" MaxLength="300" />
+          <Property Name="Balance" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
+          <Property Name="BudgetUtilYear" Type="int" />
+          <Property Name="ProjectJustification" Type="varchar" MaxLength="300" />
+          <Property Name="Benefits" Type="varchar" MaxLength="300" />
+          <Property Name="HOD" Type="varchar" MaxLength="100" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="DepartmentID" Type="int" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="Request_Date" Type="datetime" />
+          <Property Name="Create_Date" Type="datetime" />
+          <Property Name="Create_By" Type="varchar" MaxLength="300" />
+          <Property Name="Modified_Date" Type="datetime" />
+          <Property Name="Modified_By" Type="varchar" MaxLength="300" />
+          <Property Name="DeleteFlag" Type="bit" />
+          <Property Name="SendToHod" Type="datetime" />
+          <Property Name="SendToIE" Type="datetime" />
+          <Property Name="HODName" Type="varchar" MaxLength="50" />
+          <Property Name="HODRejectReason" Type="varchar" MaxLength="300" />
+          <Property Name="SendToCoo" Type="datetime" />
+          <Property Name="IEName" Type="varchar" MaxLength="50" />
+          <Property Name="IERejectReason" Type="varchar" MaxLength="300" />
+          <Property Name="SendToGMD" Type="datetime" />
+          <Property Name="COOName" Type="varchar" MaxLength="50" />
+          <Property Name="COORejectReason" Type="varchar" MaxLength="300" />
+          <Property Name="SendToProcessIE" Type="datetime" />
+          <Property Name="GMDName" Type="varchar" MaxLength="50" />
+          <Property Name="GMDRejectReason" Type="varchar" MaxLength="300" />
+          <Property Name="CPRFcompleteDate" Type="datetime" />
+          <Property Name="IECPRFCompleteName" Type="varchar" MaxLength="50" />
+          <Property Name="IEKIVName" Type="varchar" MaxLength="50" />
+          <Property Name="IEKIVReason" Type="varchar" MaxLength="300" />
+          <Property Name="IEKIVDate" Type="datetime" />
+          <Property Name="CatMain" Type="varchar" MaxLength="100" />
+          <Property Name="InvestTerm" Type="varchar" MaxLength="100" />
+          <Property Name="LockFlag" Type="bit" />
+        </EntityType>
+        <EntityType Name="CprfCategory_Mst">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryDesc" Type="varchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="CPRFMst">
           <Key>
@@ -390,6 +575,7 @@ warning 6002: The table/view 'Domi_PurEL.dbo.PO_CSV_Header' does not have a prim
           <Property Name="LastPriceVendor" Type="decimal" Precision="18" Scale="5" />
           <Property Name="LastVendorCode" Type="varchar" MaxLength="50" />
           <Property Name="EstCurExch" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="CheckPRFlag" Type="bit" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -452,6 +638,9 @@ warning 6002: The table/view 'Domi_PurEL.dbo.PO_CSV_Header' does not have a prim
           <Property Name="CPRFLvl3" Type="varchar" MaxLength="50" />
           <Property Name="NonProductflag" Type="smallint" />
           <Property Name="internalDocNo" Type="varchar" MaxLength="50" />
+          <Property Name="LastEmailMDDate" Type="datetime" />
+          <Property Name="LastEmailMDBy" Type="varchar" MaxLength="100" />
+          <Property Name="PurchaserRemarks" Type="varchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="PR_VendorComparison">
           <Key>
@@ -491,6 +680,16 @@ warning 6002: The table/view 'Domi_PurEL.dbo.PO_CSV_Header' does not have a prim
           <Property Name="QuoteNo" Type="varchar" MaxLength="50" />
           <Property Name="Remarks" Type="varchar(max)" />
         </EntityType>
+        <EntityType Name="PRAsset_Lst">
+          <Key>
+            <PropertyRef Name="PrAssetId" />
+          </Key>
+          <Property Name="PrAssetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PRDtId" Type="int" />
+          <Property Name="PRid" Type="int" />
+          <Property Name="AssetId" Type="int" />
+          <Property Name="ActiveFlag" Type="bit" />
+        </EntityType>
         <EntityType Name="PRFile">
           <Key>
             <PropertyRef Name="FileId" />
@@ -508,6 +707,16 @@ warning 6002: The table/view 'Domi_PurEL.dbo.PO_CSV_Header' does not have a prim
           <Property Name="GroupName" Type="varchar" MaxLength="50" />
           <Property Name="CPRFFlag" Type="bit" />
           <Property Name="GroupColor" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Process_Mst">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProcessCode" Type="varchar" MaxLength="2" />
+          <Property Name="ProcessDesc" Type="varchar" MaxLength="200" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CreateBy" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="PRType_mst">
           <Key>
@@ -598,6 +807,28 @@ warning 6002: The table/view 'Domi_PurEL.dbo.PO_CSV_Header' does not have a prim
           <Property Name="SourcingFlag" Type="bit" />
           <Property Name="MD_PA_Flag" Type="bit" />
         </EntityType>
+        <EntityType Name="UsrPsn_Map">
+          <Key>
+            <PropertyRef Name="Usr_psn_Id" />
+          </Key>
+          <Property Name="Usr_psn_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="usr_id" Type="int" />
+          <Property Name="Psn_id" Type="int" />
+          <Property Name="ActiveFlag" Type="bit" />
+          <Property Name="Modified_date" Type="datetime" />
+          <Property Name="Modified_by" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Domi_PurEL.dbo.vw_CprfDept' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_CprfDept">
+          <Key>
+            <PropertyRef Name="AccTypeDepID" />
+          </Key>
+          <Property Name="DepartmentId" Type="int" />
+          <Property Name="DeptName" Type="varchar" MaxLength="50" />
+          <Property Name="DeptCode" Type="varchar" MaxLength="10" />
+          <Property Name="AccTypeDepID" Type="int" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vw_sourcingRemarksLst">
@@ -609,6 +840,151 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="VCId" Type="int" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Domi_PurEL.dbo.vw_usrDpt' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_usrDpt">
+          <Key>
+            <PropertyRef Name="usr_id" />
+          </Key>
+          <Property Name="usr_id" Type="int" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Dpt_id" Type="int" />
+          <Property Name="Psn_id" Type="int" />
+          <Property Name="Team_id" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK_CostCentre_Mst_AccTypeDept">
+          <End Role="AccTypeDept" Type="Self.AccTypeDept" Multiplicity="0..1" />
+          <End Role="CostCentre_Mst" Type="Self.CostCentre_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDept">
+              <PropertyRef Name="AccTypeDepID" />
+            </Principal>
+            <Dependent Role="CostCentre_Mst">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CostCentre_Mst_CprfArea_Mst">
+          <End Role="CprfArea_Mst" Type="Self.CprfArea_Mst" Multiplicity="0..1" />
+          <End Role="CostCentre_Mst" Type="Self.CostCentre_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CprfArea_Mst">
+              <PropertyRef Name="AreaId" />
+            </Principal>
+            <Dependent Role="CostCentre_Mst">
+              <PropertyRef Name="AreaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CostCentre_Mst_Process_Mst">
+          <End Role="Process_Mst" Type="Self.Process_Mst" Multiplicity="0..1" />
+          <End Role="CostCentre_Mst" Type="Self.CostCentre_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Process_Mst">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CostCentre_Mst">
+              <PropertyRef Name="ProcessId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRF_File_CPRFBudget_Mst">
+          <End Role="CPRFBudget_Mst" Type="Self.CPRFBudget_Mst" Multiplicity="0..1" />
+          <End Role="CPRF_File" Type="Self.CPRF_File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CPRFBudget_Mst">
+              <PropertyRef Name="CPRF_Id" />
+            </Principal>
+            <Dependent Role="CPRF_File">
+              <PropertyRef Name="CPRF_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFAsset_Mst_AssetCategory_Mst">
+          <End Role="AssetCategory_Mst" Type="Self.AssetCategory_Mst" Multiplicity="0..1" />
+          <End Role="CPRFAsset_Mst" Type="Self.CPRFAsset_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssetCategory_Mst">
+              <PropertyRef Name="AssetCatId" />
+            </Principal>
+            <Dependent Role="CPRFAsset_Mst">
+              <PropertyRef Name="AssetCatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFAsset_Mst_CPRFBudget_Dtls">
+          <End Role="CPRFBudget_Dtls" Type="Self.CPRFBudget_Dtls" Multiplicity="0..1" />
+          <End Role="CPRFAsset_Mst" Type="Self.CPRFAsset_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CPRFBudget_Dtls">
+              <PropertyRef Name="CPRFDt_Id" />
+            </Principal>
+            <Dependent Role="CPRFAsset_Mst">
+              <PropertyRef Name="CPRFDt_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFAsset_Mst_CPRFBudget_Mst">
+          <End Role="CPRFBudget_Mst" Type="Self.CPRFBudget_Mst" Multiplicity="0..1" />
+          <End Role="CPRFAsset_Mst" Type="Self.CPRFAsset_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CPRFBudget_Mst">
+              <PropertyRef Name="CPRF_Id" />
+            </Principal>
+            <Dependent Role="CPRFAsset_Mst">
+              <PropertyRef Name="CPRF_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFBudget_Dtls_AccTypeDept">
+          <End Role="AccTypeDept" Type="Self.AccTypeDept" Multiplicity="0..1" />
+          <End Role="CPRFBudget_Dtls" Type="Self.CPRFBudget_Dtls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDept">
+              <PropertyRef Name="AccTypeDepID" />
+            </Principal>
+            <Dependent Role="CPRFBudget_Dtls">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFBudget_Dtls_CPRFBudget_Mst">
+          <End Role="CPRFBudget_Mst" Type="Self.CPRFBudget_Mst" Multiplicity="0..1" />
+          <End Role="CPRFBudget_Dtls" Type="Self.CPRFBudget_Dtls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CPRFBudget_Mst">
+              <PropertyRef Name="CPRF_Id" />
+            </Principal>
+            <Dependent Role="CPRFBudget_Dtls">
+              <PropertyRef Name="CPRF_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFBudget_Dtls_CprfCategory_Mst">
+          <End Role="CprfCategory_Mst" Type="Self.CprfCategory_Mst" Multiplicity="0..1" />
+          <End Role="CPRFBudget_Dtls" Type="Self.CPRFBudget_Dtls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CprfCategory_Mst">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="CPRFBudget_Dtls">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFBudget_Mst_Usr_mst">
+          <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="0..1" />
+          <End Role="CPRFBudget_Mst" Type="Self.CPRFBudget_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usr_mst">
+              <PropertyRef Name="usr_id" />
+            </Principal>
+            <Dependent Role="CPRFBudget_Mst">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_HODManager_Map_Usr_mst">
           <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="0..1" />
           <End Role="HODManager_Map" Type="Self.HODManager_Map" Multiplicity="*" />
@@ -897,6 +1273,18 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PRAsset_Lst_PR_Details">
+          <End Role="PR_Details" Type="Self.PR_Details" Multiplicity="0..1" />
+          <End Role="PRAsset_Lst" Type="Self.PRAsset_Lst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PR_Details">
+              <PropertyRef Name="PRDtId" />
+            </Principal>
+            <Dependent Role="PRAsset_Lst">
+              <PropertyRef Name="PRDtId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PRFile_PR_Mst">
           <End Role="PR_Mst" Type="Self.PR_Mst" Multiplicity="0..1" />
           <End Role="PRFile" Type="Self.PRFile" Multiplicity="*" />
@@ -969,6 +1357,30 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UsrPsn_Map_Position_mst">
+          <End Role="Position_mst" Type="Self.Position_mst" Multiplicity="0..1" />
+          <End Role="UsrPsn_Map" Type="Self.UsrPsn_Map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position_mst">
+              <PropertyRef Name="Psn_id" />
+            </Principal>
+            <Dependent Role="UsrPsn_Map">
+              <PropertyRef Name="Psn_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UsrPsn_Map_Usr_mst">
+          <End Role="Usr_mst" Type="Self.Usr_mst" Multiplicity="0..1" />
+          <End Role="UsrPsn_Map" Type="Self.UsrPsn_Map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usr_mst">
+              <PropertyRef Name="usr_id" />
+            </Principal>
+            <Dependent Role="UsrPsn_Map">
+              <PropertyRef Name="usr_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="AssignRoleMenuMap" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetDocNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="initial" Type="varchar" Mode="In" />
@@ -979,6 +1391,12 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
         <Function Name="GetPOListbyDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FromDate" Type="date" Mode="In" />
           <Parameter Name="ToDate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="SP_ChkCPRFSendToHOD" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="cprfNo" Type="varchar" Mode="In" />
+          <Parameter Name="cprfLvl" Type="int" Mode="In" />
+          <Parameter Name="prTotal" Type="decimal" Mode="In" />
+          <Parameter Name="PassFlag" Type="int" Mode="InOut" />
         </Function>
         <Function Name="SP_ChkDeptBudgetBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="monthOf" Type="int" Mode="In" />
@@ -1018,8 +1436,17 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           <EntitySet Name="AccTypeDivision" EntityType="Self.AccTypeDivision" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccTypeExpenses" EntityType="Self.AccTypeExpenses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Area_Mst" EntityType="Self.Area_Mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AssetCategory_Mst" EntityType="Self.AssetCategory_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AuditBudget_log" EntityType="Self.AuditBudget_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AuditCPRF_log" EntityType="Self.AuditCPRF_log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AuditPR_Log" EntityType="Self.AuditPR_Log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CostCentre_Mst" EntityType="Self.CostCentre_Mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CPRF_File" EntityType="Self.CPRF_File" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CprfArea_Mst" EntityType="Self.CprfArea_Mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CPRFAsset_Mst" EntityType="Self.CPRFAsset_Mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CPRFBudget_Dtls" EntityType="Self.CPRFBudget_Dtls" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CPRFBudget_Mst" EntityType="Self.CPRFBudget_Mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CprfCategory_Mst" EntityType="Self.CprfCategory_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CPRFMst" EntityType="Self.CPRFMst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency_Mst" EntityType="Self.Currency_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department_mst" EntityType="Self.Department_mst" Schema="dbo" store:Type="Tables" />
@@ -1038,8 +1465,10 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           <EntitySet Name="PR_Details" EntityType="Self.PR_Details" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_Mst" EntityType="Self.PR_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PR_VendorComparison" EntityType="Self.PR_VendorComparison" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRAsset_Lst" EntityType="Self.PRAsset_Lst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRFile" EntityType="Self.PRFile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrGroupType" EntityType="Self.PrGroupType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Process_Mst" EntityType="Self.Process_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRType_mst" EntityType="Self.PRType_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrTypeMap" EntityType="Self.PrTypeMap" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PublicHoliday_mst" EntityType="Self.PublicHoliday_mst" Schema="dbo" store:Type="Tables" />
@@ -1049,6 +1478,13 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UOM_mst" EntityType="Self.UOM_mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usr_mst" EntityType="Self.Usr_mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UsrPsn_Map" EntityType="Self.UsrPsn_Map" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category_Mst" EntityType="Self.Category_Mst" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Category_Mst].[Category_Id] AS [Category_Id], 
+    [Category_Mst].[Category_Name] AS [Category_Name]
+    FROM [dbo].[Category_Mst] AS [Category_Mst]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="Lgn_mst" EntityType="Self.Lgn_mst" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Lgn_mst].[Lgn_id] AS [Lgn_id], 
@@ -1088,6 +1524,14 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
     [PO_CSV_Header].[AA] AS [AA]
     FROM [dbo].[PO_CSV_Header] AS [PO_CSV_Header]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="vw_CprfDept" EntityType="Self.vw_CprfDept" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vw_CprfDept].[DepartmentId] AS [DepartmentId], 
+    [vw_CprfDept].[DeptName] AS [DeptName], 
+    [vw_CprfDept].[DeptCode] AS [DeptCode], 
+    [vw_CprfDept].[AccTypeDepID] AS [AccTypeDepID]
+    FROM [dbo].[vw_CprfDept] AS [vw_CprfDept]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="vw_sourcingRemarksLst" EntityType="Self.vw_sourcingRemarksLst" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [vw_sourcingRemarksLst].[PRid] AS [PRid], 
@@ -1096,6 +1540,60 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
     [vw_sourcingRemarksLst].[VCId] AS [VCId]
     FROM [dbo].[vw_sourcingRemarksLst] AS [vw_sourcingRemarksLst]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="vw_usrDpt" EntityType="Self.vw_usrDpt" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vw_usrDpt].[usr_id] AS [usr_id], 
+    [vw_usrDpt].[Username] AS [Username], 
+    [vw_usrDpt].[Email] AS [Email], 
+    [vw_usrDpt].[Dpt_id] AS [Dpt_id], 
+    [vw_usrDpt].[Psn_id] AS [Psn_id], 
+    [vw_usrDpt].[Team_id] AS [Team_id]
+    FROM [dbo].[vw_usrDpt] AS [vw_usrDpt]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_CostCentre_Mst_AccTypeDept" Association="Self.FK_CostCentre_Mst_AccTypeDept">
+            <End Role="AccTypeDept" EntitySet="AccTypeDept" />
+            <End Role="CostCentre_Mst" EntitySet="CostCentre_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CostCentre_Mst_CprfArea_Mst" Association="Self.FK_CostCentre_Mst_CprfArea_Mst">
+            <End Role="CprfArea_Mst" EntitySet="CprfArea_Mst" />
+            <End Role="CostCentre_Mst" EntitySet="CostCentre_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CostCentre_Mst_Process_Mst" Association="Self.FK_CostCentre_Mst_Process_Mst">
+            <End Role="Process_Mst" EntitySet="Process_Mst" />
+            <End Role="CostCentre_Mst" EntitySet="CostCentre_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRF_File_CPRFBudget_Mst" Association="Self.FK_CPRF_File_CPRFBudget_Mst">
+            <End Role="CPRFBudget_Mst" EntitySet="CPRFBudget_Mst" />
+            <End Role="CPRF_File" EntitySet="CPRF_File" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFAsset_Mst_AssetCategory_Mst" Association="Self.FK_CPRFAsset_Mst_AssetCategory_Mst">
+            <End Role="AssetCategory_Mst" EntitySet="AssetCategory_Mst" />
+            <End Role="CPRFAsset_Mst" EntitySet="CPRFAsset_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFAsset_Mst_CPRFBudget_Dtls" Association="Self.FK_CPRFAsset_Mst_CPRFBudget_Dtls">
+            <End Role="CPRFBudget_Dtls" EntitySet="CPRFBudget_Dtls" />
+            <End Role="CPRFAsset_Mst" EntitySet="CPRFAsset_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFAsset_Mst_CPRFBudget_Mst" Association="Self.FK_CPRFAsset_Mst_CPRFBudget_Mst">
+            <End Role="CPRFBudget_Mst" EntitySet="CPRFBudget_Mst" />
+            <End Role="CPRFAsset_Mst" EntitySet="CPRFAsset_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFBudget_Dtls_AccTypeDept" Association="Self.FK_CPRFBudget_Dtls_AccTypeDept">
+            <End Role="AccTypeDept" EntitySet="AccTypeDept" />
+            <End Role="CPRFBudget_Dtls" EntitySet="CPRFBudget_Dtls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFBudget_Dtls_CPRFBudget_Mst" Association="Self.FK_CPRFBudget_Dtls_CPRFBudget_Mst">
+            <End Role="CPRFBudget_Mst" EntitySet="CPRFBudget_Mst" />
+            <End Role="CPRFBudget_Dtls" EntitySet="CPRFBudget_Dtls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFBudget_Dtls_CprfCategory_Mst" Association="Self.FK_CPRFBudget_Dtls_CprfCategory_Mst">
+            <End Role="CprfCategory_Mst" EntitySet="CprfCategory_Mst" />
+            <End Role="CPRFBudget_Dtls" EntitySet="CPRFBudget_Dtls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFBudget_Mst_Usr_mst" Association="Self.FK_CPRFBudget_Mst_Usr_mst">
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+            <End Role="CPRFBudget_Mst" EntitySet="CPRFBudget_Mst" />
+          </AssociationSet>
           <AssociationSet Name="FK_HODManager_Map_Usr_mst" Association="Self.FK_HODManager_Map_Usr_mst">
             <End Role="Usr_mst" EntitySet="Usr_mst" />
             <End Role="HODManager_Map" EntitySet="HODManager_Map" />
@@ -1192,6 +1690,10 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
             <End Role="PR_Details" EntitySet="PR_Details" />
             <End Role="PR_VendorComparison" EntitySet="PR_VendorComparison" />
           </AssociationSet>
+          <AssociationSet Name="FK_PRAsset_Lst_PR_Details" Association="Self.FK_PRAsset_Lst_PR_Details">
+            <End Role="PR_Details" EntitySet="PR_Details" />
+            <End Role="PRAsset_Lst" EntitySet="PRAsset_Lst" />
+          </AssociationSet>
           <AssociationSet Name="FK_PRFile_PR_Mst" Association="Self.FK_PRFile_PR_Mst">
             <End Role="PR_Mst" EntitySet="PR_Mst" />
             <End Role="PRFile" EntitySet="PRFile" />
@@ -1215,6 +1717,14 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           <AssociationSet Name="FK_Usr_mst_Position_mst" Association="Self.FK_Usr_mst_Position_mst">
             <End Role="Position_mst" EntitySet="Position_mst" />
             <End Role="Usr_mst" EntitySet="Usr_mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UsrPsn_Map_Position_mst" Association="Self.FK_UsrPsn_Map_Position_mst">
+            <End Role="Position_mst" EntitySet="Position_mst" />
+            <End Role="UsrPsn_Map" EntitySet="UsrPsn_Map" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UsrPsn_Map_Usr_mst" Association="Self.FK_UsrPsn_Map_Usr_mst">
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+            <End Role="UsrPsn_Map" EntitySet="UsrPsn_Map" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -1266,6 +1776,7 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           <Property Name="Active" Type="Boolean" />
           <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_Usr_mst_Position_mst" FromRole="Position_mst" ToRole="Usr_mst" />
           <NavigationProperty Name="RoleMenuMapping_mst" Relationship="Domi_PurModel.FK_RoleMenuMapping_mst_Position_mst" FromRole="Position_mst" ToRole="RoleMenuMapping_mst" />
+          <NavigationProperty Name="UsrPsn_Map" Relationship="Domi_PurModel.FK_UsrPsn_Map_Position_mst" FromRole="Position_mst" ToRole="UsrPsn_Map" />
         </EntityType>
         <EntityContainer Name="Domi_PurEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Department_mst" EntityType="Self.Department_mst" />
@@ -1478,6 +1989,83 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
             <End Role="Usr_mst" EntitySet="Usr_mst" />
             <End Role="HODManager_Map" EntitySet="HODManager_Map" />
           </AssociationSet>
+          <EntitySet Name="CPRF_File" EntityType="Domi_PurModel.CPRF_File" />
+          <EntitySet Name="CprfArea_Mst" EntityType="Domi_PurModel.CprfArea_Mst" />
+          <EntitySet Name="CPRFAsset_Mst" EntityType="Domi_PurModel.CPRFAsset_Mst" />
+          <EntitySet Name="CPRFBudget_Mst" EntityType="Domi_PurModel.CPRFBudget_Mst" />
+          <EntitySet Name="CprfCategory_Mst" EntityType="Domi_PurModel.CprfCategory_Mst" />
+          <AssociationSet Name="FK_CPRF_File_CPRFBudget_Mst" Association="Domi_PurModel.FK_CPRF_File_CPRFBudget_Mst">
+            <End Role="CPRFBudget_Mst" EntitySet="CPRFBudget_Mst" />
+            <End Role="CPRF_File" EntitySet="CPRF_File" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFAsset_Mst_CPRFBudget_Mst" Association="Domi_PurModel.FK_CPRFAsset_Mst_CPRFBudget_Mst">
+            <End Role="CPRFBudget_Mst" EntitySet="CPRFBudget_Mst" />
+            <End Role="CPRFAsset_Mst" EntitySet="CPRFAsset_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFBudget_Mst_Usr_mst" Association="Domi_PurModel.FK_CPRFBudget_Mst_Usr_mst">
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+            <End Role="CPRFBudget_Mst" EntitySet="CPRFBudget_Mst" />
+          </AssociationSet>
+          <EntitySet Name="AssetCategory_Mst" EntityType="Domi_PurModel.AssetCategory_Mst" />
+          <EntitySet Name="AuditCPRF_log" EntityType="Domi_PurModel.AuditCPRF_log" />
+          <EntitySet Name="CostCentre_Mst" EntityType="Domi_PurModel.CostCentre_Mst" />
+          <EntitySet Name="PRAsset_Lst" EntityType="Domi_PurModel.PRAsset_Lst" />
+          <EntitySet Name="Category_Mst" EntityType="Domi_PurModel.Category_Mst" />
+          <AssociationSet Name="FK_CostCentre_Mst_AccTypeDept" Association="Domi_PurModel.FK_CostCentre_Mst_AccTypeDept">
+            <End Role="AccTypeDept" EntitySet="AccTypeDepts" />
+            <End Role="CostCentre_Mst" EntitySet="CostCentre_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFAsset_Mst_AssetCategory_Mst" Association="Domi_PurModel.FK_CPRFAsset_Mst_AssetCategory_Mst">
+            <End Role="AssetCategory_Mst" EntitySet="AssetCategory_Mst" />
+            <End Role="CPRFAsset_Mst" EntitySet="CPRFAsset_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CostCentre_Mst_CprfArea_Mst" Association="Domi_PurModel.FK_CostCentre_Mst_CprfArea_Mst">
+            <End Role="CprfArea_Mst" EntitySet="CprfArea_Mst" />
+            <End Role="CostCentre_Mst" EntitySet="CostCentre_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PRAsset_Lst_PR_Details" Association="Domi_PurModel.FK_PRAsset_Lst_PR_Details">
+            <End Role="PR_Details" EntitySet="PR_Details" />
+            <End Role="PRAsset_Lst" EntitySet="PRAsset_Lst" />
+          </AssociationSet>
+          <EntitySet Name="Process_Mst" EntityType="Domi_PurModel.Process_Mst" />
+          <EntitySet Name="vw_CprfDept" EntityType="Domi_PurModel.vw_CprfDept" />
+          <EntitySet Name="vw_usrDpt" EntityType="Domi_PurModel.vw_usrDpt" />
+          <AssociationSet Name="FK_CostCentre_Mst_Process_Mst" Association="Domi_PurModel.FK_CostCentre_Mst_Process_Mst">
+            <End Role="Process_Mst" EntitySet="Process_Mst" />
+            <End Role="CostCentre_Mst" EntitySet="CostCentre_Mst" />
+          </AssociationSet>
+          <FunctionImport Name="SP_ChkCPRFSendToHOD" ReturnType="Collection(Int32)">
+            <Parameter Name="cprfNo" Mode="In" Type="String" />
+            <Parameter Name="cprfLvl" Mode="In" Type="Int32" />
+            <Parameter Name="prTotal" Mode="In" Type="Decimal" />
+            <Parameter Name="PassFlag" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="CPRFBudget_Dtls" EntityType="Domi_PurModel.CPRFBudget_Dtls" />
+          <AssociationSet Name="FK_CPRFBudget_Dtls_AccTypeDept" Association="Domi_PurModel.FK_CPRFBudget_Dtls_AccTypeDept">
+            <End Role="AccTypeDept" EntitySet="AccTypeDepts" />
+            <End Role="CPRFBudget_Dtls" EntitySet="CPRFBudget_Dtls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFAsset_Mst_CPRFBudget_Dtls" Association="Domi_PurModel.FK_CPRFAsset_Mst_CPRFBudget_Dtls">
+            <End Role="CPRFBudget_Dtls" EntitySet="CPRFBudget_Dtls" />
+            <End Role="CPRFAsset_Mst" EntitySet="CPRFAsset_Mst" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFBudget_Dtls_CPRFBudget_Mst" Association="Domi_PurModel.FK_CPRFBudget_Dtls_CPRFBudget_Mst">
+            <End Role="CPRFBudget_Mst" EntitySet="CPRFBudget_Mst" />
+            <End Role="CPRFBudget_Dtls" EntitySet="CPRFBudget_Dtls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CPRFBudget_Dtls_CprfCategory_Mst" Association="Domi_PurModel.FK_CPRFBudget_Dtls_CprfCategory_Mst">
+            <End Role="CprfCategory_Mst" EntitySet="CprfCategory_Mst" />
+            <End Role="CPRFBudget_Dtls" EntitySet="CPRFBudget_Dtls" />
+          </AssociationSet>
+          <EntitySet Name="UsrPsn_Map" EntityType="Domi_PurModel.UsrPsn_Map" />
+          <AssociationSet Name="FK_UsrPsn_Map_Position_mst" Association="Domi_PurModel.FK_UsrPsn_Map_Position_mst">
+            <End Role="Position_mst" EntitySet="Position_mst" />
+            <End Role="UsrPsn_Map" EntitySet="UsrPsn_Map" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UsrPsn_Map_Usr_mst" Association="Domi_PurModel.FK_UsrPsn_Map_Usr_mst">
+            <End Role="Usr_mst" EntitySet="Usr_mst" />
+            <End Role="UsrPsn_Map" EntitySet="UsrPsn_Map" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -1508,6 +2096,8 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           <Property Name="MD_PA_Flag" Type="Boolean" />
           <NavigationProperty Name="HODManager_Map" Relationship="Domi_PurModel.FK_HODManager_Map_Usr_mst" FromRole="Usr_mst" ToRole="HODManager_Map" />
           <NavigationProperty Name="HODManager_Map1" Relationship="Domi_PurModel.FK_HODManager_Map_Usr_mst1" FromRole="Usr_mst" ToRole="HODManager_Map" />
+          <NavigationProperty Name="CPRFBudget_Mst" Relationship="Domi_PurModel.FK_CPRFBudget_Mst_Usr_mst" FromRole="Usr_mst" ToRole="CPRFBudget_Mst" />
+          <NavigationProperty Name="UsrPsn_Map" Relationship="Domi_PurModel.FK_UsrPsn_Map_Usr_mst" FromRole="Usr_mst" ToRole="UsrPsn_Map" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -1646,6 +2236,8 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           <Property Name="LastPriceVendor" Type="Decimal" Precision="18" Scale="5" />
           <Property Name="LastVendorCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="EstCurExch" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="CheckPRFlag" Type="Boolean" />
+          <NavigationProperty Name="PRAsset_Lst" Relationship="Domi_PurModel.FK_PRAsset_Lst_PR_Details" FromRole="PR_Details" ToRole="PRAsset_Lst" />
         </EntityType>
         <EntityType Name="PR_Mst">
           <Key>
@@ -1717,6 +2309,9 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           <Property Name="CPRFLvl3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="NonProductflag" Type="Int16" />
           <Property Name="internalDocNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastEmailMDDate" Type="DateTime" Precision="3" />
+          <Property Name="LastEmailMDBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PurchaserRemarks" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UOM_mst">
           <Key>
@@ -1895,6 +2490,8 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           <NavigationProperty Name="MonthlyBudgets" Relationship="Domi_PurModel.FK_MonthlyBudget_AccTypeDept" FromRole="AccTypeDept" ToRole="MonthlyBudget" />
           <Property Name="DeleteFlag" Type="Boolean" />
           <NavigationProperty Name="MonthlyBudget_Expense" Relationship="Domi_PurModel.FK_MonthlyBudget_Expense_AccTypeDept" FromRole="AccTypeDept" ToRole="MonthlyBudget_Expense" />
+          <NavigationProperty Name="CostCentre_Mst" Relationship="Domi_PurModel.FK_CostCentre_Mst_AccTypeDept" FromRole="AccTypeDept" ToRole="CostCentre_Mst" />
+          <NavigationProperty Name="CPRFBudget_Dtls" Relationship="Domi_PurModel.FK_CPRFBudget_Dtls_AccTypeDept" FromRole="AccTypeDept" ToRole="CPRFBudget_Dtls" />
         </EntityType>
         <EntityType Name="AccTypeDivision">
           <Key>
@@ -2541,6 +3138,430 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CPRF_File">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CPRF_Id" Type="Int32" />
+          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UploadFileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CPRFBudget_Mst" Relationship="Domi_PurModel.FK_CPRF_File_CPRFBudget_Mst" FromRole="CPRF_File" ToRole="CPRFBudget_Mst" />
+        </EntityType>
+        <EntityType Name="CprfArea_Mst">
+          <Key>
+            <PropertyRef Name="AreaId" />
+          </Key>
+          <Property Name="AreaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AreaCode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="AreaDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CostCentre_Mst" Relationship="Domi_PurModel.FK_CostCentre_Mst_CprfArea_Mst" FromRole="CprfArea_Mst" ToRole="CostCentre_Mst" />
+        </EntityType>
+        <EntityType Name="CPRFAsset_Mst">
+          <Key>
+            <PropertyRef Name="AssetId" />
+          </Key>
+          <Property Name="AssetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CPRFDt_Id" Type="Int32" />
+          <Property Name="CPRF_Id" Type="Int32" />
+          <Property Name="AssetNo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AssetSystemNo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StatusId" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CPRFBudget_Mst" Relationship="Domi_PurModel.FK_CPRFAsset_Mst_CPRFBudget_Mst" FromRole="CPRFAsset_Mst" ToRole="CPRFBudget_Mst" />
+          <Property Name="AssetCatId" Type="Int32" />
+          <Property Name="EstPrDate" Type="DateTime" Precision="0" />
+          <Property Name="DelistReqFlag" Type="Boolean" />
+          <Property Name="DelistReqBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DelistReqDate" Type="DateTime" Precision="3" />
+          <Property Name="DelistUnlockBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DelistUnlockDate" Type="DateTime" Precision="3" />
+          <Property Name="MatchFlag" Type="Boolean" />
+          <Property Name="MatchBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MatchDate" Type="DateTime" Precision="3" />
+          <Property Name="PRSNumbering" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AssetDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CostCentre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Area" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Requestor" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PONo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SerialNo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MachineID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AssetTagStatus" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AssetCategory_Mst" Relationship="Domi_PurModel.FK_CPRFAsset_Mst_AssetCategory_Mst" FromRole="CPRFAsset_Mst" ToRole="AssetCategory_Mst" />
+          <NavigationProperty Name="CPRFBudget_Dtls" Relationship="Domi_PurModel.FK_CPRFAsset_Mst_CPRFBudget_Dtls" FromRole="CPRFAsset_Mst" ToRole="CPRFBudget_Dtls" />
+        </EntityType>
+        <EntityType Name="CPRFBudget_Mst">
+          <Key>
+            <PropertyRef Name="CPRF_Id" />
+          </Key>
+          <Property Name="CPRF_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CPRF_No" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="Category" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectTitle" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="TotalBudget" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ProjectOwner" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Balance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BudgetUtilYear" Type="Int32" />
+          <Property Name="ProjectJustification" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Benefits" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="HOD" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="DepartmentID" Type="Int32" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="Request_Date" Type="DateTime" Precision="3" />
+          <Property Name="Create_Date" Type="DateTime" Precision="3" />
+          <Property Name="Create_By" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Modified_Date" Type="DateTime" Precision="3" />
+          <Property Name="Modified_By" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteFlag" Type="Boolean" />
+          <Property Name="SendToHod" Type="DateTime" Precision="3" />
+          <Property Name="SendToIE" Type="DateTime" Precision="3" />
+          <Property Name="HODName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HODRejectReason" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="SendToCoo" Type="DateTime" Precision="3" />
+          <Property Name="IEName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IERejectReason" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="SendToGMD" Type="DateTime" Precision="3" />
+          <Property Name="COOName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="COORejectReason" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="SendToProcessIE" Type="DateTime" Precision="3" />
+          <Property Name="GMDName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GMDRejectReason" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CPRF_File" Relationship="Domi_PurModel.FK_CPRF_File_CPRFBudget_Mst" FromRole="CPRFBudget_Mst" ToRole="CPRF_File" />
+          <NavigationProperty Name="CPRFAsset_Mst" Relationship="Domi_PurModel.FK_CPRFAsset_Mst_CPRFBudget_Mst" FromRole="CPRFBudget_Mst" ToRole="CPRFAsset_Mst" />
+          <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_CPRFBudget_Mst_Usr_mst" FromRole="CPRFBudget_Mst" ToRole="Usr_mst" />
+          <Property Name="CPRFcompleteDate" Type="DateTime" Precision="3" />
+          <Property Name="IECPRFCompleteName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IEKIVName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IEKIVReason" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="IEKIVDate" Type="DateTime" Precision="3" />
+          <Property Name="CatMain" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="InvestTerm" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LockFlag" Type="Boolean" />
+          <NavigationProperty Name="CPRFBudget_Dtls" Relationship="Domi_PurModel.FK_CPRFBudget_Dtls_CPRFBudget_Mst" FromRole="CPRFBudget_Mst" ToRole="CPRFBudget_Dtls" />
+        </EntityType>
+        <EntityType Name="CprfCategory_Mst">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CPRFBudget_Dtls" Relationship="Domi_PurModel.FK_CPRFBudget_Dtls_CprfCategory_Mst" FromRole="CprfCategory_Mst" ToRole="CPRFBudget_Dtls" />
+        </EntityType>
+        <Association Name="FK_CPRF_File_CPRFBudget_Mst">
+          <End Type="Domi_PurModel.CPRFBudget_Mst" Role="CPRFBudget_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.CPRF_File" Role="CPRF_File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CPRFBudget_Mst">
+              <PropertyRef Name="CPRF_Id" />
+            </Principal>
+            <Dependent Role="CPRF_File">
+              <PropertyRef Name="CPRF_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFAsset_Mst_CPRFBudget_Mst">
+          <End Type="Domi_PurModel.CPRFBudget_Mst" Role="CPRFBudget_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.CPRFAsset_Mst" Role="CPRFAsset_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CPRFBudget_Mst">
+              <PropertyRef Name="CPRF_Id" />
+            </Principal>
+            <Dependent Role="CPRFAsset_Mst">
+              <PropertyRef Name="CPRF_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFBudget_Mst_Usr_mst">
+          <End Type="Domi_PurModel.Usr_mst" Role="Usr_mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.CPRFBudget_Mst" Role="CPRFBudget_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usr_mst">
+              <PropertyRef Name="usr_id" />
+            </Principal>
+            <Dependent Role="CPRFBudget_Mst">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AssetCategory_Mst">
+          <Key>
+            <PropertyRef Name="AssetCatId" />
+          </Key>
+          <Property Name="AssetCatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AssetCatCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="AssetCatDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ActiveFlag" Type="Boolean" />
+          <NavigationProperty Name="CPRFAsset_Mst" Relationship="Domi_PurModel.FK_CPRFAsset_Mst_AssetCategory_Mst" FromRole="AssetCategory_Mst" ToRole="CPRFAsset_Mst" />
+        </EntityType>
+        <EntityType Name="AuditCPRF_log">
+          <Key>
+            <PropertyRef Name="AuditCPRF_id" />
+          </Key>
+          <Property Name="AuditCPRF_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ActionBtn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ColumnStr" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ValueStr" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CPRF_Id" Type="Int32" />
+          <Property Name="CPRFDt_Id" Type="Int32" />
+          <Property Name="PRId" Type="Int32" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CostCentre_Mst">
+          <Key>
+            <PropertyRef Name="CostCentreId" />
+          </Key>
+          <Property Name="CostCentreId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Prefix" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="DepartmentId" Type="Int32" />
+          <Property Name="ProcessId" Type="Int32" />
+          <Property Name="AreaId" Type="Int32" />
+          <Property Name="CostCentreStr" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteFlag" Type="Boolean" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AccTypeDept" Relationship="Domi_PurModel.FK_CostCentre_Mst_AccTypeDept" FromRole="CostCentre_Mst" ToRole="AccTypeDept" />
+          <NavigationProperty Name="CprfArea_Mst" Relationship="Domi_PurModel.FK_CostCentre_Mst_CprfArea_Mst" FromRole="CostCentre_Mst" ToRole="CprfArea_Mst" />
+          <NavigationProperty Name="Process_Mst" Relationship="Domi_PurModel.FK_CostCentre_Mst_Process_Mst" FromRole="CostCentre_Mst" ToRole="Process_Mst" />
+        </EntityType>
+        <EntityType Name="PRAsset_Lst">
+          <Key>
+            <PropertyRef Name="PrAssetId" />
+          </Key>
+          <Property Name="PrAssetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PRDtId" Type="Int32" />
+          <Property Name="PRid" Type="Int32" />
+          <Property Name="AssetId" Type="Int32" />
+          <Property Name="ActiveFlag" Type="Boolean" />
+          <NavigationProperty Name="PR_Details" Relationship="Domi_PurModel.FK_PRAsset_Lst_PR_Details" FromRole="PRAsset_Lst" ToRole="PR_Details" />
+        </EntityType>
+        <EntityType Name="Category_Mst">
+          <Key>
+            <PropertyRef Name="Category_Id" />
+          </Key>
+          <Property Name="Category_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Category_Name" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_CostCentre_Mst_AccTypeDept">
+          <End Type="Domi_PurModel.AccTypeDept" Role="AccTypeDept" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.CostCentre_Mst" Role="CostCentre_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDept">
+              <PropertyRef Name="AccTypeDepID" />
+            </Principal>
+            <Dependent Role="CostCentre_Mst">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFAsset_Mst_AssetCategory_Mst">
+          <End Type="Domi_PurModel.AssetCategory_Mst" Role="AssetCategory_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.CPRFAsset_Mst" Role="CPRFAsset_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssetCategory_Mst">
+              <PropertyRef Name="AssetCatId" />
+            </Principal>
+            <Dependent Role="CPRFAsset_Mst">
+              <PropertyRef Name="AssetCatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CostCentre_Mst_CprfArea_Mst">
+          <End Type="Domi_PurModel.CprfArea_Mst" Role="CprfArea_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.CostCentre_Mst" Role="CostCentre_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CprfArea_Mst">
+              <PropertyRef Name="AreaId" />
+            </Principal>
+            <Dependent Role="CostCentre_Mst">
+              <PropertyRef Name="AreaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PRAsset_Lst_PR_Details">
+          <End Type="Domi_PurModel.PR_Details" Role="PR_Details" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.PRAsset_Lst" Role="PRAsset_Lst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PR_Details">
+              <PropertyRef Name="PRDtId" />
+            </Principal>
+            <Dependent Role="PRAsset_Lst">
+              <PropertyRef Name="PRDtId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Process_Mst">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProcessCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="ProcessDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CostCentre_Mst" Relationship="Domi_PurModel.FK_CostCentre_Mst_Process_Mst" FromRole="Process_Mst" ToRole="CostCentre_Mst" />
+        </EntityType>
+        <EntityType Name="vw_CprfDept">
+          <Key>
+            <PropertyRef Name="AccTypeDepID" />
+          </Key>
+          <Property Name="DepartmentId" Type="Int32" />
+          <Property Name="DeptName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DeptCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="AccTypeDepID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="vw_usrDpt">
+          <Key>
+            <PropertyRef Name="usr_id" />
+          </Key>
+          <Property Name="usr_id" Type="Int32" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Dpt_id" Type="Int32" />
+          <Property Name="Psn_id" Type="Int32" />
+          <Property Name="Team_id" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_CostCentre_Mst_Process_Mst">
+          <End Type="Domi_PurModel.Process_Mst" Role="Process_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.CostCentre_Mst" Role="CostCentre_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Process_Mst">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CostCentre_Mst">
+              <PropertyRef Name="ProcessId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CPRFBudget_Dtls">
+          <Key>
+            <PropertyRef Name="CPRFDt_Id" />
+          </Key>
+          <Property Name="CPRFDt_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CPRF_Id" Type="Int32" />
+          <Property Name="CPRFDt_Id_Refer" Type="Int32" />
+          <Property Name="CPRFDt_No" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="CPRF_Lvl" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="TotalBudget" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Balance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="StatusId" Type="Int32" />
+          <Property Name="DepartmentId" Type="Int32" />
+          <Property Name="CategoryId" Type="Int32" />
+          <Property Name="ProcessId" Type="Int32" />
+          <Property Name="AreaId" Type="Int32" />
+          <Property Name="CostCentreStr" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Qty" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AssetStatus" Type="Int32" />
+          <Property Name="CurrencyId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Exchange" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="TotalBudgetMYR" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="BalanceMYR" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Create_By" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Create_Date" Type="DateTime" Precision="3" />
+          <Property Name="Modified_By" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Modified_Date" Type="DateTime" Precision="3" />
+          <Property Name="AssetCatId" Type="Int32" />
+          <NavigationProperty Name="AccTypeDept" Relationship="Domi_PurModel.FK_CPRFBudget_Dtls_AccTypeDept" FromRole="CPRFBudget_Dtls" ToRole="AccTypeDept" />
+          <NavigationProperty Name="CPRFAsset_Mst" Relationship="Domi_PurModel.FK_CPRFAsset_Mst_CPRFBudget_Dtls" FromRole="CPRFBudget_Dtls" ToRole="CPRFAsset_Mst" />
+          <NavigationProperty Name="CPRFBudget_Mst" Relationship="Domi_PurModel.FK_CPRFBudget_Dtls_CPRFBudget_Mst" FromRole="CPRFBudget_Dtls" ToRole="CPRFBudget_Mst" />
+          <NavigationProperty Name="CprfCategory_Mst" Relationship="Domi_PurModel.FK_CPRFBudget_Dtls_CprfCategory_Mst" FromRole="CPRFBudget_Dtls" ToRole="CprfCategory_Mst" />
+        </EntityType>
+        <Association Name="FK_CPRFBudget_Dtls_AccTypeDept">
+          <End Type="Domi_PurModel.AccTypeDept" Role="AccTypeDept" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.CPRFBudget_Dtls" Role="CPRFBudget_Dtls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypeDept">
+              <PropertyRef Name="AccTypeDepID" />
+            </Principal>
+            <Dependent Role="CPRFBudget_Dtls">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFAsset_Mst_CPRFBudget_Dtls">
+          <End Type="Domi_PurModel.CPRFBudget_Dtls" Role="CPRFBudget_Dtls" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.CPRFAsset_Mst" Role="CPRFAsset_Mst" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CPRFBudget_Dtls">
+              <PropertyRef Name="CPRFDt_Id" />
+            </Principal>
+            <Dependent Role="CPRFAsset_Mst">
+              <PropertyRef Name="CPRFDt_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFBudget_Dtls_CPRFBudget_Mst">
+          <End Type="Domi_PurModel.CPRFBudget_Mst" Role="CPRFBudget_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.CPRFBudget_Dtls" Role="CPRFBudget_Dtls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CPRFBudget_Mst">
+              <PropertyRef Name="CPRF_Id" />
+            </Principal>
+            <Dependent Role="CPRFBudget_Dtls">
+              <PropertyRef Name="CPRF_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CPRFBudget_Dtls_CprfCategory_Mst">
+          <End Type="Domi_PurModel.CprfCategory_Mst" Role="CprfCategory_Mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.CPRFBudget_Dtls" Role="CPRFBudget_Dtls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CprfCategory_Mst">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="CPRFBudget_Dtls">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UsrPsn_Map">
+          <Key>
+            <PropertyRef Name="Usr_psn_Id" />
+          </Key>
+          <Property Name="Usr_psn_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="usr_id" Type="Int32" />
+          <Property Name="Psn_id" Type="Int32" />
+          <Property Name="ActiveFlag" Type="Boolean" />
+          <Property Name="Modified_date" Type="DateTime" Precision="3" />
+          <Property Name="Modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Position_mst" Relationship="Domi_PurModel.FK_UsrPsn_Map_Position_mst" FromRole="UsrPsn_Map" ToRole="Position_mst" />
+          <NavigationProperty Name="Usr_mst" Relationship="Domi_PurModel.FK_UsrPsn_Map_Usr_mst" FromRole="UsrPsn_Map" ToRole="Usr_mst" />
+        </EntityType>
+        <Association Name="FK_UsrPsn_Map_Position_mst">
+          <End Type="Domi_PurModel.Position_mst" Role="Position_mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.UsrPsn_Map" Role="UsrPsn_Map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Position_mst">
+              <PropertyRef Name="Psn_id" />
+            </Principal>
+            <Dependent Role="UsrPsn_Map">
+              <PropertyRef Name="Psn_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UsrPsn_Map_Usr_mst">
+          <End Type="Domi_PurModel.Usr_mst" Role="Usr_mst" Multiplicity="0..1" />
+          <End Type="Domi_PurModel.UsrPsn_Map" Role="UsrPsn_Map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usr_mst">
+              <PropertyRef Name="usr_id" />
+            </Principal>
+            <Dependent Role="UsrPsn_Map">
+              <PropertyRef Name="usr_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2645,6 +3666,7 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           <EntitySetMapping Name="PR_Details">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Details">
               <MappingFragment StoreEntitySet="PR_Details">
+                <ScalarProperty Name="CheckPRFlag" ColumnName="CheckPRFlag" />
                 <ScalarProperty Name="EstCurExch" ColumnName="EstCurExch" />
                 <ScalarProperty Name="LastVendorCode" ColumnName="LastVendorCode" />
                 <ScalarProperty Name="LastPriceVendor" ColumnName="LastPriceVendor" />
@@ -2709,6 +3731,9 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
           <EntitySetMapping Name="PR_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.PR_Mst">
               <MappingFragment StoreEntitySet="PR_Mst">
+                <ScalarProperty Name="PurchaserRemarks" ColumnName="PurchaserRemarks" />
+                <ScalarProperty Name="LastEmailMDBy" ColumnName="LastEmailMDBy" />
+                <ScalarProperty Name="LastEmailMDDate" ColumnName="LastEmailMDDate" />
                 <ScalarProperty Name="internalDocNo" ColumnName="internalDocNo" />
                 <ScalarProperty Name="NonProductflag" ColumnName="NonProductflag" />
                 <ScalarProperty Name="CPRFLvl3" ColumnName="CPRFLvl3" />
@@ -3270,6 +4295,256 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_sourcingRemarksLst' does not hav
                 <ScalarProperty Name="HodId" ColumnName="HodId" />
                 <ScalarProperty Name="HodManagerId" ColumnName="HodManagerId" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CPRF_File">
+            <EntityTypeMapping TypeName="Domi_PurModel.CPRF_File">
+              <MappingFragment StoreEntitySet="CPRF_File">
+                <ScalarProperty Name="UploadFileName" ColumnName="UploadFileName" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="CPRF_Id" ColumnName="CPRF_Id" />
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CprfArea_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.CprfArea_Mst">
+              <MappingFragment StoreEntitySet="CprfArea_Mst">
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="AreaDesc" ColumnName="AreaDesc" />
+                <ScalarProperty Name="AreaCode" ColumnName="AreaCode" />
+                <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CPRFAsset_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.CPRFAsset_Mst">
+              <MappingFragment StoreEntitySet="CPRFAsset_Mst">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="AssetTagStatus" ColumnName="AssetTagStatus" />
+                <ScalarProperty Name="MachineID" ColumnName="MachineID" />
+                <ScalarProperty Name="SerialNo" ColumnName="SerialNo" />
+                <ScalarProperty Name="PONo" ColumnName="PONo" />
+                <ScalarProperty Name="Requestor" ColumnName="Requestor" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="CostCentre" ColumnName="CostCentre" />
+                <ScalarProperty Name="AssetDesc" ColumnName="AssetDesc" />
+                <ScalarProperty Name="PRSNumbering" ColumnName="PRSNumbering" />
+                <ScalarProperty Name="MatchDate" ColumnName="MatchDate" />
+                <ScalarProperty Name="MatchBy" ColumnName="MatchBy" />
+                <ScalarProperty Name="MatchFlag" ColumnName="MatchFlag" />
+                <ScalarProperty Name="DelistUnlockDate" ColumnName="DelistUnlockDate" />
+                <ScalarProperty Name="DelistUnlockBy" ColumnName="DelistUnlockBy" />
+                <ScalarProperty Name="DelistReqDate" ColumnName="DelistReqDate" />
+                <ScalarProperty Name="DelistReqBy" ColumnName="DelistReqBy" />
+                <ScalarProperty Name="DelistReqFlag" ColumnName="DelistReqFlag" />
+                <ScalarProperty Name="EstPrDate" ColumnName="EstPrDate" />
+                <ScalarProperty Name="AssetCatId" ColumnName="AssetCatId" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="AssetSystemNo" ColumnName="AssetSystemNo" />
+                <ScalarProperty Name="AssetNo" ColumnName="AssetNo" />
+                <ScalarProperty Name="CPRF_Id" ColumnName="CPRF_Id" />
+                <ScalarProperty Name="CPRFDt_Id" ColumnName="CPRFDt_Id" />
+                <ScalarProperty Name="AssetId" ColumnName="AssetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CPRFBudget_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.CPRFBudget_Mst">
+              <MappingFragment StoreEntitySet="CPRFBudget_Mst">
+                <ScalarProperty Name="LockFlag" ColumnName="LockFlag" />
+                <ScalarProperty Name="InvestTerm" ColumnName="InvestTerm" />
+                <ScalarProperty Name="CatMain" ColumnName="CatMain" />
+                <ScalarProperty Name="IEKIVDate" ColumnName="IEKIVDate" />
+                <ScalarProperty Name="IEKIVReason" ColumnName="IEKIVReason" />
+                <ScalarProperty Name="IEKIVName" ColumnName="IEKIVName" />
+                <ScalarProperty Name="IECPRFCompleteName" ColumnName="IECPRFCompleteName" />
+                <ScalarProperty Name="CPRFcompleteDate" ColumnName="CPRFcompleteDate" />
+                <ScalarProperty Name="GMDRejectReason" ColumnName="GMDRejectReason" />
+                <ScalarProperty Name="GMDName" ColumnName="GMDName" />
+                <ScalarProperty Name="SendToProcessIE" ColumnName="SendToProcessIE" />
+                <ScalarProperty Name="COORejectReason" ColumnName="COORejectReason" />
+                <ScalarProperty Name="COOName" ColumnName="COOName" />
+                <ScalarProperty Name="SendToGMD" ColumnName="SendToGMD" />
+                <ScalarProperty Name="IERejectReason" ColumnName="IERejectReason" />
+                <ScalarProperty Name="IEName" ColumnName="IEName" />
+                <ScalarProperty Name="SendToCoo" ColumnName="SendToCoo" />
+                <ScalarProperty Name="HODRejectReason" ColumnName="HODRejectReason" />
+                <ScalarProperty Name="HODName" ColumnName="HODName" />
+                <ScalarProperty Name="SendToIE" ColumnName="SendToIE" />
+                <ScalarProperty Name="SendToHod" ColumnName="SendToHod" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="Modified_By" ColumnName="Modified_By" />
+                <ScalarProperty Name="Modified_Date" ColumnName="Modified_Date" />
+                <ScalarProperty Name="Create_By" ColumnName="Create_By" />
+                <ScalarProperty Name="Create_Date" ColumnName="Create_Date" />
+                <ScalarProperty Name="Request_Date" ColumnName="Request_Date" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="HOD" ColumnName="HOD" />
+                <ScalarProperty Name="Benefits" ColumnName="Benefits" />
+                <ScalarProperty Name="ProjectJustification" ColumnName="ProjectJustification" />
+                <ScalarProperty Name="BudgetUtilYear" ColumnName="BudgetUtilYear" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="ProjectOwner" ColumnName="ProjectOwner" />
+                <ScalarProperty Name="TotalBudget" ColumnName="TotalBudget" />
+                <ScalarProperty Name="ProjectTitle" ColumnName="ProjectTitle" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+                <ScalarProperty Name="CPRF_No" ColumnName="CPRF_No" />
+                <ScalarProperty Name="CPRF_Id" ColumnName="CPRF_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CprfCategory_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.CprfCategory_Mst">
+              <MappingFragment StoreEntitySet="CprfCategory_Mst">
+                <ScalarProperty Name="CategoryDesc" ColumnName="CategoryDesc" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AssetCategory_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.AssetCategory_Mst">
+              <MappingFragment StoreEntitySet="AssetCategory_Mst">
+                <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+                <ScalarProperty Name="AssetCatDesc" ColumnName="AssetCatDesc" />
+                <ScalarProperty Name="AssetCatCode" ColumnName="AssetCatCode" />
+                <ScalarProperty Name="AssetCatId" ColumnName="AssetCatId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuditCPRF_log">
+            <EntityTypeMapping TypeName="Domi_PurModel.AuditCPRF_log">
+              <MappingFragment StoreEntitySet="AuditCPRF_log">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="PRId" ColumnName="PRId" />
+                <ScalarProperty Name="CPRFDt_Id" ColumnName="CPRFDt_Id" />
+                <ScalarProperty Name="CPRF_Id" ColumnName="CPRF_Id" />
+                <ScalarProperty Name="ValueStr" ColumnName="ValueStr" />
+                <ScalarProperty Name="ColumnStr" ColumnName="ColumnStr" />
+                <ScalarProperty Name="ActionBtn" ColumnName="ActionBtn" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="AuditCPRF_id" ColumnName="AuditCPRF_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CostCentre_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.CostCentre_Mst">
+              <MappingFragment StoreEntitySet="CostCentre_Mst">
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="CostCentreStr" ColumnName="CostCentreStr" />
+                <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+                <ScalarProperty Name="ProcessId" ColumnName="ProcessId" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Prefix" ColumnName="Prefix" />
+                <ScalarProperty Name="CostCentreId" ColumnName="CostCentreId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRAsset_Lst">
+            <EntityTypeMapping TypeName="Domi_PurModel.PRAsset_Lst">
+              <MappingFragment StoreEntitySet="PRAsset_Lst">
+                <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+                <ScalarProperty Name="AssetId" ColumnName="AssetId" />
+                <ScalarProperty Name="PRid" ColumnName="PRid" />
+                <ScalarProperty Name="PRDtId" ColumnName="PRDtId" />
+                <ScalarProperty Name="PrAssetId" ColumnName="PrAssetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Category_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Category_Mst">
+              <MappingFragment StoreEntitySet="Category_Mst">
+                <ScalarProperty Name="Category_Name" ColumnName="Category_Name" />
+                <ScalarProperty Name="Category_Id" ColumnName="Category_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Process_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Process_Mst">
+              <MappingFragment StoreEntitySet="Process_Mst">
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ProcessDesc" ColumnName="ProcessDesc" />
+                <ScalarProperty Name="ProcessCode" ColumnName="ProcessCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_CprfDept">
+            <EntityTypeMapping TypeName="Domi_PurModel.vw_CprfDept">
+              <MappingFragment StoreEntitySet="vw_CprfDept">
+                <ScalarProperty Name="AccTypeDepID" ColumnName="AccTypeDepID" />
+                <ScalarProperty Name="DeptCode" ColumnName="DeptCode" />
+                <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_usrDpt">
+            <EntityTypeMapping TypeName="Domi_PurModel.vw_usrDpt">
+              <MappingFragment StoreEntitySet="vw_usrDpt">
+                <ScalarProperty Name="Team_id" ColumnName="Team_id" />
+                <ScalarProperty Name="Psn_id" ColumnName="Psn_id" />
+                <ScalarProperty Name="Dpt_id" ColumnName="Dpt_id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="usr_id" ColumnName="usr_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_ChkCPRFSendToHOD" FunctionName="Domi_PurModel.Store.SP_ChkCPRFSendToHOD" />
+          <EntitySetMapping Name="CPRFBudget_Dtls">
+            <EntityTypeMapping TypeName="Domi_PurModel.CPRFBudget_Dtls">
+              <MappingFragment StoreEntitySet="CPRFBudget_Dtls">
+                <ScalarProperty Name="AssetCatId" ColumnName="AssetCatId" />
+                <ScalarProperty Name="Modified_Date" ColumnName="Modified_Date" />
+                <ScalarProperty Name="Modified_By" ColumnName="Modified_By" />
+                <ScalarProperty Name="Create_Date" ColumnName="Create_Date" />
+                <ScalarProperty Name="Create_By" ColumnName="Create_By" />
+                <ScalarProperty Name="BalanceMYR" ColumnName="BalanceMYR" />
+                <ScalarProperty Name="TotalBudgetMYR" ColumnName="TotalBudgetMYR" />
+                <ScalarProperty Name="Exchange" ColumnName="Exchange" />
+                <ScalarProperty Name="CurrencyId" ColumnName="CurrencyId" />
+                <ScalarProperty Name="AssetStatus" ColumnName="AssetStatus" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="CostCentreStr" ColumnName="CostCentreStr" />
+                <ScalarProperty Name="AreaId" ColumnName="AreaId" />
+                <ScalarProperty Name="ProcessId" ColumnName="ProcessId" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="TotalBudget" ColumnName="TotalBudget" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CPRF_Lvl" ColumnName="CPRF_Lvl" />
+                <ScalarProperty Name="CPRFDt_No" ColumnName="CPRFDt_No" />
+                <ScalarProperty Name="CPRFDt_Id_Refer" ColumnName="CPRFDt_Id_Refer" />
+                <ScalarProperty Name="CPRF_Id" ColumnName="CPRF_Id" />
+                <ScalarProperty Name="CPRFDt_Id" ColumnName="CPRFDt_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UsrPsn_Map">
+            <EntityTypeMapping TypeName="Domi_PurModel.UsrPsn_Map">
+              <MappingFragment StoreEntitySet="UsrPsn_Map">
+                <ScalarProperty Name="Modified_by" ColumnName="Modified_by" />
+                <ScalarProperty Name="Modified_date" ColumnName="Modified_date" />
+                <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+                <ScalarProperty Name="Psn_id" ColumnName="Psn_id" />
+                <ScalarProperty Name="usr_id" ColumnName="usr_id" />
+                <ScalarProperty Name="Usr_psn_Id" ColumnName="Usr_psn_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

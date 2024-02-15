@@ -1,0 +1,225 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFBudget_Mst>
+@{
+    ViewBag.Title = "ApprovalGMD";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>GMD Approval</h2>
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">List of CPRF for GMD Review / Approval</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div id="notification">
+        @Html.Partial("_Notifications")
+    </div>
+    <div class="card-body">
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th>
+                        Project Owner
+                    </th>
+                    <th>
+                        Request Date
+                    </th>
+                    <th>
+                        Send to IE Date
+                    </th>
+                    <th>
+                        IE Review by
+                    </th>
+                    <th>
+                        Project Title
+                    </th>
+                    <th style="display:none">
+                        Project Owner
+                    </th>
+                    <th>
+                        Budget Utilization Year
+                    </th>
+                    <th>
+                        Total Budget (RM)
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.Usr_mst.Username
+                        </td>
+                        <td>
+                            @{ DateTime reqDevDate = (DateTime)item.Request_Date; }
+                            @reqDevDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @{ DateTime IEDevDate = (DateTime)item.SendToIE; }
+                            @IEDevDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @item.IEName
+                        </td>
+                        <td>
+                            @item.ProjectTitle
+                        </td>
+                        <td style="display:none">
+                            @item.ProjectOwner
+                        </td>
+                        <td>
+                            @item.BudgetUtilYear
+                        </td>
+                        <th>
+                            @String.Format("{0:N2}", item.CPRFBudget_Dtls.Where(x => x.StatusId == 1).Sum(x => x.TotalBudgetMYR))
+                        </th>
+                        <td>
+                            @item.Status
+                        </td>
+                        <td>
+
+                            @Html.ActionLink("View", "ViewCprf", "CPRF", new { CPRFid = item.CPRF_Id, URL = "ApprovalGMD" }, new { @class = "btn btn-info" })
+                            @*@Html.ActionLink("Details", "CPRFRequestForm", "CPRF", new { CprfId = item.CPRF_Id }, new { @class = "btn btn-primary" })*@
+
+                            @*@Html.ActionLink("Approve", "GMDApprove", "CPRF", new { CPRFid = item.CPRF_Id }, new { @class = "btn btn-success" })*@
+                            <button class="btn btn-success" data-toggle="modal" data-target="#GMDApproveModal_@item.CPRF_Id">
+                                Approve
+                            </button>
+                            <!--Modal -->
+                            <div class="modal fade" id="GMDApproveModal_@item.CPRF_Id" tabindex="-1" role="dialog" aria-labelledby="GMDApproveLabel_@item.CPRF_Id" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="GMDApproveLabel_@item.CPRF_Id">Approve</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table style="width:100%">
+                                                <tr>
+                                                    <td>Date Approval</td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        <input class="form-control" type="datetime-local" name="SendToProcessIE_@item.CPRF_Id" id="SendToProcessIE_@item.CPRF_Id" />
+                                                        @*<textarea class="form-control" name="GMDApproveReason_@item.CPRF_Id" id="GMDApproveReason_@item.CPRF_Id"></textarea>*@
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary" onclick="GMDApprove(@item.CPRF_Id)">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#GMDRejectModal_@item.CPRF_Id">
+                                Reject
+                            </button>
+                            <!--Modal -->
+                            <div class="modal fade" id="GMDRejectModal_@item.CPRF_Id" tabindex="-1" role="dialog" aria-labelledby="GMDRejectLabel_@item.CPRF_Id" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="GMDRejectLabel_@item.CPRF_Id">Reject</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table style="width:100%">
+                                                <tr>
+                                                    <td>Reason</td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        <textarea class="form-control" name="GMDRejectReason_@item.CPRF_Id" id="GMDRejectReason_@item.CPRF_Id"></textarea>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary" onclick="GMDReject(@item.CPRF_Id)">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+
+    </div>
+</div>
+
+<script>
+    function GMDApprove(CPRFId) {
+        var SendToProcessIE = $("#SendToProcessIE_" + CPRFId).val();
+        
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GMDApproveWitDate", "CPRF")",
+            data: '{CPRFId: "' + CPRFId + '", DateSendToProcessIE: "' + SendToProcessIE + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#GMDApproveModal_" + CPRFId).hide();
+                window.location.replace("/CPRF/ApprovalGMD");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+
+    function GMDReject(CPRFId) {
+        var reason = $("#GMDRejectReason_" + CPRFId).val();
+        console.log(reason);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GMDReject", "CPRF")",
+            data: '{CPRFId: "' + CPRFId + '", reason: "' + reason + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#GMDRejectModal_" + CPRFId).hide();
+                window.location.replace("/CPRF/ApprovalGMD");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    });
+</script>
+
+

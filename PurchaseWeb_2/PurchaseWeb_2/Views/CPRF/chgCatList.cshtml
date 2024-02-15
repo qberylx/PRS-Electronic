@@ -1,0 +1,56 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.AMASST>
+
+<table class="table table-head-fixed  table-striped table-sm" id="tableA" width="100%">
+    <tr>
+        <th>No</th>
+        <th></th>
+        <th>Asset No</th>
+        <th>Description</th>
+        <th>Category</th>
+    </tr>
+    @{ int i = 0;}
+    @foreach (var item in Model)
+    {
+        i++;
+        <tr class="tr">
+            <td>@i</td>
+            <td>
+                <input class="custom-checkbox custom-control custom-control-input-blue" 
+                       value="@item.ASTNO" type="checkbox" id="AssetFlag_@i" name="AssetFlag_@i" onclick="ClkAsset(this, @i)">
+            </td>
+            <td>@item.ASTNO</td>
+            <td>@item.DESC</td>
+            <td>@item.CATEGORY</td>
+        </tr>
+    }
+</table>
+<input type="hidden" name="countRow" id="countRow" value="@i" />
+
+<script>
+    $(document).ready(function () {
+        var chkAssetLst = $("#chkAssetLst").val();
+        var countRow = $("#countRow").val();
+        //console.log(chkAssetLst);
+        for (let i = 1; i <= countRow; i++) {
+            //console.log(i);
+            var AssetNo = $("#AssetFlag_" + i).val();
+            //console.log(AssetNo);
+            //console.log(chkAssetLst.indexOf($.trim(AssetNo)));
+            if (chkAssetLst.indexOf($.trim(AssetNo)) >= 0) {
+                $("#AssetFlag_" + i).prop("checked", true);
+            }
+        }
+
+        $(function () {
+            var $rows = $('#tableA .tr');
+            $('#search').keyup(function () {
+                var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+                $rows.show().filter(function () {
+                    var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                    return !~text.indexOf(val);
+                }).hide();
+            });
+        });
+    });
+</script>

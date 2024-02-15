@@ -1,0 +1,247 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFBudget_Dtls>
+
+<div class="card card-secondary">
+    <div class="card-header">
+        <div class="card-title">
+            <h6>CPRF Details List</h6>
+        </div>
+    </div>
+    <div id="notificationdivCPRFDtlsLst">
+        @Html.Partial("_Notifications")
+    </div>
+    <div class="card-body">
+        <table class="table table-head-fixed table-sm" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        CPRF Details ID
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Cost Centre
+                    </th>
+                    <th>
+                        Item Price (MYR)
+                    </th>
+                    <th>
+                        Item Quantity
+                    </th>
+                    <th>
+                        Asset Listing
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.CPRFDt_Id <br /> @item.CPRFDt_No
+                        </td>
+                        <td>
+                            @item.Description
+                        </td>
+                        <td>
+                            @item.CostCentreStr
+                        </td>
+                        <td>
+                            @String.Format("{0:N2}",item.TotalBudgetMYR)
+
+                        </td>
+                        <td>
+                            @item.Qty
+                        </td>
+                        <td >
+                            @{ var sHeight = "";}
+                            @if (item.CPRFAsset_Mst.Count() > 8)
+                            {
+                                sHeight = "height: 300px";
+                            }
+                            
+                            <div style="@sHeight" class="table-responsive p-0">
+
+                                @if (item.AssetStatus != 3)
+                                {
+                                    <table class="table table-bordered table-head-fixed">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Asset No</th>
+                                            </tr>
+                                        </thead>
+                                        @{ int i = 0;}
+                                        @foreach (var itema in item.CPRFAsset_Mst)
+                                        {
+                                            i++;
+                                            <tr>
+                                                <td>
+                                                    @i
+                                                </td>
+                                                <td>
+                                                    @if (itema.AssetNo == null)
+                                                    {
+                                                        @itema.AssetSystemNo
+                                                    }
+                                                    else
+                                                    {
+                                                        @itema.AssetNo
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+                                }
+                                else
+                                {
+                                    <table class="table table-bordered table-head-fixed">
+                                        <tr>
+                                            <th>CPRF Details Reference ID</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @item.CPRFDt_Id_Refer
+                                            </td>
+                                        </tr>
+                                    </table>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-warning" name="submit" value="edit" onclick="editCPRFDt(@item.CPRFDt_Id)"><i class="fa fa-pen"></i></button>
+                            @if (ViewBag.EditFlag != 1)
+                            {
+                                <button class="btn btn-danger" name="submit" value="delete" onclick="deleteCPRFDt(@item.CPRFDt_Id)"><i class="fa fa-trash"></i></button>
+                            }
+
+                            <input type="hidden" name="CPRFDtID" id="CPRFDtID" value="@item.CPRFDt_Id" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th>
+                        @String.Format("{0:N2}", Model.Sum(s => s.TotalBudgetMYR))
+                    </th>
+                    <th>
+                        @Model.Sum(s => s.Qty)
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="card-footer">
+        <div class="row">
+            <div class="col-centered">
+                <table>
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary" onclick="history.back();">
+                                Return to Main List
+                            </button>
+                        </td>
+                        <td>&nbsp;</td>
+                        @if (ViewBag.StatusId == 1)
+                        {
+                            <td>
+                                @using (Ajax.BeginForm("SendHODCPRFRequest", "CPRF", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OSSendHODCPRFRequest" }))
+                                {
+                                    <button class="btn btn-warning">Send to HOD</button>
+                                    <input type="hidden" name="CprfId" value="@ViewBag.CprfId" />
+                                }
+                         
+                            </td>
+                        }
+                        </tr>
+                </table>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#notificationdivCPRFDtlsLst").delay(3000).fadeOut("slow");
+    });
+</script>
+
+<script>
+    function OSSendHODCPRFRequest() {
+        window.location.replace("/CPRF/CPRFRequest");
+    }
+
+    function deleteCPRFDt(CPRFDtID) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("DeleteCPRFDetails", "CPRF")",
+            data: '{CPRFDtID: "' + CPRFDtID + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCPRFDtlsLst').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function editCPRFDt(CPRFDtID) {
+        // CPRFEditDetailsForm
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CPRFEditDetailsForm", "CPRF")",
+            data: '{CPRFDtID: "' + CPRFDtID + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#Cprf-details').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        // CPRFEditAssetListForm
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CPRFEditAssetListForm", "CPRF")",
+            data: '{CPRFDtID: "' + CPRFDtID + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#asset-list').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>

@@ -1,6 +1,7 @@
 ﻿using PurchaseWeb_2.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -8,7 +9,8 @@ namespace PurchaseWeb_2.Controllers
 {
     internal class MenuDT
     {
-        SqlConnection con = new SqlConnection(PurchaseWeb_2.Properties.Resources.ConnectionString);
+        //SqlConnection con = new SqlConnection(PurchaseWeb_2.Properties.Resources.ConnectionString);
+        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Domi_PurConn"].ConnectionString);
 
         //Fetch data
         public IList<MenuModel> GetMenus(string UserId)

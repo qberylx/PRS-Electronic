@@ -1,0 +1,56 @@
+﻿@model PurchaseWeb_2.ModelData.CPRFBudget_Mst
+
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Supporting Attachments</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        @*@using (Ajax.BeginForm("CPRFFileUpload", "CPRF"
+            , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divFileForm", OnBegin = "OBCPRFFileUpload", OnSuccess = "OSCPRFFileUpload" }, new { enctype = "multipart/form-data" }))
+        {
+            <div class="input-group">
+                <input type="hidden" value="@Model.CPRF_Id" id="CPRF_Id" name="CPRF_Id" />
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="file" name="file">
+                    <label class="custom-file-label" for="file">Choose file</label>
+                </div>
+                <div class="input-group-append">
+                    <input type="submit" value="Upload" id="uploadFile" name="uploadFile" class="input-group-text">
+                </div>
+            </div>
+        }*@
+        <br />
+        <div id="divCPRFFileUploadList">
+            @{ Html.RenderAction("CPRFFileUploadList", "CPRF", new { CprfId = Model.CPRF_Id });}
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function OBCPRFFileUpload() {
+        $("#overlay").show();
+    }
+
+    function OSCPRFFileUpload() {
+        $("#overlay").hide();
+    }
+
+    $('#file').on('change',function(){
+        //get the file name
+        var fileName = $(this).val();
+        //replace the "Choose a file" label
+        var cleanFileName = fileName.replace('C:\\fakepath\\', " ");
+        $(this).next('.custom-file-label').html(cleanFileName);
+    })
+
+    $(document).ready(function () {
+        $("#divAlert").delay(3000).fadeOut("slow");
+    });
+</script>

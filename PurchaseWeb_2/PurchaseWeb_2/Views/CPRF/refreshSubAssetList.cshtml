@@ -1,0 +1,27 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFBudget_Dtls>
+
+<div id="notificationdivSctCPRFdtLvl1">
+    @Html.Partial("_Notifications")
+</div>
+<select name="CPRFReferId" id="CPRFReferId" class="form-control">
+    <option value="0"> Please Choose </option>
+    @foreach (var item in Model)
+    {
+        if (ViewBag.CPRFReferId == item.CPRFDt_Id)
+        {
+            <option value="@item.CPRFDt_Id" selected> @item.CPRFDt_Id - @item.Description </option>
+        }
+        else
+        {
+            <option value="@item.CPRFDt_Id"> @item.CPRFDt_Id - @item.Description </option>
+        }
+
+    }
+</select>
+
+<script>
+    $(document).ready(function () {
+        $("#notificationdivSctCPRFdtLvl1").delay(3000).fadeOut("slow");
+    });
+</script>
+

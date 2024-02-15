@@ -31,8 +31,9 @@ namespace PurchaseWeb_2.Controllers
         void connectionstring()
         {
             //con.ConnectionString = @"data source=ML0001868\SQLEXPRESS; database=Domi_Pur ; Integrated Security=SSPI ";
-            con.ConnectionString = PurchaseWeb_2.Properties.Resources.ConnectionString;
+            //con.ConnectionString = PurchaseWeb_2.Properties.Resources.ConnectionString;
             //con.ConnectionString = ConfigurationManager.ConnectionStrings["PRS"].ConnectionString;
+            con.ConnectionString = ConfigurationManager.ConnectionStrings["Domi_PurConn"].ConnectionString;
         }
 
 

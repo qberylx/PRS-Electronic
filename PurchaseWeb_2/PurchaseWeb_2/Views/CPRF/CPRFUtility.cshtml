@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "CPRFUtility";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<nav class="navbar navbar-expand navbar-gray navbar-light  ">
+    <ul class="navbar-nav">
+        <li class="nav-item d-none d-sm-inline-block ">
+            @using (Ajax.BeginForm("utBudgetTab", "CPRF", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divBudgetTab" }))
+            {
+                <button type="submit" class="nav-link text-light btn-secondary">Process Type</button>
+                <input type="hidden" name="utTabid" id="utTabid" value="1" />
+            }
+        </li>
+        <li class="nav-item d-none d-sm-inline-block ">
+            @using (Ajax.BeginForm("utBudgetTab", "CPRF", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divBudgetTab" }))
+            {
+                <button type="submit" class="nav-link text-light btn-secondary">Area Type</button>
+                <input type="hidden" name="utTabid" id="utTabid" value="2" />
+            }
+        </li>
+        <li class="nav-item d-none d-sm-inline-block ">
+            @using (Ajax.BeginForm("utBudgetTab", "CPRF", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divBudgetTab" }))
+            {
+                <button type="submit" class="nav-link text-light btn-secondary">Cost Center</button>
+                <input type="hidden" name="utTabid" id="utTabid" value="3" />
+            }
+        </li>
+        <li class="nav-item d-none d-sm-inline-block ">
+            @using (Ajax.BeginForm("utBudgetTab", "CPRF", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divBudgetTab" }))
+            {
+                <button type="submit" class="nav-link text-light btn-secondary">Category</button>
+                <input type="hidden" name="utTabid" id="utTabid" value="4" />
+            }
+        </li>
+    </ul>
+</nav>
+
+<div id="divBudgetTab">
+    @{Html.RenderAction("utBudgetTab", "CPRF", new { utTabid = 1 }); }
+</div>

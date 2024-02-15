@@ -1,0 +1,52 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.Process_Mst>
+
+<div class="card card-secondary">
+    <div class="card-header">
+        <div class="card-title text-light">
+            <h6>Process List</h6>
+        </div>
+    </div>
+    <div class="card-body table-responsive p-0" style="height: 600px;">
+        <div id="notification">
+            @Html.Partial("_Notifications")
+        </div>
+        <table class="table table-striped table-head-fixed text-nowrap">
+            <thead>
+                <tr>
+                    <td>
+                        No
+                    </td>
+                    <td>
+                        Code
+                    </td>
+                    <td>
+                        Description
+                    </td>
+                </tr>
+            </thead>
+            @{ int i = 0;}
+            @foreach (var item in Model)
+            {
+                i++;
+                <tr>
+                    <td>@i</td>
+                    <td>@item.ProcessCode</td>
+                    <td>@item.ProcessDesc</td>
+                    <td>
+                        @using (Ajax.BeginForm("UTProcessMstDelete", "CPRF", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divProcessLst" }))
+                        {
+                            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                            <input type="hidden" name="Id" id="Id" value="@item.Id" />
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    });
+</script>

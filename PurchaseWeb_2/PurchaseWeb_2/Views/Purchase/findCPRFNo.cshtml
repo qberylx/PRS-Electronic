@@ -1,0 +1,18 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFBudget_Dtls>
+
+<select name="CPRF" id="CPRF" class="form-control " onchange="ocCPRFNo(this.value, @ViewBag.PrId )">
+    <option value="">Please select CPRF No</option>
+    @foreach (var item in Model)
+    {
+        if (item.CPRFDt_No == ViewBag.CPRF)
+        {
+            <option value="@item.CPRFDt_No" selected>@item.CPRFDt_No - @item.Description</option>
+        }
+        else
+        {
+            <option value="@item.CPRFDt_No">@item.CPRFDt_No - @item.Description</option>
+        }
+
+    }
+</select>
+

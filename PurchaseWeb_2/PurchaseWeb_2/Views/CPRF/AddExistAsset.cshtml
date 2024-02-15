@@ -1,0 +1,144 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.AMASST>
+
+@{
+    Layout = "~/Views/Shared/_LayoutPopup.cshtml";
+}
+
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Asset Listing</h3>
+        <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 400px;">
+                <select name="cat" id="cat" class="form-control" onchange="chgCatList(this.value)">
+                    @foreach (var item in ViewBag.catList)
+                    {
+                        <option value="@item.CATEID">@item.CATEID - @item.CATEDESC</option>
+                    }
+                </select>
+
+                &nbsp;&nbsp;&nbsp;
+                <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search">
+
+
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-default">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @using (Ajax.BeginForm("SaveExistAsset", "CPRF", new AjaxOptions { HttpMethod = "POST" ,OnSuccess= "osSaveExistAsset()" }))
+    {
+        <div class="card-body" id="divAssetList">
+            <table class="table table-head-fixed  table-striped table-sm" id="tableA" width="100%">
+                <tr>
+                    <th>No</th>
+                    <th></th>
+                    <th>Asset No</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                </tr>
+                @{ int i = 0;}
+                @foreach (var item in Model)
+                {
+                    i++;
+                    <tr class="tr">
+                        <td>@i</td>
+                        <td>
+                            <input class="custom-checkbox custom-control custom-control-input-blue" 
+                                   value="@item.ASTNO" type="checkbox" id="AssetFlag_@i" name="AssetFlag_@i" onclick="ClkAsset(this, @i)">
+                        </td>
+                        <td>@item.ASTNO</td>
+                        <td>@item.DESC</td>
+                        <td>@item.CATEGORY</td>
+                    </tr>
+                }
+            </table>
+            <input type="hidden" name="countRow" id="countRow" value="@i" />
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-centered">
+                    <button class="btn btn-primary">
+                        Add to Asset List
+                    </button>
+                    <input type="hidden" name="CprfId" id="CprfId" value="@ViewBag.CprfId" />
+                    <input type="hidden" name="CPRFDtId" id="CPRFDtId" value="@ViewBag.CPRFDtId" />
+                    <input type="hidden" name="chkAssetLst" id="chkAssetLst" value=""/>
+                </div>
+            </div>
+        </div>
+    }
+
+</div> 
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#notification").delay(2000).fadeOut("slow");
+
+        $(function () {
+            var $rows = $('#tableA .tr');
+            $('#search').keyup(function () {
+                var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+                $rows.show().filter(function () {
+                    var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                    return !~text.indexOf(val);
+                }).hide();
+            });
+        });
+
+    });
+
+    function ClkAsset(Assetno, i) {
+        //console.log(Assetno.value);
+        //console.log(i);
+        var ischecked = $("#AssetFlag_" + i).is(':checked');
+        
+        if (ischecked) {            
+            var countRow = $("#chkAssetLst").val();
+            //console.log(ischecked);
+            var newCountRow = countRow + $.trim(Assetno.value) + "|";
+            //console.log(newCountRow);
+            $("#chkAssetLst").val(newCountRow);
+        } else {
+            var countRow = $("#chkAssetLst").val();
+            //console.log(ischecked);
+            var newCountRow = countRow.replace($.trim(Assetno.value) + "|", "");
+            var newCountRow = countRow.replace($.trim(Assetno.value) + "|", "");
+            $("#chkAssetLst").val(newCountRow);
+        }
+        
+    }
+
+    function osSaveExistAsset() {
+        window.opener.updateWithNewData();
+        window.close();
+    }
+
+    function chgCatList(CATEID) {
+        var cprfId = $("#CprfId").val();
+        $("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("chgCatList", "CPRF")",
+            data: '{cprfId: "' + cprfId + '",CATEID: "' + CATEID + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divAssetList').html(response);
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+
+</script>

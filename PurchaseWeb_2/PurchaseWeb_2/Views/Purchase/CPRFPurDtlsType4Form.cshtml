@@ -1,0 +1,318 @@
+﻿@model PurchaseWeb_2.Models.PRdtlsViewModel
+
+<div class="row ">
+    <div class="col-md-12">
+        <!--card header-->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title vertical-center">Purchase Request Details</h3>
+            </div>
+        </div>
+        <!--card body-->
+        <div id="divAddPurDtls">
+            @using (Ajax.BeginForm("AddPurDtlsType4CPRF", "Purchase", new AjaxOptions { HttpMethod = "POST", OnBegin = "obAddPurDtlsType4CPRF()", OnSuccess = "osAddPurDtlsType4CPRF()", UpdateTargetId = "divPurDtlsList" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.PRid, new { @Value = ViewBag.PrMstId })
+                @Html.HiddenFor(model => model.PRNo, new { @Value = ViewBag.PrNo })
+                @Html.HiddenFor(model => model.TypePRId, new { @Value = ViewBag.PRTypeId })
+                @Html.HiddenFor(model => model.PRDtId, new { @Value = 0 })
+
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <div class="row">
+                                <!--first column-->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-10">Vendor</label>
+                                        <div class="custom-control custom-switch">
+                                            &nbsp; <input type="checkbox" class="custom-control-input" id="swNewVendor" onchange="swNewVendorChg()" />
+                                            <label class="custom-control-label" for="swNewVendor">Vendor not in the list?</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <div id="divVendorList">
+                                                <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode" onchange="vendorchg(this.value)">
+                                                    <option value="">Select option</option>
+                                                    @foreach (var vendor in ViewBag.vendorlist)
+                                                    {
+                                                        <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            @Html.ValidationMessageFor(model => model.VendorCode, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 3, @id = "box" })
+                                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.VendorPartNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.VendorPartNo, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.VendorPartNo, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <strong>UOM</strong>
+                                        <div class="col-md-10">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    @Html.DropDownList("UOMName",
+                                                      new SelectList(ViewBag.UOMList, "UNIT", "UNIT"),
+                                                      "Please Select the UOM",
+                                                      new { @class = "custom-select form-control-border" })
+                                                </div>
+
+                                            </div>
+
+                                            @Html.ValidationMessageFor(model => model.UOMId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <strong>Req. Delivery Date</strong>
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.ReqDevDate, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ReqDevDate, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <strong>Estimated Unit Price</strong>
+                                        <div class="col-md-10">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div id="divCur">
+                                                        @Html.DropDownList("EstCurCode",
+                                                       new SelectList(ViewBag.CurrList, "CURID", "CURID", "MYR"),
+                                                       new { @class = "custom-select form-control-border" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    @Html.EditorFor(model => model.EstimateUnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            </div>
+                                            @Html.ValidationMessageFor(model => model.EstimateUnitPrice, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div id="divAssetCPRFList">
+                            @{Html.RenderAction("AssetCPRFList", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card-footer">
+                    <div class="form-group">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-centered">
+                                    <input type="submit" id="btnSubmit" name="Submit" value="Add PR Details" class="btn btn-primary " />
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        </div>
+
+    </div>
+
+
+</div>
+
+<!--Modal to reject-->
+<div class="modal fade" id="Notification" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:palevioletred">
+                <h5 class="modal-title" style="color:ghostwhite;font:bolder">Asset Data Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Please proceed to choose CPRF No . <br />
+                and select asset id listed on your right page. <br />
+                Thank you.
+            </div>
+            <div class="modal-footer">
+                <button type="button" name="submit" class="btn btn-secondary" data-dismiss="modal" value="close">Close</button>
+                <input type="hidden" id="hidHotification" value="" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        setFstDropdown();
+
+        $(function () {
+            var $rows = $('#tableA .tr');
+            $('#search').keyup(function () {
+                var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+                $rows.show().filter(function () {
+                    var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                    return !~text.indexOf(val);
+                }).hide();
+            });
+        });
+    });
+
+    function obAddPurDtlsType4CPRF() {
+        $("#overlay").show();
+    }
+
+    function osAddPurDtlsType4CPRF() {
+        // check if PR details exist , if it exist disable dropdown button
+
+        var PrId = $("#PRid").val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("chkPRCPRFexist", "Purchase")",
+            data: '{PrId: "' + PrId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                //$('#showCPRFBal').html(response);
+                $("#existVal").val(response[0]);
+                //existVal = response[0].responseText;
+                if (response[0] == "1") {
+                    console.log("existVal1=" + response[0]);
+                    //CPRF
+                    //$("#CPRF").removeClass("fstdropdown-select");
+                    document.getElementById("CPRF").classList.remove('fstdropdown-select');
+                    //document.getElementById("CPRF").fstdropdown.dd.remove();
+                    $("#CPRF").prop("disabled", true);
+                }
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        //var AssetRunNo = parseInt($("#AssetRunNo").val()) ;
+        //for (let i = 1; i <= AssetRunNo; i++) {
+        //    //$("#AssetId_" + i).prop("checked", false);
+        //    if ($("#AssetId_" + i+":checked").length > 0) {
+        //        $("#AssetId_" + i).prop("disabled", true);
+        //    }
+        //}
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AssetCPRFList", "Purchase")",
+            data: '{PrMstId: "' + PrId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (response) {
+                $('#divAssetCPRFList').html(response);
+                //alert(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+
+        $("#overlay").hide();
+    }
+
+    function ValidateAsset(PrMstId) {
+        var result;
+        $("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ValidateAssetPr", "Purchase")",
+            data: '{PrMstId: "' + PrMstId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (response) {
+                //$('#divPRDtlsForm').html(response);
+                $("#overlay").hide();
+                $("#hidHotification").val(response);
+                //alert(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        result = $("#hidHotification").val();
+        console.log(result);
+        if (result == "0") {
+            return false;
+            console.log("false");
+        }
+    }
+
+    function ocAssetId(AssetId) {
+        var AssetChk = $("#AssetId_" + AssetId).is(":checked");
+        console.log("Asset id= " + AssetId + " check is " + AssetChk);
+
+        @*$("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("updateAssetLst", "Purchase")",
+            data: '{PrMstId: "' + PrMstId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                //$('#divPRDtlsForm').html(response);
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });*@
+    }
+</script>

@@ -1,0 +1,153 @@
+﻿@model PurchaseWeb_2.ModelData.CPRFBudget_Mst
+
+@{
+    ViewBag.Title = "CPRFRequest";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h1>User CPRF Request</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Create CPRF Request</h3>
+            </div>
+            @using (Ajax.BeginForm("CPRFMstSave", "CPRF", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCPRFMstList",OnSuccess= "CPRFMstSaveOS" }))
+            {
+
+
+<div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table style="width:100%">
+                                <tr>
+                                    <td>Project Owner</td>
+                                    <td>:</td>
+                                    <td>
+                                        <input type="text" name="ProjectOwner" id="ProjectOwner" class="form-control" value="@Session["Username"].ToString()" required />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Project Title</td>
+                                    <td>:</td>
+                                    <td>
+                                        <textarea name="ProjectTitle" id="ProjectTitle" class="form-control" required></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Budget utilization for year</td>
+                                    <td>:</td>
+                                    <td>
+                                        @{ var thisYear = DateTime.Now.Year;}
+                                        @{ var nextYear = DateTime.Now.Year + 1;}
+                                        <select name="BudgetUtilYear" id="BudgetUtilYear" class="form-control" required>
+                                            <option value="@thisYear">@thisYear</option>
+                                            <option value="@nextYear">@nextYear</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Category</td>
+                                    <td>:</td>
+                                    <td>
+                                        <select name="CatMain" id="CatMain" class="form-control" required>
+                                            <option value="EQUIPMENT">EQUIPMENT</option>
+                                            <option value="INFRASTRUCTURE">INFRASTRUCTURE</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Investment Term</td>
+                                    <td>:</td>
+                                    <td>
+                                        <select name="InvestTerm" id="InvestTerm" class="form-control" required>
+                                            <option value="SHORT TERM">SHORT TERM</option>
+                                            <option value="MID TERM">MID TERM</option>
+                                            <option value="LONG TERM">LONG TERM</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table style="width:100%">
+                                <tr>
+                                    <td>Project Justification</td>
+                                    <td>:</td>
+                                    <td>
+                                        <textarea class="form-control" name="ProjectJustification" id="ProjectJustification" required></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Saving / Benefits</td>
+                                    <td>:</td>
+                                    <td>
+                                        <textarea class="form-control" name="Benefits" id="Benefits" required></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <table class="table-bordered table-sm" style="width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="3" style="text-align:center;background-color:lightgray;">
+                                                        Remarks
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>EQUIPMENT</td>
+                                                    <td>SHORT TERM</td>
+                                                    <td>Machines, Tools, Spare Parts, Conversion Kits, Oven, Laptops/PCs, Software, etc.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>INFRASTRUCTURE</td>
+                                                    <td>MID TERM</td>
+                                                    <td>Re-layout, Relocation Plant 1 (Facility & IT), Hostel renovation</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>INFRASTRUCTURE</td>
+                                                    <td>LONG TERM</td>
+                                                    <td>10 Storeys Building & Building extension Plant 2</td>
+                                                </tr>
+                                            </tbody>
+                                                                                           
+                                            
+
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-centered">
+                            <button class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="divCPRFMstList">
+            @{ Html.RenderAction("CPRFMstList", "CPRF");}
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    function CPRFMstSaveOS() {
+        this.reset();
+    }
+</script>
+

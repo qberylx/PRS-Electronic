@@ -1,0 +1,7 @@
+﻿<select class="form-control" name="AreaId" id="AreaId" onchange="chgArea(this)" required>
+    <option value="" code="">Please Choose</option>
+    @foreach (var a in ViewBag.areaLst)
+    {
+        <option value="@a.AreaId" code="@a.AreaCode">@a.AreaDesc</option>
+    }
+</select>

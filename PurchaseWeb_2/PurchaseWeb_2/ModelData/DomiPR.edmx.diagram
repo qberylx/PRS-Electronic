@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8ee2d69fcd2b4f91854250b661d3c8d2" Name="Diagram1" ZoomLevel="86">
+      <Diagram DiagramId="8ee2d69fcd2b4f91854250b661d3c8d2" Name="Diagram1" ZoomLevel="98">
         <EntityTypeShape EntityType="Domi_PurModel.Department_mst" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Domi_PurModel.Lgn_mst" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Domi_PurModel.Menu_mst" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
@@ -77,6 +77,35 @@
         <EntityTypeShape EntityType="Domi_PurModel.HODManager_Map" Width="1.5" PointX="3" PointY="25.875" />
         <AssociationConnector Association="Domi_PurModel.FK_HODManager_Map_Usr_mst" />
         <AssociationConnector Association="Domi_PurModel.FK_HODManager_Map_Usr_mst1" />
+        <EntityTypeShape EntityType="Domi_PurModel.CPRF_File" Width="1.5" PointX="5.25" PointY="43.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.CprfArea_Mst" Width="1.5" PointX="18.375" PointY="11.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.CPRFAsset_Mst" Width="1.5" PointX="15.25" PointY="28.25" />
+        <EntityTypeShape EntityType="Domi_PurModel.CPRFBudget_Mst" Width="1.5" PointX="3" PointY="29.875" />
+        <EntityTypeShape EntityType="Domi_PurModel.CprfCategory_Mst" Width="1.5" PointX="10.75" PointY="23.25" />
+        <AssociationConnector Association="Domi_PurModel.FK_CPRF_File_CPRFBudget_Mst" />
+        <AssociationConnector Association="Domi_PurModel.FK_CPRFAsset_Mst_CPRFBudget_Mst" />
+        <AssociationConnector Association="Domi_PurModel.FK_CPRFBudget_Mst_Usr_mst" />
+        <EntityTypeShape EntityType="Domi_PurModel.AssetCategory_Mst" Width="1.5" PointX="13" PointY="30.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.AuditCPRF_log" Width="1.5" PointX="18.375" PointY="14.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.CostCentre_Mst" Width="1.5" PointX="21.625" PointY="10.25" />
+        <EntityTypeShape EntityType="Domi_PurModel.PRAsset_Lst" Width="1.5" PointX="8.25" PointY="22.25" />
+        <EntityTypeShape EntityType="Domi_PurModel.Category_Mst" Width="1.5" PointX="18.375" PointY="18.75" />
+        <AssociationConnector Association="Domi_PurModel.FK_CostCentre_Mst_AccTypeDept" />
+        <AssociationConnector Association="Domi_PurModel.FK_CPRFAsset_Mst_AssetCategory_Mst" />
+        <AssociationConnector Association="Domi_PurModel.FK_CostCentre_Mst_CprfArea_Mst" />
+        <AssociationConnector Association="Domi_PurModel.FK_PRAsset_Lst_PR_Details" />
+        <EntityTypeShape EntityType="Domi_PurModel.Process_Mst" Width="1.5" PointX="20.375" PointY="14.875" />
+        <EntityTypeShape EntityType="Domi_PurModel.vw_CprfDept" Width="1.5" PointX="20.375" PointY="18.75" />
+        <EntityTypeShape EntityType="Domi_PurModel.vw_usrDpt" Width="1.5" PointX="21.375" PointY="0.75" />
+        <AssociationConnector Association="Domi_PurModel.FK_CostCentre_Mst_Process_Mst" />
+        <EntityTypeShape EntityType="Domi_PurModel.CPRFBudget_Dtls" Width="1.5" PointX="13" PointY="21.5" />
+        <AssociationConnector Association="Domi_PurModel.FK_CPRFBudget_Dtls_AccTypeDept" />
+        <AssociationConnector Association="Domi_PurModel.FK_CPRFAsset_Mst_CPRFBudget_Dtls" />
+        <AssociationConnector Association="Domi_PurModel.FK_CPRFBudget_Dtls_CPRFBudget_Mst" />
+        <AssociationConnector Association="Domi_PurModel.FK_CPRFBudget_Dtls_CprfCategory_Mst" />
+        <EntityTypeShape EntityType="Domi_PurModel.UsrPsn_Map" Width="1.5" PointX="7" PointY="0.75" />
+        <AssociationConnector Association="Domi_PurModel.FK_UsrPsn_Map_Position_mst" />
+        <AssociationConnector Association="Domi_PurModel.FK_UsrPsn_Map_Usr_mst" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

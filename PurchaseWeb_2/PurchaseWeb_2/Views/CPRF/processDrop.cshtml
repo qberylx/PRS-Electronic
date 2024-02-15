@@ -1,0 +1,7 @@
+﻿<select class="form-control" name="ProcessId" id="ProcessId" onchange="chgProcess(this)" required>
+    <option value="" code="">Please Choose</option>
+    @foreach (var a in ViewBag.processLst)
+    {
+        <option value="@a.Id" code="@a.ProcessCode">@a.ProcessDesc</option>
+    }
+</select>

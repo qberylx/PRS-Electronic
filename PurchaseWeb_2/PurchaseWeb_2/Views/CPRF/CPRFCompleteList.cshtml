@@ -1,0 +1,242 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFBudget_Mst>
+
+@{
+    ViewBag.Title = "CPRFCompleteList";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>CPRF Complete List</h2>
+
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">List of Complete CPRF </h3>
+
+        <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search">
+
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-default">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div id="notification">
+        @Html.Partial("_Notifications")
+    </div>
+    <div class="card-body">
+        <table class="table table-sm " id="tableA">
+            <thead>
+                <tr>
+                    <th>
+                        CPRF No
+                    </th>
+                    <th>
+                        Project Owner
+                    </th>
+                    <th>
+                        Request Date
+                    </th>
+                    <th>
+                        Send to IE Date
+                    </th>
+                    <th>
+                        Approval Date (COO)
+                    </th>
+                    <th>
+                        Approval Date (GMD)
+                    </th>
+                    <th>
+                        CPRF Complete
+                    </th>
+                    <th>
+                        Project Title
+                    </th>
+                    <th style="display:none">
+                        Project Owner
+                    </th>
+                    <th>
+                        Budget Utilization Year
+                    </th>
+                    <th>
+                        Total Budget
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="tr">
+                        <td>
+                            @item.CPRF_No
+                        </td>
+                        <td>
+                            @item.Usr_mst.Username
+                        </td>
+                        <td>
+                            @{ DateTime reqDevDate = (DateTime)item.Request_Date; }
+                            @reqDevDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @{ DateTime IEDevDate = (DateTime)item.SendToIE; }
+                            @IEDevDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @{ DateTime CooDate = (DateTime)item.SendToGMD; }
+                            @CooDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @{ DateTime GmdDate = (DateTime)item.SendToProcessIE; }
+                            @GmdDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @if (item.CPRFcompleteDate != null)
+                            {
+                                DateTime CPRFcompleteDate = (DateTime)item.CPRFcompleteDate; 
+                                @CPRFcompleteDate.ToString("dd/MM/yyyy")
+                            }
+
+                        </td>
+                        <td>
+                            @item.ProjectTitle
+                        </td>
+                        <td style="display:none">
+                            @item.ProjectOwner
+                        </td>
+                        <td>
+                            @item.BudgetUtilYear
+                        </td>
+                        <th>
+                            @String.Format("{0:N2}", item.CPRFBudget_Dtls.Where(x => x.StatusId == 1).Sum(x => x.TotalBudgetMYR))
+                        </th>
+                        <td>
+                            @item.Status
+                        </td>
+                        <td>
+
+                            @Html.ActionLink("View", "ViewCprf", "CPRF", new { CPRFid = item.CPRF_Id }, new { @class = "btn btn-info" })
+                            @Html.ActionLink("Export to Excel", "ExportCPRF", "CPRF", new { CPRFid = item.CPRF_Id }, new { @class = "btn bg-olive" })
+                            @if (item.LockFlag == true)
+                            {
+                                
+                                    @Html.ActionLink("UnLock Budget", "UnlockCPRF", "CPRF", new { CPRFid = item.CPRF_Id }, new { @class = "btn bg-primary" })
+                                
+                                
+                            }
+                            else
+                            {
+                                
+                                    @Html.ActionLink("Lock Budget", "LockCPRF", "CPRF", new { CPRFid = item.CPRF_Id }, new { @class = "btn bg-warning" })
+                                
+                            }
+                            
+                            @*@Html.ActionLink("Details", "CPRFFinishing", "CPRF", new { CprfId = item.CPRF_Id }, new { @class = "btn btn-primary" })
+            @if (item.CPRF_No != null)
+            {
+                //var stat = 1;
+                //foreach (var item2 in item.CPRFBudget_Dtls.Where(x=>x.StatusId==1).ToList() )
+                //{
+                //    foreach (var item3 in item2.CPRFAsset_Mst)
+                //    {
+                //        if (item3.AssetNo == null)
+                //        {
+                //            stat = 0;
+                //            break;
+                //        }
+                //    }
+                //    if (stat == 0)
+                //    {
+                //        break;
+                //    }
+
+                //}
+                //if (stat == 1)
+                //{
+                @Html.ActionLink("Complete", "CPRFComplete", "CPRF", new { CprfId = item.CPRF_Id }, new { @class = "btn btn-success" })
+                //}
+            }*@
+
+                        </td>
+                    </tr>
+                    @*if (item.StatusID == 8)
+                    {
+                        <tr>
+                            <td style="color:red;font-weight:bold; background-color:lightgrey" colspan="8">@item.COORejectReason</td>
+                        </tr>
+                    }
+
+                    if (item.StatusID == 10)
+                    {
+                        <tr>
+                            <td style="color:red;font-weight:bold; background-color:lightgrey" colspan="8">@item.GMDRejectReason</td>
+                        </tr>
+                    }*@
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+
+    </div>
+</div>
+
+<script>
+    function IEReject(CPRFId) {
+        var reason = $("#IERejectReason_" + CPRFId).val();
+        console.log(reason);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("IEReject", "CPRF")",
+            data: '{CPRFId: "' + CPRFId + '", reason: "' + reason + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#IERejectModal_" + CPRFId).hide();
+                window.location.replace("/CPRF/ApprovalIE");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    });
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        var $rows = $('#tableA .tr');
+        $('#search').keyup(function () {
+            //console.log($(this).val());
+            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+            $rows.show().filter(function () {
+                var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                return !~text.indexOf(val);
+            }).hide();
+        });
+    });
+
+</script>

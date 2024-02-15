@@ -5,6 +5,407 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="dom1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AMASST">
+          <Key>
+            <PropertyRef Name="ASTNO" />
+          </Key>
+          <Property Name="ASTNO" Type="char" MaxLength="80" Nullable="false" />
+          <Property Name="AUDTDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="AUDTTIME" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="AUDTUSER" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="AUDTORG" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="DESC" Type="char" MaxLength="60" Nullable="false" />
+          <Property Name="ACTIVE" Type="smallint" Nullable="false" />
+          <Property Name="CATEGORY" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="COSTCENT" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="LOCATION" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="GROUP" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="TXTYPE" Type="smallint" Nullable="false" />
+          <Property Name="AQUCODE" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="ACCSET" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="INIALLOW" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="SUBFLAG" Type="smallint" Nullable="false" />
+          <Property Name="MSTNO" Type="char" MaxLength="80" Nullable="false" />
+          <Property Name="STATUS" Type="smallint" Nullable="false" />
+          <Property Name="EVENTF" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="NOTES" Type="char" MaxLength="80" Nullable="false" />
+          <Property Name="RESP" Type="char" MaxLength="30" Nullable="false" />
+          <Property Name="VENDOR" Type="char" MaxLength="12" Nullable="false" />
+          <Property Name="OPERATOR" Type="char" MaxLength="30" Nullable="false" />
+          <Property Name="OPDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="INSCO" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="INSPOLI" Type="char" MaxLength="80" Nullable="false" />
+          <Property Name="INSDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="INSVALUE" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="SPEC" Type="char" MaxLength="30" Nullable="false" />
+          <Property Name="DPEXACC" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="ACUDPACC" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="ASSETACC" Type="char" MaxLength="20" Nullable="false" />
+          <Property Name="ACQDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKVALUE" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSALVAL" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKETLIFE" Type="smallint" Nullable="false" />
+          <Property Name="BKMETHOD" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="BKPERDID" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="BKSDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKLTPERD" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="BKLTDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKLTYDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKYDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKACUDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKNETVAL" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TAVALUE" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TASALVAL" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TAETLIFE" Type="smallint" Nullable="false" />
+          <Property Name="TAMETHOD" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="TAPERDID" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="TASDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="TALTPERD" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="TALTDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TALTYDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TADP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TAYDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TAACUDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TANETVAL" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WORKLOAD" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WLLT" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WLLTY" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WLCUR" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WLY" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WLACU" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WLNET" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="UNITS" Type="int" Nullable="false" />
+          <Property Name="SOURCURR" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="RATETYPE" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="RATEDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="RATE" Type="decimal" Precision="15" Scale="7" Nullable="false" />
+          <Property Name="BUDGCODE" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="CLASCODE" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="REVALFLG" Type="smallint" Nullable="false" />
+          <Property Name="MACRSFLG" Type="smallint" Nullable="false" />
+          <Property Name="TXPOLFLG" Type="smallint" Nullable="false" />
+          <Property Name="CAPFLG" Type="smallint" Nullable="false" />
+          <Property Name="MEASUNIT" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="MACRSCOD" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="BKHADUY" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="BKTIMUY" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="BKDPTIME" Type="smallint" Nullable="false" />
+          <Property Name="BKDPYTIM" Type="smallint" Nullable="false" />
+          <Property Name="BKSVAL" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSSAL" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSNET" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSLTDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSLYDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSYDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSACDP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TAHADUY" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="TATIMUY" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="TADPTIME" Type="smallint" Nullable="false" />
+          <Property Name="TADPYTIM" Type="smallint" Nullable="false" />
+          <Property Name="WLUNIT" Type="char" MaxLength="30" Nullable="false" />
+          <Property Name="PICFILE" Type="char" MaxLength="30" Nullable="false" />
+          <Property Name="OPTFLD0" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="OPTFLD1" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="OPTFLD2" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="OPTFLD3" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="OPTFLD4" Type="char" MaxLength="12" Nullable="false" />
+          <Property Name="OPTFLD5" Type="char" MaxLength="20" Nullable="false" />
+          <Property Name="OPTFLD6" Type="char" MaxLength="30" Nullable="false" />
+          <Property Name="OPTFLD7" Type="smallint" Nullable="false" />
+          <Property Name="OPTFLD8" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="OPTFLD9" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="PRORDATE" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="SHORTFLG" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="BKESTY" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="TAESTY" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="BKDPRATE" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TADPRATE" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKMACRSFLG" Type="smallint" Nullable="false" />
+          <Property Name="BKRCPERD" Type="decimal" Precision="9" Scale="1" Nullable="false" />
+          <Property Name="BKDRATE" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKCONV" Type="smallint" Nullable="false" />
+          <Property Name="BKACRSFLAG" Type="smallint" Nullable="false" />
+          <Property Name="BKACRSCODE" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="TAMACRSFLG" Type="smallint" Nullable="false" />
+          <Property Name="TARCPERD" Type="decimal" Precision="9" Scale="1" Nullable="false" />
+          <Property Name="TADRATE" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TACONV" Type="smallint" Nullable="false" />
+          <Property Name="TAACRSFLAG" Type="smallint" Nullable="false" />
+          <Property Name="TAACRSCODE" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="BUSINV" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="ALL179" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="ALLSPC" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDEPBASE" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TADEPBASE" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="COMMENT1" Type="char" MaxLength="80" Nullable="false" />
+          <Property Name="COMMENT2" Type="char" MaxLength="80" Nullable="false" />
+          <Property Name="COMMENT3" Type="char" MaxLength="80" Nullable="false" />
+          <Property Name="COMMENT4" Type="char" MaxLength="80" Nullable="false" />
+          <Property Name="ISMDEP" Type="smallint" Nullable="false" />
+          <Property Name="TEMPCODE" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="ALWCALT" Type="smallint" Nullable="false" />
+          <Property Name="ALW179F" Type="smallint" Nullable="false" />
+          <Property Name="DATELASTMN" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="ACRSBSPC" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="ACRSTSPC" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="ACRSB179" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="ACRST179" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="RSVINT" Type="smallint" Nullable="false" />
+          <Property Name="RSVDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="RSVBCD" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TARETDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="TALSDPDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="TASTATUS" Type="smallint" Nullable="false" />
+          <Property Name="VALUES" Type="int" Nullable="false" />
+          <Property Name="PROCESSCMD" Type="smallint" Nullable="false" />
+          <Property Name="RVPERIOD" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="TARVPERD" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="NXTBCODENO" Type="int" Nullable="false" />
+          <Property Name="BKSINITVAL" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKFINITVAL" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TAINITVAL" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKADJYDP" Type="smallint" Nullable="false" />
+          <Property Name="TAADJYDP" Type="smallint" Nullable="false" />
+          <Property Name="WORKLOAD1" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WORKLOAD2" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WORKLOAD3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WORKLOAD4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WORKLOAD5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WORKLOAD6" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WORKLOAD7" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WORKLOAD8" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WORKLOAD9" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WORKLOAD10" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="WORKLOAD11" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDICOST" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDIPRO" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDIPL" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TADIPRO" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TADIPL" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKYADJ" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSYADJ" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TAYADJ" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="SWBSPCALL" Type="smallint" Nullable="false" />
+          <Property Name="SWTSPCALL" Type="smallint" Nullable="false" />
+          <Property Name="SWB179ALL" Type="smallint" Nullable="false" />
+          <Property Name="SWT179ALL" Type="smallint" Nullable="false" />
+          <Property Name="BKLIFE" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TALIFE" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BDISPYEAR" Type="smallint" Nullable="false" />
+          <Property Name="BDISPPERD" Type="smallint" Nullable="false" />
+          <Property Name="SWBDISPRV" Type="smallint" Nullable="false" />
+          <Property Name="TDISPYEAR" Type="smallint" Nullable="false" />
+          <Property Name="TDISPPERD" Type="smallint" Nullable="false" />
+          <Property Name="SWTDISPRV" Type="smallint" Nullable="false" />
+          <Property Name="PRIUNBARCD" Type="char" MaxLength="30" Nullable="false" />
+          <Property Name="SERNO" Type="char" MaxLength="30" Nullable="false" />
+          <Property Name="TACURR" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="TARATETYPE" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="TAEXCHRATE" Type="decimal" Precision="15" Scale="7" Nullable="false" />
+          <Property Name="TARATEDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="UNITCNT" Type="int" Nullable="false" />
+          <Property Name="MAXUNIT" Type="int" Nullable="false" />
+          <Property Name="INSEXPDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKACUIM" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TAACUIM" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSACUIM" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TAALWCALT" Type="smallint" Nullable="false" />
+          <Property Name="TAALW179F" Type="smallint" Nullable="false" />
+          <Property Name="BKPERDID3" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="BKMETHOD3" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="BKVALUE3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSALVAL3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKACUDP3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKNETVAL3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKLTPERD3" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="BKLTDP3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKLTYDP3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDP3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKYDP3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="SOURCURR3" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="RATETYPE3" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="RATEDATE3" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="RATE3" Type="decimal" Precision="15" Scale="7" Nullable="false" />
+          <Property Name="BKHADUY3" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="BKTIMUY3" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="DISDATE3" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKDPRATE3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSDATE3" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKDPTIME3" Type="smallint" Nullable="false" />
+          <Property Name="BKDPYTIM3" Type="smallint" Nullable="false" />
+          <Property Name="RETDATE3" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="LSTDPDATE3" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKSTATUS3" Type="smallint" Nullable="false" />
+          <Property Name="BKRVPERD3" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="BKINITVAL3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKADJYDP3" Type="smallint" Nullable="false" />
+          <Property Name="BKDIPRO3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDIPL3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKYADJ3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKLIFE3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BDISPYEAR3" Type="smallint" Nullable="false" />
+          <Property Name="BDISPPERD3" Type="smallint" Nullable="false" />
+          <Property Name="SWBDISPRV3" Type="smallint" Nullable="false" />
+          <Property Name="BKDICOST3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKACUIM3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKPERDID4" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="BKMETHOD4" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="BKVALUE4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSALVAL4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKACUDP4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKNETVAL4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKLTPERD4" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="BKLTDP4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKLTYDP4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDP4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKYDP4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="SOURCURR4" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="RATETYPE4" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="RATEDATE4" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="RATE4" Type="decimal" Precision="15" Scale="7" Nullable="false" />
+          <Property Name="BKHADUY4" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="BKTIMUY4" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="DISDATE4" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKDPRATE4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSDATE4" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKDPTIME4" Type="smallint" Nullable="false" />
+          <Property Name="BKDPYTIM4" Type="smallint" Nullable="false" />
+          <Property Name="RETDATE4" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="LSTDPDATE4" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKSTATUS4" Type="smallint" Nullable="false" />
+          <Property Name="BKRVPERD4" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="BKINITVAL4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKADJYDP4" Type="smallint" Nullable="false" />
+          <Property Name="BKDIPRO4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDIPL4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKYADJ4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKLIFE4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BDISPYEAR4" Type="smallint" Nullable="false" />
+          <Property Name="BDISPPERD4" Type="smallint" Nullable="false" />
+          <Property Name="SWBDISPRV4" Type="smallint" Nullable="false" />
+          <Property Name="BKDICOST4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKACUIM4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKPERDID5" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="BKMETHOD5" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="BKVALUE5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSALVAL5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKACUDP5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKNETVAL5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKLTPERD5" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="BKLTDP5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKLTYDP5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDP5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKYDP5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="SOURCURR5" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="RATETYPE5" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="RATEDATE5" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="RATE5" Type="decimal" Precision="15" Scale="7" Nullable="false" />
+          <Property Name="BKHADUY5" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="BKTIMUY5" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="DISDATE5" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKDPRATE5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKSDATE5" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKDPTIME5" Type="smallint" Nullable="false" />
+          <Property Name="BKDPYTIM5" Type="smallint" Nullable="false" />
+          <Property Name="RETDATE5" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="LSTDPDATE5" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKSTATUS5" Type="smallint" Nullable="false" />
+          <Property Name="BKRVPERD5" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="BKINITVAL5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKADJYDP5" Type="smallint" Nullable="false" />
+          <Property Name="BKDIPRO5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDIPL5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKYADJ5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKLIFE5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BDISPYEAR5" Type="smallint" Nullable="false" />
+          <Property Name="BDISPPERD5" Type="smallint" Nullable="false" />
+          <Property Name="SWBDISPRV5" Type="smallint" Nullable="false" />
+          <Property Name="BKDICOST5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKACUIM5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKIMLTPD" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="TAIMLTPD" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="BK3IMLTPD" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="BK4IMLTPD" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="BK5IMLTPD" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="APINVCNO" Type="char" MaxLength="22" Nullable="false" />
+          <Property Name="PONUMBER" Type="char" MaxLength="22" Nullable="false" />
+          <Property Name="BKSYIMP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKFYIMP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TAYIMP" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKYIMP3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKYIMP4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKYIMP5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="LSIMPDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="BKDEPBASE3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDEPBASE4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDEPBASE5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="MACRSFLG3" Type="smallint" Nullable="false" />
+          <Property Name="MACRSFLG4" Type="smallint" Nullable="false" />
+          <Property Name="MACRSFLG5" Type="smallint" Nullable="false" />
+          <Property Name="BKRCPERD3" Type="decimal" Precision="9" Scale="1" Nullable="false" />
+          <Property Name="BKRCPERD4" Type="decimal" Precision="9" Scale="1" Nullable="false" />
+          <Property Name="BKRCPERD5" Type="decimal" Precision="9" Scale="1" Nullable="false" />
+          <Property Name="BKDRATE3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDRATE4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKDRATE5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BKCONV3" Type="smallint" Nullable="false" />
+          <Property Name="BKCONV4" Type="smallint" Nullable="false" />
+          <Property Name="BKCONV5" Type="smallint" Nullable="false" />
+          <Property Name="BKACRSFLG3" Type="smallint" Nullable="false" />
+          <Property Name="BKACRSFLG4" Type="smallint" Nullable="false" />
+          <Property Name="BKACRSFLG5" Type="smallint" Nullable="false" />
+          <Property Name="BKACRSCOD3" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="BKACRSCOD4" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="BKACRSCOD5" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="SWSPCALL4" Type="smallint" Nullable="false" />
+          <Property Name="SW179ALL4" Type="smallint" Nullable="false" />
+          <Property Name="SWSPCALL5" Type="smallint" Nullable="false" />
+          <Property Name="SW179ALL5" Type="smallint" Nullable="false" />
+          <Property Name="ACRSBSPC3" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="ACRSB1793" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="ACRSBSPC4" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="ACRSB1794" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="ACRSBSPC5" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="ACRSB1795" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="ISMDEP3" Type="smallint" Nullable="false" />
+          <Property Name="ISMDEP4" Type="smallint" Nullable="false" />
+          <Property Name="ISMDEP5" Type="smallint" Nullable="false" />
+          <Property Name="TABUSINV" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TAALL179" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="TAALLSPC" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BUSINV3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="ALL1793" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="ALLSPC3" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BUSINV4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="ALL1794" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="ALLSPC4" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="BUSINV5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="ALL1795" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+          <Property Name="ALLSPC5" Type="decimal" Precision="19" Scale="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AMCATE">
+          <Key>
+            <PropertyRef Name="CATEID" />
+          </Key>
+          <Property Name="CATEID" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="AUDTDATE" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="AUDTTIME" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="AUDTUSER" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="AUDTORG" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="CATENAME" Type="char" MaxLength="60" Nullable="false" />
+          <Property Name="CATEDESC" Type="char" MaxLength="60" Nullable="false" />
+          <Property Name="NXATNO" Type="int" Nullable="false" />
+          <Property Name="NOTES" Type="char" MaxLength="80" Nullable="false" />
+          <Property Name="SEGCODE" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="DEFFLAG" Type="smallint" Nullable="false" />
+          <Property Name="DEFACCT" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="INACTIVE" Type="smallint" Nullable="false" />
+          <Property Name="DATEINACTV" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="DATELASTMN" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="NXTBCODENO" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="APRTA">
           <Key>
             <PropertyRef Name="TERMSCODE" />
@@ -371,6 +772,8 @@
           <Property Name="ROUNDAMT" Type="decimal" Precision="19" Scale="6" Nullable="false" />
         </EntityType>
         <EntityContainer Name="dom1ModelStoreContainer">
+          <EntitySet Name="AMASST" EntityType="Self.AMASST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AMCATE" EntityType="Self.AMCATE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="APRTA" EntityType="Self.APRTA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="APVEN" EntityType="Self.APVEN" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="APVENO" EntityType="Self.APVENO" Schema="dbo" store:Type="Tables" />
@@ -681,6 +1084,8 @@
           <EntitySet Name="CSCRDs" EntityType="dom1Model.CSCRD" />
           <EntitySet Name="APRTAs" EntityType="dom1Model.APRTA" />
           <EntitySet Name="APVENOes" EntityType="dom1Model.APVENO" />
+          <EntitySet Name="AMCATEs" EntityType="dom1Model.AMCATE" />
+          <EntitySet Name="AMASSTs" EntityType="dom1Model.AMASST" />
         </EntityContainer>
         <Association Name="APVENPOVUPR">
           <End Type="dom1Model.APVEN" Role="APVEN" Multiplicity="1" />
@@ -798,6 +1203,407 @@
           <Property Name="ALLOWNULL" Type="Int16" Nullable="false" />
           <Property Name="VALIDATE" Type="Int16" Nullable="false" />
           <Property Name="SWSET" Type="Int16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AMCATE">
+          <Key>
+            <PropertyRef Name="CATEID" />
+          </Key>
+          <Property Name="CATEID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="AUDTDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="AUDTTIME" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="AUDTUSER" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="AUDTORG" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="CATENAME" Type="String" Nullable="false" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="CATEDESC" Type="String" Nullable="false" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="NXATNO" Type="Int32" Nullable="false" />
+          <Property Name="NOTES" Type="String" Nullable="false" MaxLength="80" FixedLength="true" Unicode="false" />
+          <Property Name="SEGCODE" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="DEFFLAG" Type="Int16" Nullable="false" />
+          <Property Name="DEFACCT" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="INACTIVE" Type="Int16" Nullable="false" />
+          <Property Name="DATEINACTV" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="DATELASTMN" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="NXTBCODENO" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AMASST">
+          <Key>
+            <PropertyRef Name="ASTNO" />
+          </Key>
+          <Property Name="ASTNO" Type="String" Nullable="false" MaxLength="80" FixedLength="true" Unicode="false" />
+          <Property Name="AUDTDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="AUDTTIME" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="AUDTUSER" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="AUDTORG" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="DESC" Type="String" Nullable="false" MaxLength="60" FixedLength="true" Unicode="false" />
+          <Property Name="ACTIVE" Type="Int16" Nullable="false" />
+          <Property Name="CATEGORY" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="COSTCENT" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="LOCATION" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="GROUP" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="TXTYPE" Type="Int16" Nullable="false" />
+          <Property Name="AQUCODE" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="ACCSET" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="INIALLOW" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="SUBFLAG" Type="Int16" Nullable="false" />
+          <Property Name="MSTNO" Type="String" Nullable="false" MaxLength="80" FixedLength="true" Unicode="false" />
+          <Property Name="STATUS" Type="Int16" Nullable="false" />
+          <Property Name="EVENTF" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="NOTES" Type="String" Nullable="false" MaxLength="80" FixedLength="true" Unicode="false" />
+          <Property Name="RESP" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="VENDOR" Type="String" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" />
+          <Property Name="OPERATOR" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="OPDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="INSCO" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Name="INSPOLI" Type="String" Nullable="false" MaxLength="80" FixedLength="true" Unicode="false" />
+          <Property Name="INSDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="INSVALUE" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="SPEC" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="DPEXACC" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="ACUDPACC" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="ASSETACC" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="ACQDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKVALUE" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSALVAL" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKETLIFE" Type="Int16" Nullable="false" />
+          <Property Name="BKMETHOD" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="BKPERDID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="BKSDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKLTPERD" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="BKLTDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKLTYDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKYDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKACUDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKNETVAL" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TAVALUE" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TASALVAL" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TAETLIFE" Type="Int16" Nullable="false" />
+          <Property Name="TAMETHOD" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="TAPERDID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="TASDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="TALTPERD" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="TALTDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TALTYDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TADP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TAYDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TAACUDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TANETVAL" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WORKLOAD" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WLLT" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WLLTY" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WLCUR" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WLY" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WLACU" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WLNET" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="UNITS" Type="Int32" Nullable="false" />
+          <Property Name="SOURCURR" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="RATETYPE" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="RATEDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="RATE" Type="Decimal" Nullable="false" Precision="15" Scale="7" />
+          <Property Name="BUDGCODE" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="CLASCODE" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="REVALFLG" Type="Int16" Nullable="false" />
+          <Property Name="MACRSFLG" Type="Int16" Nullable="false" />
+          <Property Name="TXPOLFLG" Type="Int16" Nullable="false" />
+          <Property Name="CAPFLG" Type="Int16" Nullable="false" />
+          <Property Name="MEASUNIT" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="MACRSCOD" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="BKHADUY" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="BKTIMUY" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="BKDPTIME" Type="Int16" Nullable="false" />
+          <Property Name="BKDPYTIM" Type="Int16" Nullable="false" />
+          <Property Name="BKSVAL" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSSAL" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSNET" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSLTDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSLYDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSYDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSACDP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TAHADUY" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="TATIMUY" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="TADPTIME" Type="Int16" Nullable="false" />
+          <Property Name="TADPYTIM" Type="Int16" Nullable="false" />
+          <Property Name="WLUNIT" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="PICFILE" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="OPTFLD0" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="OPTFLD1" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="OPTFLD2" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="OPTFLD3" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="OPTFLD4" Type="String" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" />
+          <Property Name="OPTFLD5" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="OPTFLD6" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="OPTFLD7" Type="Int16" Nullable="false" />
+          <Property Name="OPTFLD8" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="OPTFLD9" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="PRORDATE" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="SHORTFLG" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="BKESTY" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="TAESTY" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="BKDPRATE" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TADPRATE" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKMACRSFLG" Type="Int16" Nullable="false" />
+          <Property Name="BKRCPERD" Type="Decimal" Nullable="false" Precision="9" Scale="1" />
+          <Property Name="BKDRATE" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKCONV" Type="Int16" Nullable="false" />
+          <Property Name="BKACRSFLAG" Type="Int16" Nullable="false" />
+          <Property Name="BKACRSCODE" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="TAMACRSFLG" Type="Int16" Nullable="false" />
+          <Property Name="TARCPERD" Type="Decimal" Nullable="false" Precision="9" Scale="1" />
+          <Property Name="TADRATE" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TACONV" Type="Int16" Nullable="false" />
+          <Property Name="TAACRSFLAG" Type="Int16" Nullable="false" />
+          <Property Name="TAACRSCODE" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="BUSINV" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="ALL179" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="ALLSPC" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDEPBASE" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TADEPBASE" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="COMMENT1" Type="String" Nullable="false" MaxLength="80" FixedLength="true" Unicode="false" />
+          <Property Name="COMMENT2" Type="String" Nullable="false" MaxLength="80" FixedLength="true" Unicode="false" />
+          <Property Name="COMMENT3" Type="String" Nullable="false" MaxLength="80" FixedLength="true" Unicode="false" />
+          <Property Name="COMMENT4" Type="String" Nullable="false" MaxLength="80" FixedLength="true" Unicode="false" />
+          <Property Name="ISMDEP" Type="Int16" Nullable="false" />
+          <Property Name="TEMPCODE" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="ALWCALT" Type="Int16" Nullable="false" />
+          <Property Name="ALW179F" Type="Int16" Nullable="false" />
+          <Property Name="DATELASTMN" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="ACRSBSPC" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="ACRSTSPC" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="ACRSB179" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="ACRST179" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="RSVINT" Type="Int16" Nullable="false" />
+          <Property Name="RSVDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="RSVBCD" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TARETDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="TALSDPDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="TASTATUS" Type="Int16" Nullable="false" />
+          <Property Name="VALUES" Type="Int32" Nullable="false" />
+          <Property Name="PROCESSCMD" Type="Int16" Nullable="false" />
+          <Property Name="RVPERIOD" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="TARVPERD" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="NXTBCODENO" Type="Int32" Nullable="false" />
+          <Property Name="BKSINITVAL" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKFINITVAL" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TAINITVAL" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKADJYDP" Type="Int16" Nullable="false" />
+          <Property Name="TAADJYDP" Type="Int16" Nullable="false" />
+          <Property Name="WORKLOAD1" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WORKLOAD2" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WORKLOAD3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WORKLOAD4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WORKLOAD5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WORKLOAD6" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WORKLOAD7" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WORKLOAD8" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WORKLOAD9" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WORKLOAD10" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="WORKLOAD11" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDICOST" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDIPRO" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDIPL" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TADIPRO" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TADIPL" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKYADJ" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSYADJ" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TAYADJ" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="SWBSPCALL" Type="Int16" Nullable="false" />
+          <Property Name="SWTSPCALL" Type="Int16" Nullable="false" />
+          <Property Name="SWB179ALL" Type="Int16" Nullable="false" />
+          <Property Name="SWT179ALL" Type="Int16" Nullable="false" />
+          <Property Name="BKLIFE" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TALIFE" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BDISPYEAR" Type="Int16" Nullable="false" />
+          <Property Name="BDISPPERD" Type="Int16" Nullable="false" />
+          <Property Name="SWBDISPRV" Type="Int16" Nullable="false" />
+          <Property Name="TDISPYEAR" Type="Int16" Nullable="false" />
+          <Property Name="TDISPPERD" Type="Int16" Nullable="false" />
+          <Property Name="SWTDISPRV" Type="Int16" Nullable="false" />
+          <Property Name="PRIUNBARCD" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="SERNO" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="TACURR" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="TARATETYPE" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="TAEXCHRATE" Type="Decimal" Nullable="false" Precision="15" Scale="7" />
+          <Property Name="TARATEDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="UNITCNT" Type="Int32" Nullable="false" />
+          <Property Name="MAXUNIT" Type="Int32" Nullable="false" />
+          <Property Name="INSEXPDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKACUIM" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TAACUIM" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSACUIM" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TAALWCALT" Type="Int16" Nullable="false" />
+          <Property Name="TAALW179F" Type="Int16" Nullable="false" />
+          <Property Name="BKPERDID3" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="BKMETHOD3" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="BKVALUE3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSALVAL3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKACUDP3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKNETVAL3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKLTPERD3" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="BKLTDP3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKLTYDP3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDP3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKYDP3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="SOURCURR3" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="RATETYPE3" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="RATEDATE3" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="RATE3" Type="Decimal" Nullable="false" Precision="15" Scale="7" />
+          <Property Name="BKHADUY3" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="BKTIMUY3" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="DISDATE3" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKDPRATE3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSDATE3" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKDPTIME3" Type="Int16" Nullable="false" />
+          <Property Name="BKDPYTIM3" Type="Int16" Nullable="false" />
+          <Property Name="RETDATE3" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="LSTDPDATE3" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKSTATUS3" Type="Int16" Nullable="false" />
+          <Property Name="BKRVPERD3" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="BKINITVAL3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKADJYDP3" Type="Int16" Nullable="false" />
+          <Property Name="BKDIPRO3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDIPL3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKYADJ3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKLIFE3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BDISPYEAR3" Type="Int16" Nullable="false" />
+          <Property Name="BDISPPERD3" Type="Int16" Nullable="false" />
+          <Property Name="SWBDISPRV3" Type="Int16" Nullable="false" />
+          <Property Name="BKDICOST3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKACUIM3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKPERDID4" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="BKMETHOD4" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="BKVALUE4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSALVAL4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKACUDP4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKNETVAL4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKLTPERD4" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="BKLTDP4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKLTYDP4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDP4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKYDP4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="SOURCURR4" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="RATETYPE4" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="RATEDATE4" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="RATE4" Type="Decimal" Nullable="false" Precision="15" Scale="7" />
+          <Property Name="BKHADUY4" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="BKTIMUY4" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="DISDATE4" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKDPRATE4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSDATE4" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKDPTIME4" Type="Int16" Nullable="false" />
+          <Property Name="BKDPYTIM4" Type="Int16" Nullable="false" />
+          <Property Name="RETDATE4" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="LSTDPDATE4" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKSTATUS4" Type="Int16" Nullable="false" />
+          <Property Name="BKRVPERD4" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="BKINITVAL4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKADJYDP4" Type="Int16" Nullable="false" />
+          <Property Name="BKDIPRO4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDIPL4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKYADJ4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKLIFE4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BDISPYEAR4" Type="Int16" Nullable="false" />
+          <Property Name="BDISPPERD4" Type="Int16" Nullable="false" />
+          <Property Name="SWBDISPRV4" Type="Int16" Nullable="false" />
+          <Property Name="BKDICOST4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKACUIM4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKPERDID5" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="BKMETHOD5" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="BKVALUE5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSALVAL5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKACUDP5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKNETVAL5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKLTPERD5" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="BKLTDP5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKLTYDP5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDP5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKYDP5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="SOURCURR5" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="RATETYPE5" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="RATEDATE5" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="RATE5" Type="Decimal" Nullable="false" Precision="15" Scale="7" />
+          <Property Name="BKHADUY5" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="BKTIMUY5" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="DISDATE5" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKDPRATE5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKSDATE5" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKDPTIME5" Type="Int16" Nullable="false" />
+          <Property Name="BKDPYTIM5" Type="Int16" Nullable="false" />
+          <Property Name="RETDATE5" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="LSTDPDATE5" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKSTATUS5" Type="Int16" Nullable="false" />
+          <Property Name="BKRVPERD5" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="BKINITVAL5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKADJYDP5" Type="Int16" Nullable="false" />
+          <Property Name="BKDIPRO5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDIPL5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKYADJ5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKLIFE5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BDISPYEAR5" Type="Int16" Nullable="false" />
+          <Property Name="BDISPPERD5" Type="Int16" Nullable="false" />
+          <Property Name="SWBDISPRV5" Type="Int16" Nullable="false" />
+          <Property Name="BKDICOST5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKACUIM5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKIMLTPD" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="TAIMLTPD" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="BK3IMLTPD" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="BK4IMLTPD" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="BK5IMLTPD" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="APINVCNO" Type="String" Nullable="false" MaxLength="22" FixedLength="true" Unicode="false" />
+          <Property Name="PONUMBER" Type="String" Nullable="false" MaxLength="22" FixedLength="true" Unicode="false" />
+          <Property Name="BKSYIMP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKFYIMP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TAYIMP" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKYIMP3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKYIMP4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKYIMP5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="LSIMPDATE" Type="Decimal" Nullable="false" Precision="9" Scale="0" />
+          <Property Name="BKDEPBASE3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDEPBASE4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDEPBASE5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="MACRSFLG3" Type="Int16" Nullable="false" />
+          <Property Name="MACRSFLG4" Type="Int16" Nullable="false" />
+          <Property Name="MACRSFLG5" Type="Int16" Nullable="false" />
+          <Property Name="BKRCPERD3" Type="Decimal" Nullable="false" Precision="9" Scale="1" />
+          <Property Name="BKRCPERD4" Type="Decimal" Nullable="false" Precision="9" Scale="1" />
+          <Property Name="BKRCPERD5" Type="Decimal" Nullable="false" Precision="9" Scale="1" />
+          <Property Name="BKDRATE3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDRATE4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKDRATE5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BKCONV3" Type="Int16" Nullable="false" />
+          <Property Name="BKCONV4" Type="Int16" Nullable="false" />
+          <Property Name="BKCONV5" Type="Int16" Nullable="false" />
+          <Property Name="BKACRSFLG3" Type="Int16" Nullable="false" />
+          <Property Name="BKACRSFLG4" Type="Int16" Nullable="false" />
+          <Property Name="BKACRSFLG5" Type="Int16" Nullable="false" />
+          <Property Name="BKACRSCOD3" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="BKACRSCOD4" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="BKACRSCOD5" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="SWSPCALL4" Type="Int16" Nullable="false" />
+          <Property Name="SW179ALL4" Type="Int16" Nullable="false" />
+          <Property Name="SWSPCALL5" Type="Int16" Nullable="false" />
+          <Property Name="SW179ALL5" Type="Int16" Nullable="false" />
+          <Property Name="ACRSBSPC3" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="ACRSB1793" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="ACRSBSPC4" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="ACRSB1794" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="ACRSBSPC5" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="ACRSB1795" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="ISMDEP3" Type="Int16" Nullable="false" />
+          <Property Name="ISMDEP4" Type="Int16" Nullable="false" />
+          <Property Name="ISMDEP5" Type="Int16" Nullable="false" />
+          <Property Name="TABUSINV" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TAALL179" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="TAALLSPC" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BUSINV3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="ALL1793" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="ALLSPC3" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BUSINV4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="ALL1794" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="ALLSPC4" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="BUSINV5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="ALL1795" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
+          <Property Name="ALLSPC5" Type="Decimal" Nullable="false" Precision="19" Scale="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1170,6 +1976,409 @@
                 <ScalarProperty Name="AUDTDATE" ColumnName="AUDTDATE" />
                 <ScalarProperty Name="OPTFIELD" ColumnName="OPTFIELD" />
                 <ScalarProperty Name="VENDORID" ColumnName="VENDORID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AMCATEs">
+            <EntityTypeMapping TypeName="dom1Model.AMCATE">
+              <MappingFragment StoreEntitySet="AMCATE">
+                <ScalarProperty Name="NXTBCODENO" ColumnName="NXTBCODENO" />
+                <ScalarProperty Name="DATELASTMN" ColumnName="DATELASTMN" />
+                <ScalarProperty Name="DATEINACTV" ColumnName="DATEINACTV" />
+                <ScalarProperty Name="INACTIVE" ColumnName="INACTIVE" />
+                <ScalarProperty Name="DEFACCT" ColumnName="DEFACCT" />
+                <ScalarProperty Name="DEFFLAG" ColumnName="DEFFLAG" />
+                <ScalarProperty Name="SEGCODE" ColumnName="SEGCODE" />
+                <ScalarProperty Name="NOTES" ColumnName="NOTES" />
+                <ScalarProperty Name="NXATNO" ColumnName="NXATNO" />
+                <ScalarProperty Name="CATEDESC" ColumnName="CATEDESC" />
+                <ScalarProperty Name="CATENAME" ColumnName="CATENAME" />
+                <ScalarProperty Name="AUDTORG" ColumnName="AUDTORG" />
+                <ScalarProperty Name="AUDTUSER" ColumnName="AUDTUSER" />
+                <ScalarProperty Name="AUDTTIME" ColumnName="AUDTTIME" />
+                <ScalarProperty Name="AUDTDATE" ColumnName="AUDTDATE" />
+                <ScalarProperty Name="CATEID" ColumnName="CATEID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AMASSTs">
+            <EntityTypeMapping TypeName="dom1Model.AMASST">
+              <MappingFragment StoreEntitySet="AMASST">
+                <ScalarProperty Name="ALLSPC5" ColumnName="ALLSPC5" />
+                <ScalarProperty Name="ALL1795" ColumnName="ALL1795" />
+                <ScalarProperty Name="BUSINV5" ColumnName="BUSINV5" />
+                <ScalarProperty Name="ALLSPC4" ColumnName="ALLSPC4" />
+                <ScalarProperty Name="ALL1794" ColumnName="ALL1794" />
+                <ScalarProperty Name="BUSINV4" ColumnName="BUSINV4" />
+                <ScalarProperty Name="ALLSPC3" ColumnName="ALLSPC3" />
+                <ScalarProperty Name="ALL1793" ColumnName="ALL1793" />
+                <ScalarProperty Name="BUSINV3" ColumnName="BUSINV3" />
+                <ScalarProperty Name="TAALLSPC" ColumnName="TAALLSPC" />
+                <ScalarProperty Name="TAALL179" ColumnName="TAALL179" />
+                <ScalarProperty Name="TABUSINV" ColumnName="TABUSINV" />
+                <ScalarProperty Name="ISMDEP5" ColumnName="ISMDEP5" />
+                <ScalarProperty Name="ISMDEP4" ColumnName="ISMDEP4" />
+                <ScalarProperty Name="ISMDEP3" ColumnName="ISMDEP3" />
+                <ScalarProperty Name="ACRSB1795" ColumnName="ACRSB1795" />
+                <ScalarProperty Name="ACRSBSPC5" ColumnName="ACRSBSPC5" />
+                <ScalarProperty Name="ACRSB1794" ColumnName="ACRSB1794" />
+                <ScalarProperty Name="ACRSBSPC4" ColumnName="ACRSBSPC4" />
+                <ScalarProperty Name="ACRSB1793" ColumnName="ACRSB1793" />
+                <ScalarProperty Name="ACRSBSPC3" ColumnName="ACRSBSPC3" />
+                <ScalarProperty Name="SW179ALL5" ColumnName="SW179ALL5" />
+                <ScalarProperty Name="SWSPCALL5" ColumnName="SWSPCALL5" />
+                <ScalarProperty Name="SW179ALL4" ColumnName="SW179ALL4" />
+                <ScalarProperty Name="SWSPCALL4" ColumnName="SWSPCALL4" />
+                <ScalarProperty Name="BKACRSCOD5" ColumnName="BKACRSCOD5" />
+                <ScalarProperty Name="BKACRSCOD4" ColumnName="BKACRSCOD4" />
+                <ScalarProperty Name="BKACRSCOD3" ColumnName="BKACRSCOD3" />
+                <ScalarProperty Name="BKACRSFLG5" ColumnName="BKACRSFLG5" />
+                <ScalarProperty Name="BKACRSFLG4" ColumnName="BKACRSFLG4" />
+                <ScalarProperty Name="BKACRSFLG3" ColumnName="BKACRSFLG3" />
+                <ScalarProperty Name="BKCONV5" ColumnName="BKCONV5" />
+                <ScalarProperty Name="BKCONV4" ColumnName="BKCONV4" />
+                <ScalarProperty Name="BKCONV3" ColumnName="BKCONV3" />
+                <ScalarProperty Name="BKDRATE5" ColumnName="BKDRATE5" />
+                <ScalarProperty Name="BKDRATE4" ColumnName="BKDRATE4" />
+                <ScalarProperty Name="BKDRATE3" ColumnName="BKDRATE3" />
+                <ScalarProperty Name="BKRCPERD5" ColumnName="BKRCPERD5" />
+                <ScalarProperty Name="BKRCPERD4" ColumnName="BKRCPERD4" />
+                <ScalarProperty Name="BKRCPERD3" ColumnName="BKRCPERD3" />
+                <ScalarProperty Name="MACRSFLG5" ColumnName="MACRSFLG5" />
+                <ScalarProperty Name="MACRSFLG4" ColumnName="MACRSFLG4" />
+                <ScalarProperty Name="MACRSFLG3" ColumnName="MACRSFLG3" />
+                <ScalarProperty Name="BKDEPBASE5" ColumnName="BKDEPBASE5" />
+                <ScalarProperty Name="BKDEPBASE4" ColumnName="BKDEPBASE4" />
+                <ScalarProperty Name="BKDEPBASE3" ColumnName="BKDEPBASE3" />
+                <ScalarProperty Name="LSIMPDATE" ColumnName="LSIMPDATE" />
+                <ScalarProperty Name="BKYIMP5" ColumnName="BKYIMP5" />
+                <ScalarProperty Name="BKYIMP4" ColumnName="BKYIMP4" />
+                <ScalarProperty Name="BKYIMP3" ColumnName="BKYIMP3" />
+                <ScalarProperty Name="TAYIMP" ColumnName="TAYIMP" />
+                <ScalarProperty Name="BKFYIMP" ColumnName="BKFYIMP" />
+                <ScalarProperty Name="BKSYIMP" ColumnName="BKSYIMP" />
+                <ScalarProperty Name="PONUMBER" ColumnName="PONUMBER" />
+                <ScalarProperty Name="APINVCNO" ColumnName="APINVCNO" />
+                <ScalarProperty Name="BK5IMLTPD" ColumnName="BK5IMLTPD" />
+                <ScalarProperty Name="BK4IMLTPD" ColumnName="BK4IMLTPD" />
+                <ScalarProperty Name="BK3IMLTPD" ColumnName="BK3IMLTPD" />
+                <ScalarProperty Name="TAIMLTPD" ColumnName="TAIMLTPD" />
+                <ScalarProperty Name="BKIMLTPD" ColumnName="BKIMLTPD" />
+                <ScalarProperty Name="BKACUIM5" ColumnName="BKACUIM5" />
+                <ScalarProperty Name="BKDICOST5" ColumnName="BKDICOST5" />
+                <ScalarProperty Name="SWBDISPRV5" ColumnName="SWBDISPRV5" />
+                <ScalarProperty Name="BDISPPERD5" ColumnName="BDISPPERD5" />
+                <ScalarProperty Name="BDISPYEAR5" ColumnName="BDISPYEAR5" />
+                <ScalarProperty Name="BKLIFE5" ColumnName="BKLIFE5" />
+                <ScalarProperty Name="BKYADJ5" ColumnName="BKYADJ5" />
+                <ScalarProperty Name="BKDIPL5" ColumnName="BKDIPL5" />
+                <ScalarProperty Name="BKDIPRO5" ColumnName="BKDIPRO5" />
+                <ScalarProperty Name="BKADJYDP5" ColumnName="BKADJYDP5" />
+                <ScalarProperty Name="BKINITVAL5" ColumnName="BKINITVAL5" />
+                <ScalarProperty Name="BKRVPERD5" ColumnName="BKRVPERD5" />
+                <ScalarProperty Name="BKSTATUS5" ColumnName="BKSTATUS5" />
+                <ScalarProperty Name="LSTDPDATE5" ColumnName="LSTDPDATE5" />
+                <ScalarProperty Name="RETDATE5" ColumnName="RETDATE5" />
+                <ScalarProperty Name="BKDPYTIM5" ColumnName="BKDPYTIM5" />
+                <ScalarProperty Name="BKDPTIME5" ColumnName="BKDPTIME5" />
+                <ScalarProperty Name="BKSDATE5" ColumnName="BKSDATE5" />
+                <ScalarProperty Name="BKDPRATE5" ColumnName="BKDPRATE5" />
+                <ScalarProperty Name="DISDATE5" ColumnName="DISDATE5" />
+                <ScalarProperty Name="BKTIMUY5" ColumnName="BKTIMUY5" />
+                <ScalarProperty Name="BKHADUY5" ColumnName="BKHADUY5" />
+                <ScalarProperty Name="RATE5" ColumnName="RATE5" />
+                <ScalarProperty Name="RATEDATE5" ColumnName="RATEDATE5" />
+                <ScalarProperty Name="RATETYPE5" ColumnName="RATETYPE5" />
+                <ScalarProperty Name="SOURCURR5" ColumnName="SOURCURR5" />
+                <ScalarProperty Name="BKYDP5" ColumnName="BKYDP5" />
+                <ScalarProperty Name="BKDP5" ColumnName="BKDP5" />
+                <ScalarProperty Name="BKLTYDP5" ColumnName="BKLTYDP5" />
+                <ScalarProperty Name="BKLTDP5" ColumnName="BKLTDP5" />
+                <ScalarProperty Name="BKLTPERD5" ColumnName="BKLTPERD5" />
+                <ScalarProperty Name="BKNETVAL5" ColumnName="BKNETVAL5" />
+                <ScalarProperty Name="BKACUDP5" ColumnName="BKACUDP5" />
+                <ScalarProperty Name="BKSALVAL5" ColumnName="BKSALVAL5" />
+                <ScalarProperty Name="BKVALUE5" ColumnName="BKVALUE5" />
+                <ScalarProperty Name="BKMETHOD5" ColumnName="BKMETHOD5" />
+                <ScalarProperty Name="BKPERDID5" ColumnName="BKPERDID5" />
+                <ScalarProperty Name="BKACUIM4" ColumnName="BKACUIM4" />
+                <ScalarProperty Name="BKDICOST4" ColumnName="BKDICOST4" />
+                <ScalarProperty Name="SWBDISPRV4" ColumnName="SWBDISPRV4" />
+                <ScalarProperty Name="BDISPPERD4" ColumnName="BDISPPERD4" />
+                <ScalarProperty Name="BDISPYEAR4" ColumnName="BDISPYEAR4" />
+                <ScalarProperty Name="BKLIFE4" ColumnName="BKLIFE4" />
+                <ScalarProperty Name="BKYADJ4" ColumnName="BKYADJ4" />
+                <ScalarProperty Name="BKDIPL4" ColumnName="BKDIPL4" />
+                <ScalarProperty Name="BKDIPRO4" ColumnName="BKDIPRO4" />
+                <ScalarProperty Name="BKADJYDP4" ColumnName="BKADJYDP4" />
+                <ScalarProperty Name="BKINITVAL4" ColumnName="BKINITVAL4" />
+                <ScalarProperty Name="BKRVPERD4" ColumnName="BKRVPERD4" />
+                <ScalarProperty Name="BKSTATUS4" ColumnName="BKSTATUS4" />
+                <ScalarProperty Name="LSTDPDATE4" ColumnName="LSTDPDATE4" />
+                <ScalarProperty Name="RETDATE4" ColumnName="RETDATE4" />
+                <ScalarProperty Name="BKDPYTIM4" ColumnName="BKDPYTIM4" />
+                <ScalarProperty Name="BKDPTIME4" ColumnName="BKDPTIME4" />
+                <ScalarProperty Name="BKSDATE4" ColumnName="BKSDATE4" />
+                <ScalarProperty Name="BKDPRATE4" ColumnName="BKDPRATE4" />
+                <ScalarProperty Name="DISDATE4" ColumnName="DISDATE4" />
+                <ScalarProperty Name="BKTIMUY4" ColumnName="BKTIMUY4" />
+                <ScalarProperty Name="BKHADUY4" ColumnName="BKHADUY4" />
+                <ScalarProperty Name="RATE4" ColumnName="RATE4" />
+                <ScalarProperty Name="RATEDATE4" ColumnName="RATEDATE4" />
+                <ScalarProperty Name="RATETYPE4" ColumnName="RATETYPE4" />
+                <ScalarProperty Name="SOURCURR4" ColumnName="SOURCURR4" />
+                <ScalarProperty Name="BKYDP4" ColumnName="BKYDP4" />
+                <ScalarProperty Name="BKDP4" ColumnName="BKDP4" />
+                <ScalarProperty Name="BKLTYDP4" ColumnName="BKLTYDP4" />
+                <ScalarProperty Name="BKLTDP4" ColumnName="BKLTDP4" />
+                <ScalarProperty Name="BKLTPERD4" ColumnName="BKLTPERD4" />
+                <ScalarProperty Name="BKNETVAL4" ColumnName="BKNETVAL4" />
+                <ScalarProperty Name="BKACUDP4" ColumnName="BKACUDP4" />
+                <ScalarProperty Name="BKSALVAL4" ColumnName="BKSALVAL4" />
+                <ScalarProperty Name="BKVALUE4" ColumnName="BKVALUE4" />
+                <ScalarProperty Name="BKMETHOD4" ColumnName="BKMETHOD4" />
+                <ScalarProperty Name="BKPERDID4" ColumnName="BKPERDID4" />
+                <ScalarProperty Name="BKACUIM3" ColumnName="BKACUIM3" />
+                <ScalarProperty Name="BKDICOST3" ColumnName="BKDICOST3" />
+                <ScalarProperty Name="SWBDISPRV3" ColumnName="SWBDISPRV3" />
+                <ScalarProperty Name="BDISPPERD3" ColumnName="BDISPPERD3" />
+                <ScalarProperty Name="BDISPYEAR3" ColumnName="BDISPYEAR3" />
+                <ScalarProperty Name="BKLIFE3" ColumnName="BKLIFE3" />
+                <ScalarProperty Name="BKYADJ3" ColumnName="BKYADJ3" />
+                <ScalarProperty Name="BKDIPL3" ColumnName="BKDIPL3" />
+                <ScalarProperty Name="BKDIPRO3" ColumnName="BKDIPRO3" />
+                <ScalarProperty Name="BKADJYDP3" ColumnName="BKADJYDP3" />
+                <ScalarProperty Name="BKINITVAL3" ColumnName="BKINITVAL3" />
+                <ScalarProperty Name="BKRVPERD3" ColumnName="BKRVPERD3" />
+                <ScalarProperty Name="BKSTATUS3" ColumnName="BKSTATUS3" />
+                <ScalarProperty Name="LSTDPDATE3" ColumnName="LSTDPDATE3" />
+                <ScalarProperty Name="RETDATE3" ColumnName="RETDATE3" />
+                <ScalarProperty Name="BKDPYTIM3" ColumnName="BKDPYTIM3" />
+                <ScalarProperty Name="BKDPTIME3" ColumnName="BKDPTIME3" />
+                <ScalarProperty Name="BKSDATE3" ColumnName="BKSDATE3" />
+                <ScalarProperty Name="BKDPRATE3" ColumnName="BKDPRATE3" />
+                <ScalarProperty Name="DISDATE3" ColumnName="DISDATE3" />
+                <ScalarProperty Name="BKTIMUY3" ColumnName="BKTIMUY3" />
+                <ScalarProperty Name="BKHADUY3" ColumnName="BKHADUY3" />
+                <ScalarProperty Name="RATE3" ColumnName="RATE3" />
+                <ScalarProperty Name="RATEDATE3" ColumnName="RATEDATE3" />
+                <ScalarProperty Name="RATETYPE3" ColumnName="RATETYPE3" />
+                <ScalarProperty Name="SOURCURR3" ColumnName="SOURCURR3" />
+                <ScalarProperty Name="BKYDP3" ColumnName="BKYDP3" />
+                <ScalarProperty Name="BKDP3" ColumnName="BKDP3" />
+                <ScalarProperty Name="BKLTYDP3" ColumnName="BKLTYDP3" />
+                <ScalarProperty Name="BKLTDP3" ColumnName="BKLTDP3" />
+                <ScalarProperty Name="BKLTPERD3" ColumnName="BKLTPERD3" />
+                <ScalarProperty Name="BKNETVAL3" ColumnName="BKNETVAL3" />
+                <ScalarProperty Name="BKACUDP3" ColumnName="BKACUDP3" />
+                <ScalarProperty Name="BKSALVAL3" ColumnName="BKSALVAL3" />
+                <ScalarProperty Name="BKVALUE3" ColumnName="BKVALUE3" />
+                <ScalarProperty Name="BKMETHOD3" ColumnName="BKMETHOD3" />
+                <ScalarProperty Name="BKPERDID3" ColumnName="BKPERDID3" />
+                <ScalarProperty Name="TAALW179F" ColumnName="TAALW179F" />
+                <ScalarProperty Name="TAALWCALT" ColumnName="TAALWCALT" />
+                <ScalarProperty Name="BKSACUIM" ColumnName="BKSACUIM" />
+                <ScalarProperty Name="TAACUIM" ColumnName="TAACUIM" />
+                <ScalarProperty Name="BKACUIM" ColumnName="BKACUIM" />
+                <ScalarProperty Name="INSEXPDATE" ColumnName="INSEXPDATE" />
+                <ScalarProperty Name="MAXUNIT" ColumnName="MAXUNIT" />
+                <ScalarProperty Name="UNITCNT" ColumnName="UNITCNT" />
+                <ScalarProperty Name="TARATEDATE" ColumnName="TARATEDATE" />
+                <ScalarProperty Name="TAEXCHRATE" ColumnName="TAEXCHRATE" />
+                <ScalarProperty Name="TARATETYPE" ColumnName="TARATETYPE" />
+                <ScalarProperty Name="TACURR" ColumnName="TACURR" />
+                <ScalarProperty Name="SERNO" ColumnName="SERNO" />
+                <ScalarProperty Name="PRIUNBARCD" ColumnName="PRIUNBARCD" />
+                <ScalarProperty Name="SWTDISPRV" ColumnName="SWTDISPRV" />
+                <ScalarProperty Name="TDISPPERD" ColumnName="TDISPPERD" />
+                <ScalarProperty Name="TDISPYEAR" ColumnName="TDISPYEAR" />
+                <ScalarProperty Name="SWBDISPRV" ColumnName="SWBDISPRV" />
+                <ScalarProperty Name="BDISPPERD" ColumnName="BDISPPERD" />
+                <ScalarProperty Name="BDISPYEAR" ColumnName="BDISPYEAR" />
+                <ScalarProperty Name="TALIFE" ColumnName="TALIFE" />
+                <ScalarProperty Name="BKLIFE" ColumnName="BKLIFE" />
+                <ScalarProperty Name="SWT179ALL" ColumnName="SWT179ALL" />
+                <ScalarProperty Name="SWB179ALL" ColumnName="SWB179ALL" />
+                <ScalarProperty Name="SWTSPCALL" ColumnName="SWTSPCALL" />
+                <ScalarProperty Name="SWBSPCALL" ColumnName="SWBSPCALL" />
+                <ScalarProperty Name="TAYADJ" ColumnName="TAYADJ" />
+                <ScalarProperty Name="BKSYADJ" ColumnName="BKSYADJ" />
+                <ScalarProperty Name="BKYADJ" ColumnName="BKYADJ" />
+                <ScalarProperty Name="TADIPL" ColumnName="TADIPL" />
+                <ScalarProperty Name="TADIPRO" ColumnName="TADIPRO" />
+                <ScalarProperty Name="BKDIPL" ColumnName="BKDIPL" />
+                <ScalarProperty Name="BKDIPRO" ColumnName="BKDIPRO" />
+                <ScalarProperty Name="BKDICOST" ColumnName="BKDICOST" />
+                <ScalarProperty Name="WORKLOAD11" ColumnName="WORKLOAD11" />
+                <ScalarProperty Name="WORKLOAD10" ColumnName="WORKLOAD10" />
+                <ScalarProperty Name="WORKLOAD9" ColumnName="WORKLOAD9" />
+                <ScalarProperty Name="WORKLOAD8" ColumnName="WORKLOAD8" />
+                <ScalarProperty Name="WORKLOAD7" ColumnName="WORKLOAD7" />
+                <ScalarProperty Name="WORKLOAD6" ColumnName="WORKLOAD6" />
+                <ScalarProperty Name="WORKLOAD5" ColumnName="WORKLOAD5" />
+                <ScalarProperty Name="WORKLOAD4" ColumnName="WORKLOAD4" />
+                <ScalarProperty Name="WORKLOAD3" ColumnName="WORKLOAD3" />
+                <ScalarProperty Name="WORKLOAD2" ColumnName="WORKLOAD2" />
+                <ScalarProperty Name="WORKLOAD1" ColumnName="WORKLOAD1" />
+                <ScalarProperty Name="TAADJYDP" ColumnName="TAADJYDP" />
+                <ScalarProperty Name="BKADJYDP" ColumnName="BKADJYDP" />
+                <ScalarProperty Name="TAINITVAL" ColumnName="TAINITVAL" />
+                <ScalarProperty Name="BKFINITVAL" ColumnName="BKFINITVAL" />
+                <ScalarProperty Name="BKSINITVAL" ColumnName="BKSINITVAL" />
+                <ScalarProperty Name="NXTBCODENO" ColumnName="NXTBCODENO" />
+                <ScalarProperty Name="TARVPERD" ColumnName="TARVPERD" />
+                <ScalarProperty Name="RVPERIOD" ColumnName="RVPERIOD" />
+                <ScalarProperty Name="PROCESSCMD" ColumnName="PROCESSCMD" />
+                <ScalarProperty Name="VALUES" ColumnName="VALUES" />
+                <ScalarProperty Name="TASTATUS" ColumnName="TASTATUS" />
+                <ScalarProperty Name="TALSDPDATE" ColumnName="TALSDPDATE" />
+                <ScalarProperty Name="TARETDATE" ColumnName="TARETDATE" />
+                <ScalarProperty Name="RSVBCD" ColumnName="RSVBCD" />
+                <ScalarProperty Name="RSVDATE" ColumnName="RSVDATE" />
+                <ScalarProperty Name="RSVINT" ColumnName="RSVINT" />
+                <ScalarProperty Name="ACRST179" ColumnName="ACRST179" />
+                <ScalarProperty Name="ACRSB179" ColumnName="ACRSB179" />
+                <ScalarProperty Name="ACRSTSPC" ColumnName="ACRSTSPC" />
+                <ScalarProperty Name="ACRSBSPC" ColumnName="ACRSBSPC" />
+                <ScalarProperty Name="DATELASTMN" ColumnName="DATELASTMN" />
+                <ScalarProperty Name="ALW179F" ColumnName="ALW179F" />
+                <ScalarProperty Name="ALWCALT" ColumnName="ALWCALT" />
+                <ScalarProperty Name="TEMPCODE" ColumnName="TEMPCODE" />
+                <ScalarProperty Name="ISMDEP" ColumnName="ISMDEP" />
+                <ScalarProperty Name="COMMENT4" ColumnName="COMMENT4" />
+                <ScalarProperty Name="COMMENT3" ColumnName="COMMENT3" />
+                <ScalarProperty Name="COMMENT2" ColumnName="COMMENT2" />
+                <ScalarProperty Name="COMMENT1" ColumnName="COMMENT1" />
+                <ScalarProperty Name="TADEPBASE" ColumnName="TADEPBASE" />
+                <ScalarProperty Name="BKDEPBASE" ColumnName="BKDEPBASE" />
+                <ScalarProperty Name="ALLSPC" ColumnName="ALLSPC" />
+                <ScalarProperty Name="ALL179" ColumnName="ALL179" />
+                <ScalarProperty Name="BUSINV" ColumnName="BUSINV" />
+                <ScalarProperty Name="TAACRSCODE" ColumnName="TAACRSCODE" />
+                <ScalarProperty Name="TAACRSFLAG" ColumnName="TAACRSFLAG" />
+                <ScalarProperty Name="TACONV" ColumnName="TACONV" />
+                <ScalarProperty Name="TADRATE" ColumnName="TADRATE" />
+                <ScalarProperty Name="TARCPERD" ColumnName="TARCPERD" />
+                <ScalarProperty Name="TAMACRSFLG" ColumnName="TAMACRSFLG" />
+                <ScalarProperty Name="BKACRSCODE" ColumnName="BKACRSCODE" />
+                <ScalarProperty Name="BKACRSFLAG" ColumnName="BKACRSFLAG" />
+                <ScalarProperty Name="BKCONV" ColumnName="BKCONV" />
+                <ScalarProperty Name="BKDRATE" ColumnName="BKDRATE" />
+                <ScalarProperty Name="BKRCPERD" ColumnName="BKRCPERD" />
+                <ScalarProperty Name="BKMACRSFLG" ColumnName="BKMACRSFLG" />
+                <ScalarProperty Name="TADPRATE" ColumnName="TADPRATE" />
+                <ScalarProperty Name="BKDPRATE" ColumnName="BKDPRATE" />
+                <ScalarProperty Name="TAESTY" ColumnName="TAESTY" />
+                <ScalarProperty Name="BKESTY" ColumnName="BKESTY" />
+                <ScalarProperty Name="SHORTFLG" ColumnName="SHORTFLG" />
+                <ScalarProperty Name="PRORDATE" ColumnName="PRORDATE" />
+                <ScalarProperty Name="OPTFLD9" ColumnName="OPTFLD9" />
+                <ScalarProperty Name="OPTFLD8" ColumnName="OPTFLD8" />
+                <ScalarProperty Name="OPTFLD7" ColumnName="OPTFLD7" />
+                <ScalarProperty Name="OPTFLD6" ColumnName="OPTFLD6" />
+                <ScalarProperty Name="OPTFLD5" ColumnName="OPTFLD5" />
+                <ScalarProperty Name="OPTFLD4" ColumnName="OPTFLD4" />
+                <ScalarProperty Name="OPTFLD3" ColumnName="OPTFLD3" />
+                <ScalarProperty Name="OPTFLD2" ColumnName="OPTFLD2" />
+                <ScalarProperty Name="OPTFLD1" ColumnName="OPTFLD1" />
+                <ScalarProperty Name="OPTFLD0" ColumnName="OPTFLD0" />
+                <ScalarProperty Name="PICFILE" ColumnName="PICFILE" />
+                <ScalarProperty Name="WLUNIT" ColumnName="WLUNIT" />
+                <ScalarProperty Name="TADPYTIM" ColumnName="TADPYTIM" />
+                <ScalarProperty Name="TADPTIME" ColumnName="TADPTIME" />
+                <ScalarProperty Name="TATIMUY" ColumnName="TATIMUY" />
+                <ScalarProperty Name="TAHADUY" ColumnName="TAHADUY" />
+                <ScalarProperty Name="BKSACDP" ColumnName="BKSACDP" />
+                <ScalarProperty Name="BKSYDP" ColumnName="BKSYDP" />
+                <ScalarProperty Name="BKSDP" ColumnName="BKSDP" />
+                <ScalarProperty Name="BKSLYDP" ColumnName="BKSLYDP" />
+                <ScalarProperty Name="BKSLTDP" ColumnName="BKSLTDP" />
+                <ScalarProperty Name="BKSNET" ColumnName="BKSNET" />
+                <ScalarProperty Name="BKSSAL" ColumnName="BKSSAL" />
+                <ScalarProperty Name="BKSVAL" ColumnName="BKSVAL" />
+                <ScalarProperty Name="BKDPYTIM" ColumnName="BKDPYTIM" />
+                <ScalarProperty Name="BKDPTIME" ColumnName="BKDPTIME" />
+                <ScalarProperty Name="BKTIMUY" ColumnName="BKTIMUY" />
+                <ScalarProperty Name="BKHADUY" ColumnName="BKHADUY" />
+                <ScalarProperty Name="MACRSCOD" ColumnName="MACRSCOD" />
+                <ScalarProperty Name="MEASUNIT" ColumnName="MEASUNIT" />
+                <ScalarProperty Name="CAPFLG" ColumnName="CAPFLG" />
+                <ScalarProperty Name="TXPOLFLG" ColumnName="TXPOLFLG" />
+                <ScalarProperty Name="MACRSFLG" ColumnName="MACRSFLG" />
+                <ScalarProperty Name="REVALFLG" ColumnName="REVALFLG" />
+                <ScalarProperty Name="CLASCODE" ColumnName="CLASCODE" />
+                <ScalarProperty Name="BUDGCODE" ColumnName="BUDGCODE" />
+                <ScalarProperty Name="RATE" ColumnName="RATE" />
+                <ScalarProperty Name="RATEDATE" ColumnName="RATEDATE" />
+                <ScalarProperty Name="RATETYPE" ColumnName="RATETYPE" />
+                <ScalarProperty Name="SOURCURR" ColumnName="SOURCURR" />
+                <ScalarProperty Name="UNITS" ColumnName="UNITS" />
+                <ScalarProperty Name="WLNET" ColumnName="WLNET" />
+                <ScalarProperty Name="WLACU" ColumnName="WLACU" />
+                <ScalarProperty Name="WLY" ColumnName="WLY" />
+                <ScalarProperty Name="WLCUR" ColumnName="WLCUR" />
+                <ScalarProperty Name="WLLTY" ColumnName="WLLTY" />
+                <ScalarProperty Name="WLLT" ColumnName="WLLT" />
+                <ScalarProperty Name="WORKLOAD" ColumnName="WORKLOAD" />
+                <ScalarProperty Name="TANETVAL" ColumnName="TANETVAL" />
+                <ScalarProperty Name="TAACUDP" ColumnName="TAACUDP" />
+                <ScalarProperty Name="TAYDP" ColumnName="TAYDP" />
+                <ScalarProperty Name="TADP" ColumnName="TADP" />
+                <ScalarProperty Name="TALTYDP" ColumnName="TALTYDP" />
+                <ScalarProperty Name="TALTDP" ColumnName="TALTDP" />
+                <ScalarProperty Name="TALTPERD" ColumnName="TALTPERD" />
+                <ScalarProperty Name="TASDATE" ColumnName="TASDATE" />
+                <ScalarProperty Name="TAPERDID" ColumnName="TAPERDID" />
+                <ScalarProperty Name="TAMETHOD" ColumnName="TAMETHOD" />
+                <ScalarProperty Name="TAETLIFE" ColumnName="TAETLIFE" />
+                <ScalarProperty Name="TASALVAL" ColumnName="TASALVAL" />
+                <ScalarProperty Name="TAVALUE" ColumnName="TAVALUE" />
+                <ScalarProperty Name="BKNETVAL" ColumnName="BKNETVAL" />
+                <ScalarProperty Name="BKACUDP" ColumnName="BKACUDP" />
+                <ScalarProperty Name="BKYDP" ColumnName="BKYDP" />
+                <ScalarProperty Name="BKDP" ColumnName="BKDP" />
+                <ScalarProperty Name="BKLTYDP" ColumnName="BKLTYDP" />
+                <ScalarProperty Name="BKLTDP" ColumnName="BKLTDP" />
+                <ScalarProperty Name="BKLTPERD" ColumnName="BKLTPERD" />
+                <ScalarProperty Name="BKSDATE" ColumnName="BKSDATE" />
+                <ScalarProperty Name="BKPERDID" ColumnName="BKPERDID" />
+                <ScalarProperty Name="BKMETHOD" ColumnName="BKMETHOD" />
+                <ScalarProperty Name="BKETLIFE" ColumnName="BKETLIFE" />
+                <ScalarProperty Name="BKSALVAL" ColumnName="BKSALVAL" />
+                <ScalarProperty Name="BKVALUE" ColumnName="BKVALUE" />
+                <ScalarProperty Name="ACQDATE" ColumnName="ACQDATE" />
+                <ScalarProperty Name="ASSETACC" ColumnName="ASSETACC" />
+                <ScalarProperty Name="ACUDPACC" ColumnName="ACUDPACC" />
+                <ScalarProperty Name="DPEXACC" ColumnName="DPEXACC" />
+                <ScalarProperty Name="SPEC" ColumnName="SPEC" />
+                <ScalarProperty Name="INSVALUE" ColumnName="INSVALUE" />
+                <ScalarProperty Name="INSDATE" ColumnName="INSDATE" />
+                <ScalarProperty Name="INSPOLI" ColumnName="INSPOLI" />
+                <ScalarProperty Name="INSCO" ColumnName="INSCO" />
+                <ScalarProperty Name="OPDATE" ColumnName="OPDATE" />
+                <ScalarProperty Name="OPERATOR" ColumnName="OPERATOR" />
+                <ScalarProperty Name="VENDOR" ColumnName="VENDOR" />
+                <ScalarProperty Name="RESP" ColumnName="RESP" />
+                <ScalarProperty Name="NOTES" ColumnName="NOTES" />
+                <ScalarProperty Name="EVENTF" ColumnName="EVENTF" />
+                <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+                <ScalarProperty Name="MSTNO" ColumnName="MSTNO" />
+                <ScalarProperty Name="SUBFLAG" ColumnName="SUBFLAG" />
+                <ScalarProperty Name="INIALLOW" ColumnName="INIALLOW" />
+                <ScalarProperty Name="ACCSET" ColumnName="ACCSET" />
+                <ScalarProperty Name="AQUCODE" ColumnName="AQUCODE" />
+                <ScalarProperty Name="TXTYPE" ColumnName="TXTYPE" />
+                <ScalarProperty Name="GROUP" ColumnName="GROUP" />
+                <ScalarProperty Name="LOCATION" ColumnName="LOCATION" />
+                <ScalarProperty Name="COSTCENT" ColumnName="COSTCENT" />
+                <ScalarProperty Name="CATEGORY" ColumnName="CATEGORY" />
+                <ScalarProperty Name="ACTIVE" ColumnName="ACTIVE" />
+                <ScalarProperty Name="DESC" ColumnName="DESC" />
+                <ScalarProperty Name="AUDTORG" ColumnName="AUDTORG" />
+                <ScalarProperty Name="AUDTUSER" ColumnName="AUDTUSER" />
+                <ScalarProperty Name="AUDTTIME" ColumnName="AUDTTIME" />
+                <ScalarProperty Name="AUDTDATE" ColumnName="AUDTDATE" />
+                <ScalarProperty Name="ASTNO" ColumnName="ASTNO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

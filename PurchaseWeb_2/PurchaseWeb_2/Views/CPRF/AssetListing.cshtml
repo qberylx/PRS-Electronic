@@ -1,0 +1,152 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFBudget_Dtls>
+
+@{
+    ViewBag.Title = "AssetListing";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>Asset Listing</h2>
+
+<div class="card card-primary">
+    <div class="card-header">
+        <div class="card-title">
+            <h6>Asset Listing Update</h6>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table ">
+            <tr>
+                <th>
+                    Asset System No
+                </th>
+                <th>
+                    Asset No 
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Category
+                </th>
+                <th>
+                    Cost Center
+                </th>
+                <th>
+                    Amount (RM)
+                </th>
+                <th>
+                    CPRF
+                </th>
+                <th>
+                    CPRF Main
+                </th>
+                <th>
+                    CPRF Approval Date
+                </th>
+                
+            </tr>
+
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td colspan="2">
+                        <table class="table-sm">
+                            <tr>
+                                <th style="color:white">
+                                    Asset System No
+                                </th>
+                                <th style="color:white">
+                                    Asset No
+                                </th>
+                            </tr>
+                            @foreach (var item2 in item.CPRFAsset_Mst.Where(x=>x.StatusId==1).OrderBy(b => b.AssetId))
+                            {
+                                <tr>
+                                    <td>
+                                        <label>@item2.AssetSystemNo</label>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" name="AssetNo_@item2.AssetId" id="AssetNo_@item2.AssetId" value="@item2.AssetNo" onfocusout="foAssetNo(this.value, @item2.AssetId)" />
+                                    </td>
+                                    <td>
+                                        <div id="divAsset_@item2.AssetId" style="display:none">
+                                            <button class="btn btn-success"><i class="fa fa-check"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                        </td>
+                    @*<td>
+                        @foreach (var item3 in item.CPRFAsset_Mst.OrderBy(b => b.AssetId))
+                        {
+                            <table>
+                                <tr>
+                                    <td>
+                                        <input class="form-control" name="AssetNo_@item3.AssetId" id="AssetNo_@item3.AssetId" value="@item3.AssetNo" onfocusout="foAssetNo(this.value)" />
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                        }
+                    </td>*@
+                    <td style="text-align:start">
+                        @item.Description
+                    </td>
+                    <td>
+                        @item.CprfCategory_Mst.CategoryDesc
+                    </td>
+                    <td>
+                        @item.CostCentreStr
+                    </td>
+                    <td>
+                        @String.Format("{0:N2}", item.TotalBudgetMYR)
+                    </td>
+                    <td>
+                        @item.CPRFDt_No
+                    </td>
+                    <td>
+                        @item.CPRFBudget_Mst.CPRF_No
+                    </td>
+                    <td>
+                        @if (item.CPRFBudget_Mst.SendToProcessIE != null)
+                        {
+                            DateTime SendToProcessIE = (DateTime)item.CPRFBudget_Mst.SendToProcessIE; 
+                            @SendToProcessIE.ToString("dd/MM/yyyy")
+                        }
+
+                    </td>
+                    
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<script>
+    function foAssetNo(assetNo, assetId) {
+        var AssetId = assetId;
+        var AssetNo = assetNo;
+        $("#overlay").show();
+    $.ajax({
+            type: "POST",
+            url: "@Url.Action("updateAssetNo", "CPRF")",
+            data: '{AssetId: "' + AssetId + '" , AssetNo: "' + AssetNo + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                //$('#divAsset_' + AssetId).show;
+                $('#divAsset_' + AssetId).css('display', 'block');
+                console.log("done " + AssetId);
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+    }
+</script>

@@ -21,6 +21,8 @@ namespace PurchaseWeb_2.ModelData
             this.PR_Mst = new HashSet<PR_Mst>();
             this.MonthlyBudgets = new HashSet<MonthlyBudget>();
             this.MonthlyBudget_Expense = new HashSet<MonthlyBudget_Expense>();
+            this.CostCentre_Mst = new HashSet<CostCentre_Mst>();
+            this.CPRFBudget_Dtls = new HashSet<CPRFBudget_Dtls>();
         }
     
         public int AccTypeDepID { get; set; }
@@ -36,5 +38,9 @@ namespace PurchaseWeb_2.ModelData
         public virtual ICollection<MonthlyBudget> MonthlyBudgets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MonthlyBudget_Expense> MonthlyBudget_Expense { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CostCentre_Mst> CostCentre_Mst { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CPRFBudget_Dtls> CPRFBudget_Dtls { get; set; }
     }
 }

@@ -1,0 +1,174 @@
+﻿@model PurchaseWeb_2.ModelData.CPRFBudget_Mst
+
+
+<div class="card card-secondary">
+    <div class="card-header">
+        <h4 class="card-title">CPRF Request</h4>
+    </div>
+    <div id="notificationCPRFMst">
+        @Html.Partial("_Notifications")
+    </div>
+    <div>
+        @using (Ajax.BeginForm("GenerateCPRFNo", "CPRF",
+            new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCPRFMainForm", OnBegin = "OBSaveCPRFMst", OnSuccess = "OSSaveCPRFMst" }))
+        {
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table style="width:100%">
+                            <tr>
+                                <th>CPRF Official No</th>
+                                <td>:</td>
+                                @if (Model.CPRF_No != null)
+                                {
+                                    <td>
+                                        <input class="form-control" name="CPRF_No" id="CPRF_No" value="@Model.CPRF_No" readonly/>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <input class="form-control" name="CPRF_No" id="CPRF_No" value="" readonly/>
+                                    </td>
+                                }
+                            </tr>
+                            <tr>
+                                <th>CPRF Id</th>
+                                <td>:</td>
+                                <td>@Model.StatusID</td>
+                            </tr>
+
+                            <tr>
+                                <th style="width:35%">
+                                    Requestor
+                                </th>
+                                <td style="width:5%">
+                                    :
+                                </td>
+                                <td style="width:60%">
+                                    @Model.Usr_mst.Username
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>HOD</th>
+                                <td>:</td>
+                                <td>@Model.HOD</td>
+                            </tr>
+                            <tr>
+                                <th>Project Owner</th>
+                                <td>:</td>
+                                <td>
+                                    @Model.ProjectOwner
+                                    @*<input type="text" name="ProjectOwner" id="ProjectOwner" class="form-control" value="@Model.ProjectOwner" />*@
+                                </td>
+                            </tr>
+                            
+
+                            <tr>
+                                <th>Budget utilization for year</th>
+                                <td>:</td>
+                                <td>@Model.BudgetUtilYear</td>
+                                @*<td>
+                                    @{ var thisYear = DateTime.Now.Year;}
+                                    @{ var nextYear = DateTime.Now.Year + 1;}
+                                    <select name="BudgetUtilYear" id="BudgetUtilYear" class="form-control">
+                                        @if (Model.BudgetUtilYear == thisYear)
+                                        {
+                                            <option value="@thisYear" selected>@thisYear</option>
+                                            <option value="@nextYear">@nextYear</option>
+                                        }
+                                        else if (Model.BudgetUtilYear == nextYear)
+                                        {
+                                            <option value="@nextYear" selected>@nextYear</option>
+                                            <option value="@thisYear">@thisYear</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@thisYear">@thisYear</option>
+                                            <option value="@nextYear">@nextYear</option>
+                                        }
+
+                                    </select>
+                                </td>*@
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table style="width:100%">
+                            <tr>
+                                <th>Project Title</th>
+                                <td>:</td>
+                                <td>
+                                    @Model.ProjectTitle
+                                    @*<input type="text" name="ProjectTitle" id="ProjectTitle" class="form-control" value="@Model.ProjectTitle" />*@
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Project Justification</th>
+                                <td>:</td>
+                                <td>
+                                    <textarea class="form-control" name="ProjectJustification" id="ProjectJustification" rows="3" readonly>@Model.ProjectJustification</textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Saving / Benefits</th>
+                                <td>:</td>
+                                <td>
+                                    <textarea class="form-control" name="Benefits" id="Benefits" rows="3" readonly>@Model.Benefits</textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-centered">
+                        <button class="btn btn-primary">Generate CPRF No</button>
+                        <input type="hidden" name="CPRF_Id" id="CPRF_Id" value="@Model.CPRF_Id" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+
+</div>
+
+
+
+<script>
+    //notificationCPRFMst
+    $(document).ready(function () {
+        $("#notificationCPRFMst").delay(3000).fadeOut("slow");
+        //$("#overlay").hide();
+    });
+    function OBSaveCPRFMst(){
+        $("#overlay").show();
+
+    }
+
+    function OSSaveCPRFMst() {
+        var cprfId = $("#CPRF_Id").val();
+        console.log("cprfId:" + cprfId);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CPRFDtlsLstView", "CPRF")",
+            data: '{CprfId: "' + cprfId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCPRFDtlsLst').html(response);
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        
+    }
+</script>

@@ -19,6 +19,7 @@ namespace PurchaseWeb_2.ModelData
         {
             this.Usr_mst = new HashSet<Usr_mst>();
             this.RoleMenuMapping_mst = new HashSet<RoleMenuMapping_mst>();
+            this.UsrPsn_Map = new HashSet<UsrPsn_Map>();
         }
     
         public int Psn_id { get; set; }
@@ -31,5 +32,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual ICollection<Usr_mst> Usr_mst { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RoleMenuMapping_mst> RoleMenuMapping_mst { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UsrPsn_Map> UsrPsn_Map { get; set; }
     }
 }

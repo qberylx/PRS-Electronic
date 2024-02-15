@@ -1,0 +1,180 @@
+﻿@using (Ajax.BeginForm("CprfDtlsSave", "CPRF", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCprfDtlsID", OnBegin= "obCprfDtlsSave", OnSuccess = "osCprfDtlsSave" }))
+{
+    <div class="row">
+        <div class="col-md-6">
+            <table style="width:80%">
+                <tr id="divCprfDtlsID" style="display:none">
+                    <td>System CPRF Details ID</td>
+                    <td>:</td>
+                    <td>
+                        <input type="text" class="form-control" name="CPRFDt_Id" id="CPRFDt_Id" value="0" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>:</td>
+                    <td>
+                        <input type="text" class="form-control" name="Description" id="Description" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Project Category</td>
+                    <td>:</td>
+                    <td>
+                        <select class="form-control" name="CategoryId" id="CategoryId" required>
+                            <option>Please Choose</option>
+                            @foreach (var a in ViewBag.categoryLst)
+                            {
+                                <option value="@a.CategoryID">@a.CategoryDesc</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Department</td>
+                    <td>:</td>
+                    <td>
+                        <select class="form-control" name="DepartmentId" id="DepartmentId" onchange="chgDept(this)" required>
+                            <option value="" code="">Please Choose</option>
+                            @foreach (var a in ViewBag.deptLst)
+                            {
+                                <option value="@a.DepartmentId" code="@a.DeptCode">@a.DeptName</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"><strong>Equipment invest for </strong></td>
+                </tr>
+                <tr>
+                    <td>Process</td>
+                    <td>:</td>
+                    <td>
+                        <div id="divProcess">
+                            <select class="form-control" name="ProcessId" id="ProcessId" onchange="chgProcess(this)" required>
+                                <option value="" code="">Please Choose</option>
+                                @foreach (var a in ViewBag.processLst)
+                                {
+                                    <option value="@a.Id" code="@a.ProcessCode">@a.ProcessDesc</option>
+                                }
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Area</td>
+                    <td>:</td>
+                    <td>
+                        <div id="divArea">
+                            <select class="form-control" name="AreaId" id="AreaId" onchange="chgArea(this)" required>
+                                <option value="" code="">Please Choose</option>
+                                @foreach (var a in ViewBag.areaLst)
+                                {
+                                    <option value="@a.AreaId" code="@a.AreaCode">@a.AreaDesc</option>
+                                }
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Cost Centre</td>
+                    <td>:</td>
+                    <td>
+                        <input type="text" class="form-control" name="CostCentreStr" id="CostCentreStr" value="20" readonly />
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="col-md-6">
+            <table style="width:80%">
+                <tr>
+                    <td>
+                        Currency
+                    </td>
+                    <td>:</td>
+                    <td>
+                        <select name="CurrencyId" id="=CurrencyId" class="form-control" onchange="chgCurr(this.value)" >
+                            @foreach (var item in ViewBag.currLst)
+                            {
+                                if (item.CURID == "MYR")
+                                {
+                                    <option value="@item.CURID" selected>@item.CURID </option>
+                                }
+                                else
+                                {
+                                    <option value="@item.CURID" >@item.CURID </option>
+                                }
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Exchange value (RM)
+                    </td>
+                    <td>:</td>
+                    <td>
+                        <div id="divExchange">
+                            <table style="width:100%">
+                                <tr>
+                                    <td>RM</td>
+                                    <td>
+                                        <input class="form-control" name="Exchange" id="Exchange" value="1" required readonly />
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Items Price</td>
+                    <td>:</td>
+                    <td>
+                        <input class="form-control price" name="TotalBudget" id="TotalBudget" value="0.00" onfocusout="calcTotal()" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Items Quantity</td>
+                    <td>:</td>
+                    <td>
+                        <input class="form-control qty" name="Qty" id="Qty" value="0" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Budget (RM)</td>
+                    <td>:</td>
+                    <td>
+                        <input class="form-control" name="TotalBudgetMYR" id="TotalBudgetMYR" value="0.00" required />
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-centered">
+            <button class="btn btn-primary" id="CprfDtlsSaveBtn">Save</button>
+            <input type="hidden" name="CPRF_Id" id="CPRF_Id" value="@ViewBag.CprfId" />
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $('input.price').blur(function () {
+            var textAmt = (this.value).replace(/,/g, "");
+            var amt = parseFloat(textAmt);
+            $(this).val(amt.toFixed(5));
+        });
+
+        $('input.qty').blur(function () {
+            var amt = parseFloat(this.value);
+            $(this).val(amt.toFixed(0));
+        });
+
+    });
+
+    
+</script>

@@ -84,6 +84,12 @@
     <Reference Include="Microsoft.SqlServer.Types, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.SqlServer.Types.160.1000.6\lib\net462\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
@@ -175,6 +181,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BudgetController.cs" />
+    <Compile Include="Controllers\CPRFController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\POController.cs" />
@@ -205,6 +212,12 @@
     <Compile Include="ModelData\AccTypeExpens.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\AMASST.cs">
+      <DependentUpon>SageDom1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\AMCATE.cs">
+      <DependentUpon>SageDom1.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\APRTA.cs">
       <DependentUpon>SageDom1.tt</DependentUpon>
     </Compile>
@@ -217,13 +230,43 @@
     <Compile Include="ModelData\Area_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\AssetCategory_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\AuditBudget_log.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\AuditCPRF_log.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\AuditPR_Log.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\Category_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\CostCentre_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\CprfArea_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\CPRFAsset_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\CPRFBudget_Dtls.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\CPRFBudget_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\CprfCategory_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\CPRFMst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\CPRF_File.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\CSCCD.cs">
@@ -310,10 +353,16 @@
     <Compile Include="ModelData\PO_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\PRAsset_Lst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\PRFile.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\PrGroupType.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\Process_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelData\PrTypeMap.cs">
@@ -376,10 +425,19 @@
     <Compile Include="ModelData\usp_GetMenuData_Result.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\UsrPsn_Map.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\Usr_mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\vw_CprfDept.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\vw_sourcingRemarksLst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelData\vw_usrDpt.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CPRFFormView.cs" />
@@ -414,6 +472,13 @@
     </Compile>
     <Compile Include="ReportView\ConsumptionSummary.aspx.designer.cs">
       <DependentUpon>ConsumptionSummary.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportView\CPRFapprovedDtls.aspx.cs">
+      <DependentUpon>CPRFapprovedDtls.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportView\CPRFapprovedDtls.aspx.designer.cs">
+      <DependentUpon>CPRFapprovedDtls.aspx</DependentUpon>
     </Compile>
     <Compile Include="ReportView\DeptBudgetDetails.aspx.cs">
       <DependentUpon>DeptBudgetDetails.aspx</DependentUpon>
@@ -450,6 +515,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\dataTables.bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\font-awesome.css" />
     <Content Include="css\Formstyle.css" />
@@ -2373,6 +2439,7 @@
     <Content Include="plugins\uplot\uPlot.iife.min.js" />
     <Content Include="plugins\uplot\uPlot.min.css" />
     <Content Include="ReportView\ConsumptionSummary.aspx" />
+    <Content Include="ReportView\CPRFapprovedDtls.aspx" />
     <Content Include="ReportView\DeptBudgetDetails.aspx" />
     <Content Include="ReportView\MonthlyDeptBudget.aspx" />
     <Content Include="ReportView\PRProcessTime.aspx" />
@@ -2686,6 +2753,66 @@
     <Content Include="Views\Main\ListHodManager.cshtml" />
     <Content Include="Views\Budget\DeptBudgetDetails.cshtml" />
     <Content Include="Views\Budget\ConsumptionRpt.cshtml" />
+    <Content Include="Views\CPRF\AddExistAsset.cshtml" />
+    <Content Include="Views\CPRF\ApprovalCOO.cshtml" />
+    <Content Include="Views\CPRF\ApprovalGMD.cshtml" />
+    <Content Include="Views\CPRF\ApprovalHOD.cshtml" />
+    <Content Include="Views\CPRF\ApprovalIE.cshtml" />
+    <Content Include="Views\CPRF\areaDrop.cshtml" />
+    <Content Include="Views\CPRF\AssetListing.cshtml" />
+    <Content Include="Views\CPRF\changeCurrency.cshtml" />
+    <Content Include="Views\CPRF\chgCatList.cshtml" />
+    <Content Include="Views\CPRF\CPRFAssetFinishingForm.cshtml" />
+    <Content Include="Views\CPRF\CPRFAssetListForm.cshtml" />
+    <Content Include="Views\CPRF\CPRFAttachement.cshtml" />
+    <Content Include="Views\CPRF\CPRFCompleteList.cshtml" />
+    <Content Include="Views\CPRF\CPRFCompleteList2.cshtml" />
+    <Content Include="Views\CPRF\CPRFCompletePage.cshtml" />
+    <Content Include="Views\CPRF\CPRFDtlsForm.cshtml" />
+    <Content Include="Views\CPRF\CPRFDtlsLst.cshtml" />
+    <Content Include="Views\CPRF\CPRFDtlsLstView.cshtml" />
+    <Content Include="Views\CPRF\CprfDtlsSave.cshtml" />
+    <Content Include="Views\CPRF\CPRFDtlsView.cshtml" />
+    <Content Include="Views\CPRF\CPRFEditAssetListForm.cshtml" />
+    <Content Include="Views\CPRF\CPRFEditDetailsForm.cshtml" />
+    <Content Include="Views\CPRF\CPRFEditForm.cshtml" />
+    <Content Include="Views\CPRF\CPRFFileForm.cshtml" />
+    <Content Include="Views\CPRF\CPRFFileUploadList.cshtml" />
+    <Content Include="Views\CPRF\CPRFFileView.cshtml" />
+    <Content Include="Views\CPRF\CPRFFinishing.cshtml" />
+    <Content Include="Views\CPRF\CPRFFinishingForm.cshtml" />
+    <Content Include="Views\CPRF\CPRFInProgress.cshtml" />
+    <Content Include="Views\CPRF\CPRFMstForm.cshtml" />
+    <Content Include="Views\CPRF\CPRFMstList.cshtml" />
+    <Content Include="Views\CPRF\CPRFMstView.cshtml" />
+    <Content Include="Views\CPRF\CPRFNewDetailsForm.cshtml" />
+    <Content Include="Views\CPRF\CPRFReport.cshtml" />
+    <Content Include="Views\CPRF\CPRFRequest.cshtml" />
+    <Content Include="Views\CPRF\CPRFRequestForm.cshtml" />
+    <Content Include="Views\CPRF\CPRFUtility.cshtml" />
+    <Content Include="Views\CPRF\IEProcessList.cshtml" />
+    <Content Include="Views\CPRF\NewAssetGenerate.cshtml" />
+    <Content Include="Views\CPRF\NewAssetList.cshtml" />
+    <Content Include="Views\CPRF\NewAssetRefresh.cshtml" />
+    <Content Include="Views\CPRF\processDrop.cshtml" />
+    <Content Include="Views\CPRF\refreshCPRFdtLvl1.cshtml" />
+    <Content Include="Views\CPRF\refreshExistAssetList.cshtml" />
+    <Content Include="Views\CPRF\refreshSubAssetList.cshtml" />
+    <Content Include="Views\CPRF\saveCPRFdtLvl1.cshtml" />
+    <Content Include="Views\CPRF\uTArea.cshtml" />
+    <Content Include="Views\CPRF\UTAreaMstLst.cshtml" />
+    <Content Include="Views\CPRF\uTCategory.cshtml" />
+    <Content Include="Views\CPRF\UTCategoryMstLst.cshtml" />
+    <Content Include="Views\CPRF\uTCostCentre.cshtml" />
+    <Content Include="Views\CPRF\UTCostCentreMstLst.cshtml" />
+    <Content Include="Views\CPRF\uTProcess.cshtml" />
+    <Content Include="Views\CPRF\UTProcessMstLst.cshtml" />
+    <Content Include="Views\CPRF\ViewCprf.cshtml" />
+    <Content Include="Views\Purchase\PurMstSelectedCPRF.cshtml" />
+    <Content Include="Views\Purchase\CPRFPurDtlsType4Form.cshtml" />
+    <Content Include="Views\Purchase\AssetCPRFList.cshtml" />
+    <Content Include="Views\Purchase\findCPRFNo.cshtml" />
+    <Content Include="Views\Purchase\getCPRFBal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

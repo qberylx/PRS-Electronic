@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "PRS System";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>CPRF Approved details </h2>
+
+<br />
+<br />
+
+<a href="http://reportmanager/ReportServer/Pages/ReportViewer.aspx?%2fPRS%2fCPRFApprovedDetails-test&rs:Command=Render" target="_blank">CPRF Approved Details</a>
+
+@*<iframe src="http://reportmanager/ReportServer/Pages/ReportViewer.aspx?%2fPRS%2fPRProcessingTime&rs:Command=Render" style="width: 100%" class="myIframe">
+    </iframe>*@
+
+<iframe src="~/ReportView/CPRFapprovedDtls.aspx" style="width: 100%" class="myIframe">
+</iframe>
+
+
+<script type="text/javascript" language="javascript">
+
+    $('.myIframe').css('height', $(window).height() + 'px');
+</script>
+

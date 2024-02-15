@@ -1,0 +1,167 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFBudget_Mst>
+
+@{
+    ViewBag.Title = "CPRFInProgress";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>CPRF In Progress List</h2>
+
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">List of in progress CPRF </h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div id="notification">
+        @Html.Partial("_Notifications")
+    </div>
+    <div class="card-body">
+        <table class="table table-sm ">
+            <thead>
+                <tr>
+                    <th>
+                        No
+                    </th>
+                    <th>
+                        Project Owner
+                    </th>
+                    <th>
+                        Request Date
+                    </th>
+                    <th>
+                        HOD
+                    </th>
+                    <th>
+                        Project Title
+                    </th>
+                    <th>
+                        Total Budget (MYR)
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int i = 0;}
+                @foreach (var item in Model)
+                {
+                    i++;
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @item.Usr_mst.Username
+                        </td>
+                        <td>
+                            @if (item.Request_Date != null)
+                            {
+                                DateTime reqDevDate = (DateTime)item.Request_Date; 
+                                @reqDevDate.ToString("dd/MM/yyyy")
+                            }
+
+                        </td>
+                        <td>
+                            @item.HODName
+                        </td>
+                        <td>
+                            @item.ProjectTitle
+                        </td>
+                        <th>
+                            @String.Format("{0:N2}", item.CPRFBudget_Dtls.Sum(x => x.TotalBudgetMYR))
+                        </th>
+                        <td>
+                            @item.Status
+                        </td>
+                        <td>
+
+                            @Html.ActionLink("View", "ViewCprf", "CPRF", new { CPRFid = item.CPRF_Id }, new { @class = "btn btn-info" })
+                            @*@Html.ActionLink("Details", "CPRFFinishing", "CPRF", new { CprfId = item.CPRF_Id }, new { @class = "btn btn-primary" })
+                                @if (item.CPRF_No != null)
+                                {
+                                    //var stat = 1;
+                                    //foreach (var item2 in item.CPRFBudget_Dtls.Where(x=>x.StatusId==1).ToList() )
+                                    //{
+                                    //    foreach (var item3 in item2.CPRFAsset_Mst)
+                                    //    {
+                                    //        if (item3.AssetNo == null)
+                                    //        {
+                                    //            stat = 0;
+                                    //            break;
+                                    //        }
+                                    //    }
+                                    //    if (stat == 0)
+                                    //    {
+                                    //        break;
+                                    //    }
+
+                                    //}
+                                    //if (stat == 1)
+                                    //{
+                                    @Html.ActionLink("Complete", "CPRFComplete", "CPRF", new { CprfId = item.CPRF_Id }, new { @class = "btn btn-success" })
+                                    //}
+                                }*@
+
+                        </td>
+                    </tr>
+                    @*if (item.StatusID == 8)
+                        {
+                            <tr>
+                                <td style="color:red;font-weight:bold; background-color:lightgrey" colspan="8">@item.COORejectReason</td>
+                            </tr>
+                        }
+
+                        if (item.StatusID == 10)
+                        {
+                            <tr>
+                                <td style="color:red;font-weight:bold; background-color:lightgrey" colspan="8">@item.GMDRejectReason</td>
+                            </tr>
+                        }*@
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+
+    </div>
+</div>
+
+<script>
+    function IEReject(CPRFId) {
+        var reason = $("#IERejectReason_" + CPRFId).val();
+        console.log(reason);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("IEReject", "CPRF")",
+            data: '{CPRFId: "' + CPRFId + '", reason: "' + reason + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#IERejectModal_" + CPRFId).hide();
+                window.location.replace("/CPRF/ApprovalIE");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+    });
+</script>

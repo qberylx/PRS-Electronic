@@ -79,6 +79,9 @@ namespace PurchaseWeb_2.ModelData
         public string CPRFLvl3 { get; set; }
         public Nullable<short> NonProductflag { get; set; }
         public string internalDocNo { get; set; }
+        public Nullable<System.DateTime> LastEmailMDDate { get; set; }
+        public string LastEmailMDBy { get; set; }
+        public string PurchaserRemarks { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_Details> PR_Details { get; set; }

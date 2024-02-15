@@ -1,0 +1,484 @@
+﻿
+<div id="divPurChaseMasterSelected">
+    @model PurchaseWeb_2.ModelData.PR_Mst
+
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">PURCHASE REQUISITION</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div id="notification">
+            @Html.Partial("_Notifications")
+        </div>
+        <div class="card-body">
+            <table style="width:100%">
+                <tr>
+                    <th>
+                        PR No :
+                    </th>
+                    <td>
+                        @Model.PRNo
+                    </td>
+                    <th>
+                        PR Type :
+                    </th>
+                    <td>
+                        @Model.PRType_mst.Name
+                    </td>
+
+                    <td>
+                        <table style="width:100%">
+                            <tr>
+                                <th>
+                                    CPRF No :
+                                </th>
+                                <td>
+                                    <div id="divCPRFNo">
+                                        <input type="text" name="CPRFNo" id="CPRFNo" class="form-control" value="@Model.CPRF" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div id="btnFindCPRF">
+                                        <btn class="btn btn-warning" onclick="findCPRFNo(@Model.PRId)">Find</btn>
+                                    </div>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="swc2022" onchange="chgYearCPRF(@Model.PRId)">
+                                        <label class="custom-control-label" for="swc2022"> For CPRF year 2023 and below</label>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div id="divCPRFdrop">
+                                        <select name="CPRF" id="CPRF" class="form-control">
+                                            @if (ViewBag.cprf != null)
+                                            {
+                                                <option value="@ViewBag.cprf.CPRFDt_No" selected>@ViewBag.cprf.CPRFDt_No - @ViewBag.cprf.Description</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="">Please select CPRF No</option>
+                                            }
+
+                                        </select>
+                                    </div>
+                                    <div id="divCPRF" style="color:mediumvioletred">Please select CPRF No</div>
+                                    <div id="divPrDtExist" style="color:mediumvioletred">PR details already exist. You're no allowed to change CPRF No.</div>
+                                    <input type="hidden" id="existVal" name="existVal" />
+                                    <input type="hidden" id="cPRId" name="cPRId" value="@Model.PRId" />
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th>
+                                    CPRF Balance :
+                                </th>
+                                <td>
+                                    <div id="showCPRFBal">
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+            </table>
+            <hr />
+            <table style="width:100%">
+                <tr>
+                    <th>
+                        Requisition Date :
+                    </th>
+                    <td>
+                        @Model.RequestDate
+                    </td>
+                    <th>
+                        Requestor :
+                    </th>
+                    <td>
+                        @Model.Usr_mst.Username
+                    </td>
+                    <th>
+                        Department :
+                    </th>
+                    <td>
+                        @Model.AccTypeDept.DeptName
+                    </td>
+                    <th>
+                        Tel Ext. :
+                    </th>
+                    <td>
+                        @Model.Usr_mst.TelExt
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="1">
+                        Purpose :
+                    </th>
+                    <td colspan="2">
+                        <textarea name="Purpose" id="Purpose" class="form-control" onblur="obPurpose(this.value,@Model.PRId)">@Model.Purpose</textarea>
+                        <div id="divPurpose" style="color:mediumvioletred">Please key-in PR Purpose</div>
+                    </td>
+                    <th>&nbsp;</th>
+                    <th colspan="1">
+                        Remarks :
+                    </th>
+                    <td colspan="2">
+                        <textarea name="Remarks" id="Remarks" class="form-control" onblur="obRemarks(this.value,@Model.PRId)">@Model.Remarks</textarea>
+                        <div id="divRemarks" style="color:mediumvioletred">Please key-in PR Remarks</div>
+                    </td>
+                    <th>&nbsp;</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function findCPRFNo(PrId) {
+        var CprfNo = $("#CPRFNo").val();
+        $("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("findCPRFNo", "Purchase")",
+            data: '{CprfNo: "' + CprfNo + '", PrId: "' + PrId +'" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCPRFdrop').html(response);
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(3000).fadeOut("slow");
+        $("#divPrDtExist").hide();
+
+        // check if PR details exist , if it exist disable dropdown button
+
+        var PrId = $("#cPRId").val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("chkPRCPRFexist", "Purchase")",
+            data: '{PrId: "' + PrId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                //$('#showCPRFBal').html(response);
+                $("#existVal").val(response[0]);
+                //existVal = response[0].responseText;
+                if (response[0] == "1") {
+                    console.log("existVal1=" + response[0]);
+                    //CPRF
+                    //document.getElementById("CPRF").classList.remove('fstdropdown-select');
+                    //document.getElementById("CPRF").fstdropdown.dd.remove();
+                    $("#CPRF").prop("disabled", true);
+                    $("#CPRFNo").prop("disabled", true);
+                }
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        if ($("#CPRFNo").val() != "") {
+            $("#divCPRF").hide();
+
+            var CPRFNo = $("#CPRFNo").val();
+            if (CPRFNo.startsWith("2022") || CPRFNo.startsWith("2021")) {
+                $("#swc2022").prop("checked", true);
+                chgYearCPRF($("#cPRId").val());
+                $("#CPRF").val(CPRFNo);
+                $("#CPRFNo").val(CPRFNo);
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("chkPRCPRFexist", "Purchase")",
+                    data: '{PrId: "' + PrId + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        $("#existVal").val(response[0]);
+                        if (response[0] == "1") {
+                            console.log("existVal1=" + response[0]);
+                            //CPRF
+                            $("#btnSaveCPRF").hide();
+                            $("#swc2022").prop("disabled", true);
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+
+            } else
+            {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("getCPRFBal", "Purchase")",
+                    data: '{CPRFNo: "' + $("#CPRF").val() + '", PrId:  "' + $("#cPRId").val() + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        $('#showCPRFBal').html(response);
+
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        }
+
+        if ($("#Purpose").val() != "") {
+            $("#divPurpose").hide();
+        }
+
+        if ($("#Remarks").val() != "") {
+            $("#divRemarks").hide();
+        }
+
+
+    });
+
+
+    function chgYearCPRF(PrId) {
+        //swc2022
+        if ($("#swc2022:checked").length > 0) {
+            var CPRFNo = $("#CPRFNo").val();
+            $("#divCPRFNo").html("<input type='text' name='CPRF' id='CPRF' class='form-control' value='' /> " +
+                " <input type='hidden' name='CPRFNo' id='CPRFNo' class='form-control' value='" + CPRFNo +"' /> ");
+            $("#btnFindCPRF").html("<btn class='btn btn-success' id='btnSaveCPRF' onclick='saveCPRFNo(" + PrId + ")'>Save</btn>");
+            $("#divCPRFdrop").html("");
+            $("#divCPRF").text("Please key-in CPRF No");
+            ocCPRFNo( CPRFNo , PrId);
+        } else {
+            $("#divCPRFNo").html("<input type='text' name='CPRFNo' id='CPRFNo' class='form-control' value='' />   ");
+            $("#btnFindCPRF").html("<btn class='btn btn-warning' onclick='findCPRFNo(" + PrId + ")'>Find</btn>");
+            $("#divCPRFdrop").html("<select name='CPRF' id='CPRF' class='form-control'>" +
+                " <option value=''>Please select CPRF No</option> " +
+                " </select>");
+            $("#divCPRF").text("Please select CPRF No");
+        }
+
+    }
+
+    function saveCPRFNo(PrId) {
+        console.log("saveCPRFNo=" + PrId);
+        var CPRF = $("#CPRF").val();
+        $("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("saveCPRFNo", "Purchase")",
+            data: '{CPRFNo: "' + CPRF + '", PrId:  "' + PrId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response[0] == "0") {
+                    console.log("existVal1=" + response[0]);
+
+                    $("#divCPRF").text("CPRF No must start with 2022 and must be in list of allowed CPRF");
+                    $("#divCPRF").show();
+                    $("#CPRF").val("");
+                    //$("#divCPRF").delay(3000).fadeOut("slow");
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("getCPRFBal", "Purchase")",
+                        data: '{CPRFNo: "' + $("#CPRF").val() + '", PrId:  "' + $("#cPRId").val() + '" }',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "html",
+                        success: function (response) {
+                            $('#showCPRFBal').html(response);
+
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                    $("#divCPRF").hide();
+                }
+                $("#overlay").hide();
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+    }
+
+    function ocCPRFNo(CPRFNo, PrId) {
+        console.log("CPRFNo=" + CPRFNo);
+        console.log("PrId=" + PrId);
+        $("#overlay").show();
+        // chk if pr details has been made.
+
+            $.ajax({
+            type: "POST",
+            url: "@Url.Action("getCPRFBal", "Purchase")",
+            data: '{CPRFNo: "' + CPRFNo + '",PrId: "' + PrId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#showCPRFBal').html(response);
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("updateCPRFNo", "Purchase")",
+            data: '{CPRFNo: "' + CPRFNo + '",PrId: "' + PrId + '"  }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                //$('#divPRDtlsForm').html(response);
+                $('#divCPRFPurDtlsType4Form').html(response);
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        console.log($("#CPRF").val());
+        if ($("#CPRF").val() != "") {
+            $("#divCPRF").hide();
+        }
+        //}
+
+
+
+
+
+        //refreshPurDtls(PrId);
+        //refreshPurDtls(PrId);
+
+    }
+
+    function refreshPurDtls(PrId) {
+        console.log("refreshPurDtls=" + PrId);
+        //$("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CPRFPurDtlsType4Form", "Purchase")",
+            data: '{PrMstId: "' + PrId + '"  }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCPRFPurDtlsType4Form').html(response);
+                //$("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function obPurpose(Purpose, PrId) {
+        $("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("updatePurpose", "Purchase")",
+            data: '{Purpose: "' + Purpose + '",PrId: "' + PrId + '"  }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                //$('#divPRDtlsForm').html(response);
+
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        console.log($("#Purpose").val());
+        if ($("#Purpose").val() != "") {
+            $("#divPurpose").hide();
+        }
+    }
+
+    function obRemarks(Remarks, PrId) {
+        $("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("updateRemarks", "Purchase")",
+            data: '{Remarks: "' + Remarks + '",PrId: "' + PrId + '"  }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                //$('#divPRDtlsForm').html(response);
+
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        console.log($("#Remarks").val());
+        if ($("#Remarks").val() != "") {
+            $("#divRemarks").hide();
+        }
+    }
+
+</script>
+

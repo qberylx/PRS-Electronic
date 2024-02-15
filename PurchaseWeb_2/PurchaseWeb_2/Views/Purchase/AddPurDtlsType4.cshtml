@@ -21,237 +21,256 @@
 
 <div class="row">
     <div class="col-md-8">
-        @{ Html.RenderAction("PurMstSelected", "Purchase", new { PrMstId = ViewBag.PrMstId , PrGroup = ViewBag.PrGroup });}
+        @if (ViewBag.CPRFFlag == true)
+        {
+            { Html.RenderAction("PurMstSelectedCPRF", "Purchase", new { PrMstId = ViewBag.PrMstId, PrGroup = ViewBag.PrGroup }); }
+        }
+        else
+        {
+            { Html.RenderAction("PurMstSelected", "Purchase", new { PrMstId = ViewBag.PrMstId, PrGroup = ViewBag.PrGroup });}
+        }
+
     </div>
     <div class="col-md-4">
         @{ Html.RenderAction("UploadQuo", "Purchase", new { PrMstId = ViewBag.PrMstId });}
     </div>
 </div>
 
-
-
-<div class="row zoomedElement">
-    <div class="col-md-12">
-        <!--card header-->
-        <div class="card card-primary">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-md-2 ">
-                        <h3 class="card-title vertical-center">Purchase Request Details</h3>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <!--card body-->
-        @*using (Html.BeginForm("AddPurDtls", "Purchase",FormMethod.Post))*@
-    <div id="divAddPurDtls">
-        @using (Ajax.BeginForm("AddPurDtlsType4", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.PRid, new { @Value = ViewBag.PrMstId })
-            @Html.HiddenFor(model => model.PRNo, new { @Value = ViewBag.PrNo })
-            @Html.HiddenFor(model => model.TypePRId, new { @Value = ViewBag.PRTypeId })
-
-
-            <div class="card-body">
-                <div class="row">
-                    <!--first column-->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label class="control-label col-md-10">Vendor</label>
-                            <div class="custom-control custom-switch">
-                                &nbsp; <input type="checkbox" class="custom-control-input" id="swNewVendor" onchange="swNewVendorChg()" />
-                                <label class="custom-control-label" for="swNewVendor">Vendor not in the list?</label>
-                            </div>
-                            <div class="col-md-10">
-                                <div id="divVendorList">
-                                    <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode" onchange="vendorchg(this.value)">
-                                        <option value="">Select option</option>
-                                        @foreach (var vendor in ViewBag.vendorlist)
-                                        {
-                                            <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
-                                        }
-                                    </select>
-                                </div>
-                                @Html.ValidationMessageFor(model => model.VendorCode, "", new { @class = "text-danger" })
-                            </div>
+@if (ViewBag.CPRFFlag == true)
+{
+    <div id="divCPRFPurDtlsType4Form">
+        @{ Html.RenderAction("CPRFPurDtlsType4Form", "Purchase", new { PrMstId = ViewBag.PrMstId }); }
+    </div>
+}
+else
+{ 
+    <div class="row zoomedElement">
+        <div class="col-md-12">
+            <!--card header-->
+            <div class="card card-primary">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-2 ">
+                            <h3 class="card-title vertical-center">Purchase Request Details</h3>
                         </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 3, @id = "box" })
-                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.VendorPartNo, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.VendorPartNo, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.VendorPartNo, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <strong>UOM</strong>
-                            <div class="col-md-10">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        @Html.DropDownList("UOMName",
-                                          new SelectList(ViewBag.UOMList, "UNIT", "UNIT"),
-                                          "Please Select the UOM",
-                                          new { @class = "custom-select form-control-border" })
-                                    </div>
-
-                                </div>
-
-                                @Html.ValidationMessageFor(model => model.UOMId, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <strong>Req. Delivery Date</strong>
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.ReqDevDate, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.ReqDevDate, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <strong>Estimated Unit Price</strong>
-                            <div class="col-md-10">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div id="divCur">
-                                            @Html.DropDownList("EstCurCode",
-                                           new SelectList(ViewBag.CurrList, "CURID", "CURID", "MYR"),
-                                           new { @class = "custom-select form-control-border" })
-                                        </div>
-                                    </div>
-                                    <div class="col-md-9">
-                                        @Html.EditorFor(model => model.EstimateUnitPrice, new { htmlAttributes = new { @class = "form-control" } })
-                                    </div>
-                                </div>
-                                @Html.ValidationMessageFor(model => model.EstimateUnitPrice, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-
 
                     </div>
                 </div>
-
             </div>
-            <div class="card-footer">
-                <div class="form-group">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-centered">
-                                <input type="submit" id="btnSubmit" name="Submit" value="Add PR Details" class="btn btn-primary btn-lg" />
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        }
-    </div>
-        
-    </div>
-
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div id="divPurDtlsList">
-            @{Html.RenderAction("PurDtlsList", "Purchase", new { PrMstId = ViewBag.PrMstId });}
-        </div>
-    </div>
-</div>
-
-<!-- Modal Add UOM -->
-<div class="modal fade" id="addUOM" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            @*{Html.RenderAction("AddUOM", "Purchase");}*@
-            <div class="modal-header">
-                <h5 class="modal-title">Add UOM</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            @using (Html.BeginForm("AddUOM", "Purchase", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <div class="modal-body">
+            <!--card body-->
+            @*using (Html.BeginForm("AddPurDtls", "Purchase",FormMethod.Post))*@
+            <div id="divAddPurDtls">
+                @using (Ajax.BeginForm("AddPurDtlsType4", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divPurDtlsList" }))
+                {
+                    @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.UOM_mst.UOMName, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.UOM_mst.UOMName, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.UOM_mst.UOMName, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.PRid, new { @Value = ViewBag.PrMstId })
+                    @Html.HiddenFor(model => model.PRNo, new { @Value = ViewBag.PrNo })
+                    @Html.HiddenFor(model => model.TypePRId, new { @Value = ViewBag.PRTypeId })
 
-                            <input type="hidden" id="PrMstId" name="PrMstId" value="@ViewBag.PrMstId" />
+
+                    <div class="card-body">
+                        <div class="row">
+                            <!--first column-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-10">Vendor</label>
+                                    <div class="custom-control custom-switch">
+                                        &nbsp; <input type="checkbox" class="custom-control-input" id="swNewVendor" onchange="swNewVendorChg()" />
+                                        <label class="custom-control-label" for="swNewVendor">Vendor not in the list?</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div id="divVendorList">
+                                            <select class="fstdropdown-select form-control-border" id="VendorCode" name="VendorCode" onchange="vendorchg(this.value)">
+                                                <option value="">Select option</option>
+                                                @foreach (var vendor in ViewBag.vendorlist)
+                                                {
+                                                    <option value="@vendor.VENDORID">@vendor.VENDNAME</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.VendorCode, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = 3, @id = "box" })
+                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.VendorPartNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.VendorPartNo, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.VendorPartNo, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <strong>UOM</strong>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                @Html.DropDownList("UOMName",
+                                                  new SelectList(ViewBag.UOMList, "UNIT", "UNIT"),
+                                                  "Please Select the UOM",
+                                                  new { @class = "custom-select form-control-border" })
+                                            </div>
+
+                                        </div>
+
+                                        @Html.ValidationMessageFor(model => model.UOMId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <strong>Req. Delivery Date</strong>
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.ReqDevDate, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.ReqDevDate, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <strong>Estimated Unit Price</strong>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div id="divCur">
+                                                    @Html.DropDownList("EstCurCode",
+                                                   new SelectList(ViewBag.CurrList, "CURID", "CURID", "MYR"),
+                                                   new { @class = "custom-select form-control-border" })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-9">
+                                                @Html.EditorFor(model => model.EstimateUnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.EstimateUnitPrice, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <div class="form-group">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-centered">
+                                        <input type="submit" id="btnSubmit" name="Submit" value="Add PR Details" class="btn btn-primary btn-lg" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+            </div>
+
+        </div>
+
+    </div>        
+}
+
+
+
+    
+
+    <div class="row">
+        <div class="col-md-12">
+            <div id="divPurDtlsList">
+                @{Html.RenderAction("PurDtlsList", "Purchase", new { PrMstId = ViewBag.PrMstId });}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Add UOM -->
+    <div class="modal fade" id="addUOM" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                @*{Html.RenderAction("AddUOM", "Purchase");}*@
+                <div class="modal-header">
+                    <h5 class="modal-title">Add UOM</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @using (Html.BeginForm("AddUOM", "Purchase", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal-body">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.UOM_mst.UOMName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.UOM_mst.UOMName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.UOM_mst.UOMName, "", new { @class = "text-danger" })
+
+                                <input type="hidden" id="PrMstId" name="PrMstId" value="@ViewBag.PrMstId" />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <div class="form-group">
-                        <input type="submit" name="AddUOM" value="Add" class="btn btn-primary" />
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <div class="form-group">
+                            <input type="submit" name="AddUOM" value="Add" class="btn btn-primary" />
+                        </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    $(function () {
-        $('input#Qty').blur(function () {
-            var amt = parseFloat(this.value);
-            $(this).val( amt.toFixed(4));
+    <script>
+        $(function () {
+            $('input#Qty').blur(function () {
+                var amt = parseFloat(this.value);
+                $(this).val(amt.toFixed(4));
+            });
         });
-    });
 
-    $(function () {
-        $('input#EstimateUnitPrice').blur(function () {
-            var amt = parseFloat(this.value);
-            $(this).val(amt.toFixed(5));
+        $(function () {
+            $('input#EstimateUnitPrice').blur(function () {
+                var amt = parseFloat(this.value);
+                $(this).val(amt.toFixed(5));
+            });
         });
-    });
 
-</script>
+    </script>
 
 
-<div class="container">
-    <div class="row">
-        <div class="col-centered">
-            @Html.ActionLink("Return To Main PR", "PurRequest", "Purchase", null, new { @class = "btn btn-primary" })
-            @Html.ActionLink("Submit To HOD", "PRhod", "Purchase", new { PrMstId = ViewBag.PrMstId }, new { @class = "btn btn-success" })
+    <div class="container">
+        <div class="row">
+            <div class="col-centered">
+                @Html.ActionLink("Return To Main PR", "PurRequest", "Purchase", null, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Submit To HOD", "PRhod", "Purchase", new { PrMstId = ViewBag.PrMstId }, new { @class = "btn btn-success" })
+            </div>
         </div>
     </div>
-</div>
 
 
-<script>
+    <script>
     var box = document.getElementById('box');
     var charlimit = 80; // char limit per line
     box.onkeyup = function () {
@@ -273,16 +292,16 @@
     //$(function () {
 
     //    $(document).on('input propertychange', 'textarea', function (e) {
-            
+
     //        // Something was typed into the textarea
     //        var lines = $(this).val().split("\n");
     //        console.log(lines);
     //        var last_line = lines[lines.length - 1];
     //        if (last_line.length >= LINE_LENGTH_CHARS) {
 
-    //            // Resetting the textarea val() in this way has the 
-    //            // effect of adding a line break at the end of the 
-    //            // textarea and putting the cursor position to the 
+    //            // Resetting the textarea val() in this way has the
+    //            // effect of adding a line break at the end of the
+    //            // textarea and putting the cursor position to the
     //            // end of the textarea
     //            $(this).val($(this).val() + "\n");
 
@@ -351,4 +370,4 @@
 
         }
     }
-</script>
+    </script>

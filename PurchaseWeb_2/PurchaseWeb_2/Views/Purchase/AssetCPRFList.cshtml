@@ -1,0 +1,165 @@
+﻿<div class="card card-info">
+    <div class="card-header">
+        <h6 class="card-title">Asset List</h6>
+        <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search">
+
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-default">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="tableA" style="width:100%">
+            <tr>
+                <th>No</th>
+                <td>&nbsp;</td>
+                <th>Asset No</th>
+                <th>Est Pr Date</th>
+            </tr>
+            @{ int i = 0;}
+            @{ int assetId = 0;}
+            @foreach (var item in ViewBag.assetLst)
+            {
+                i++;
+                {
+                    assetId = item.AssetId;
+                    foreach (var actAsset in ViewBag.PrAssetLst)
+                    {
+                        if (actAsset.AssetId == assetId)
+                        {
+                            ViewBag.Match = actAsset;
+                            break;
+                        }
+                        else
+                        {
+                            ViewBag.Match = null;
+                        }
+                    }
+                }
+                DateTime currentDate = DateTime.Now;
+                //int lastDayOfMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+                DateTime firstDayOfMonthDate = new DateTime(currentDate.Year, currentDate.Month, 1);
+
+                DateTime EstPrDate = (DateTime)item.EstPrDate;
+                if (String.IsNullOrEmpty(item.AssetNo))
+                {
+                    <tr class="tr">
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @*@if (ViewBag.Match != null && ViewBag.CPRFDt_Id_Refer == null)
+                            {
+                                <input type="checkbox" name="AssetId_@i" id="AssetId_@i" value="@item.AssetId" checked disabled />
+                                <input type="hidden" name="AssetIdNo_@i" id="AssetIdNo_@i" value="@item.AssetId" />
+                            }
+                            else if (item.EstPrDate < firstDayOfMonthDate)
+                            {
+                                <input type="checkbox" name="AssetId_@i" id="AssetId_@i" value="@item.AssetId" disabled />
+                                <input type="hidden" name="AssetIdNo_@i" id="AssetIdNo_@i" value="@item.AssetId" />
+                                <i class="fa fa-paper-plane" data-toggle="tooltip"
+                                   data-placement="left"
+                                   style="cursor: pointer"
+                                   title="Request to this delist Asset No to Treasurer"
+                                   onclick="DelistAsset(@item.AssetId)"></i>
+                            }
+                            else
+                            {*@
+                                <input type="checkbox" name="AssetId_@i" id="AssetId_@i" value="@item.AssetId" />
+                                <input type="hidden" name="AssetIdNo_@i" id="AssetIdNo_@i" value="@item.AssetId" />
+                            @*}*@
+                        </td>
+                        <td>
+                            @item.AssetSystemNo
+                        </td>
+                        <td>
+                            @EstPrDate.ToString("dd/MM/yyyy")
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr class="tr">
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @*@if (ViewBag.Match != null && @item.CPRFBudget_Dtls.CPRFDt_Id_Refer == null)
+                            {
+                                <input type="checkbox" name="AssetId_@i" id="AssetId_@i" value="@item.AssetId" checked disabled />
+                                <input type="hidden" name="AssetIdNo_@i" id="AssetIdNo_@i" value="@item.AssetId" />
+                            }
+                            else if (item.EstPrDate < firstDayOfMonthDate)
+                            {
+                                <input type="checkbox" name="AssetId_@i" id="AssetId_@i" value="@item.AssetId" disabled />
+                                <input type="hidden" name="AssetIdNo_@i" id="AssetIdNo_@i" value="@item.AssetId" />
+                                <i class="fa fa-paper-plane" data-toggle="tooltip"
+                                   data-placement="left"
+                                   style="cursor: pointer"
+                                   title="Request to this delist Asset No to Treasurer"
+                                   onclick="DelistAsset(@item.AssetId)"></i>
+                            }
+                            else
+                            {*@
+                                <input type="checkbox" name="AssetId_@i" id="AssetId_@i" value="@item.AssetId" />
+                                <input type="hidden" name="AssetIdNo_@i" id="AssetIdNo_@i" value="@item.AssetId" />
+                            @*}*@
+
+                        </td>
+                        <td>
+                            @item.AssetNo
+                        </td>
+                        <td>
+
+                            @EstPrDate.ToString("dd/MM/yyyy")
+
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+    <div class="card-footer">
+        <div id="divSendEmailNoti" style="display:none">
+            <a style="color:green">Email has been sent to Treasury</a>
+        </div>
+        <div id="divSendEmailNotiFail" style="display:none">
+            <a style="color:palevioletred">Email sent failed</a>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" name="AssetRunNo" id="AssetRunNo" value="@i" />
+
+<script>
+    function DelistAsset(assetId) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("sendDelistAssetEmail", "Purchase")",
+            data: '{assetId: "' + assetId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response == "1") {
+                    $("#divSendEmailNoti").show();
+                    $("#divSendEmailNoti").delay(3000).fadeOut("slow");
+                } else {
+                    $("#divSendEmailNotiFail").show();
+                    $("#divSendEmailNotiFail").delay(3000).fadeOut("slow");
+                }
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
+

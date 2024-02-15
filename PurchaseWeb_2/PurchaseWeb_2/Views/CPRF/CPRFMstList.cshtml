@@ -1,0 +1,136 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFBudget_Mst>
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">
+        </h3>
+        <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search">
+
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-default">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="notificationCPRFMstList">
+        @Html.Partial("_Notifications")
+    </div>
+    <div class="card-body">
+        <table style="width:100%" class="table table-head-fixed table-hover table-striped table-sm" id="tableA">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Project Owner</th>
+                    <th>Request Date</th>
+                    
+                    <th>HOD</th>
+                    <th>Project Title</th>
+                    <th>Total Budget (RM)</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int i = 0;}
+                @foreach (var item in Model)
+                {
+                    i++;
+                    <tr class="tr">
+                        <td>@i</td>
+                        <td>
+                            @{ var username = item.Usr_mst?.Username ?? ""; }
+                            @username
+                        </td>
+                        <td>@item.Create_Date</td>
+
+                        <td>@item.HOD</td>
+                        <td>@item.ProjectTitle</td>
+                        <td>
+                            @String.Format("{0:N2}", item.CPRFBudget_Dtls.Where(x => x.StatusId == 1).Sum(s => s.TotalBudgetMYR))
+                        </td>
+                        <td>@item.Status </td>
+                        <td>
+                            <table>
+                                <tr>
+                                    @if (item.StatusID == 1 || item.StatusID == 4 || item.StatusID == 6)
+                                    {
+                                        <td>
+                                            @Html.ActionLink("Details", "CPRFRequestForm", "CPRF", new { CprfId = item.CPRF_Id }, new { @class = "btn btn-primary" })
+                                        </td>
+                                        <td>
+                                            @using (Ajax.BeginForm("SendHODCPRFRequest", "CPRF", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCPRFMstList" }))
+                                            {
+                                                <button class="btn btn-warning">Send</button>
+                                                <input type="hidden" name="CprfId" value="@item.CPRF_Id" />
+                                            }
+                                        </td>
+                                        <td>
+                                            @using (Ajax.BeginForm("DeleteCPRFRequest", "CPRF", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCPRFMstList" }))
+                                            {
+                                                <button class="btn btn-danger">Delete</button>
+                                                <input type="hidden" name="CprfId" value="@item.CPRF_Id" />
+                                            }
+
+
+
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @Html.ActionLink("View", "ViewCprf", "CPRF", new { CPRFid = item.CPRF_Id, URL = "CPRFMstList" }, new { @class = "btn btn-info" })
+                                        </td>
+                                    }
+
+
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    if (item.StatusID == 4)
+                    {
+                        <tr>
+                            <td style="color:red;font-weight:bold; background-color:lightgrey" colspan="8">@item.HODRejectReason</td>
+                        </tr>
+                    }
+
+                    if (item.StatusID == 6)
+                    {
+                        <tr>
+                            <td style="color:red;font-weight:bold; background-color:lightgrey" colspan="8">@item.IERejectReason</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#notificationCPRFMstList").delay(4000).fadeOut("slow");
+    });
+
+    $(document).ready(function () {
+        $(function () {
+            var $rows = $('#tableA .tr');
+            $('#search').keyup(function () {
+                var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+                $rows.show().filter(function () {
+                    var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                    return !~text.indexOf(val);
+                }).hide();
+            });
+        });
+    });
+
+</script>

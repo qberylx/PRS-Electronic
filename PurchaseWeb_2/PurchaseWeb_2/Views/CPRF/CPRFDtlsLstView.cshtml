@@ -1,0 +1,741 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFBudget_Dtls>
+
+<div class="card card-secondary">
+    <div class="card-header">
+        <div class="card-title">
+            <h6>CPRF Details List</h6>
+        </div>
+    </div>
+    <div id="notificationdivCPRFDtlsLst">
+        @Html.Partial("_Notifications")
+    </div>
+    <div class="card-body">
+        <table class="table table-head-fixed table-sm" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        CPRF Details ID
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Cost Centre
+                    </th>
+
+                    @*<th>
+                        Currency
+                    </th>*@
+
+                    <th>
+                        Item Price (MYR)
+                    </th>
+                    @*<th>
+                        Currency Exchange
+                    </th>*@
+                    <th>
+                        Item Quantity
+                    </th>
+                    <th>
+                        Asset Listing
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (item.CPRFDt_No != null)
+                            {
+                                @item.CPRFDt_No
+                            }
+                            else
+                            {
+                                @item.CPRFDt_Id
+                            }
+
+                        </td>
+                        <td>
+                            @item.Description
+                        </td>
+                        <td>
+                            @item.CostCentreStr
+                        </td>
+
+                        @*<td>
+                            @item.CurrencyId
+                        </td>*@
+
+                        <td>
+
+                            @String.Format("{0:N2}", item.TotalBudgetMYR)
+                        </td>
+                        @*<td>
+                            @item.Exchange
+                        </td>*@
+                        <td>
+                            @item.Qty
+                        </td>
+                        <td>
+                            @if (item.AssetStatus != 3)
+                            {
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Asset No</th>
+                                    </tr>
+                                    @{ int i = 0;}
+                                    @foreach (var itema in item.CPRFAsset_Mst)
+                                    {
+                                        i++;
+                                        <tr>
+                                            <td>
+                                                @i
+                                            </td>
+                                            <td>
+                                                @if (itema.AssetNo == null)
+                                                {
+                                                    @itema.AssetSystemNo
+                                                }
+                                                else
+                                                {
+                                                    @itema.AssetNo
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            }
+                            else
+                            {
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>CPRF Details Reference ID</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @item.CPRFDt_Id_Refer
+                                        </td>
+                                    </tr>
+                                </table>
+                            }
+
+
+                        </td>
+                        <td>
+                            @*<button class="btn btn-warning" name="submit" value="edit" onclick="editCPRFDt(@item.CPRFDt_Id)"><i class="fa fa-pen"></i></button>
+            <button class="btn btn-danger" name="submit" value="delete" onclick="deleteCPRFDt(@item.CPRFDt_Id)"><i class="fa fa-trash"></i></button>*@
+                            <input type="hidden" name="CPRFDtID" id="CPRFDtID" value="@item.CPRFDt_Id" />
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+
+                    @*<th>
+                        Currency
+                    </th>*@
+
+                    <th>
+                        @String.Format("{0:N2}", Model.Sum(s => s.TotalBudgetMYR))
+                    </th>
+                    @*<th>
+                        &nbsp;
+                    </th>*@
+                    <th>
+                        @String.Format("{0:N2}", Model.Sum(s => s.Qty))
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="card-footer">
+        <div class="row">
+            <div class="col-centered">
+                <table>
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary" onclick="history.back();">
+                                Return to Main List
+                            </button>
+                        </td>
+
+                        <td>&nbsp;</td>
+                        @if (ViewBag.StatusId == 2 && ViewBag.URL == "ApprovalHOD") // HOD Approval
+                        {
+                            <td>
+                                @*@Html.ActionLink("Approve", "HODApprove", "CPRF", new { CPRFid = ViewBag.CprfId }, new { @class = "btn btn-success" })*@
+                                <button class="btn btn-success" data-toggle="modal" data-target="#HODApproveModal_@ViewBag.CprfId">
+                                    Approve
+                                </button>
+                                <!-- Modal Success -->
+                                <div class="modal fade" id="HODApproveModal_@ViewBag.CprfId" tabindex="-1" role="dialog" aria-labelledby="HODApproveLabel_@ViewBag.CprfId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="HODApproveLabel_@ViewBag.CprfId">Approve</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table style="width:100%">
+                                                    <tr>
+                                                        <td>Date Approval</td>
+                                                        <td>:</td>
+                                                        <td>
+                                                            <input class="form-control" type="datetime-local" name="SendToIE_@ViewBag.CprfId" id="SendToIE_@ViewBag.CprfId" />
+                                                            @*<textarea class="form-control" name="HodApproveReason_@item.CPRF_Id" id="HodApproveReason_@item.CPRF_Id"></textarea>*@
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="HodApprove(@ViewBag.CprfId)">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>&nbsp;</td>
+
+                            <td>
+                                <button class="btn btn-danger" data-toggle="modal" data-target="#HODRejectModal_@ViewBag.CprfId">
+                                    Reject
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="HODRejectModal_@ViewBag.CprfId" tabindex="-1" role="dialog" aria-labelledby="HODRejectLabel_@ViewBag.CprfId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="HODRejectLabel_@ViewBag.CprfId">Reject</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table style="width:100%">
+                                                    <tr>
+                                                        <td>Reason</td>
+                                                        <td>:</td>
+                                                        <td>
+                                                            <textarea class="form-control" name="HodRejectReason_@ViewBag.CprfId" id="HodRejectReason_@ViewBag.CprfId"></textarea>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="HodReject(@ViewBag.CprfId)">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        }
+
+                        @if ((ViewBag.StatusId == 3 || ViewBag.StatusId == 8 || ViewBag.StatusId == 10) && ViewBag.URL == "ApprovalIE") // IE approval
+                        {
+                            <td>
+                                @Html.ActionLink("Approve", "IEApprove", "CPRF", new { CPRFid = ViewBag.CprfId }, new { @class = "btn btn-success" })
+                            </td>
+                            <td>&nbsp;</td>
+                            <td>
+                                <button class="btn btn-warning" data-toggle="modal" data-target="#IEKIVModal_@ViewBag.CprfId">
+                                    KIV
+                                </button>
+                                <!--Modal -->
+                                <div class="modal fade" id="IEKIVModal_@ViewBag.CprfId" tabindex="-1" role="dialog" aria-labelledby="IEKIVLabel_@ViewBag.CprfId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="IEKIVLabel_@ViewBag.CprfId">KIV</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table style="width:100%">
+                                                    <tr>
+                                                        <td>Reason</td>
+                                                        <td>:</td>
+                                                        <td>
+                                                            <textarea class="form-control" name="IEKIVReason_@ViewBag.CprfId" id="IEKIVReason_@ViewBag.CprfId"></textarea>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="IEKIV(@ViewBag.CprfId)">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>&nbsp;</td>
+
+                            <td>
+                                <button class="btn btn-danger" data-toggle="modal" data-target="#IERejectModal_@ViewBag.CprfId">
+                                    Reject
+                                </button>
+                                <!--Modal-->
+                                <div class="modal fade" id="IERejectModal_@ViewBag.CprfId" tabindex="-1" role="dialog" aria-labelledby="IERejectLabel_@ViewBag.CprfId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="IERejectLabel_@ViewBag.CprfId">Reject</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table style="width:100%">
+                                                    <tr>
+                                                        <td>Reason</td>
+                                                        <td>:</td>
+                                                        <td>
+                                                            <textarea class="form-control" name="IERejectReason_@ViewBag.CprfId" id="IERejectReason_@ViewBag.CprfId"></textarea>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="IEReject(@ViewBag.CprfId)">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        }
+
+                        @if (ViewBag.StatusId == 5 && ViewBag.URL == "ApprovalCOO") // COO Approval
+                        {
+                            <td>
+                                @*@Html.ActionLink("Approve", "COOApprove", "CPRF", new { CPRFid = ViewBag.CprfId }, new { @class = "btn btn-success" })*@
+                                <button class="btn btn-success" data-toggle="modal" data-target="#COOApproveModal_@ViewBag.CprfId">
+                                    Approve
+                                </button>
+                                <!--Modal -->
+                                <div class="modal fade" id="COOApproveModal_@ViewBag.CprfId" tabindex="-1" role="dialog" aria-labelledby="COOApproveLabel_@ViewBag.CprfId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="COOApproveLabel_@ViewBag.CprfId">Approve</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table style="width:100%">
+                                                    <tr>
+                                                        <td>Approval Date</td>
+                                                        <td>:</td>
+                                                        <td>
+                                                            <input class="form-control" type="datetime-local" name="SendToGMD_@ViewBag.CprfId" id="SendToGMD_@ViewBag.CprfId" />
+                                                            @*<textarea class="form-control" name="COOApproveReason_@ViewBag.CprfId" id="COOApproveReason_@ViewBag.CprfId"></textarea>*@
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="COOApprove(@ViewBag.CprfId)">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>&nbsp;</td>
+
+                            <td>
+                                <button class="btn btn-danger" data-toggle="modal" data-target="#COORejectModal_@ViewBag.CprfId">
+                                    Reject
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="COORejectModal_@ViewBag.CprfId" tabindex="-1" role="dialog" aria-labelledby="COORejectLabel_@ViewBag.CprfId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="COORejectLabel_@ViewBag.CprfId">Reject</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table style="width:100%">
+                                                    <tr>
+                                                        <td>Reason</td>
+                                                        <td>:</td>
+                                                        <td>
+                                                            <textarea class="form-control" name="COORejectReason_@ViewBag.CprfId" id="COORejectReason_@ViewBag.CprfId"></textarea>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="COOReject(@ViewBag.CprfId)">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        }
+
+                        @if (ViewBag.StatusId == 7 && ViewBag.URL == "ApprovalGMD") // GMD Approval
+                        {
+                            <td>
+                                @*@Html.ActionLink("Approve", "GMDApprove", "CPRF", new { CPRFid = ViewBag.CprfId }, new { @class = "btn btn-success" })*@
+                                <button class="btn btn-success" data-toggle="modal" data-target="#GMDApproveModal_@ViewBag.CprfId">
+                                    Approve
+                                </button>
+                                <!--Modal -->
+                                <div class="modal fade" id="GMDApproveModal_@ViewBag.CprfId" tabindex="-1" role="dialog" aria-labelledby="GMDApproveLabel_@ViewBag.CprfId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="GMDApproveLabel_@ViewBag.CprfId">Approve</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table style="width:100%">
+                                                    <tr>
+                                                        <td>Date Approval</td>
+                                                        <td>:</td>
+                                                        <td>
+                                                            <input class="form-control" type="datetime-local" name="SendToProcessIE_@ViewBag.CprfId" id="SendToProcessIE_@ViewBag.CprfId" />
+                                                            @*<textarea class="form-control" name="GMDApproveReason_@ViewBag.CprfId" id="GMDApproveReason_@ViewBag.CprfId"></textarea>*@
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="GMDApprove(@ViewBag.CprfId)">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>&nbsp;</td>
+
+                            <td>
+                                <button class="btn btn-danger" data-toggle="modal" data-target="#GMDRejectModal_@ViewBag.CprfId">
+                                    Reject
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="GMDRejectModal_@ViewBag.CprfId" tabindex="-1" role="dialog" aria-labelledby="GMDRejectLabel_@ViewBag.CprfId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="GMDRejectLabel_@ViewBag.CprfId">Reject</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table style="width:100%">
+                                                    <tr>
+                                                        <td>Reason</td>
+                                                        <td>:</td>
+                                                        <td>
+                                                            <textarea class="form-control" name="GMDRejectReason_@ViewBag.CprfId" id="GMDRejectReason_@ViewBag.CprfId"></textarea>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="GMDReject(@ViewBag.CprfId)">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        }
+
+                        @*<td>
+            @using (Ajax.BeginForm("SendHODCPRFRequest", "CPRF", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OSSendHODCPRFRequest" }))
+            {
+                <button class="btn btn-warning">Send to HOD</button>
+                <input type="hidden" name="CprfId" value="@ViewBag.CprfId" />
+            }
+        </td>*@
+                    </tr>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function IEKIV(CPRFId) {
+        var reason = $("#IEKIVReason_" + CPRFId).val();
+        console.log(reason);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("IEKIV", "CPRF")",
+            data: '{CPRFId: "' + CPRFId + '", reason: "' + reason + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#IEKIVModal_" + CPRFId).hide();
+                window.location.replace("/CPRF/ApprovalIE");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
+
+<script>
+    function GMDApprove(CPRFId) {
+        var SendToProcessIE = $("#SendToProcessIE_" + CPRFId).val();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GMDApproveWitDate", "CPRF")",
+            data: '{CPRFId: "' + CPRFId + '", DateSendToProcessIE: "' + SendToProcessIE + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#GMDApproveModal_" + CPRFId).hide();
+                window.location.replace("/CPRF/ApprovalGMD");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function GMDReject(CPRFId) {
+        var reason = $("#GMDRejectReason_" + CPRFId).val();
+        console.log(reason);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GMDReject", "CPRF")",
+            data: '{CPRFId: "' + CPRFId + '", reason: "' + reason + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#GMDRejectModal_" + CPRFId).hide();
+                window.location.replace("/CPRF/ApprovalGMD");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function COOApprove(CPRFId) {
+        var SendToGMD = $("#SendToGMD_" + CPRFId).val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("COOApproveWitDate", "CPRF")",
+            data: '{CPRFId: "' + CPRFId + '", DateSendToGMD : "' + SendToGMD + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#COOApproveModal_" + CPRFId).hide();
+                window.location.replace("/CPRF/ApprovalCOO");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function COOReject(CPRFId) {
+        var reason = $("#COORejectReason_" + CPRFId).val();
+        console.log(reason);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("COOReject", "CPRF")",
+            data: '{CPRFId: "' + CPRFId + '", reason: "' + reason + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#COORejectModal_" + CPRFId).hide();
+                window.location.replace("/CPRF/ApprovalCOO");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function IEReject(CPRFId) {
+        var reason = $("#IERejectReason_" + CPRFId).val();
+        console.log(reason);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("IEReject", "CPRF")",
+            data: '{CPRFId: "' + CPRFId + '", reason: "' + reason + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#IERejectModal_" + CPRFId).hide();
+                window.location.replace("/CPRF/ApprovalIE");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function HodApprove(CPRFId) {
+        var SendToIE = $("#SendToIE_" + CPRFId).val();
+        console.log(SendToIE);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("HODApproveWitDate", "CPRF")",
+            data: '{CPRFId: "' + CPRFId + '", DateSendToIE : "' + SendToIE + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#HODApproveModal_" + CPRFId).hide();
+                window.location.replace("/CPRF/ApprovalHOD");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function HodReject(CPRFId) {
+        var reason = $("#HodRejectReason_" + CPRFId).val();
+        console.log(reason);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("HODReject", "CPRF")",
+            data: '{CPRFId: "' + CPRFId + '", reason: "' + reason + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $("#HODRejectModal_" + CPRFId).hide();
+                window.location.replace("/CPRF/ApprovalHOD");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#notificationdivCPRFDtlsLst").delay(3000).fadeOut("slow");
+    });
+</script>
+
+<script>
+    function OSSendHODCPRFRequest() {
+        window.location.replace("/CPRF/CPRFRequest");
+    }
+
+    function deleteCPRFDt(CPRFDtID) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("DeleteCPRFDetails", "CPRF")",
+            data: '{CPRFDtID: "' + CPRFDtID + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCPRFDtlsLst').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function editCPRFDt(CPRFDtID) {
+        // CPRFEditDetailsForm
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CPRFEditDetailsForm", "CPRF")",
+            data: '{CPRFDtID: "' + CPRFDtID + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#Cprf-details').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        // CPRFEditAssetListForm
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CPRFEditAssetListForm", "CPRF")",
+            data: '{CPRFDtID: "' + CPRFDtID + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#asset-list').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFAsset_Mst>
+
+<div id="notificationExistAsset">
+    @Html.Partial("_Notifications")
+</div>
+
+<table class="table table-head-fixed table-bordered table-sm" style="width:50%">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>System Asset No</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int i = 0;}
+        @foreach (var a in Model)
+        {
+            i++;
+            <tr>
+                <td>@i</td>
+                <td>@a.AssetNo</td>
+                <td><i class="fa fa-trash " style="color:red" onclick="DeleteExistAsset(@a.AssetId,@a.CPRFDt_Id)"></i></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        //alert("test");
+        $("#notificationExistAsset").delay(3000).fadeOut("slow");
+    });
+
+    function DeleteExistAsset(assetId, CprfDtId) {
+        console.log(assetId);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ExistAssetDelete", "CPRF")",
+            data: JSON.stringify({ assetId: assetId, CprfDtId: CprfDtId }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divRdoExist').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        })
+    };
+
+</script>

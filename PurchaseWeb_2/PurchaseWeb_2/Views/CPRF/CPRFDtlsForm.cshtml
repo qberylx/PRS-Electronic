@@ -1,0 +1,469 @@
+﻿@model PurchaseWeb_2.ModelData.CPRFBudget_Dtls
+
+<script>
+    function ShowExistingAsset(CprfId) {
+        console.log("ShowExistingAsset =" + CprfId);
+        // check if the rdoExist checked
+        if (!$("#rdoExist").is(":checked")) {
+            alert("Please check radio Existing Asset");
+            return false;
+        }
+        var CPRFDtId = $("#CPRFDt_Id").val();
+        if ($("#CPRFDt_Id").val() == 0) {
+            alert("Please save CPRF details information first");
+            return false;
+        }
+        let height = 500;
+        let width = 400;
+        // set the horizontal center of the popup window the center of the screen.
+        var left = (screen.width - width) / 2;
+        // set thevertical center of the popup window the center of the screen.
+        var top = (screen.height - height) / 2;
+
+        window.open("/CPRF/AddExistAsset/?CprfId=" + CprfId + "&cat=BA&CPRFDtId=" + CPRFDtId , "PopupWindow", 'width=800px,height=500px,toolbar=no,menubar=no,resizable=yes,top=' + top + ',left=' + left + '');
+
+    }
+</script>
+
+<div class="card card-primary card-tabs">
+    <div class="card-header p-0 pt-1">
+        <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="Cprf-details-tab" data-toggle="pill" href="#Cprf-details" role="tab" aria-controls="Cprf-details" aria-selected="true">CPRF Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="asset-list-tab" data-toggle="pill" href="#asset-list" role="tab" aria-controls="asset-list" aria-selected="false">Asset Listing</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content" id="CprfDtls-tabContent">
+            
+            <div class="tab-pane fade active show" id="Cprf-details" role="tabpanel" aria-labelledby="Cprf-details-tab">
+                @{ Html.RenderAction("CPRFNewDetailsForm", "CPRF", new { CprfId = ViewBag.CprfId });}
+            </div>
+            
+            <div id="asset-list" class="tab-pane fade">
+                @{ Html.RenderAction("CPRFAssetListForm", "CPRF", new { CprfId = ViewBag.CprfId });}
+                
+                @*<div class="row">
+            <div class="col-centered">
+                <button class="btn btn-primary" value="save" name="submit">Save</button>
+                <input type="hidden" name="CPRF_Id" id="CPRF_Id" value="@ViewBag.CprfId" />
+            </div>
+        </div>*@
+            </div>
+        </div>
+           
+    </div>
+    <div class="card-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-centered">
+                    <button class="btn btn-success" onclick="AddlineCPRF(@ViewBag.CprfId)">Add to Line Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="divCPRFDtlsLst">
+            @{ Html.RenderAction("CPRFDtlsLst", "CPRF", new { CprfId = ViewBag.CprfId, EditFlag = ViewBag.EditFlag });}
+        </div>        
+    </div>
+</div>
+
+<script>
+    function chgCurr(currId) {
+        var CurrId = currId;
+        $("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("changeCurrency", "CPRF")",
+            data: '{currId: "' + CurrId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divExchange').html(response);
+                calcTotal();
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+
+    }
+
+    function calcTotal() {
+        var Exchange = $("#Exchange").val();
+        if (!(Exchange > 0) ) {
+            Exchange = 1;
+        }
+
+        var Price = $("#TotalBudget").val();
+        if (!(Price > 0)) {
+            Price = 0;
+        }
+
+        var Budget = Exchange * Price;
+        $("#TotalBudgetMYR").val(Budget);
+    };
+
+    $(function () {
+        $('input.price').blur(function () {
+            var textAmt = (this.value).replace(/,/g, "");
+            var amt = parseFloat(textAmt);
+            $(this).val(amt.toFixed(5));
+        });
+
+        $('input.qty').blur(function () {
+            var amt = parseFloat(this.value);
+            $(this).val( amt.toFixed(0));
+        });
+
+    });
+
+    $(document).ready(function () {
+        $("#divCprfDtlsID").hide();
+        $("#divRdoExist").hide();
+        $("#divRdoSub").hide();
+    });
+
+    function updateWithNewData() {
+        var cprfDtId = $("#CPRFDt_Id").val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("refreshExistAssetList", "CPRF")",
+            data: '{cprfDtId: "' + cprfDtId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divRdoExist').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function AddlineCPRF(cprfId) {
+        var cprfDtId = $("#CPRFDt_Id").val();
+        var AssetCatId = $("#AssetCatId").val();
+        var EditFlag = @ViewBag.EditFlag
+        // check radio checked
+        var rdoAssetChk = $('input[name="radio1"]:checked').val();
+        console.log(rdoAssetChk);
+        $("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("addCPRFDtls", "CPRF")",
+            data: '{cprfId: "' + cprfId + '",cprfDtId: "' + cprfDtId + '" ,assetStatus: "' + rdoAssetChk + '" , assetCatId: "' + AssetCatId + '" , EditFlag: "' + EditFlag + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCPRFDtlsLst').html(response);
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+        // if there are any hiccup cancel reload new form
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CheckaddCPRFDtls", "CPRF")",
+            data: '{cprfId: "' + cprfId + '",cprfDtId: "' + cprfDtId + '" ,assetStatus: "' + rdoAssetChk + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "text",
+            success: function (response) {
+                //$('#divCPRFDtlsLst').html(response);
+                if (response == "Pass") {
+                    // check out new form CPRF
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("CPRFNewDetailsForm", "CPRF")",
+                        data: '{CprfId: "' + cprfId + '" }',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "html",
+                        success: function (response) {
+                            $('#Cprf-details').html(response);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+
+                    // check out new form Asset
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("CPRFAssetListForm", "CPRF")",
+                        data: '{CprfId: "' + cprfId + '"}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "html",
+                        success: function (response) {
+                            $('#asset-list').html(response);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+
+    }
+
+    function obCprfDtlsSave() {
+        $("#overlay").show();
+    }
+
+    function osCprfDtlsSave() {
+        //chg btn primary to secondary and word saved
+        $("#CprfDtlsSaveBtn").removeClass("btn-primary");
+        $("#CprfDtlsSaveBtn").addClass("btn-secondary");
+        $("#CprfDtlsSaveBtn").html("Saved");
+
+        $("#divCprfDtlsID").show();
+        $("#overlay").hide();
+
+    }
+
+    function chgDept(dept) {
+        console.log(dept.value);
+        var deptCode = $('option:selected', dept).attr("code");
+        console.log(deptCode);
+        var deptId = $("#DepartmentId").val();
+        console.log(deptId);
+
+        chgCost();
+
+        if (deptId == "") {
+            deptId = 0;
+        }
+        $("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("processDrop", "CPRF")",
+            data: '{deptId: "' + deptId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divProcess').html(response);
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function chgProcess(process) {
+        console.log(process.value);
+        var processCode = $('option:selected', process).attr("code");
+        console.log(processCode);
+        var processId = $("#ProcessId").val();
+        console.log(processId);
+        var deptId = $("#DepartmentId").val();
+        console.log(deptId);
+
+        chgCost();
+
+        if (processId == "") {
+            processId = 0;
+        }
+        if (deptId == "") {
+            deptId = 0;
+        }
+        $("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("areaDrop", "CPRF")",
+            data: '{processId: "' + processId + '",deptId: "' + deptId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divArea').html(response);
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function chgArea(area) {
+        console.log(area.value);
+        var areaCode = $('option:selected', area).attr("code");
+        console.log(areaCode);
+
+        chgCost();
+    }
+
+    function chgCost() {
+        var dept = $("#DepartmentId");
+        var process = $("#ProcessId");
+        var area = $("#AreaId");
+        var deptCode = $('option:selected', dept).attr("code");
+        var processCode = $('option:selected', process).attr("code");
+        var areaCode = $('option:selected', area).attr("code");
+
+        var costcentre = "20" + deptCode + processCode + areaCode;
+        $("#CostCentreStr").val(costcentre);
+    }
+</script>
+
+<script>
+    function ExistingAsset(CprfId) {
+        $("#divRdoNew").hide();
+        $("#divRdoExist").show();
+        $("#divRdoSub").hide();
+    }
+
+    function NewAsset(CprfId) {
+        $("#divRdoNew").show();
+        $("#divRdoExist").hide();
+        $("#divRdoSub").hide();
+    }
+
+    function generateExistAsset(CprfId) {
+        $.ajax({
+        type: "POST",
+        url: "@Url.Action("ExistAssetGenerate", "CPRF")",
+        data: JSON.stringify({ CprfId: CprfId, CPRFDtId: CPRFDtId }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "html",
+        success: function (response) {
+            $('#divRdoExist').html(response);
+        },
+        failure: function (response) {
+            alert(response.responseText);
+        },
+        error: function (response) {
+            alert(response.responseText);
+        }
+        });
+    }
+
+    function generateNewAsset(CprfId) {
+        console.log(CprfId);
+        //get qty new asset
+        var assetqty = $("#assetqty").val();
+        // det CPRFDt_Id
+        var CPRFDtId = $("#CPRFDt_Id").val();
+        // AssetCatId
+        var AssetCatId = $("#AssetCatId").val();
+
+        $("#overlay").show();
+        $.ajax({
+        type: "POST",
+        url: "@Url.Action("NewAssetGenerate", "CPRF")",
+            data: JSON.stringify({ CprfId: CprfId, CPRFDtId: CPRFDtId, assetqty: assetqty, assetCatId: AssetCatId }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "html",
+        success: function (response) {
+            $('#divNewAssetList').html(response);
+            $("#overlay").hide();
+        },
+        failure: function (response) {
+            alert(response.responseText);
+        },
+        error: function (response) {
+            alert(response.responseText);
+        }
+        });
+
+    }
+</script>
+
+<script>
+    function CPRFReferIdSave() {
+        var CPRFReferId = $("#CPRFReferId").val();
+        if (CPRFReferId == 0) {
+            alert("Please select CPRF Details Id");
+            return false;
+        }
+
+        var cprfDtId = $("#CPRFDt_Id").val();
+        if (cprfDtId == 0) {
+            alert("Please save CPRF Details information first");
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("saveCPRFdtLvl1", "CPRF")",
+            data: '{cprfDtId: "' + cprfDtId + '",CPRFReferId: "' + CPRFReferId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divSctCPRFdtLvl1').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+    }
+
+    function SubAsset(CprfId) {
+        $("#divRdoNew").hide();
+        $("#divRdoExist").hide();
+        $("#divRdoSub").show();
+
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("refreshCPRFdtLvl1", "CPRF")",
+            data: '{CprfId: "' + CprfId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divSctCPRFdtLvl1').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>

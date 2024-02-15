@@ -1660,6 +1660,161 @@ namespace PurchaseWeb_2.Controllers
             return View("ShowPRBudgetList", budgetList);
         }
 
+        public ActionResult PurMstSelectedCPRF(int PrMstId, int PrGroup)
+        {
+            var prMstr = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            var cprf = db.CPRFBudget_Dtls
+                .Where(x => x.CPRFDt_No == prMstr.CPRF && x.CPRFBudget_Mst.StatusID == 11 && x.StatusId == 1 && x.CPRFBudget_Mst.LockFlag != true)
+                .FirstOrDefault();
+
+            ViewBag.cprf = cprf;
+
+            return PartialView("PurMstSelectedCPRF", prMstr);
+        }
+
+        public JsonResult saveCPRFNo(string CprfNo, int PrId)
+        {
+            // check if CprfNo starts with 2022
+            string existVal = "0";
+            if (CprfNo.StartsWith("2023") || CprfNo.StartsWith("2022") || CprfNo.StartsWith("2021"))
+            {
+                //check if CPRF 2022 is in old CPRFMst table
+                var cprfChk = db.CPRFMsts.Where(x => x.CPRFNo == CprfNo).FirstOrDefault();
+                if (cprfChk != null)
+                {
+                    var PrMst = db.PR_Mst.Where(x => x.PRId == PrId).FirstOrDefault();
+                    PrMst.CPRF = CprfNo;
+                    db.SaveChanges();
+                    existVal = "1";
+                }
+            }
+
+            return Json(existVal, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult findCPRFNo(string CprfNo, int PrId)
+        {
+            ViewBag.PrId = PrId;
+
+            var prMst = db.PR_Mst.Where(x => x.PRId == PrId).FirstOrDefault();
+            ViewBag.CPRF = prMst.CPRF;
+
+            var cprfDt = db.CPRFBudget_Dtls
+                .Where(x => x.CPRFBudget_Mst.CPRF_No == CprfNo && x.CPRFBudget_Mst.StatusID == 11 && x.StatusId == 1 && x.CPRFBudget_Mst.LockFlag != true)
+                .ToList();
+
+            return PartialView("findCPRFNo", cprfDt);
+        }
+
+        public ActionResult updateCPRFNo(string CPRFNo, int PrId)
+        {
+            //find costcentre 
+            var CprfDtl = db.CPRFBudget_Dtls.Where(x=>x.CPRFDt_No == CPRFNo && x.StatusId == 1).FirstOrDefault();
+            
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrId).FirstOrDefault();
+            PrMst.CPRF = CPRFNo;
+            if (CprfDtl != null)
+            {
+                PrMst.CostCentreNo = CprfDtl.CostCentreStr;
+            }
+
+            db.SaveChanges();
+
+            return RedirectToAction("CPRFPurDtlsType4Form", "Purchase", new { PrMstId = PrId });
+        }
+
+        public JsonResult chkPRCPRFexist(int PrId)
+        {
+            string existVal = "0";
+            var prDt = db.PR_Details.Where(x => x.PRid == PrId).ToList();
+            if (prDt != null && prDt.Count != 0)
+            {
+                existVal = "1";
+            }
+
+            return Json(existVal, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult getCPRFBal(string CPRFNo, int PrId)
+        {
+            var bookingBal = 0.00M;
+            // if start with 2022
+            if (CPRFNo.StartsWith("2023") || CPRFNo.StartsWith("2022") || CPRFNo.StartsWith("2021"))
+            {
+                var cprfMst = db.CPRFMsts.Where(x => x.CPRFNo == CPRFNo).FirstOrDefault();
+                var totEstPrice = db.PR_Details.Where(x => x.PRid == PrId).Sum(s => s.EstTotalPrice);
+                if (totEstPrice != null)
+                {
+                    bookingBal = (decimal)cprfMst.CPRFBalance - (decimal)totEstPrice;
+                }
+                else
+                {
+                    bookingBal = (decimal)cprfMst.CPRFBalance;
+                }
+            }
+            else
+            {
+                bookingBal = getCPRFbookingBal(CPRFNo, PrId);
+            }
+
+            ViewBag.bookingBal = bookingBal;
+
+            return PartialView("getCPRFBal");
+        }
+
+        public decimal getCPRFbookingBal(string CPRFNo, int PrId)
+        {
+            //get real CPRF bal
+
+            var CPRFBal = db.CPRFBudget_Dtls.Where(x => x.CPRFDt_No == CPRFNo).FirstOrDefault();
+            decimal CPRFBalMYR = 0.00M;
+            if (CPRFBal != null)
+            {
+                if (CPRFBal.BalanceMYR != null)
+                {
+                    CPRFBalMYR = (decimal)CPRFBal.BalanceMYR;
+                }
+            }
+            else
+            {
+                var cprfMstOld = db.CPRFMsts.Where(x => x.CPRFNo == CPRFNo).FirstOrDefault();
+                if (cprfMstOld != null)
+                {
+                    CPRFBalMYR = cprfMstOld.CPRFBalance ?? 0.00M;
+                }
+            }
+
+
+            // get sum all PR 
+            var sumPRCPRF = db.PR_Details.Where(x => x.PR_Mst.CPRF == CPRFNo && x.PR_Mst.StatId != 5 && x.PR_Mst.StatId != 9 && x.PR_Mst.StatId != 8 && x.PR_Mst.DeActiveFlag != true).Sum(s => s.EstTotalPrice);
+
+            decimal bookingBal = 0.00M;
+            bookingBal = (CPRFBalMYR * 1.05M) - (sumPRCPRF ?? 0.00M);
+
+            return bookingBal;
+        }
+
+        public int updatePurpose(string Purpose, int PrId)
+        {
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrId).FirstOrDefault();
+            PrMst.Purpose = Purpose;
+            db.SaveChanges();
+            return 1;
+        }
+
+        public int updateRemarks(string Remarks, int PrId)
+        {
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrId).FirstOrDefault();
+            PrMst.Remarks = Remarks;
+            db.SaveChanges();
+            return 1;
+        }
+
+
+
         //Show purchase master selected for reference
         public ActionResult PurMstSelected(int PrMstId, int PrGroup)
         {
@@ -2935,6 +3090,8 @@ namespace PurchaseWeb_2.Controllers
                 .Where(x => x.PRId == PrMstId)
                 .FirstOrDefault();
 
+            ViewBag.CPRFFlag = purMstr.PrGroupType1.CPRFFlag;
+
             ViewBag.PrNo = purMstr.PRNo;
             ViewBag.PrTypeID = purMstr.PRTypeId;
 
@@ -3104,6 +3261,543 @@ namespace PurchaseWeb_2.Controllers
 
             return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
         }
+
+        public ActionResult CPRFPurDtlsType4Form(int PrMstId)
+        {
+            ViewBag.PrMstId = PrMstId;
+
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.CPRFFlag = purMstr.PrGroupType1.CPRFFlag;
+
+            ViewBag.PrNo = purMstr.PRNo;
+            ViewBag.PrTypeID = purMstr.PRTypeId;
+
+            var UomList = dbDom1.ICUCODs.ToList();
+            ViewBag.UOMList = UomList;
+
+            var CurrList = dbDom1.CSCCDs.ToList();
+            ViewBag.CurrList = CurrList;
+
+            //ViewBag.PrGroup = PrGroup;
+
+            // get from sage the vendorlist
+            var vendorlist = dbDom1.APVENs
+                .Where(x => x.SWACTV == 1)
+                .OrderBy(r => r.VENDNAME)
+                .ToList();
+            ViewBag.vendorlist = vendorlist;
+
+            var cprfDtls = db.CPRFBudget_Dtls.Where(x => x.CPRFDt_No == purMstr.CPRF).FirstOrDefault();
+            if (cprfDtls != null)
+            {
+                var assetLst = db.CPRFAsset_Mst.Where(x => x.CPRFDt_Id == cprfDtls.CPRFDt_Id && x.StatusId == 1).ToList();
+                if (cprfDtls.CPRFDt_Id_Refer != null)
+                {
+                    assetLst = db.CPRFAsset_Mst.Where(x => x.CPRFDt_Id == cprfDtls.CPRFDt_Id_Refer && x.StatusId == 1).ToList();
+                }
+                ViewBag.assetLst = assetLst;
+            }
+            else
+            {
+                ViewBag.assetLst = "";
+            }
+
+            List<PrAssetID> assets = new List<PrAssetID>();
+            PRAsset_Lst PrAssetAct;
+            int intAssetId;
+            foreach (var asset in ViewBag.assetLst)
+            {
+                intAssetId = asset.AssetId;
+                PrAssetAct = db.PRAsset_Lst.Where(x => x.AssetId == intAssetId && x.ActiveFlag == true).FirstOrDefault();
+                if (PrAssetAct != null)
+                {
+                    assets.Add(new PrAssetID
+                    {
+                        AssetId = asset.AssetId,
+                    });
+                }
+
+            }
+
+            ViewBag.PrAssetLst = assets;
+
+
+            return PartialView("CPRFPurDtlsType4Form");
+        }
+
+        public class PrAssetID
+        {
+            public int AssetId;
+        }
+
+        public ActionResult AssetCPRFList(int PrMstId)
+        {
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == PrMstId)
+                .FirstOrDefault();
+
+            ViewBag.CPRFDt_Id_Refer = null;
+
+            var cprfDtls = db.CPRFBudget_Dtls.Where(x => x.CPRFDt_No == purMstr.CPRF).FirstOrDefault();
+            if (cprfDtls != null)
+            {
+                var assetLst = db.CPRFAsset_Mst.Where(x => x.CPRFDt_Id == cprfDtls.CPRFDt_Id && x.StatusId == 1).ToList();
+                if (cprfDtls.CPRFDt_Id_Refer != null)
+                {
+                    assetLst = db.CPRFAsset_Mst.Where(x => x.CPRFDt_Id == cprfDtls.CPRFDt_Id_Refer && x.StatusId == 1).ToList();
+                    ViewBag.CPRFDt_Id_Refer = cprfDtls.CPRFDt_Id_Refer;
+                }
+                ViewBag.assetLst = assetLst;
+            }
+            else
+            {
+                ViewBag.assetLst = "";
+            }
+
+            List<PrAssetID> assets = new List<PrAssetID>();
+            PRAsset_Lst PrAssetAct;
+            int intAssetId;
+            foreach (var asset in ViewBag.assetLst)
+            {
+                intAssetId = asset.AssetId;
+                PrAssetAct = db.PRAsset_Lst
+                    .Where(x => x.AssetId == intAssetId && x.ActiveFlag == true && x.PR_Details.PR_Mst.DeActiveFlag != true)
+                    .FirstOrDefault();
+
+                if (PrAssetAct != null)
+                {
+                    assets.Add(new PrAssetID
+                    {
+                        AssetId = asset.AssetId,
+                    });
+                }
+            }
+            ViewBag.PrAssetLst = assets;
+
+
+
+            return PartialView("AssetCPRFList");
+        }
+
+        public JsonResult sendDelistAssetEmail(int assetId)
+        {
+            int result = 0;
+
+            try
+            {
+                var CPRFAsset = db.CPRFAsset_Mst.Where(x => x.AssetId == assetId).FirstOrDefault();
+                CPRFAsset.DelistReqFlag = true;
+                CPRFAsset.DelistReqBy = Session["UserName"].ToString();
+                CPRFAsset.DelistReqDate = DateTime.Now;
+                db.SaveChanges();
+
+                var AssetNo = CPRFAsset.AssetNo;
+                if (AssetNo == null)
+                {
+                    AssetNo = CPRFAsset.AssetSystemNo;
+                }
+
+                var usrMst = db.UsrPsn_Map.Where(x => x.Position_mst.Position_name == "Treasurer").ToList();
+
+                //Email to tresury
+                //subject
+                string subject = @"Asset No : " + AssetNo + " request to be delist  ";
+                //body
+                string body = @"Asset No : " + AssetNo + "  is requested to be delist by " + Session["UserName"].ToString() + ". <br/>   " +
+                   " Kindly login to  http://prs.dominant-semi.com/ to continue.";
+                //user email
+                String userEmail = "";
+                foreach (var user in usrMst)
+                {
+                    userEmail = user.Usr_mst.Email;
+                    SendEmail(userEmail, subject, body, "");
+                }
+
+                result = 1;
+
+            }
+            catch (Exception e)
+            {
+                var failMsg = e.Message;
+                result = 0;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AddPurDtlsType4CPRF(PRdtlsViewModel pR_)
+        {
+            var purMstr = db.PR_Mst
+                .Where(x => x.PRId == pR_.PRid)
+                .FirstOrDefault();
+
+            //if qty 0 not allowed
+            if (pR_.Qty == 0)
+            {
+                this.AddNotification("0 Quantity is not allowed !!", NotificationType.ERROR);
+                return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+            }
+
+            // if cprfNo null or empty
+            if (String.IsNullOrEmpty(purMstr.CPRF))
+            {
+                this.AddNotification("CPRF No is not selected !!", NotificationType.ERROR);
+                return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+            }
+            else
+            {
+                var AssetRunNo = Request.Form["AssetRunNo"];
+                var iAssetRunNo = int.Parse(AssetRunNo);
+                var assetId = "";
+                int calAsst = 0;
+
+                for (int i = 1; i <= iAssetRunNo; i++)
+                {
+                    assetId = Request.Form["AssetId_" + i];
+                    if (assetId != null)
+                    {
+                        calAsst++;
+                    }
+
+                }
+
+                if (calAsst == 0 && !purMstr.CPRF.StartsWith("2022") && !purMstr.CPRF.StartsWith("2021"))
+                {
+                    this.AddNotification("Asset list still havent been checked !!", NotificationType.ERROR);
+                    return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+                }
+            }
+
+            // asset no not chk
+
+
+            // find vendor name
+            string VendorName = "";
+            if (pR_.VendorCode == "0")
+            {
+                VendorName = pR_.VendorName;
+            }
+            else
+            {
+                var vendor = dbDom1.APVENs.Where(x => x.VENDORID == pR_.VendorCode).FirstOrDefault();
+                VendorName = vendor.VENDNAME.Trim();
+            }
+
+            decimal curExh = 1.00M;
+
+            if (pR_.EstCurCode != null)
+            {
+                var EstCurExc = dbDom1.CSCRDs.Where(x => x.HOMECUR == "MYR" && x.RATETYPE == "SP" && x.SOURCECUR == pR_.EstCurCode)
+                    .OrderByDescending(o => o.RATEDATE)
+                    .FirstOrDefault();
+                if (EstCurExc != null)
+                {
+                    curExh = EstCurExc.RATE;
+                }
+            }
+
+
+            try
+            {
+
+                if (pR_.PRDtId == 0)
+                {
+                    var AddPRDtls = new PR_Details
+                    {
+                        PRid = pR_.PRid,
+                        PRNo = pR_.PRNo,
+                        TypePRId = pR_.TypePRId,
+                        UserId = purMstr.UserId,
+                        UserName = purMstr.Usr_mst.Username,
+                        DepartmentName = purMstr.AccTypeDept.DeptName,
+                        DomiPartNo = "NS",
+                        Description = pR_.Description,
+                        Qty = pR_.Qty,
+                        ReqDevDate = pR_.ReqDevDate,
+                        Remarks = "-",
+                        VendorCode = pR_.VendorCode.Trim(),
+                        VendorName = VendorName, //vendor.VENDNAME.Trim(),
+                        VendorPartNo = pR_.VendorPartNo,
+                        Device = "-",
+                        SalesOrder = "-",
+                        EstimateUnitPrice = pR_.EstimateUnitPrice,
+                        EstTotalPrice = pR_.EstimateUnitPrice * pR_.Qty,
+                        UOMName = pR_.UOMName,
+                        EstCurCode = pR_.EstCurCode,
+                        Tax = 0,
+                        TaxCode = "SSTG",
+                        TaxClass = 1,
+                        EstCurExch = curExh
+
+                    };
+                    db.PR_Details.Add(AddPRDtls);
+                    db.SaveChanges();
+
+                    var AssetRunNo = Request.Form["AssetRunNo"];
+                    var iAssetRunNo = int.Parse(AssetRunNo);
+                    var assetId = "";
+                    var assetIdNo = "";
+                    var addPRAsset = db.Set<PRAsset_Lst>();
+
+                    for (int i = 1; i <= iAssetRunNo; i++)
+                    {
+                        assetId = Request.Form["AssetId_" + i];
+                        assetIdNo = Request.Form["AssetIdNo_" + i];
+                        if (assetId != null)
+                        {
+                            addPRAsset.Add(new PRAsset_Lst
+                            {
+                                PRDtId = AddPRDtls.PRDtId,
+                                PRid = pR_.PRid,
+                                AssetId = int.Parse(assetIdNo),
+                                ActiveFlag = true
+                            });
+                        }
+                        else
+                        {
+                            addPRAsset.Add(new PRAsset_Lst
+                            {
+                                PRDtId = AddPRDtls.PRDtId,
+                                PRid = pR_.PRid,
+                                AssetId = int.Parse(assetIdNo),
+                                ActiveFlag = false
+                            });
+                        }
+                        db.SaveChanges();
+                    }
+
+
+
+                    string Username = (string)Session["Username"];
+                    // add audit log for PR
+                    var auditLog = db.Set<AuditPR_Log>();
+                    auditLog.Add(new AuditPR_Log
+                    {
+                        ModifiedBy = Username,
+                        ModifiedOn = DateTime.Now,
+                        ActionBtn = "INSERT",
+
+                        ColumnStr =
+                        "PRid              |" +
+                        "PRNo              |" +
+                        "TypePRId          |" +
+                        "UserId            |" +
+                        "UserName          |" +
+                        "DepartmentName    |" +
+                        "DomiPartNo        |" +
+                        "Description       |" +
+                        "Qty               |" +
+                        "ReqDevDate        |" +
+                        "Remarks           |" +
+                        "VendorCode        |" +
+                        "VendorName        |" +
+                        "VendorPartNo      |" +
+                        "Device            |" +
+                        "SalesOrder        |" +
+                        "EstimateUnitPrice |" +
+                        "EstTotalPrice     |" +
+                        "UOMName           |" +
+                        "EstCurCode        |" +
+                        "Tax               |" +
+                        "TaxCode           |" +
+                        "TaxClass          |",
+
+                        ValueStr =
+                        pR_.PRid + "|" +
+                        pR_.PRNo + "|" +
+                        pR_.TypePRId + "|" +
+                        purMstr.UserId + "|" +
+                        purMstr.Usr_mst.Username + "|" +
+                        purMstr.AccTypeDept.DeptName + "|" +
+                        "NS" + "|" +
+                        pR_.Description + "|" +
+                        pR_.Qty + "|" +
+                        pR_.ReqDevDate + "|" +
+                        "-" + "|" +
+                        pR_.VendorCode.Trim() + "|" +
+                        VendorName + "|" +
+                        pR_.VendorPartNo + "|" +
+                        "-" + "|" +
+                        "-" + "|" +
+                        pR_.EstimateUnitPrice + "|" +
+                        pR_.EstimateUnitPrice * pR_.Qty + "|" +
+                        pR_.UOMName + "|" +
+                        pR_.EstCurCode + "|" +
+                        0 + "|" +
+                        "SSTG" + "|" +
+                         1 + "|",
+
+                        PRId = pR_.PRid,
+                        PRDtlsId = pR_.PRDtId,
+                        Remarks = "Add PR Details"
+
+                    });
+                    db.SaveChanges();
+
+                    this.AddNotification("New PR details added ", NotificationType.SUCCESS);
+                }
+                else
+                {
+                    var UpdPRDtls = db.PR_Details.Where(x => x.PRDtId == pR_.PRDtId).FirstOrDefault();
+                    if (UpdPRDtls != null)
+                    {
+                        UpdPRDtls.DomiPartNo = "NS";
+                        UpdPRDtls.Description = pR_.Description;
+                        UpdPRDtls.Qty = pR_.Qty;
+                        UpdPRDtls.ReqDevDate = pR_.ReqDevDate;
+                        UpdPRDtls.Remarks = "-";
+                        UpdPRDtls.VendorCode = pR_.VendorCode.Trim();
+                        UpdPRDtls.VendorName = VendorName; //vendor.VENDNAME.Trim(),
+                        UpdPRDtls.VendorPartNo = pR_.VendorPartNo;
+                        UpdPRDtls.Device = "-";
+                        UpdPRDtls.SalesOrder = "-";
+                        UpdPRDtls.EstimateUnitPrice = pR_.EstimateUnitPrice;
+                        UpdPRDtls.EstTotalPrice = pR_.EstimateUnitPrice * pR_.Qty;
+                        UpdPRDtls.UOMName = pR_.UOMName;
+                        UpdPRDtls.EstCurCode = pR_.EstCurCode;
+                        UpdPRDtls.Tax = 0;
+                        UpdPRDtls.TaxCode = "SSTG";
+                        UpdPRDtls.TaxClass = 1;
+                        UpdPRDtls.EstCurExch = curExh;
+                        db.SaveChanges();
+
+                        var AssetRunNo = Request.Form["AssetRunNo"];
+                        var iAssetRunNo = int.Parse(AssetRunNo);
+                        var assetId = "";
+                        var assetIdNo = "";
+
+                        var DelPRAsset = db.PRAsset_Lst.Where(x => x.PRDtId == pR_.PRDtId).ToList();
+                        db.PRAsset_Lst.RemoveRange(DelPRAsset);
+                        db.SaveChanges();
+
+                        var addPRAsset = db.Set<PRAsset_Lst>();
+
+                        for (int i = 1; i <= iAssetRunNo; i++)
+                        {
+                            assetId = Request.Form["AssetId_" + i];
+                            assetIdNo = Request.Form["AssetIdNo_" + i];
+                            if (assetId != null)
+                            {
+                                addPRAsset.Add(new PRAsset_Lst
+                                {
+                                    PRDtId = pR_.PRDtId,
+                                    PRid = pR_.PRid,
+                                    AssetId = int.Parse(assetIdNo),
+                                    ActiveFlag = true
+                                });
+                            }
+                            else
+                            {
+                                addPRAsset.Add(new PRAsset_Lst
+                                {
+                                    PRDtId = pR_.PRDtId,
+                                    PRid = pR_.PRid,
+                                    AssetId = int.Parse(assetIdNo),
+                                    ActiveFlag = false
+                                });
+                            }
+                            db.SaveChanges();
+                        }
+
+                        string Username = (string)Session["Username"];
+                        // add audit log for PR
+                        var auditLog = db.Set<AuditPR_Log>();
+                        auditLog.Add(new AuditPR_Log
+                        {
+                            ModifiedBy = Username,
+                            ModifiedOn = DateTime.Now,
+                            ActionBtn = "UPDATE",
+
+                            ColumnStr =
+                            "PRid              |" +
+                            "PRNo              |" +
+                            "TypePRId          |" +
+                            "UserId            |" +
+                            "UserName          |" +
+                            "DepartmentName    |" +
+                            "DomiPartNo        |" +
+                            "Description       |" +
+                            "Qty               |" +
+                            "ReqDevDate        |" +
+                            "Remarks           |" +
+                            "VendorCode        |" +
+                            "VendorName        |" +
+                            "VendorPartNo      |" +
+                            "Device            |" +
+                            "SalesOrder        |" +
+                            "EstimateUnitPrice |" +
+                            "EstTotalPrice     |" +
+                            "UOMName           |" +
+                            "EstCurCode        |" +
+                            "Tax               |" +
+                            "TaxCode           |" +
+                            "TaxClass          |",
+
+                            ValueStr =
+                            pR_.PRid + "|" +
+                            pR_.PRNo + "|" +
+                            pR_.TypePRId + "|" +
+                            purMstr.UserId + "|" +
+                            purMstr.Usr_mst.Username + "|" +
+                            purMstr.AccTypeDept.DeptName + "|" +
+                            "NS" + "|" +
+                            pR_.Description + "|" +
+                            pR_.Qty + "|" +
+                            pR_.ReqDevDate + "|" +
+                            "-" + "|" +
+                            pR_.VendorCode.Trim() + "|" +
+                            VendorName + "|" +
+                            pR_.VendorPartNo + "|" +
+                            "-" + "|" +
+                            "-" + "|" +
+                            pR_.EstimateUnitPrice + "|" +
+                            pR_.EstimateUnitPrice * pR_.Qty + "|" +
+                            pR_.UOMName + "|" +
+                            pR_.EstCurCode + "|" +
+                            0 + "|" +
+                            "SSTG" + "|" +
+                             1 + "|",
+
+                            PRId = pR_.PRid,
+                            PRDtlsId = pR_.PRDtId,
+                            Remarks = "Add PR Details"
+
+                        });
+                        db.SaveChanges();
+
+                        this.AddNotification("PR details updated ", NotificationType.SUCCESS);
+                    }
+                }
+
+
+            }
+            catch (RetryLimitExceededException)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+
+
+            return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
+        }
+
+        public String ValidateAssetPr(int PrMstId)
+        {
+            var PrMst = db.PR_Mst.Where(x => x.PRId == PrMstId).FirstOrDefault();
+            if (String.IsNullOrEmpty(PrMst.CPRF))
+            {
+                return "0";
+            }
+            else
+            {
+                return "0";
+            }
+
+        }
+
 
         public ActionResult callNewVendor()
         {

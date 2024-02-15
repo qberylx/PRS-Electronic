@@ -18,6 +18,7 @@ namespace PurchaseWeb_2.ModelData
         public PR_Details()
         {
             this.PR_VendorComparison = new HashSet<PR_VendorComparison>();
+            this.PRAsset_Lst = new HashSet<PRAsset_Lst>();
         }
     
         public int PRDtId { get; set; }
@@ -78,6 +79,7 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<decimal> LastPriceVendor { get; set; }
         public string LastVendorCode { get; set; }
         public Nullable<decimal> EstCurExch { get; set; }
+        public Nullable<bool> CheckPRFlag { get; set; }
     
         public virtual PR_Mst PR_Mst { get; set; }
         public virtual UOM_mst UOM_mst { get; set; }
@@ -86,5 +88,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual Currency_Mst Currency_Mst1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PR_VendorComparison> PR_VendorComparison { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PRAsset_Lst> PRAsset_Lst { get; set; }
     }
 }

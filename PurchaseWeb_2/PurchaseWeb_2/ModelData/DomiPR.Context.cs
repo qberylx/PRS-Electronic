@@ -67,6 +67,21 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<AuditBudget_log> AuditBudget_log { get; set; }
         public virtual DbSet<MonthlyDeptBudget> MonthlyDeptBudgets { get; set; }
         public virtual DbSet<HODManager_Map> HODManager_Map { get; set; }
+        public virtual DbSet<CPRF_File> CPRF_File { get; set; }
+        public virtual DbSet<CprfArea_Mst> CprfArea_Mst { get; set; }
+        public virtual DbSet<CPRFAsset_Mst> CPRFAsset_Mst { get; set; }
+        public virtual DbSet<CPRFBudget_Mst> CPRFBudget_Mst { get; set; }
+        public virtual DbSet<CprfCategory_Mst> CprfCategory_Mst { get; set; }
+        public virtual DbSet<AssetCategory_Mst> AssetCategory_Mst { get; set; }
+        public virtual DbSet<AuditCPRF_log> AuditCPRF_log { get; set; }
+        public virtual DbSet<CostCentre_Mst> CostCentre_Mst { get; set; }
+        public virtual DbSet<PRAsset_Lst> PRAsset_Lst { get; set; }
+        public virtual DbSet<Category_Mst> Category_Mst { get; set; }
+        public virtual DbSet<Process_Mst> Process_Mst { get; set; }
+        public virtual DbSet<vw_CprfDept> vw_CprfDept { get; set; }
+        public virtual DbSet<vw_usrDpt> vw_usrDpt { get; set; }
+        public virtual DbSet<CPRFBudget_Dtls> CPRFBudget_Dtls { get; set; }
+        public virtual DbSet<UsrPsn_Map> UsrPsn_Map { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {
@@ -196,6 +211,23 @@ namespace PurchaseWeb_2.ModelData
                 new ObjectParameter("SourcingName", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_ChkDeptBudgetReject", prIdParameter, sourcingNameParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> SP_ChkCPRFSendToHOD(string cprfNo, Nullable<int> cprfLvl, Nullable<decimal> prTotal, ObjectParameter passFlag)
+        {
+            var cprfNoParameter = cprfNo != null ?
+                new ObjectParameter("cprfNo", cprfNo) :
+                new ObjectParameter("cprfNo", typeof(string));
+    
+            var cprfLvlParameter = cprfLvl.HasValue ?
+                new ObjectParameter("cprfLvl", cprfLvl) :
+                new ObjectParameter("cprfLvl", typeof(int));
+    
+            var prTotalParameter = prTotal.HasValue ?
+                new ObjectParameter("prTotal", prTotal) :
+                new ObjectParameter("prTotal", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_ChkCPRFSendToHOD", cprfNoParameter, cprfLvlParameter, prTotalParameter, passFlag);
         }
     }
 }

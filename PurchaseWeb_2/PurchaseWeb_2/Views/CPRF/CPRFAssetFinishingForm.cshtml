@@ -1,0 +1,147 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFAsset_Mst>
+
+<div class="card card-primary">
+    <div class="card-header">
+        <div class="card-title">
+            <h6>Assign official Asset No</h6>
+        </div>
+    </div>
+    <div id="notificationAsset">
+        @Html.Partial("_Notifications")
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered" style="width:60%">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Asset System No</th>
+                    <th>Asset No</th>
+                    <th></th>
+                </tr>
+                @{ int i = 0;}
+                @foreach (var item in Model)
+                {
+                    i++;
+                    <tr>
+                        <td>@i</td>
+                        @if (item.AssetSystemNo != null)
+                        {
+                            <td>@item.AssetSystemNo</td>
+                        }
+                        else
+                        {
+                            <td>@item.AssetNo</td>
+                        }
+
+
+                        @if (item.AssetSystemNo != null)
+                        {
+                            <td>
+                                <input class="form-control" name="AssetNo" id="AssetNo_@item.AssetId" value="@item.AssetNo" />
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <input class="form-control" name="AssetNo" id="AssetNo_@item.AssetId" value="@item.AssetNo" readonly />
+                            </td>
+                        }
+
+                        <td>
+                            <button class="btn btn-primary" onclick="SaveAssetNo(@item.AssetId)">Save</button>
+                            @*<button class="btn btn-info" onclick="GenerateAssetNo(@item.AssetId)">Auto Generate Asset No</button>*@
+                        </td>
+
+                    </tr>
+                }
+            </thead>
+            @*<tfoot>
+                <tr>
+                    <td colspan="2">&nbsp;</td>
+                    <td>
+                        <button class="btn btn-info" onclick="GenerateAllAssetNo(@ViewBag.CprfId)">Auto Generate All Asset No</button>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            </tfoot>*@
+        </table>
+    </div>
+</div>
+
+<script>
+    function GenerateAllAssetNo(CprfId) {
+        $("#overlay").show();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GenerateAllAssetNo", "CPRF")",
+            data: '{CprfId: "' + CprfId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCPRFAssetFinishingForm').html(response);
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function SaveAssetNo(AssetId) {
+        var AssetNo = $("#AssetNo_" + AssetId).val();
+        if (AssetNo == "") {
+            alert("Please key-in the Asset No before proceed");
+            return false;
+        }
+        $("#overlay").show();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("SaveAssetNo", "CPRF")",
+            data: '{AssetId: "' + AssetId + '", AssetNo: "' + AssetNo + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCPRFAssetFinishingForm').html(response);
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function GenerateAssetNo(AssetId) {
+        $("#overlay").show();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GenerateAssetNo", "CPRF")",
+            data: '{AssetId: "' + AssetId + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divCPRFAssetFinishingForm').html(response);
+                $("#overlay").hide();
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $("#notificationAsset").delay(3000).fadeOut("slow");
+    });
+</script>

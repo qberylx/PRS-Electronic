@@ -1,0 +1,60 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRF_File>
+
+
+<div id="notification">
+    @Html.Partial("_Notifications")
+</div>
+<table class="table">
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UploadFileName)
+                </td>
+                <td class="text-right py-0 align-middle">
+                    <div class="btn-group btn-group-sm">
+                        <a href="~/UploadedFile/CPRF/@item.FileName" class="btn btn-info" target="_blank"><i class="fas fa-eye"></i></a>
+                        <a>&nbsp;</a>
+                        @if (ViewBag.StatusId < 5)
+                        {
+                            <a class="btn btn-danger" id="deleteFile" name="deleteFile" onclick="deleteFile(@item.CPRF_Id,@item.FileId)" href="#"> <i class="fas fa-trash"></i></a>
+                        }
+                        <input type="hidden" id="filePrMstId" value="@item.CPRF_Id" />
+                        <input type="hidden" id="fileId" value="@item.FileId" />
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $("#notification").delay(2000).fadeOut("slow");
+    });
+
+    function deleteFile(CprfId, fileId) {
+        //alert(prMstId);
+        //alert(fileId);
+        if (confirm("Are you sure to delete this file?") == true) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("CPRFdeleteFile", "CPRF")",
+                data: '{ CprfId:"' + CprfId + '", Fileid:"' + fileId + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $("#divCPRFFileUploadList").html(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+
+    };
+</script>

@@ -1,0 +1,101 @@
+﻿@model IEnumerable<PurchaseWeb_2.ModelData.CPRFAsset_Mst>
+
+<div id="notificationNewAsset">
+    @Html.Partial("_Notifications")
+</div>
+<hr/>
+<div class="table-responsive" style="height:300px">
+    <table class="table table-head-fixed table-bordered table-sm " style="width:50%">
+        <thead >
+            <tr >
+                <th>No</th>
+                <th>System Asset No</th>
+                <th>Estimate date of PR</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 0;}
+            @foreach (var a in Model)
+            {
+                i++;
+                <tr>
+                    <td>@i</td>
+                    <td>@a.AssetSystemNo</td>
+                    <td>
+                        <input type="date" id="estPrDate_@a.AssetId" name="estPrDate" min="" class="form-control" onchange="chgEstPrDate(@a.AssetId, @a.CPRFDt_Id)" />
+                    </td>
+                    <td><i class="fa fa-trash " style="color:red" onclick="DeleteNewAsset(@a.AssetId,@a.CPRFDt_Id)"></i></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        //alert("test");
+        $("#notificationNewAsset").delay(3000).fadeOut("slow");
+
+        // get the current date
+        let today = new Date();
+
+        // format the date as YYYY-MM-DD
+        let dateString = today.toISOString().slice(0, 10);
+
+        // set the min attribute of the input field to today's date
+        //document.getElementById("#estPrDate_").setAttribute("min", dateString);
+
+        let myDate = $("input[name='estPrDate']");
+
+        myDate.attr({
+            min: dateString
+        });
+        myDate.val(dateString);
+
+    });
+
+    function chgEstPrDate(assetId, CprfDtId) {
+        //console.log(assetId);
+        //console.log(CprfDtId);
+        var EstDate = $("#estPrDate_" + assetId).val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("chgEstPrDate", "CPRF")",
+            data: JSON.stringify({ assetId: assetId, CprfDtId: CprfDtId, EstDate: EstDate }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                //$('#divNewAssetList').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        })
+    }
+
+    function DeleteNewAsset(assetId, CprfDtId) {
+        console.log(assetId);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("NewAssetDelete", "CPRF")",
+            data: JSON.stringify({ assetId: assetId, CprfDtId: CprfDtId }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divNewAssetList').html(response);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        })
+    };
+
+</script>
