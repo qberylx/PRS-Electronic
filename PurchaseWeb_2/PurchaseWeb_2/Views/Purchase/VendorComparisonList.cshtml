@@ -71,7 +71,7 @@
                     @Html.DisplayFor(modelItem => item.VCName)
                 </td>
                 <td>
-                    @item.CurPrice.ToString() 
+                    @item.CurPrice.ToString()
 
                 </td>
                 <td>
@@ -195,6 +195,17 @@
 
                 </td>
                 <td>
+                    @using (Ajax.BeginForm("VendorComparisonEdit", "Purchase", new AjaxOptions { HttpMethod = "POST"
+                        , UpdateTargetId = "divVendorComparison_" + item.PRDtId + "" 
+                        , OnBegin = "obLoad();"
+                        , OnSuccess = "osLoad();"
+                        }))
+                    {
+                        <button class="btn btn-warning"><i class="fa fa-pen"></i></button>
+                        <input type="hidden" value="@item.VCId" id="VCIdEdt" name="VCIdEdt" />
+                    }
+                </td>
+                <td>
                     @using (Ajax.BeginForm("VendorComparisonDelete", "Purchase", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divVDCompareLst_" + item.PRDtId + "" }))
                     {
                         <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
@@ -213,4 +224,12 @@
     $(document).ready(function () {
         $("#notification").delay(3000).fadeOut("slow");
     });
+
+    function obLoad() {
+        $(".overlay").show();
+    }
+
+    function osLoad() {
+        $(".overlay").hide();
+    }
 </script> 

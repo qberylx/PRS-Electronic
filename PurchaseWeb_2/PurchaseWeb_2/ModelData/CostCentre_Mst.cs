@@ -23,6 +23,7 @@ namespace PurchaseWeb_2.ModelData
         public Nullable<bool> DeleteFlag { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public string CreateBy { get; set; }
+        public string Description { get; set; }
     
         public virtual AccTypeDept AccTypeDept { get; set; }
         public virtual CprfArea_Mst CprfArea_Mst { get; set; }

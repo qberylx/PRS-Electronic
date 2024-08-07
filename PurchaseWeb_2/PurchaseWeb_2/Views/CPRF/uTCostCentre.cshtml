@@ -1,6 +1,5 @@
 ﻿@model PurchaseWeb_2.ModelData.CostCentre_Mst
 
-
 <div class="row">
     <div class="col-md-12">
         <div class="card card-primary">
@@ -11,67 +10,32 @@
             </div>
             <div class="card-body">
                 @using (Ajax.BeginForm("UTCostCentreMstSave", "CPRF"
-                    , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCostCentreLst", OnSuccess = "OnSuccess" }))
+                    , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCostCentreLst" }))
                 {
-                    @Html.AntiForgeryToken()
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <table style="width:60%">
+                        <tr>
+                            <td>Cost Centre Code</td>
+                            <td>:</td>
+                            <td>
+                                <input type="text" class="form-control" name="CostCentreStr" id="CostCentreStr" required />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Cost Centre Desc</td>
+                            <td>:</td>
+                            <td>
+                                <input type="text" class="form-control" name="Description" id="Description" required />
+                            </td>
+                        </tr>
 
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label class="form-label">Prefix</label>
-                            @Html.EditorFor(model => model.Prefix, new { htmlAttributes = new { @class = "form-control" , @Value = "20" , @Onchange = "chgPrefix(this.val)" } })
-                            @Html.ValidationMessageFor(model => model.Prefix, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Department</label>
-                            <select name="dptSlt" id="dptSlt" class="form-control" onchange="chgDept(this.val)" >
-                                @foreach (var dpt in ViewBag.dptLst)
-                                {
-                                    <option value='{"depId":"@dpt.AccTypeDepID","depCode":"@dpt.DeptCode"}'>@dpt.DeptCode - @dpt.DeptName</option>
-                                }
-                            </select>
-                            <input type="hidden" name="DepartmentId" id="DepartmentId" value="" />
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Process</label>
-                            <select name="prcSlt" id="prcSlt" class="form-control" onchange="chgProcess(this.val)">
-                                @foreach (var prc in ViewBag.processLst)
-                                {
-                                    <option value='{"processId":"@prc.Id","processCode":"@prc.ProcessCode"}'>@prc.ProcessCode - @prc.ProcessDesc</option>
-                                }
-                            </select>
-                            <input type="hidden" name="ProcessId" id="ProcessId" value="" />
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Area</label>
-                            <select name="areaSlt" id="areaSlt" class="form-control" onchange="chgArea(this.val)">
-                                @foreach (var area in ViewBag.areaLst)
-                                {
-                                    <option value='{"areaId":"@area.AreaId","areaCode":"@area.AreaCode"}'>@area.AreaCode - @area.AreaDesc</option>
-                                }
-                            </select>
-                            <input type="hidden" name="AreaId" id="AreaId" value="" />
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label class="form-label">Cost Centre </label>
-                            <input type="hidden" id="strPrefix" value="20" />
-                            <input type="hidden" id="codeDept" value="" />
-                            <input type="hidden" id="codeProcess" value="" />
-                            <input type="hidden" id="codeArea" value="" />
-                            <input type="text" name="CostCentreStr" id="CostCentreStr" class="form-control" readonly />
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-md-6 text-center">
-                            <input class="btn btn-primary" type="submit" value="Save" name="save" />
-                        </div>
-                    </div>
-
+                        <tr>
+                            <td colspan="3" style="text-align:center">
+                                <button class="btn btn-primary">Save</button>
+                            </td>
+                        </tr>
+                    </table>
                 }
+
             </div>
         </div>
     </div>
@@ -84,61 +48,3 @@
 
     </div>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        var depId = $("#dptSlt").val();
-        chgDept(depId);
-
-        var processId = $("#prcSlt").val();
-        chgProcess(processId);
-
-        var areaId = $("#areaSlt").val();
-        chgArea(areaId);
-
-        codeCentreUpdate();
-
-    });
-
-    function codeCentreUpdate() {
-        var strCodeCentre = $("#strPrefix").val() + $("#codeDept").val() + $("#codeProcess").val() + $("#codeArea").val()
-        $("#CostCentreStr").val(strCodeCentre);
-    }
-
-    function chgPrefix(prefix) {
-        $("#strPrefix").val(prefix);
-        codeCentreUpdate();
-    }
-
-    function chgDept(dept) {
-        var depId = $("#dptSlt").val();
-        var depObj = JSON.parse(depId);
-        $("#DepartmentId").val(depObj.depId);
-        $("#codeDept").val(depObj.depCode);
-        codeCentreUpdate();
-    }
-
-    function chgProcess(process) {
-        var processId = $("#prcSlt").val();
-        var processObj = JSON.parse(processId);
-        $("#ProcessId").val(processObj.processId);
-        $("#codeProcess").val(processObj.processCode);
-        codeCentreUpdate();
-    }
-
-    function chgArea(area) {
-        var areaId = $("#areaSlt").val();
-        var areaObj = JSON.parse(areaId);
-        $("#AreaId").val(areaObj.areaId);
-        $("#codeArea").val(areaObj.areaCode);
-        codeCentreUpdate();
-    }
-
-
-
-    function OnSuccess() {
-        //this.reset();
-        //console.log("reset value");
-    }
-</script>
-

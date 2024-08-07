@@ -110,7 +110,21 @@
                     <td>Cost Centre</td>
                     <td>:</td>
                     <td>
-                        <input type="text" class="form-control" name="CostCentreStr" id="CostCentreStr" value="@Model.CostCentreStr" readonly />
+                        <select class="form-control" name="CostCentreStr" id="CostCentreStr"  required>
+                            <option value="" code="">Please Choose</option>
+                            @foreach (var a in ViewBag.costList)
+                            {
+                                if (Model.CostCentreStr == a.CostCentreStr)
+                                {
+                                    <option value="@a.CostCentreStr" selected>@a.CostCentreStr - @a.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@a.CostCentreStr" >@a.CostCentreStr - @a.Description</option>
+                                }
+                            }
+                        </select>
+                        @*<input type="text" class="form-control" name="CostCentreStr" id="CostCentreStr" value="@Model.CostCentreStr" readonly />*@
                     </td>
                 </tr>
             </table>

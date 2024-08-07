@@ -1,8 +1,10 @@
-﻿using PagedList;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using PagedList;
 using PurchaseWeb_2.Extensions;
 using PurchaseWeb_2.ModelData;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
@@ -482,6 +484,10 @@ namespace PurchaseWeb_2.Controllers
             var areaLst = db.CprfArea_Mst.ToList();
             ViewBag.areaLst = areaLst;
 
+            //COSTCENTRE
+            var costcentreList = db.CostCentre_Mst.Where(x=>x.DeleteFlag != true).ToList();
+            ViewBag.costcentreList = costcentreList;
+
             // currency
             var rateCurrLst = dbDom1.CSCRDs
                 .Select(s => s.SOURCECUR)
@@ -544,6 +550,10 @@ namespace PurchaseWeb_2.Controllers
             //area
             var areaLst = db.CprfArea_Mst.ToList();
             ViewBag.areaLst = areaLst;
+
+            //costcentre
+            var costList = db.CostCentre_Mst.Where(x=>x.DeleteFlag != true).ToList();
+            ViewBag.costList = costList;
 
             // currency
             var rateCurrLst = dbDom1.CSCRDs
@@ -1360,7 +1370,8 @@ namespace PurchaseWeb_2.Controllers
                 AreaId = centre_Mst.AreaId,
                 CostCentreStr = centre_Mst.CostCentreStr,
                 CreateDate = DateTime.Now,
-                CreateBy = Session["Username"].ToString()
+                CreateBy = Session["Username"].ToString(),
+                Description = centre_Mst.Description,
             };
 
             var costcetreChk = db.CostCentre_Mst.Where(x => x.CostCentreStr == centre_Mst.CostCentreStr).FirstOrDefault();
@@ -1373,10 +1384,18 @@ namespace PurchaseWeb_2.Controllers
             }
             else
             {
+                costcetreChk.Prefix = centre_Mst.Prefix;
+                costcetreChk.DepartmentId = centre_Mst.DepartmentId;
+                costcetreChk.ProcessId = centre_Mst.ProcessId;
+                costcetreChk.AreaId = centre_Mst.AreaId;
+                costcetreChk.CostCentreStr = centre_Mst.CostCentreStr;
+                costcetreChk.CreateDate = DateTime.Now;
+                costcetreChk.CreateBy = Session["Username"].ToString();
+                costcetreChk.Description = centre_Mst.Description;
                 costcetreChk.DeleteFlag = false;
                 db.SaveChanges();
 
-                this.AddNotification("This cost centre has already exists", NotificationType.ERROR);
+                this.AddNotification("This cost centre has been updated", NotificationType.SUCCESS);
             }
 
             return RedirectToAction("UTCostCentreMstLst", "CPRF");
@@ -2655,12 +2674,12 @@ namespace PurchaseWeb_2.Controllers
             var sCPRFNo = "";
             var sLastNo = "";
             var sBudgetYear = "";
-            var lastNo = db.LastNoMsts.Where(x => x.Initial == "DE" && x.DocYear == cprfMst.BudgetUtilYear).FirstOrDefault();
+            var lastNo = db.LastNoMsts.Where(x => x.Initial == "CDE" && x.DocYear == cprfMst.BudgetUtilYear).FirstOrDefault();
             if (lastNo == null)
             {
                 var newLastNo = new LastNoMst
                 {
-                    Initial = "DE",
+                    Initial = "CDE",
                     DocType = 1,
                     DocYear = cprfMst.BudgetUtilYear,
                     LastNo = 1

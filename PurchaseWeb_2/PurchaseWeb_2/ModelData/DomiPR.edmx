@@ -62,6 +62,14 @@
           <Property Name="ModifiedBy" Type="varchar" MaxLength="100" />
           <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="Asset_Category_Mst">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AssetCatCode" Type="varchar" MaxLength="10" />
+          <Property Name="AssetCatDesc" Type="varchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="AssetCategory_Mst">
           <Key>
             <PropertyRef Name="AssetCatId" />
@@ -136,6 +144,7 @@ warning 6002: The table/view 'Domi_PurEL.dbo.Category_Mst' does not have a prima
           <Property Name="DeleteFlag" Type="bit" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="CreateBy" Type="varchar" MaxLength="100" />
+          <Property Name="Description" Type="varchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="CPRF_File">
           <Key>
@@ -1436,6 +1445,7 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_usrDpt' does not have a primary 
           <EntitySet Name="AccTypeDivision" EntityType="Self.AccTypeDivision" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccTypeExpenses" EntityType="Self.AccTypeExpenses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Area_Mst" EntityType="Self.Area_Mst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Asset_Category_Mst" EntityType="Self.Asset_Category_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AssetCategory_Mst" EntityType="Self.AssetCategory_Mst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AuditBudget_log" EntityType="Self.AuditBudget_log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AuditCPRF_log" EntityType="Self.AuditCPRF_log" Schema="dbo" store:Type="Tables" />
@@ -2066,6 +2076,7 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_usrDpt' does not have a primary 
             <End Role="Usr_mst" EntitySet="Usr_mst" />
             <End Role="UsrPsn_Map" EntitySet="UsrPsn_Map" />
           </AssociationSet>
+          <EntitySet Name="Asset_Category_Mst" EntityType="Domi_PurModel.Asset_Category_Mst" />
           </EntityContainer>
         <ComplexType Name="usp_GetMenuData_Result">
           <Property Type="Int32" Name="MID" Nullable="false" />
@@ -3333,6 +3344,7 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_usrDpt' does not have a primary 
           <NavigationProperty Name="AccTypeDept" Relationship="Domi_PurModel.FK_CostCentre_Mst_AccTypeDept" FromRole="CostCentre_Mst" ToRole="AccTypeDept" />
           <NavigationProperty Name="CprfArea_Mst" Relationship="Domi_PurModel.FK_CostCentre_Mst_CprfArea_Mst" FromRole="CostCentre_Mst" ToRole="CprfArea_Mst" />
           <NavigationProperty Name="Process_Mst" Relationship="Domi_PurModel.FK_CostCentre_Mst_Process_Mst" FromRole="CostCentre_Mst" ToRole="Process_Mst" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PRAsset_Lst">
           <Key>
@@ -3562,6 +3574,14 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_usrDpt' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Asset_Category_Mst">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AssetCatCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="AssetCatDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4440,6 +4460,7 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_usrDpt' does not have a primary 
           <EntitySetMapping Name="CostCentre_Mst">
             <EntityTypeMapping TypeName="Domi_PurModel.CostCentre_Mst">
               <MappingFragment StoreEntitySet="CostCentre_Mst">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
@@ -4545,6 +4566,15 @@ warning 6002: The table/view 'Domi_PurEL.dbo.vw_usrDpt' does not have a primary 
                 <ScalarProperty Name="Psn_id" ColumnName="Psn_id" />
                 <ScalarProperty Name="usr_id" ColumnName="usr_id" />
                 <ScalarProperty Name="Usr_psn_Id" ColumnName="Usr_psn_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Asset_Category_Mst">
+            <EntityTypeMapping TypeName="Domi_PurModel.Asset_Category_Mst">
+              <MappingFragment StoreEntitySet="Asset_Category_Mst">
+                <ScalarProperty Name="AssetCatDesc" ColumnName="AssetCatDesc" />
+                <ScalarProperty Name="AssetCatCode" ColumnName="AssetCatCode" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

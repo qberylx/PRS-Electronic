@@ -34,7 +34,8 @@
                     <td>Department</td>
                     <td>:</td>
                     <td>
-                        <select class="form-control" name="DepartmentId" id="DepartmentId" onchange="chgDept(this)" required>
+                        @*onchange="chgDept(this)"*@
+                        <select class="form-control" name="DepartmentId" id="DepartmentId" required>
                             <option value="" code="">Please Choose</option>
                             @foreach (var a in ViewBag.deptLst)
                             {
@@ -51,7 +52,8 @@
                     <td>:</td>
                     <td>
                         <div id="divProcess">
-                            <select class="form-control" name="ProcessId" id="ProcessId" onchange="chgProcess(this)" required>
+                            @*onchange="chgProcess(this)"*@
+                            <select class="form-control" name="ProcessId" id="ProcessId" required>
                                 <option value="" code="">Please Choose</option>
                                 @foreach (var a in ViewBag.processLst)
                                 {
@@ -66,7 +68,8 @@
                     <td>:</td>
                     <td>
                         <div id="divArea">
-                            <select class="form-control" name="AreaId" id="AreaId" onchange="chgArea(this)" required>
+                            @*onchange="chgArea(this)"*@
+                            <select class="form-control" name="AreaId" id="AreaId" required>
                                 <option value="" code="">Please Choose</option>
                                 @foreach (var a in ViewBag.areaLst)
                                 {
@@ -80,7 +83,13 @@
                     <td>Cost Centre</td>
                     <td>:</td>
                     <td>
-                        <input type="text" class="form-control" name="CostCentreStr" id="CostCentreStr" value="20" readonly />
+                        <select class="form-control" name="CostCentreStr" id="CostCentreStr" required>
+                            @foreach(var a in ViewBag.costcentreList)
+                            {
+                                <option value="@a.CostCentreStr">@a.CostCentreStr - @a.Description</option>
+                            }
+                        </select>
+                        @*<input type="text" class="form-control" name="CostCentreStr" id="CostCentreStr" value="20" readonly />*@
                     </td>
                 </tr>
             </table>

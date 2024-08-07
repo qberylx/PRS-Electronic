@@ -244,7 +244,7 @@
                         Reject PR to User
                     </button>
                     @Html.ActionLink("Budget", "budgetUpdate", "Purchase", new { PrMstId = ViewBag.PrId }, new { @class = "btn btn-warning" })
-                    @Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = ViewBag.PrId, url= "PRDtlsListForPurchaserType4" }, new { @class = "btn btn-success" })
+                    @Html.ActionLink("Send To HOD", "PurHODApproval", "Purchase", new { PrMstId = ViewBag.PrId, url = "PRDtlsListForPurchaserType4" }, new { @class = "btn btn-success" })
                 </div>
             </div>
         </div>
@@ -252,7 +252,9 @@
 
     </div>
 
-
+    <div class="overlay" >
+        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+    </div>
 
 </div>
 
@@ -288,3 +290,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $(".overlay").hide();
+    });
+</script>

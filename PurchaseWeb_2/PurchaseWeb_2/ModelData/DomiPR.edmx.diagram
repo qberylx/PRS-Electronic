@@ -106,6 +106,7 @@
         <EntityTypeShape EntityType="Domi_PurModel.UsrPsn_Map" Width="1.5" PointX="7" PointY="0.75" />
         <AssociationConnector Association="Domi_PurModel.FK_UsrPsn_Map_Position_mst" />
         <AssociationConnector Association="Domi_PurModel.FK_UsrPsn_Map_Usr_mst" />
+        <EntityTypeShape EntityType="Domi_PurModel.Asset_Category_Mst" Width="1.5" PointX="21.375" PointY="3.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

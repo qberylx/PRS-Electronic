@@ -17,7 +17,7 @@
                         No
                     </td>
                     <td>
-                        Cost Centre
+                        Cost Centre 
                     </td>
                     <td>
                         Description
@@ -31,7 +31,7 @@
                 <tr>
                     <td>@i</td>
                     <td>@item.CostCentreStr</td>
-                    <td>@item.Description</td>
+                    <td>@item.AccTypeDept.DeptName - @item.Process_Mst.ProcessDesc - @item.CprfArea_Mst.AreaDesc</td>
                     <td>
                         @using (Ajax.BeginForm("UTCostCentreMstDelete", "CPRF"
                             , new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divCostCentreLst" }))

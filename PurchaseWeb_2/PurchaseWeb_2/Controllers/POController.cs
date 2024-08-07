@@ -988,6 +988,7 @@ namespace PurchaseWeb_2.Controllers
                     dt2.Columns.Add("DISCOUNT");
                     dt2.Columns.Add("DETAILNUM");
                     dt2.Columns.Add("GLACEXPENS");
+                    dt2.Columns.Add("EXPARRIVAL");
 
                     //Purchase_Order_Comments
                     dt3.Columns.Add("PORHSEQ");
@@ -1044,7 +1045,16 @@ namespace PurchaseWeb_2.Controllers
 
                         if (prdt.PR_Mst.PRTypeId == 4 && prdt.PR_Mst.PrGroupType1.CPRFFlag == false)
                         {
-                            Remarks = prdt.Remarks.ToString() + '|' + prdt.PR_Mst.AccountCode.ToString();
+                            var Budget = db.MonthlyBudget_Expense
+                                .Where(x => x.ExpenseString == prdt.PR_Mst.AccountCode.ToString().Replace("-","")).FirstOrDefault();
+                            if(Budget != null)
+                            {
+                                Remarks = prdt.Remarks.ToString() + '|' + prdt.PR_Mst.AccountCode.ToString() + '|' + Budget.AccountDesc;
+                            }
+                            else
+                            {
+                                Remarks = prdt.Remarks.ToString() + '|' + prdt.PR_Mst.AccountCode.ToString();
+                            }                            
                         }
                         else
                         {
@@ -1281,7 +1291,7 @@ namespace PurchaseWeb_2.Controllers
                                 "E1000S",
                                 pr.Description.ToString(),
                                 VendorPartNo,
-                                "FALSE",
+                                "TRUE",
                                 pr.UOMName.ToString(),
                                 pr.Qty.ToString(),
                                 pr.UnitPrice.ToString(),
@@ -1308,7 +1318,8 @@ namespace PurchaseWeb_2.Controllers
                                 "0",
                                 strDiscVendor,
                                 DETAILNUM.ToString(),
-                                GLACEXPENS
+                                GLACEXPENS,
+                                pr.ReqDevDate?.ToString("dd/MM/yyyy", DateTimeFormatInfo.InvariantInfo)
                                 );
 
                             ws2.Cell(2, 1).InsertData(dt2.AsEnumerable());

@@ -1,0 +1,307 @@
+﻿
+@using PagedList.Mvc
+@using PagedList;
+@model PagedList.IPagedList<PurchaseWeb_2.ModelData.PR_Mst>
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<div class="card card-primary">
+    <div class="card-header">
+        <div class="card-title">
+            <h4>PR History List</h4>
+        </div>
+        <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search" value="@ViewBag.Search">
+
+                <div class="input-group-append">
+                    <button class="btn btn-default" onclick="searchPr()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-head-fixed table-striped table-responsive table-sm" id="tableA">
+            <thead>
+                <tr>
+                    <th>
+                        No
+                    </th>
+
+                    <th>
+                        PR No
+                    </th>
+                    <th>
+                        PO No
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Requestor
+                    </th>
+                    <th>
+                        Department
+                    </th>
+                    <th>
+                        Requisition Date
+                    </th>
+                    <th>
+                        PR Type
+                    </th>
+                    <th>
+                        PR Group
+                    </th>
+                    <th>
+                        Total PR (RM)
+                    </th>
+                    <th>
+                        PR Status
+                    </th>
+                    <th>
+                        Items
+                    </th>
+
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int i = 0;}
+                @if (ViewBag.pageNumber != 1)
+                {
+                    i = (ViewBag.pageNumber - 1) * 10;
+                }
+
+                @foreach (var item in Model)
+                {
+                    i++;
+                    <tr>
+                        <td>@i</td>
+                        <td>
+                            @item.PRNo
+                        </td>
+                        <td>
+                            @{ var PoNoLst = item.PR_Details; }
+                            @foreach (var PoNo in PoNoLst.Select(x => x.NoPo).Distinct())
+                            {
+                                <table>
+                                    <tr>
+                                        <td>@PoNo</td>
+                                        <td>
+                                            @foreach (var domiPN in PoNoLst.Where(x => x.NoPo == PoNo && PoNo != null).ToList())
+                                            {
+                                                <a>@domiPN.DomiPartNo</a><br />
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            }
+                        </td>
+                        <td>
+                            @if (item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault() != null)
+                            {
+                                if (item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault().Count() >= 60)
+                                {
+                                    <span style="white-space: pre-line">@item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault().Substring(0, 60) </span>
+                                }
+                                else
+                                {
+                                    <span style="white-space: pre-line">@item.PR_Details.Select(s => s.Description).Take(1).FirstOrDefault() </span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @item.Usr_mst.Username
+                        </td>
+                        <td>
+                            @item.AccTypeDept.DeptName
+                        </td>
+                        <td>
+                            @item.RequestDate
+                        </td>
+                        <td>
+                            @item.PRType_mst.Name
+                        </td>
+                        <td>
+                            @item.PrGroupType1.GroupName
+                        </td>
+                        <td>
+                            @if (item.PRTypeId == 4 && (item.StatId == 1 || item.StatId == 2 || item.StatId == 3 || item.StatId == 4 || item.StatId == 7 ||
+                                item.StatId == 12 || item.StatId == 13 || item.StatId == 15))
+                            {
+                                @String.Format("{0:N2}", item.PR_Details.Sum(s => s.EstTotalPrice))
+                            }
+                            else
+                            {
+                                if (item.PRTypeId == 4)
+                                {
+                                    @String.Format("{0:N2}", item.PR_Details.Sum(s => s.TotCostWitTaxMYR))
+                                }
+                                else
+                                {
+                                    @String.Format("{0:N2}", item.PR_Details.Sum(s => s.TotCostWitTax))
+                                }
+                            }
+                        </td>
+                        <td>
+                            @item.Status_Mst.Name
+                        </td>
+                        <td>
+                            @item.PR_Details.Count
+                        </td>
+
+                        <td>
+                            @if (item.StatId != 1 && item.StatId != 2 && item.StatId != 13)
+                            {
+                            <td>
+                                @Html.ActionLink("View", "DashboardPrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                                @Html.ActionLink("Export To Excel", "ExportPRtoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
+                                @if (ViewBag.Psn_id == 4 || ViewBag.Psn_id == 5 || ViewBag.Psn_id == 7)
+                                {
+                                    if (item.StatId == 9)
+                                    {
+                                        @*@Html.ActionLink("Send Back PR to Sourcing", "SendToSourcing", "Purchase", new { PrMstId = item.PRId }
+                                            , new { @class = "btn btn-primary", onclick = "return confirm('Are you sure you wish to send this PR back to Sourcing?');" }
+                                            )*@
+                                        <button name="SendToSourcing" class="btn btn-primary" data-toggle="modal" data-target="#SendModal_@item.PRId">Send Back PR to Sourcing</button>
+                                        <div class="modal fade" id="SendModal_@item.PRId" tabindex="-1" role="dialog" aria-labelledby="SendSourcingModal_@item.PRId" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="SendSourcingModal_@item.PRId">Send To Sourcing Reason</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    @*@using (Ajax.BeginForm("SendToSourcing", "Purchase", new AjaxOptions { HttpMethod = "POST" , OnBegin= "CloseModal("+item.PRId+")" , UpdateTargetId= "divPRDashBoard" }))*@
+                                                    @using (Html.BeginForm("SendToSourcing", "Purchase", FormMethod.Post))
+                                                    {
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    Reason :
+                                                                </div>
+                                                                <div class="col-md-10">
+                                                                    <textarea class="form-control" name="clerkReason"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary" onclick="CloseModal(@item.PRId)">Save</button>
+                                                            <input type="hidden" name="PrMstId" value="@item.PRId" />
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                                @Html.ActionLink("Audit Log", "PRAuditLog", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-secondary" })
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+
+                                @Html.ActionLink("View", "DashboardPrView", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-info" })
+                                @Html.ActionLink("Export To Excel", "ExportPRtoExcel", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-warning" })
+                                @Html.ActionLink("Audit Log", "PRAuditLog", "Purchase", new { PrMstId = item.PRId }, new { @class = "btn btn-secondary" })
+                            </td>
+                        }
+                            </td>
+                        </tr>
+                    }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+@*<h2>List of Products</h2>
+    <ul>
+        @foreach (var item in ViewBag.OnePageOfProducts)
+        {
+            <li>@product.Name</li>
+        }
+    </ul>*@
+
+<!-- output a paging control that lets the user navigation to the previous page, next page, etc -->
+@*@Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("PRHistoryPagingList", new { page }))*@
+
+@Html.PagedListPager(Model, page => Url.Action("PRHistoryList", new { page, search = ViewBag.Search }))
+
+<script type="text/javascript">
+    function CloseModal(PRId) {
+        console.log(PRId);
+        $("#SendModal_" + PRId).modal('hide');
+        $('#loaderBody').show();
+    }
+
+    $(function () {
+        var $rows = $('#tableA tr');
+        $('#search').keyup(function () {
+            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+            $rows.show().filter(function () {
+                var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                return !~text.indexOf(val);
+            }).hide();
+        });
+    });
+
+    // Get the input field
+    var input = document.getElementById("search");
+
+    // Execute a function when the user presses a key on the keyboard
+    input.addEventListener("keypress", function (event) {
+        // If the user presses the "Enter" key on the keyboard
+        if (event.key === "Enter") {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            searchPr();
+        }
+    });
+
+    function searchPr() {
+        $("body").css("cursor", "progress");
+        $('#loaderBody').show();
+        var page = "@ViewBag.pageNumber";
+        var search = $("#search").val();
+        console.log(search);
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/PRHistoryPagingList?page=" + page + "&search=" + search,
+            data: '',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response) {
+                $('#divPrMstList').html(response);
+                $('#loaderBody').hide();
+                $("body").css("cursor", "default");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+
+
+
+
+    //$(document).ready(function () {
+    //    $('#tableA').DataTable({
+    //        order: [[0, 'desc']],
+    //    });
+    //});
+
+</script>

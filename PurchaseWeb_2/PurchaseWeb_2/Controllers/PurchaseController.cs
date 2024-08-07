@@ -15,6 +15,7 @@ using PurchaseWeb_2.Models;
 using System.Net.Mail;
 using System.Text;
 using System.Threading;
+using PagedList;
 
 namespace PurchaseWeb_2.Controllers
 {
@@ -526,7 +527,7 @@ namespace PurchaseWeb_2.Controllers
             bool blMD_PA_Flag = PrMst.Usr_mst.MD_PA_Flag != true ? false : true;
             if (blMD_PA_Flag)
             {
-                var usrMstMD = db.Usr_mst.Where(x => x.Psn_id == 3).FirstOrDefault();
+                var usrMstMD = db.Usr_mst.Where(x => x.Psn_id == 3 && x.Flag_Aproval == true).FirstOrDefault();
 
                 string SubjectMD = PrMst.PRNo + " - " + PrMst.Purpose;
 
@@ -628,13 +629,15 @@ namespace PurchaseWeb_2.Controllers
             // if user login position Purchaser HOD then list out only HOD under him
             if (userdtls.Psn_id == 5)
             {
-                PrMst = (from prMst in db.PR_Mst
+                var PrMst2 = (from prMst in db.PR_Mst
                          join HODMap in db.HODManager_Map
                          on new { HODId = prMst.UserId }
                          equals new { HODId = HODMap.HodId }
                          where HODMap.HodManagerId == userdtls.usr_id && prMst.StatId == 3
                          select prMst
                          ).ToList();
+
+                PrMst.AddRange(PrMst2);
             }
 
             if (userdtls.Psn_id == 7)
@@ -2949,6 +2952,11 @@ namespace PurchaseWeb_2.Controllers
             try
             {
                 var edtPrDtls = db.PR_Details.Where(x => x.PRDtId == pR_.PRDtId).FirstOrDefault();
+                var decEstimateUnitPrice = pR_.EstimateUnitPrice ?? 0.00M;
+                var declQty = pR_.Qty ?? 0.00M;
+                double dblEstimateUnitPrice = (double)decEstimateUnitPrice;
+                double dblQty = (double)declQty;
+
                 if (edtPrDtls != null)
                 {
                     edtPrDtls.DomiPartNo = "NS";
@@ -2962,7 +2970,7 @@ namespace PurchaseWeb_2.Controllers
                     edtPrDtls.Device = "-";
                     edtPrDtls.SalesOrder = "-";
                     edtPrDtls.EstimateUnitPrice = pR_.EstimateUnitPrice;
-                    edtPrDtls.EstTotalPrice = pR_.EstimateUnitPrice * pR_.Qty;
+                    edtPrDtls.EstTotalPrice = (decimal)Math.Round( dblEstimateUnitPrice * dblQty, 2);
                     edtPrDtls.UOMName = pR_.UOMName;
                     edtPrDtls.EstCurCode = pR_.EstCurCode;
                     edtPrDtls.Tax = 0;
@@ -3175,7 +3183,7 @@ namespace PurchaseWeb_2.Controllers
                     Device              = "-",
                     SalesOrder          = "-",
                     EstimateUnitPrice   = pR_.EstimateUnitPrice,
-                    EstTotalPrice       = pR_.EstimateUnitPrice * pR_.Qty,
+                    EstTotalPrice       = Math.Round(pR_.EstimateUnitPrice * pR_.Qty,2),
                     UOMName             = pR_.UOMName,
                     EstCurCode          = pR_.EstCurCode,
                     Tax                 = 0,
@@ -3464,7 +3472,7 @@ namespace PurchaseWeb_2.Controllers
 
                 }
 
-                if (calAsst == 0 && !purMstr.CPRF.StartsWith("2022") && !purMstr.CPRF.StartsWith("2021"))
+                if (calAsst == 0 && !purMstr.CPRF.StartsWith("2022") && !purMstr.CPRF.StartsWith("2021") && !purMstr.CPRF.StartsWith("2023"))
                 {
                     this.AddNotification("Asset list still havent been checked !!", NotificationType.ERROR);
                     return RedirectToAction("PurDtlsList", "Purchase", new { PrMstId = pR_.PRid });
@@ -3524,7 +3532,7 @@ namespace PurchaseWeb_2.Controllers
                         Device = "-",
                         SalesOrder = "-",
                         EstimateUnitPrice = pR_.EstimateUnitPrice,
-                        EstTotalPrice = pR_.EstimateUnitPrice * pR_.Qty,
+                        EstTotalPrice = Math.Round(pR_.EstimateUnitPrice * pR_.Qty,2),
                         UOMName = pR_.UOMName,
                         EstCurCode = pR_.EstCurCode,
                         Tax = 0,
@@ -3655,7 +3663,7 @@ namespace PurchaseWeb_2.Controllers
                         UpdPRDtls.Device = "-";
                         UpdPRDtls.SalesOrder = "-";
                         UpdPRDtls.EstimateUnitPrice = pR_.EstimateUnitPrice;
-                        UpdPRDtls.EstTotalPrice = pR_.EstimateUnitPrice * pR_.Qty;
+                        UpdPRDtls.EstTotalPrice = Math.Round(pR_.EstimateUnitPrice * pR_.Qty,2);
                         UpdPRDtls.UOMName = pR_.UOMName;
                         UpdPRDtls.EstCurCode = pR_.EstCurCode;
                         UpdPRDtls.Tax = 0;
@@ -4723,7 +4731,48 @@ namespace PurchaseWeb_2.Controllers
 
         }
 
-        
+        public ActionResult VendorComparisonRefresh(int PrDtlstId)
+        {
+            ViewBag.PrDtlstId = PrDtlstId;
+
+            //get kuantiti
+            var prdtls = db.PR_Details
+                .Where(x => x.PRDtId == PrDtlstId)
+                .FirstOrDefault();
+
+            ViewBag.PrMstId = prdtls.PRid;
+
+            ViewBag.Qty = prdtls.Qty;
+            if (prdtls.LastPrice <= 0 || prdtls.LastPrice == null)
+            {
+                ViewBag.lastPrice = 0;
+            }
+            else
+            {
+                ViewBag.lastPrice = prdtls.LastPrice;
+            }
+
+
+            // get vendor list
+            var vdLst = dbDom1.APVENs
+                .Where(x => x.SWACTV == 1)
+                .OrderBy(r => r.VENDNAME)
+                .ToList();
+
+            ViewBag.vdLst = vdLst;
+
+            //payment terms
+            var terms = dbDom1.APRTAs
+                .Where(x => x.SWACTV == 1)
+                .ToList();
+
+            ViewBag.termlist = terms;
+
+            return PartialView("VendorComparisonRefresh");
+
+        }
+
+
         [HttpGet]
         public ActionResult VendorComparison(int PrDtlstId)
         {
@@ -4954,6 +5003,88 @@ namespace PurchaseWeb_2.Controllers
             return RedirectToAction("VendorComparisonList", "Purchase", new { PrDtlstId = PrDtlstId });
         }
 
+        public ActionResult VendorComparisonEdit(int VCIdEdt)
+        {
+            var VendorComparison = db.PR_VendorComparison.Where(x=>x.VCId  == VCIdEdt).FirstOrDefault();
+
+            ViewBag.PrDtlstId = VendorComparison.PRDtId;
+            
+            //get kuantiti
+            var prdtls = db.PR_Details
+                .Where(x => x.PRDtId == VendorComparison.PRDtId)
+                .FirstOrDefault();
+
+            ViewBag.PrMstId = prdtls.PRid;
+
+            ViewBag.Qty = prdtls.Qty;
+            if (prdtls.LastPrice <= 0 || prdtls.LastPrice == null)
+            {
+                ViewBag.lastPrice = 0;
+            }
+            else
+            {
+                ViewBag.lastPrice = prdtls.LastPrice;
+            }
+
+
+            // get vendor list
+            var vdLst = dbDom1.APVENs
+                .Where(x => x.SWACTV == 1)
+                .OrderBy(r => r.VENDNAME)
+                .ToList();
+
+            ViewBag.vdLst = vdLst;
+
+            //payment terms
+            var terms = dbDom1.APRTAs
+                .Where(x => x.SWACTV == 1)
+                .ToList();
+
+            ViewBag.termlist = terms;
+
+            var VCModel = new VendorComparisonModel()
+            {
+                VCId = VendorComparison.VCId,
+                PRDtId = VendorComparison.PRDtId,
+                VendorCode = VendorComparison.VDCode,
+                VendorName = VendorComparison.VCName,
+                CurPrice = VendorComparison.CurPrice,
+                QuoteDate = VendorComparison.QuoteDate,
+                LastPrice = VendorComparison.LastPrice,
+                LastQuoteDate = VendorComparison.LastQuoteDate,
+                PODate = VendorComparison.PODate,
+                CostDown = VendorComparison.CostDown,
+                FlagWin = VendorComparison.FlagWin,
+                CreatedBy = VendorComparison.CreatedBy,
+                CreatedDate = VendorComparison.CreatedDate,
+                ModifiedBy = VendorComparison.ModifiedBy,
+                ModifiedDate = VendorComparison.ModifiedDate,
+                TotCostnoTax = VendorComparison.TotCostnoTax,
+                Tax = VendorComparison.Tax,
+                TotCostWitTax = VendorComparison.TotCostWitTax,
+                TaxCode = VendorComparison.TaxCode,
+                TaxClass = VendorComparison.TaxClass,
+                Discount = VendorComparison.Discount,
+                DiscType = VendorComparison.DiscType,
+                CurRate = VendorComparison.CurRate,
+                VdCurCode = VendorComparison.VdCurCode,
+                TotCostnoTaxVendorCur = VendorComparison.TotCostnoTaxVendorCur,
+                TotCostWitTaxVendorCur = VendorComparison.TotCostWitTaxVendorCur,
+                CurPriceMYR = VendorComparison.CurPriceMYR,
+                PayTerms = VendorComparison.PayTerms,
+                PayDesc = VendorComparison.PayDesc,
+                QuoteName = VendorComparison.QuoteName,
+                QuotePath = VendorComparison.QuotePath,
+                QuoteNo = VendorComparison.QuoteNo,
+                Remarks = VendorComparison.Remarks
+            };
+            
+
+            
+
+            return PartialView("VendorComparisonEdit", VCModel);
+        }
+
         public ActionResult SourcingRemarks(int PrMstId)
         {
             var remarksLst = db.vw_sourcingRemarksLst.Where(x => x.PRid == PrMstId).ToList();
@@ -5157,6 +5288,7 @@ namespace PurchaseWeb_2.Controllers
 
         public ActionResult getCurCode(String vdCode , int PrDtlstId)
         {
+            
             if (vdCode != null)
             {
                 var vendorCode = dbDom1.APVENs
@@ -6876,6 +7008,14 @@ namespace PurchaseWeb_2.Controllers
                 //db.PR_VendorComparison.Remove(pR_Vendor);
                 //db.SaveChanges();
 
+                //PRAsset_Lst check
+                var assetLst = db.PRAsset_Lst.Where(x => x.PRDtId == PRDtls.PRDtId).ToList();
+                if(assetLst != null)
+                {
+                    db.PRAsset_Lst.RemoveRange(assetLst);
+                    db.SaveChanges();
+                }
+
                 PR_Details pR_ = new PR_Details() { PRDtId = PrDtlsId };
                 //db.PR_Details.Attach(pR_);
                 db.PR_Details.Remove(PRDtls);
@@ -7597,6 +7737,77 @@ namespace PurchaseWeb_2.Controllers
             }
             
         }
+
+        public ActionResult PRHistoryList(int? page, string search)
+        {
+            ViewBag.page = page;
+            ViewBag.Search = search;
+
+            return View("PRHistoryList");
+        }
+
+        public ActionResult PRHistoryPagingList(int? page, string search)
+        {
+            // if user or HOD only list out their department and team id with stat = 9
+            string username = Convert.ToString(Session["Username"]);
+            var userdtls = db.Usr_mst
+                            .Where(x => x.Username == username)
+                            .FirstOrDefault();
+            //var userDpts = db.Usr_mst.Where(x => x.Username == username).Select(x => x.Dpt_id);
+
+            ViewBag.Psn_id = userdtls.Psn_id;
+
+            var PrMst = db.PR_Mst.Where(x => x.StatId != 1 && x.StatId != 2 && x.DeActiveFlag != true)
+                    .OrderByDescending(x => x.PRId).ToList();
+
+            if (userdtls.Psn_id == 1 || userdtls.Psn_id == 2)
+            {
+                PrMst = (from prMst in db.PR_Mst
+                         join usrMst in db.Usr_mst
+                         on new { DepartmentId = prMst.DepartmentId, TeamId = prMst.TeamId }
+                         equals new { DepartmentId = usrMst.Dpt_id, TeamId = usrMst.Team_id }
+                         where usrMst.Username == username && prMst.StatId == 9 && prMst.DeActiveFlag != true
+                         select prMst
+                          ).OrderByDescending(x => x.PRId)
+                          .ToList();
+            }
+            else if (userdtls.Psn_id == 12)
+            {
+                PrMst = db.PR_Mst.Where(x => x.DeActiveFlag != true && x.DepartmentId == userdtls.Dpt_id)
+                    .OrderByDescending(x => x.PRId)./*Take(300).*/ToList();
+            }
+
+            if (search != null)
+            {
+                var PrDtls = db.PR_Details.Where(x => x.Description.Contains(search) || x.NoPo.Contains(search))
+                    .Select(s => s.PRid).ToList();
+
+
+                PrMst = PrMst.Where(x => x.PRNo.Contains(search)
+
+                        || PrDtls.Contains(x.PRId)
+                        || x.Usr_mst.Username.Contains(search)
+                        || x.AccTypeDept.DeptName.Contains(search)
+                        || x.RequestDate.ToString().Contains(search)
+                        || x.PRType_mst.Name.Contains(search)
+                        || x.PrGroupType1.GroupName.Contains(search)
+                        || x.Status_Mst.Name.Contains(search)
+                        )
+                        .ToList();
+            }
+
+            var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
+            var onePageOfList = PrMst.ToPagedList(pageNumber, 10); // will only contain 25 products max because of the pageSize
+
+            ViewBag.onePageOfList = onePageOfList;
+            ViewBag.pageNumber = pageNumber;
+            ViewBag.Search = search;
+
+
+            return PartialView("PRHistoryPagingList", onePageOfList);
+        }
+
+
 
     }
 

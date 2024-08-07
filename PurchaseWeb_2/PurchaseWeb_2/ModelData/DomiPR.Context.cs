@@ -82,6 +82,7 @@ namespace PurchaseWeb_2.ModelData
         public virtual DbSet<vw_usrDpt> vw_usrDpt { get; set; }
         public virtual DbSet<CPRFBudget_Dtls> CPRFBudget_Dtls { get; set; }
         public virtual DbSet<UsrPsn_Map> UsrPsn_Map { get; set; }
+        public virtual DbSet<Asset_Category_Mst> Asset_Category_Mst { get; set; }
     
         public virtual ObjectResult<usp_GetMenuData_Result> usp_GetMenuData(string userId)
         {

@@ -233,6 +233,9 @@
     <Compile Include="ModelData\AssetCategory_Mst.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
+    <Compile Include="ModelData\Asset_Category_Mst.cs">
+      <DependentUpon>DomiPR.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelData\AuditBudget_log.cs">
       <DependentUpon>DomiPR.tt</DependentUpon>
     </Compile>
@@ -2803,8 +2806,8 @@
     <Content Include="Views\CPRF\UTAreaMstLst.cshtml" />
     <Content Include="Views\CPRF\uTCategory.cshtml" />
     <Content Include="Views\CPRF\UTCategoryMstLst.cshtml" />
-    <Content Include="Views\CPRF\uTCostCentre.cshtml" />
-    <Content Include="Views\CPRF\UTCostCentreMstLst.cshtml" />
+    <Content Include="Views\CPRF\uTCostCentre2.cshtml" />
+    <Content Include="Views\CPRF\UTCostCentreMstLst2.cshtml" />
     <Content Include="Views\CPRF\uTProcess.cshtml" />
     <Content Include="Views\CPRF\UTProcessMstLst.cshtml" />
     <Content Include="Views\CPRF\ViewCprf.cshtml" />
@@ -2813,6 +2816,12 @@
     <Content Include="Views\Purchase\AssetCPRFList.cshtml" />
     <Content Include="Views\Purchase\findCPRFNo.cshtml" />
     <Content Include="Views\Purchase\getCPRFBal.cshtml" />
+    <Content Include="Views\CPRF\uTCostCentre.cshtml" />
+    <Content Include="Views\CPRF\UTCostCentreMstLst.cshtml" />
+    <Content Include="Views\Purchase\PRHistoryList.cshtml" />
+    <Content Include="Views\Purchase\PRHistoryPagingList.cshtml" />
+    <Content Include="Views\Purchase\VendorComparisonEdit.cshtml" />
+    <Content Include="Views\Purchase\VendorComparisonRefresh.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

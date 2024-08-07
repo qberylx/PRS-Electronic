@@ -1,0 +1,25 @@
+﻿@{
+
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+<div id="notification">
+    @Html.Partial("_Notifications")
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+
+
+        <div id="divPrMstList">
+            @{Html.RenderAction("PRHistoryPagingList", "Purchase", new { page = ViewBag.page, search = ViewBag.Search });}
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("body").css("cursor", "default");
+    });
+</script>
